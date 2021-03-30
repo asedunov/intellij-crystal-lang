@@ -1,0 +1,9 @@
+<idea-plugin>
+    <id>intellij-crystal-lang</id>
+    <name>Crystal</name>
+    <vendor email="alexey.sedunov@gmail.com">Alexey Sedunov</vendor>
+
+    <description><![CDATA[IntelliJ plugin for Crystal language (https://crystal-lang.org/)]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

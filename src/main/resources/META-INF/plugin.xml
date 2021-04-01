@@ -6,4 +6,12 @@
     <description><![CDATA[IntelliJ plugin for Crystal language (https://crystal-lang.org/)]]></description>
 
     <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Crystal"
+                  language="Crystal"
+                  implementationClass="org.crystal.intellij.CrystalFileType" 
+                  fieldName="INSTANCE" 
+                  extensions="cr"/>
+    </extensions>
 </idea-plugin>

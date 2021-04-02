@@ -1,0 +1,123 @@
+FILE
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one')
+    PsiWhiteSpace('  ')
+    PsiElement(<string raw>)('two')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one')
+    PsiWhiteSpace('\n')
+    PsiElement(<string raw>)('two')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one')
+    PsiWhiteSpace('\t')
+    PsiElement(<string raw>)('two')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiWhiteSpace('\n')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one')
+    PsiElement(<escape>)('\ ')
+    PsiElement(<string raw>)('two')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one{}')
+    PsiWhiteSpace(' ')
+    PsiElement(<string raw>)('two')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<escape>)('\{')
+    PsiElement(<string raw>)('one')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one')
+    PsiElement(<escape>)('\}')
+    PsiElement(<string array end>)('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w(')
+    PsiErrorElement:Expected: <string array end>
+      <empty list>
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('one')
+    PsiElement(<string array end>)('}')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(})('}')
+
+  CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
+    PsiElement(<string array start>)('%w{')
+    PsiElement(<string raw>)('{one}')
+    PsiErrorElement:Expected: <string array end>
+      <empty list>
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i(')
+    PsiElement(<string raw>)('one')
+    PsiElement(<escape>)('\ ')
+    PsiElement(<string raw>)('two')
+    PsiElement(<symbol array end>)(')')
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i{')
+    PsiElement(<string raw>)('(one')
+    PsiWhiteSpace(' ')
+    PsiElement(<string raw>)('two)')
+    PsiElement(<symbol array end>)('}')
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i(')
+    PsiElement(<string raw>)('(one')
+    PsiWhiteSpace(' ')
+    PsiElement(<string raw>)('two)')
+    PsiElement(<symbol array end>)(')')
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i(')
+    PsiElement(<string raw>)('foo(bar)')
+    PsiWhiteSpace(' ')
+    PsiElement(<string raw>)('baz')
+    PsiElement(<symbol array end>)(')')
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i{')
+    PsiElement(<string raw>)('foo\nbar')
+    PsiWhiteSpace(' ')
+    PsiElement(<string raw>)('baz')
+    PsiElement(<symbol array end>)('}')
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i(')
+    PsiErrorElement:Expected: <symbol array end>
+      <empty list>
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i{')
+    PsiElement(<string raw>)('one')
+    PsiElement(<symbol array end>)('}')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(})('}')
+
+  CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
+    PsiElement(<symbol array start>)('%i{')
+    PsiElement(<string raw>)('{one}')
+    PsiErrorElement:Expected: <symbol array end>
+      <empty list>

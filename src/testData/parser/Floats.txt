@@ -1,0 +1,115 @@
+FILE
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.0')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.0')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('hello')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(+)('+')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('1.0')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(-)('-')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('1.0')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0.5')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(+)('+')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('0.5')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(-)('-')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('0.5')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1_234.567_890')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1234.567890')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1e23')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1e-23')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1e+23')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.2e+23')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0f32')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0_f32')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.0f32')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(+)('+')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('1.0f32')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(-)('-')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('1.0f32')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.0f32')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('hello')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1_234.567_890_f32')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1e+23_f32')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.2e+23_f32')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0f64')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0_f64')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.0f64')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(+)('+')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('1.0f64')
+
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
+    PsiElement(-)('-')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<float literal>)('1.0f64')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.0f64')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('hello')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1_234.567_890_f64')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1e+23_f64')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.2e+23_f64')

@@ -1,0 +1,20 @@
+FILE
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiComment(CR_LINE_COMMENT)('#')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiComment(CR_LINE_COMMENT)('#{')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiComment(CR_LINE_COMMENT)('# sajdfhs 1 ''')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiComment(CR_LINE_COMMENT)('# #')

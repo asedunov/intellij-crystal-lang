@@ -11,6 +11,12 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        java.srcDir("src/main/gen")
+    }
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation("junit", "junit", "4.12")

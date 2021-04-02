@@ -1,0 +1,156 @@
+FILE
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiErrorElement:Unexpected <integer literal>
+    <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<integer literal>)('2')
+
+  CrBooleanLiteralExpression(CR_BOOLEAN_LITERAL_EXPRESSION)
+    PsiElement(false)('false')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrNilExpression(CR_NIL_EXPRESSION)
+    PsiElement(nil)('nil')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
+    PsiElement(<char start>)(''')
+    PsiElement(<char raw>)('a')
+    PsiElement(<char end>)(''')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrStringLiteralExpression(CR_STRING_LITERAL_EXPRESSION)
+    PsiElement(<string start>)('"')
+    PsiElement(<string raw>)('hello')
+    PsiElement(<string end>)('"')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrSymbolExpression(CR_SYMBOL_EXPRESSION)
+    PsiElement(<symbol start>)(':')
+    PsiElement(<string raw>)('bar')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(then)('then')
+
+  CrCallExpression(CR_CALL_EXPRESSION)
+    CrNameElement(CR_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    CrArgumentList(CR_PARENTHESIZED_ARGUMENT_LIST)
+      PsiElement(()('(')
+      CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+        PsiElement(<integer literal>)('1')
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Expected: ')'
+        PsiElement(<integer literal>)('2')
+      PsiElement())(')')
+
+  CrCallExpression(CR_CALL_EXPRESSION)
+    CrNameElement(CR_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    CrArgumentList(CR_PARENTHESIZED_ARGUMENT_LIST)
+      PsiElement(()('(')
+      CrStringLiteralExpression(CR_STRING_LITERAL_EXPRESSION)
+        PsiElement(<string start>)('"')
+        PsiElement(<string raw>)('bar')
+        PsiElement(<string end>)('"')
+      PsiWhiteSpace(' ')
+      PsiErrorElement:Expected: ')'
+        PsiElement(<string start>)('"')
+        PsiElement(<string raw>)('baz')
+        PsiElement(<string end>)('"')
+      PsiElement())(')')
+
+  CrReturnExpression(CR_RETURN_EXPRESSION)
+    PsiElement(return)('return')
+    PsiWhiteSpace(' ')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrReturnExpression(CR_RETURN_EXPRESSION)
+    PsiElement(return)('return')
+    PsiWhiteSpace(' ')
+    CrBooleanLiteralExpression(CR_BOOLEAN_LITERAL_EXPRESSION)
+      PsiElement(false)('false')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<identifier>)('foo')
+
+  CrParenthesizedExpression(CR_PARENTHESIZED_EXPRESSION)
+    PsiElement(()('(')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
+    PsiErrorElement:Expected: ')'
+      PsiElement(,)(',')
+      PsiWhiteSpace(' ')
+      PsiElement(<integer literal>)('2')
+      PsiWhiteSpace(' ')
+      PsiElement(<integer literal>)('3')
+    PsiElement())(')')
+
+  CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
+    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrNameElement(CR_NAME_ELEMENT)
+        PsiElement(<identifier>)('foo')
+    PsiWhiteSpace(' ')
+    PsiElement(=)('=')
+    PsiWhiteSpace(' ')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
+  PsiWhiteSpace('\n')
+  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrNameElement(CR_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+  PsiElement(;)(';')
+  PsiWhiteSpace(' ')
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+
+  CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
+    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrNameElement(CR_NAME_ELEMENT)
+        PsiElement(<identifier>)('foo')
+    PsiWhiteSpace(' ')
+    PsiElement(=)('=')
+    PsiWhiteSpace(' ')
+    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
+  PsiWhiteSpace('\n')
+  CrBinaryExpression(CR_BINARY_EXPRESSION)
+    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrNameElement(CR_NAME_ELEMENT)
+        PsiElement(<identifier>)('foo')
+    PsiWhiteSpace(' ')
+    PsiElement(+)('+')
+    PsiWhiteSpace(' ')
+    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrNameElement(CR_NAME_ELEMENT)
+        PsiElement(<identifier>)('nfoo')
+  PsiElement(;)(';')
+  PsiWhiteSpace(' ')
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')

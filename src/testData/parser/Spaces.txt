@@ -1,0 +1,18 @@
+FILE
+  PsiErrorElement:Expected: <expression>
+    <empty list>
+
+  PsiWhiteSpace(' ')
+
+  PsiWhiteSpace('\t')
+
+  PsiWhiteSpace(' \t ')
+
+  PsiWhiteSpace('\t \t')
+
+  PsiWhiteSpace('\n')
+
+  PsiWhiteSpace('\n\n\n')
+
+  PsiWhiteSpace(' ')
+  PsiWhiteSpace('\n\n')

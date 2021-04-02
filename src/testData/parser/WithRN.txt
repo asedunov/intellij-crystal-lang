@@ -1,0 +1,15 @@
+FILE
+  CrClass(CR_CLASS_DEFINITION)
+    PsiElement(class)('class')
+    PsiWhiteSpace(' ')
+    CrPath(CR_PATH)
+      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+        CrNameElement(CR_NAME_ELEMENT)
+          PsiElement(<constant>)('Foo')
+    PsiWhiteSpace('\r\n')
+    CrTypeBody(CR_TYPE_BODY)
+      <empty list>
+    PsiElement(end)('end')
+  PsiWhiteSpace('\r\n\r\n')
+  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')

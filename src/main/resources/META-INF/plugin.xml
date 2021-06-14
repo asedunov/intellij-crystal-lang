@@ -15,5 +15,7 @@
                   extensions="cr"/>
         <lang.parserDefinition language="Crystal"
                                implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
+        <annotator language="Crystal"
+                   implementationClass="org.crystal.intellij.highlighter.CrystalSyntaxAnnotator"/>
     </extensions>
 </idea-plugin>

@@ -1,0 +1,6 @@
+-EnumConstants.cr
+ -[MyEnum]
+  A
+  B
+  C
+  D

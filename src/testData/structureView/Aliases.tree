@@ -1,0 +1,12 @@
+-Aliases.cr
+ [Foo = Bar]
+ Foo = Mod2::Bar
+ -MyClass
+  Foo = Bar
+  Foo = Mod2::Bar
+ -MyLib
+  Foo = Bar
+  Foo = Mod2::Bar
+ -MyModule
+  Foo = Bar
+  Foo = Mod2::Bar

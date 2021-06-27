@@ -1,7 +1,7 @@
 package org.crystal.intellij.psi
 
-import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiNameIdentifierOwner
 
-abstract class CrDefinition(node: ASTNode) : CrExpression(node) {
+interface CrDefinition : CrExpression, CrNameElementHolder, PsiNameIdentifierOwner {
     override fun accept(visitor: CrVisitor) = visitor.visitDefinition(this)
 }

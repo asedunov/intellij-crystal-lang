@@ -1,0 +1,22 @@
+-Methods.cr
+ [foo1]
+ foo10("x" y : Int)
+ foo11(x : Int = ...)
+ foo2 : Int
+ foo3()
+ foo4() : Int
+ foo5(x : Int)
+ foo6(x : Int, s : String)
+ foo7(x : Int) : String
+ foo8(x : Int, s : String) : String
+ foo9(x y : Int)
+ Int.foo12 : Int
+ -MyClass
+  foo
+ -MyEnum
+  foo
+ -MyModule
+  foo
+ -MyStruct
+  foo
+ self.foo13

@@ -1,0 +1,20 @@
+-CStructAndUnions.cr
+ -[MyLib]
+  Struct1
+  -Struct2
+   a : Int
+   s : String
+  -Struct3
+   a : Int
+   b : Int
+   x : Double
+   y : Double
+  Union1
+  -Union2
+   a : Int
+   s : String
+  -Union3
+   a : Int
+   b : Int
+   x : Double
+   y : Double

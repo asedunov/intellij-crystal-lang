@@ -17,5 +17,8 @@
                                implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
         <annotator language="Crystal"
                    implementationClass="org.crystal.intellij.highlighter.CrystalSyntaxAnnotator"/>
+
+        <lang.psiStructureViewFactory language="Crystal"
+                                      implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>
     </extensions>
 </idea-plugin>

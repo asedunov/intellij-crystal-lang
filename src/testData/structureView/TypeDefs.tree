@@ -1,0 +1,4 @@
+-TypeDefs.cr
+ -[MyLib]
+  Foo1 = Bar
+  Foo2 = Mod1::Bar

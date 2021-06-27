@@ -1,0 +1,23 @@
+-Classlikes.cr
+ -MyClass
+  MyInnerClass
+  MyInnerEnum
+  MyInnerModule
+  MyInnerStruct
+ MyContainedClass
+ MyContainedEnum
+ MyContainedModule
+ MyContainedStruct
+ MyEnum
+ -MyLib
+  MyInnerEnum
+ -[MyModule]
+  MyInnerClass
+  MyInnerEnum
+  MyInnerModule
+  MyInnerStruct
+ -MyStruct
+  MyInnerClass
+  MyInnerEnum
+  MyInnerModule
+  MyInnerStruct

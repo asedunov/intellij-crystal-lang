@@ -1,0 +1,14 @@
+-LibFunctions.cr
+ -[MyLib]
+  foo1
+  foo10 = "bar.baz"(s : String)
+  foo11(...)
+  foo12(x : Int, ...)
+  foo2 : Int
+  foo3()
+  foo4() : Int
+  foo5(x : Int)
+  foo6(x : Int, s : String)
+  foo7(x : Int) : String
+  foo8(x : Int, s : String) : String
+  foo9 = bar(x : Int)

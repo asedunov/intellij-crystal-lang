@@ -3164,7 +3164,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                         parseBareProcType()
                     }
                     else {
-                        error("Expected: ")
+                        error("Expected: <type>")
                         return true
                     }
 

@@ -1,0 +1,9 @@
+-AnnotationDefs.cr
+ Bar
+ [Foo]
+ -MyClass
+  Bar
+  Foo
+ -MyModule
+  Bar
+  Foo

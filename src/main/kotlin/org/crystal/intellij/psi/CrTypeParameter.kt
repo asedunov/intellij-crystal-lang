@@ -2,6 +2,6 @@ package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
 
-class CrTypeParameter(node: ASTNode) : CrDefinition(node) {
+class CrTypeParameter(node: ASTNode) : CrDefinitionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitTypeParameter(this)
 }

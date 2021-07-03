@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij") version "0.7.2"
+    id("org.jetbrains.intellij") version "1.0"
     java
     kotlin("jvm") version "1.5.0"
 }
@@ -23,5 +23,5 @@ dependencies {
 }
 
 intellij {
-    version = "2020.3.3"
+    version.set("2021.1.3")
 }

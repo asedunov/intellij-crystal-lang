@@ -3,6 +3,7 @@ package org.crystal.intellij.presentation
 import com.intellij.navigation.ColoredItemPresentation
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.psi.util.elementType
+import com.intellij.ui.RowIcon
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.CrystalIcons
 import org.crystal.intellij.lexer.CR_PATH_OP
@@ -123,8 +124,8 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
         return null
     }
 
-    override fun getIcon(unused: Boolean): Icon? {
-        return when (definition) {
+    override fun getIcon(unused: Boolean): Icon {
+        val baseIcon = when (definition) {
             is CrModule -> CrystalIcons.MODULE
             is CrLibrary -> CrystalIcons.LIBRARY
             is CrClass -> CrystalIcons.CLASS
@@ -141,6 +142,16 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
             is CrCField -> CrystalIcons.CFIELD
             is CrVariable -> if (definition.isGlobal) CrystalIcons.GLOBAL_VARIABLE else CrystalIcons.VARIABLE
             else -> null
+        }
+        val visibilityIcon = when (definition.visibility) {
+            CrVisibility.PRIVATE -> CrystalIcons.PRIVATE
+            CrVisibility.PROTECTED -> CrystalIcons.PROTECTED
+            CrVisibility.PUBLIC -> CrystalIcons.PUBLIC
+            else -> null
+        }
+        return RowIcon(2).apply {
+            setIcon(baseIcon, 0)
+            setIcon(visibilityIcon, 1)
         }
     }
 }

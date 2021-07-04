@@ -19,6 +19,9 @@ object CrystalIcons {
     val LIBRARY = load("library")
     val METHOD = PlatformIcons.METHOD_ICON!!
     val MODULE = load("module")
+    val PRIVATE = PlatformIcons.PRIVATE_ICON
+    val PROTECTED = PlatformIcons.PROTECTED_ICON
+    val PUBLIC = PlatformIcons.PUBLIC_ICON
     val STRUCT = load("struct")
     val TYPEDEF = AllIcons.Nodes.Type
     val UNION = load("union")

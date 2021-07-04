@@ -24,7 +24,7 @@ class CrystalStructureViewElement(element: CrElement) : PsiTreeElementBase<CrEle
         } ?: return emptyList()
         return container
             .traverser()
-            .expandAndSkip { it == container || it is CrCFieldGroup }
+            .expandAndSkip { it == container || it is CrCFieldGroup || it is CrVisibilityExpression }
             .filter(CrDefinition::class.java)
             .map(::CrystalStructureViewElement)
             .toList()

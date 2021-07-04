@@ -3000,7 +3000,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
             }
 
-            parseEnumBodyExpressions()
+            composite(CR_TYPE_BODY) { parseEnumBodyExpressions() }
 
             parseEnd()
         }

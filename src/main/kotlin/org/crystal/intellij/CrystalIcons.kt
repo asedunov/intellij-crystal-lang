@@ -5,20 +5,22 @@ import com.intellij.openapi.util.IconLoader
 import com.intellij.util.PlatformIcons
 
 object CrystalIcons {
-    val LANGUAGE = IconLoader.getIcon("/icons/language.svg")
-    val MODULE = IconLoader.getIcon("/icons/module.svg")
-    val LIBRARY = IconLoader.getIcon("/icons/library.svg")
-    val CLASS = PlatformIcons.CLASS_ICON
-    val STRUCT = IconLoader.getIcon("/icons/struct.svg")
-    val ENUM = PlatformIcons.ENUM_ICON
-    val UNION = IconLoader.getIcon("/icons/union.svg")
-    val ALIAS = IconLoader.getIcon("/icons/alias.svg")
-    val TYPEDEF = AllIcons.Nodes.Type
-    val ANNOTATION = PlatformIcons.ANNOTATION_TYPE_ICON
-    val METHOD = PlatformIcons.METHOD_ICON
-    val FUNCTION = PlatformIcons.FUNCTION_ICON
-    val CONSTANT = IconLoader.getIcon("/icons/constant.svg")
+    private fun load(name: String) = IconLoader.getIcon("/icons/$name.svg", CrystalIcons::class.java)
+
+    val ALIAS = load("alias")
+    val ANNOTATION = PlatformIcons.ANNOTATION_TYPE_ICON!!
     val CFIELD = AllIcons.Nodes.Field
-    val VARIABLE = PlatformIcons.VARIABLE_ICON
+    val CLASS = PlatformIcons.CLASS_ICON!!
+    val CONSTANT = load("constant")
+    val ENUM = PlatformIcons.ENUM_ICON!!
+    val FUNCTION = PlatformIcons.FUNCTION_ICON!!
     val GLOBAL_VARIABLE = AllIcons.Nodes.Gvariable
+    val LANGUAGE = load("language")
+    val LIBRARY = load("library")
+    val METHOD = PlatformIcons.METHOD_ICON!!
+    val MODULE = load("module")
+    val STRUCT = load("struct")
+    val TYPEDEF = AllIcons.Nodes.Type
+    val UNION = load("union")
+    val VARIABLE = PlatformIcons.VARIABLE_ICON!!
 }

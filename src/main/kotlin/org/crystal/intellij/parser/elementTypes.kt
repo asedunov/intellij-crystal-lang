@@ -121,7 +121,7 @@ class CrCompositeElementType(
 @JvmField val CR_UNION_TYPE = CrCompositeElementType("CR_UNION_TYPE", ::CrUnionType)
 
 // Miscellaneous
-@JvmField val CR_BODY_CLAUSE = CrCompositeElementType("CR_BODY_CLAUSE", ::CrBodyClause)
+@JvmField val CR_BODY = CrCompositeElementType("CR_BODY", ::CrBody)
 @JvmField val CR_C_FIELD_GROUP = CrCompositeElementType("CR_C_FIELD_GROUP", ::CrCFieldGroup)
 @JvmField val CR_ELSE_CLAUSE = CrCompositeElementType("CR_ELSE_CLAUSE", ::CrElseClause)
 @JvmField val CR_ENSURE_CLAUSE = CrCompositeElementType("CR_ENSURE_CLAUSE", ::CrEnsureClause)
@@ -139,7 +139,6 @@ class CrCompositeElementType(
 @JvmField val CR_SUPERTYPE_CLAUSE = CrCompositeElementType("CR_SUPERTYPE_CLAUSE", ::CrSupertypeClause)
 @JvmField val CR_THEN_CLAUSE = CrCompositeElementType("CR_THEN_CLAUSE", ::CrThenClause)
 @JvmField val CR_TYPE_ARGUMENT_LIST = CrCompositeElementType("CR_TYPE_ARGUMENT_LIST", ::CrTypeArgumentList)
-@JvmField val CR_TYPE_BODY = CrCompositeElementType("CR_TYPE_BODY", ::CrTypeBody)
 @JvmField val CR_TYPE_PARAMETER_LIST = CrCompositeElementType("CR_TYPE_PARAMETER_LIST", ::CrTypeParameterList)
 @JvmField val CR_UNICODE_BLOCK = CrCompositeElementType("CR_UNICODE_BLOCK", ::CrUnicodeBlock)
 @JvmField val CR_WHEN_CLAUSE = CrCompositeElementType("CR_WHEN_CLAUSE", ::CrWhenClause)

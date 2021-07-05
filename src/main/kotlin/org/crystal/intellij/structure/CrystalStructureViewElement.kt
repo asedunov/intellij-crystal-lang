@@ -11,16 +11,9 @@ class CrystalStructureViewElement(element: CrElement) : PsiTreeElementBase<CrEle
 
     override fun getChildrenBase(): Collection<StructureViewTreeElement> {
         val container = when (val element = element) {
-            is CrTypeDefinitionWithBody ->
-                element.body
-            is CrFile,
-            is CrLibrary,
-            is CrEnum,
-            is CrCStruct,
-            is CrCUnion ->
-                element
-            else ->
-                null
+            is CrFile -> element
+            is CrBodyHolder -> element.body
+            else -> null
         } ?: return emptyList()
         return container
             .traverser()

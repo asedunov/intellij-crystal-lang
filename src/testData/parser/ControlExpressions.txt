@@ -350,7 +350,7 @@ FILE
       PsiElement(true)('true')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
@@ -362,7 +362,7 @@ FILE
       PsiElement(true)('true')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('1')
       PsiElement(;)(';')
@@ -377,7 +377,7 @@ FILE
       PsiElement(true)('true')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
@@ -389,7 +389,7 @@ FILE
       PsiElement(true)('true')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('1')
       PsiElement(;)(';')
@@ -986,7 +986,7 @@ FILE
     PsiErrorElement:Unexpected <identifier>
       <empty list>
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       CrReferenceExpression(CR_REFERENCE_EXPRESSION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<identifier>)('a')
@@ -1046,7 +1046,7 @@ FILE
           PsiElement(<identifier>)('a')
       PsiElement(;)(';')
       PsiWhiteSpace(' ')
-      CrBodyClause(CR_BODY_CLAUSE)
+      CrBody(CR_BODY)
         <empty list>
     PsiElement(end)('end')
 

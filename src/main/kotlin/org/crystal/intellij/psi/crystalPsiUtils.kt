@@ -12,6 +12,9 @@ fun PsiElement.traverser() =
 fun PsiElement.allChildren() =
     JBIterable.generate(firstChild) { it.nextSibling }
 
+fun PsiElement.allDescendants() =
+    traverser().traverse()
+
 fun PsiElement.nextSiblingsStrict() =
     JBIterable.generate(nextSibling) { it.nextSibling }
 

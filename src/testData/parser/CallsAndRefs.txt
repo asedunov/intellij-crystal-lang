@@ -2450,7 +2450,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
   PsiWhiteSpace('\n')
@@ -2461,7 +2461,7 @@ FILE
       PsiElement(true)('true')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -2472,7 +2472,7 @@ FILE
       PsiElement(true)('true')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrBodyClause(CR_BODY_CLAUSE)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
   PsiWhiteSpace('\n')

@@ -2524,7 +2524,6 @@ class CrystalParser : PsiParser, LightPsiParser {
                     else {
                         composite(CR_BLOCK_EXPRESSION) {
                             parseExpressions()
-
                             parseExceptionHandler()
                         }
                         parseEnd()
@@ -2601,7 +2600,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
                 skipStatementEnd()
 
-                composite(CR_TYPE_BODY) {
+                composite(CR_BODY) {
                     parseExpressions()
                 }
 
@@ -2826,8 +2825,11 @@ class CrystalParser : PsiParser, LightPsiParser {
                         nextToken()
                     }
                     else {
-                        parseExpressions()
-                        parseBlockTail()
+                        composite(CR_BLOCK_EXPRESSION) {
+                            parseExpressions()
+                            parseExceptionHandler()
+                        }
+                        parseEnd()
                     }
                 }
 
@@ -2913,7 +2915,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             composite(CR_NAME_ELEMENT) { nextToken() }
             skipStatementEnd()
 
-            parseCStructOrUnionBodyExpressions()
+            composite(CR_BODY) { parseCStructOrUnionBodyExpressions() }
 
             parseEnd()
             skipSpaces()
@@ -3000,7 +3002,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
             }
 
-            composite(CR_TYPE_BODY) { parseEnumBodyExpressions() }
+            composite(CR_BODY) { parseEnumBodyExpressions() }
 
             parseEnd()
         }
@@ -3099,7 +3101,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                 skipStatementEnd()
 
-                parseLibBodyExpressions()
+                composite(CR_BODY) { parseLibBodyExpressions() }
 
                 parseEnd()
                 skipSpaces()
@@ -3382,7 +3384,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 lexerState.slashIsRegex = true
                 skipStatementEnd()
 
-                composite(CR_BODY_CLAUSE) { parseExpressions() }
+                composite(CR_BODY) { parseExpressions() }
                 skipStatementEnd()
 
                 recoverUntil("'end'", true) { at(CR_END) }
@@ -3506,7 +3508,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                                 }
                             }
 
-                            composite(CR_BODY_CLAUSE) { parseExpressions() }
+                            composite(CR_BODY) { parseExpressions() }
                             skipSpacesAndNewlines()
                         }
 
@@ -3559,7 +3561,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                                 }
                                 skipStatementEnd()
 
-                                composite(CR_BODY_CLAUSE) {
+                                composite(CR_BODY) {
                                     parseExpressions()
                                 }
                                 skipSpacesAndNewlines()

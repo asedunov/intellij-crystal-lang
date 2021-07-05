@@ -21,7 +21,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     fun visitBlockExpression(o: CrBlockExpression) = visitExpression(o)
 
-    fun visitBodyClause(o: CrBodyClause) = visitCrElement(o)
+    fun visitBodyClause(o: CrBody) = visitCrElement(o)
 
     fun visitBooleanLiteralExpression(o: CrBooleanLiteralExpression) = visitExpression(o)
 
@@ -224,8 +224,6 @@ open class CrVisitor : PsiElementVisitor() {
     fun visitType(o: CrType) = visitCrElement(o)
 
     fun visitTypeArgumentList(o: CrTypeArgumentList) = visitCrElement(o)
-
-    fun visitTypeBody(o: CrTypeBody) = visitCrElement(o)
 
     fun visitTypeDef(o: CrTypeDef) = visitDefinition(o)
 

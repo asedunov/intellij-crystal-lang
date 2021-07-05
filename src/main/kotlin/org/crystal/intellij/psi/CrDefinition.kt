@@ -19,8 +19,10 @@ interface CrDefinition : CrExpression, CrNameElementHolder, PsiNameIdentifierOwn
                     CR_PROTECTED -> return CrVisibility.PROTECTED
                 }
             }
+            var parent = parent
+            if (parent is CrBody) parent = parent.parent
             return when (parent) {
-                is CrFile, is CrTypeBody, is CrLibrary -> CrVisibility.PUBLIC
+                is CrFile, is CrTypeDefinition, is CrLibrary -> CrVisibility.PUBLIC
                 else -> null
             }
         }

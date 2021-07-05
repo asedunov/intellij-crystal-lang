@@ -7,7 +7,7 @@ FILE
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\r\n')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
   PsiWhiteSpace('\r\n\r\n')

@@ -8,7 +8,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -20,7 +20,7 @@ FILE
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\n')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -32,7 +32,7 @@ FILE
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\n')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrMethod(CR_METHOD_DEFINITION)
         PsiElement(def)('def')
         PsiWhiteSpace(' ')
@@ -63,7 +63,7 @@ FILE
               PsiElement(<constant>)('Bar')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -82,7 +82,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -101,7 +101,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -120,7 +120,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -135,7 +135,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -150,7 +150,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -170,7 +170,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -190,7 +190,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -215,7 +215,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -241,7 +241,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -254,7 +254,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -266,7 +266,7 @@ FILE
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\n')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrMethod(CR_METHOD_DEFINITION)
         PsiElement(def)('def')
         PsiWhiteSpace(' ')
@@ -294,7 +294,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -368,7 +368,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
         CrReferenceExpression(CR_REFERENCE_EXPRESSION)
           CrNameElement(CR_NAME_ELEMENT)
@@ -392,7 +392,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -427,7 +427,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -462,7 +462,7 @@ FILE
             PsiElement(<constant>)('UInt16')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -475,7 +475,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrMethod(CR_METHOD_DEFINITION)
         PsiElement(def)('def')
         PsiWhiteSpace(' ')
@@ -502,7 +502,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -538,7 +538,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -587,7 +587,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -630,7 +630,7 @@ FILE
           PsiElement(<constant>)('Bar')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -652,7 +652,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
         CrReferenceExpression(CR_REFERENCE_EXPRESSION)
           CrNameElement(CR_NAME_ELEMENT)
@@ -681,7 +681,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrMethod(CR_METHOD_DEFINITION)
         PsiElement(private)('private')
         PsiWhiteSpace(' ')
@@ -710,7 +710,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrMethod(CR_METHOD_DEFINITION)
         PsiElement(protected)('protected')
         PsiWhiteSpace(' ')
@@ -739,7 +739,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrAnnotationExpression(CR_ANNOTATION_EXPRESSION)
         PsiElement(@[)('@[')
         CrPath(CR_PATH)
@@ -760,7 +760,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -782,7 +782,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\n')
     PsiWhiteSpace('  ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')
@@ -807,7 +807,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\n')
     PsiWhiteSpace('  ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrMethod(CR_METHOD_DEFINITION)
         PsiElement(def)('def')
         PsiWhiteSpace(' ')
@@ -855,7 +855,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiElement(end)('end')
 
@@ -869,7 +869,7 @@ FILE
     PsiErrorElement:Unexpected <
       <empty list>
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       PsiErrorElement:Unexpected <
         <empty list>
     PsiErrorElement:Expected: 'end'
@@ -889,7 +889,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrRequireExpression(CR_REQUIRE_EXPRESSION)
         PsiElement(require)('require')
         PsiWhiteSpace(' ')
@@ -910,7 +910,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrRequireExpression(CR_REQUIRE_EXPRESSION)
         PsiElement(require)('require')
         PsiWhiteSpace(' ')
@@ -957,7 +957,7 @@ FILE
       PsiErrorElement:Expected: ')'
         PsiElement(<constant>)('U')
       PsiElement())(')')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiErrorElement:Expected: end
       <empty list>
@@ -983,7 +983,7 @@ FILE
       PsiErrorElement:Expected: ')'
         PsiElement(<constant>)('V')
       PsiElement())(')')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       <empty list>
     PsiErrorElement:Expected: end
       <empty list>
@@ -1007,7 +1007,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('1')
       PsiElement(;)(';')
@@ -1076,7 +1076,7 @@ FILE
           PsiElement(<constant>)('Foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
-    CrTypeBody(CR_TYPE_BODY)
+    CrBody(CR_BODY)
       CrEnumConstant(CR_ENUM_CONSTANT_DEFINITION)
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('A')

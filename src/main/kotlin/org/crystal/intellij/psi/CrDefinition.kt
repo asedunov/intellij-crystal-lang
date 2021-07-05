@@ -2,6 +2,7 @@ package org.crystal.intellij.psi
 
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.util.elementType
+import org.crystal.intellij.lexer.CR_ABSTRACT
 import org.crystal.intellij.lexer.CR_PRIVATE
 import org.crystal.intellij.lexer.CR_PROTECTED
 
@@ -23,4 +24,7 @@ interface CrDefinition : CrExpression, CrNameElementHolder, PsiNameIdentifierOwn
                 else -> null
             }
         }
+
+    val isAbstract: Boolean
+        get() = allChildren().any { it.elementType == CR_ABSTRACT }
 }

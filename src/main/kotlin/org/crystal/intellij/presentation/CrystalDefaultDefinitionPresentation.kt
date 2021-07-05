@@ -128,15 +128,15 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
         val baseIcon = when (definition) {
             is CrModule -> CrystalIcons.MODULE
             is CrLibrary -> CrystalIcons.LIBRARY
-            is CrClass -> CrystalIcons.CLASS
-            is CrStruct -> CrystalIcons.STRUCT
+            is CrClass -> if (definition.isAbstract) CrystalIcons.ABSTRACT_CLASS else CrystalIcons.CLASS
+            is CrStruct -> if (definition.isAbstract) CrystalIcons.ABSTRACT_STRUCT else CrystalIcons.STRUCT
             is CrEnum -> CrystalIcons.ENUM
             is CrCStruct -> CrystalIcons.STRUCT
             is CrCUnion -> CrystalIcons.UNION
             is CrAlias -> CrystalIcons.ALIAS
             is CrTypeDef -> CrystalIcons.TYPEDEF
             is CrAnnotation -> CrystalIcons.ANNOTATION
-            is CrMethod -> CrystalIcons.METHOD
+            is CrMethod -> if (definition.isAbstract) CrystalIcons.ABSTRACT_METHOD else CrystalIcons.METHOD
             is CrFunction -> CrystalIcons.FUNCTION
             is CrEnumConstant -> CrystalIcons.CONSTANT
             is CrCField -> CrystalIcons.CFIELD

@@ -7,6 +7,9 @@ import com.intellij.util.PlatformIcons
 object CrystalIcons {
     private fun load(name: String) = IconLoader.getIcon("/icons/$name.svg", CrystalIcons::class.java)
 
+    val ABSTRACT_CLASS = PlatformIcons.ABSTRACT_CLASS_ICON
+    val ABSTRACT_METHOD = PlatformIcons.ABSTRACT_METHOD_ICON
+    val ABSTRACT_STRUCT = load("abstractStruct")
     val ALIAS = load("alias")
     val ANNOTATION = PlatformIcons.ANNOTATION_TYPE_ICON!!
     val CFIELD = AllIcons.Nodes.Field

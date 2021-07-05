@@ -20,5 +20,6 @@
 
         <lang.psiStructureViewFactory language="Crystal"
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>
+        <lang.commenter language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalCommenter"/>
     </extensions>
 </idea-plugin>

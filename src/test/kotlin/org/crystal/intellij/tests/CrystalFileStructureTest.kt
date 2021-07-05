@@ -4,6 +4,7 @@ import com.intellij.testFramework.FileStructureTestBase
 import com.intellij.testFramework.PlatformTestUtil
 import com.intellij.util.PathUtil
 import org.crystal.intellij.CrystalFileType
+import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -14,11 +15,7 @@ class CrystalFileStructureTest(private val testName: String) : FileStructureTest
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
-        fun testFiles(): List<Array<Any>> {
-            return File("src/testData/structureView")
-                .listFiles { file -> file.name.endsWith(".cr") }
-                ?.map { arrayOf(it.nameWithoutExtension) } ?: emptyList()
-        }
+        fun testFiles() = getCrystalTestFilesAsParameters("structureView")
     }
 
     override fun getTestName(lowercaseFirstLetter: Boolean) = testName

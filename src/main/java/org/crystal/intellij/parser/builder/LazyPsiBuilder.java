@@ -353,7 +353,7 @@ public class LazyPsiBuilder extends UnprotectedUserDataHolder implements PsiBuil
       return isDone ? text.toString() : text + "\u2026";
     }
 
-    boolean isDone() {
+    public boolean isDone() {
       return myDoneLexeme != -1;
     }
   }

@@ -8,7 +8,6 @@ import com.intellij.util.containers.SmartHashSet
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.builder.LazyPsiBuilder
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CrystalParser : PsiParser, LightPsiParser {
     private class OpInfo(
@@ -95,6 +94,8 @@ class CrystalParser : PsiParser, LightPsiParser {
         private var typeNest = 0
         private var funNest = 0
         private var insideCStruct = false
+        private var isMacroDef = false
+        private var inMacroExpression = false
 
         private tailrec fun PsiBuilder.asLazyBuilder(): LazyPsiBuilder {
             return if (this is PsiBuilderAdapter) delegate.asLazyBuilder() else this as LazyPsiBuilder
@@ -162,6 +163,16 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
             finally {
                 typeDeclarationCount--
+            }
+        }
+
+        private inline fun <T> PsiBuilder.inMacroExpression(body: PsiBuilder.() -> T): T {
+            inMacroExpression = true
+            try {
+                return body()
+            }
+            finally {
+                inMacroExpression = false
             }
         }
 
@@ -348,9 +359,12 @@ class CrystalParser : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.unexpected() {
-            val tokenType = tokenType
+            error(unexpectedMessage(tokenType))
+        }
+
+        private fun unexpectedMessage(tokenType: IElementType?): String {
             val description = (tokenType as? CrystalTokenType)?.name ?: tokenType?.toString() ?: "<EOF>"
-            error("Unexpected $description")
+            return "Unexpected $description"
         }
 
         private fun PsiBuilder.ensureNotAt(token: CrystalTokenType) {
@@ -627,7 +641,8 @@ class CrystalParser : PsiParser, LightPsiParser {
         private val endTokenStrongMarkers = TokenSet.create(
             CR_RBRACE,
             CR_INTERPOLATION_END,
-            CR_RBRACKET
+            CR_RBRACKET,
+            CR_MACRO_CONTROL_RBRACE
         )
 
         private val endTokenKeywords = TokenSet.create(
@@ -938,6 +953,8 @@ class CrystalParser : PsiParser, LightPsiParser {
                 at(CR_PATH_OP) -> parseGenericOrGlobalCall()
                 at(CR_ARROW_OP) -> parseFunLiteralOrPointer()
                 at(CR_ANNO_LBRACKET) -> parseAnnotation()
+                at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+                at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
                 at(CR_NUMBERS) -> parseNumericLiteral()
                 at(CR_CHAR_START) -> parseCharLiteral()
                 at(CR_STRING_START) -> parseStringLiteral()
@@ -953,6 +970,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 at(booleanTokens) -> parseBooleanLiteral()
 
                 at(CR_DEF) -> parseDef()
+                at(CR_MACRO) -> parseMacro()
                 at(CR_CLASS) -> parseClasslikeDef(CR_CLASS_DEFINITION)
                 at(CR_STRUCT) -> parseClasslikeDef(CR_STRUCT_DEFINITION)
                 at(CR_MODULE) -> parseClasslikeDef(CR_MODULE_DEFINITION)
@@ -989,7 +1007,13 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                 at(CR_CONSTANT) -> parseGenericOrCustomLiteral()
                 at(idTokens) -> parseVarOrCall()
-                at(CR_CLASS_VAR) || at(CR_INSTANCE_VAR) -> parseRefOrVarDeclaration()
+                at(CR_CLASS_VAR) -> parseRefOrVarDeclaration()
+                at(CR_INSTANCE_VAR) -> {
+                    if (inMacroExpression && lexer.tokenText == "@type") {
+                        isMacroDef = true
+                    }
+                    parseRefOrVarDeclaration()
+                }
                 at(CR_UNDERSCORE) -> composite(CR_REFERENCE_EXPRESSION) {
                     composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                 }
@@ -1265,7 +1289,9 @@ class CrystalParser : PsiParser, LightPsiParser {
                 CR_LINE_,
                 CR_END_LINE_,
                 CR_FILE_,
-                CR_DIR_
+                CR_DIR_,
+                CR_MACRO_EXPRESSION_LBRACE,
+                CR_MACRO_CONTROL_LBRACE
             ),
             referenceTokens
         )
@@ -2204,15 +2230,15 @@ class CrystalParser : PsiParser, LightPsiParser {
                     if (!isAssign && at(CR_DOT)) {
                         compositeSuffix(CR_REFERENCE_EXPRESSION) {}
 
-                        advanceToDefName()
-                        consumeDefName()
+                        advanceToDefOrMacroName()
+                        consumeDefOrMacroName()
                     }
                 }
 
                 at(CR_CONSTANT) -> {
                     parseGeneric()
                     if (at(CR_DOT)) {
-                        advanceToDefName()
+                        advanceToDefOrMacroName()
                         composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
@@ -2226,7 +2252,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     if (at(CR_DOT)) {
                         compositeSuffix(CR_REFERENCE_EXPRESSION) {}
 
-                        advanceToDefName()
+                        advanceToDefOrMacroName()
                         composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
@@ -2476,7 +2502,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.consumeDefName() {
+        private fun PsiBuilder.consumeDefOrMacroName() {
             val isId = at(idTokens)
             composite(CR_SIMPLE_NAME_ELEMENT) {
                 nextToken()
@@ -2506,18 +2532,148 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseDef(
-            isAbstract: Boolean = false
-        ) = varDeclarationOrElse {
-            composite(CR_METHOD_DEFINITION) { doParseDef(isAbstract) }
+        private fun PsiBuilder.parseMacro() = varDeclarationOrElse {
+            composite(CR_MACRO_DEFINITION) {
+                doParseMacro()
+            }
         }
 
-        private fun PsiBuilder.doParseDef(isAbstract: Boolean = false) {
+        private fun PsiBuilder.nextAndDoneIfNeeded(m: LazyPsiBuilder.StartMarker, type: IElementType) {
+            nextToken()
+            if (!m.isDone) m.done(type)
+        }
+
+        private fun PsiBuilder.advanceToMacroBody(
+            beforeParamList: Boolean,
+            currentMarker: LazyPsiBuilder.StartMarker,
+            currentNodeType: IElementType
+        ) {
+            var la = lexer.lookAhead()
+            if (la in CR_WHITESPACES || la in CR_COMMENTS) {
+                nextAndDoneIfNeeded(currentMarker, currentNodeType)
+                la = lexer.lookAhead()
+            }
+
+            var errorMessage: String? = null
+            var enterMacro = true
+            var preAdvance = false
+            if (beforeParamList) {
+                when (la) {
+                    CR_END -> errorMessage = "Expected: ';' or <newline>"
+                    CR_MUL_OP, CR_EXP_OP, in idTokens -> errorMessage = "Parentheses are mandatory for macro arguments"
+                    CR_DOT -> errorMessage = "Macro can't have a receiver"
+                    CR_LPAREN -> enterMacro = false
+                    CR_SEMICOLON, CR_NEWLINE -> preAdvance = true
+                    null -> enterMacro = false
+                    else -> errorMessage = unexpectedMessage(la)
+                }
+            }
+            else {
+                preAdvance = la == CR_SEMICOLON || la == CR_NEWLINE
+            }
+            if (preAdvance) nextAndDoneIfNeeded(currentMarker, currentNodeType)
+            if (enterMacro) lexer.enterMacro()
+            nextAndDoneIfNeeded(currentMarker, currentNodeType)
+            if (errorMessage != null) error(errorMessage)
+        }
+
+        private fun PsiBuilder.doParseMacro() {
+            advanceToDefOrMacroName()
+
+            pushDef()
+
+            if (at(CR_CONSTANT)) {
+                lexer.enterMacro()
+                nextToken()
+                error("Macro can't have a receiver")
+            }
+            else {
+                val mName = mark() as LazyPsiBuilder.StartMarker
+                if (at(idTokens) && lexer.lookAhead() == CR_ASSIGN_OP) nextToken()
+                advanceToMacroBody(true, mName, CR_SIMPLE_NAME_ELEMENT)
+                if (at(CR_LPAREN)) parseParamList(true)
+            }
+
+            parseMacroLiteral()
+
+            recoverUntil("'end'", true) { at(CR_END) }
+            tok(CR_END)
+
+            popDef()
+        }
+
+        private fun PsiBuilder.parseMacroLiteral() {
+            if (eof()) return
+            composite(CR_MACRO_LITERAL) {
+                do {
+                    val macroState = lexer.macroState
+                    when (tokenType) {
+                        CR_MACRO_FRAGMENT -> {
+                            lexer.enterMacro(macroState, false)
+                            nextToken()
+                        }
+
+                        CR_MACRO_EXPRESSION_LBRACE -> parseMacroExpression(macroState)
+
+                        CR_MACRO_CONTROL_LBRACE -> if (!parseMacroControl(macroState)) break
+
+                        CR_MACRO_VAR -> parseMacroVariable(macroState)
+
+                        CR_WHITESPACE -> nextToken()
+
+                        else -> break
+                    }
+                } while (!eof())
+            }
+        }
+
+        private fun PsiBuilder.parseMacroVariable(macroState: MacroState) = composite(CR_MACRO_VARIABLE_EXPRESSION) {
+            if (lexer.lookAhead() != CR_LBRACE) {
+                lexer.enterMacro(macroState, false)
+                nextToken()
+            }
+            else {
+                nextToken()
+                parseMacroVariableExpressions(macroState)
+            }
+        }
+
+        private fun PsiBuilder.parseMacroVariableExpressions(macroState: MacroState) {
+            tok(CR_LBRACE)
+
+            while (true) {
+                parseExpressionInsideMacro()
+                skipSpaces()
+
+                recoverUntil("',' or '}'") { at(CR_COMMA) || at(CR_RBRACE) }
+                if (at(CR_COMMA)) {
+                    nextTokenSkipSpaces()
+                    if (at(CR_RBRACE)) break
+                }
+                else break
+            }
+
+            lexer.enterMacro(macroState, false)
+            tok(CR_RBRACE)
+        }
+
+        private fun PsiBuilder.parseDef(
+            isAbstract: Boolean = false,
+            isMacroDef: Boolean = false
+        ) = varDeclarationOrElse {
+            composite(CR_METHOD_DEFINITION) { doParseDef(isAbstract, isMacroDef) }
+        }
+
+        private fun PsiBuilder.doParseDef(
+            isAbstract: Boolean = false,
+            isMacroDef: Boolean = false
+        ) {
+            this@ParserImpl.isMacroDef = false
             inDef {
                 stopOnDo = false
 
                 nextToken()
-                advanceToDefName()
+                advanceToDefOrMacroName()
 
                 val mReceiver = mark()
 
@@ -2526,7 +2682,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     parsePathType()
                 }
                 else {
-                    consumeDefName()
+                    consumeDefOrMacroName()
                 }
 
                 if (at(CR_DOT) && !hasTypeReceiver) {
@@ -2538,29 +2694,15 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                 when {
                     at(CR_DOT) -> {
-                        advanceToDefName()
-                        consumeDefName()
+                        advanceToDefOrMacroName()
+                        consumeDefOrMacroName()
                     }
                     hasTypeReceiver -> unexpected()
                 }
 
                 when {
-                    at(CR_LPAREN) -> composite(CR_PARAMETER_LIST) {
-                        nextTokenSkipSpacesAndNewlines()
-
-                        while (!at(CR_RPAREN)) {
-                            parseParam(true)
-
-                            if (at(CR_COMMA)) {
-                                nextTokenSkipSpacesAndNewlines()
-                            }
-                            else {
-                                skipSpacesAndNewlines()
-                                recoverUntil("')'", true) { at(CR_RPAREN) }
-                                break
-                            }
-                        }
-                        tok(CR_RPAREN)
+                    at(CR_LPAREN) -> {
+                        parseParamList(false)
                         skipSpaces()
                     }
 
@@ -2609,6 +2751,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     }
                 }
             }
+            this@ParserImpl.isMacroDef = false
         }
 
         private val defTokenForParenWarn = TokenSet.orSet(
@@ -2628,7 +2771,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             TokenSet.create(CR_BACKQUOTE)
         )
 
-        private fun PsiBuilder.advanceToDefName() {
+        private fun PsiBuilder.advanceToDefOrMacroName() {
             lexerState.wantsDefOrMacroName = true
             nextTokenSkipSpacesAndNewlines()
             if (!at(defNameTokens)) error("Expected: <definition name>")
@@ -2724,6 +2867,33 @@ class CrystalParser : PsiParser, LightPsiParser {
                         break
                     }
                 }
+            }
+        }
+
+        private fun PsiBuilder.parseParamList(inMacroDef: Boolean) {
+            val m = mark() as LazyPsiBuilder.StartMarker
+
+            nextTokenSkipSpacesAndNewlines()
+
+            while (!at(CR_RPAREN)) {
+                parseParam(!inMacroDef)
+
+                if (at(CR_COMMA)) {
+                    nextTokenSkipSpacesAndNewlines()
+                }
+                else {
+                    skipSpacesAndNewlines()
+                    recoverUntil("')'", true) { at(CR_RPAREN) }
+                    break
+                }
+            }
+
+            if (inMacroDef) {
+                advanceToMacroBody(false, m, CR_PARAMETER_LIST)
+            }
+            else {
+                nextToken()
+                m.done(CR_PARAMETER_LIST)
             }
         }
 
@@ -3020,6 +3190,10 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     at(idTokens) -> parseCStructOrUnionFields()
 
+                    at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+
+                    at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
+
                     at(CR_SEMICOLON) || at(CR_NEWLINE) -> skipStatementEnd()
 
                     else -> break
@@ -3121,13 +3295,14 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                         if (at(CR_PRIVATE) || at(CR_PROTECTED)) nextTokenSkipSpaces()
 
-                        if (at(CR_DEF)) {
-                            finishComposite(CR_METHOD_DEFINITION, m) { doParseDef() }
-                        }
-                        else {
-                            error("Expected: <method/macro definition>")
-                            m.drop()
-                            break
+                        when {
+                            at(CR_DEF) -> finishComposite(CR_METHOD_DEFINITION, m) { doParseDef() }
+                            at(CR_MACRO) -> finishComposite(CR_MACRO_DEFINITION, m) { doParseMacro() }
+                            else -> {
+                                error("Expected: <method/macro definition>")
+                                m.drop()
+                                break
+                            }
                         }
                     }
 
@@ -3149,6 +3324,10 @@ class CrystalParser : PsiParser, LightPsiParser {
                     }
 
                     at(CR_ANNO_LBRACKET) -> parseAnnotation()
+
+                    at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+
+                    at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
 
                     at(CR_SEMICOLON) || at(CR_NEWLINE) -> skipStatementEnd()
 
@@ -3255,6 +3434,10 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     skipStatementEnd()
                 }
+
+                at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+
+                at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
 
                 else -> false
             }
@@ -3882,7 +4065,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         }
 
         private fun isVar(name: String): Boolean {
-            return name == "self" || name in defVars.peek()
+            return inMacroExpression || name == "self" || name in defVars.peek()
         }
 
         private fun PsiBuilder.parseVarOrCall(): Boolean {
@@ -3969,6 +4152,247 @@ class CrystalParser : PsiParser, LightPsiParser {
             composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
             if (isGlobalMatchData && lexer.lookAhead() == CR_ASSIGN_OP) pushVarName(name)
+        }
+
+        private fun PsiBuilder.parseMacroExpression(macroState: MacroState?) = composite(CR_MACRO_EXPRESSION) {
+            lexerState.slashIsRegex = true
+            nextTokenSkipSpacesAndNewlines()
+            parseExpressionInsideMacro()
+            parseMacroExpressionEnd(macroState)
+        }
+
+        private fun PsiBuilder.parseExpressionInsideMacro() = inMacroExpression {
+            if (at(CR_MUL_OP) || at(CR_EXP_OP)) nextTokenSkipSpaces()
+
+            parseExpression()
+            skipSpacesAndNewlines()
+        }
+
+        private fun PsiBuilder.parseMacroExpressionEnd(macroState: MacroState?) {
+            recoverUntil("'}}'", true) { at(CR_RBRACE) }
+            val m = mark()
+            if (!at(CR_RBRACE)) {
+                m.drop()
+                return
+            }
+            val hasSecondBrace = lexer.lookAhead() == CR_RBRACE
+            if (hasSecondBrace) nextToken()
+            if (macroState != null) lexer.enterMacro(macroState)
+            tok(CR_RBRACE)
+            if (hasSecondBrace) m.collapse(CR_MACRO_EXPRESSION_RBRACE) else m.error("Expected: '}}'")
+        }
+
+        private fun PsiBuilder.parseMacroControl(macroState: MacroState?) : Boolean {
+            val la = lexer.lookAhead { skipSpacesAndNewlines(); tokenType }
+            if (la == CR_END || la == CR_ELSE || la == CR_ELSIF) return false
+
+            val m = mark()
+            nextTokenSkipSpacesAndNewlines()
+            val nodeType = when (tokenType) {
+                CR_FOR -> parseMacroFor(macroState)
+                CR_IF -> parseMacroIfUnless(macroState, false)
+                CR_UNLESS -> parseMacroIfUnless(macroState, true)
+                CR_BEGIN -> parseMacroBeginEnd(macroState)
+                CR_VERBATIM -> parseMacroVerbatim(macroState)
+                else -> parseMacroWrapper(macroState)
+            }
+            m.done(nodeType)
+            skipSpaces()
+            return true
+        }
+
+        private fun PsiBuilder.consumeMacroStatementClosingBrace(macroState: MacroState?) {
+            val hasClosingBrace = at(CR_MACRO_CONTROL_RBRACE)
+            if (macroState != null) lexer.enterMacro(macroState)
+            if (!hasClosingBrace) error("Expected: '%}'")
+            tok(CR_MACRO_CONTROL_RBRACE)
+        }
+
+        private fun PsiBuilder.parseMacroFor(macroState: MacroState?): IElementType {
+            nextTokenSkipSpaces()
+            while (true) {
+                if (!at(idTokens)) {
+                    error("Expected: <identifier>")
+                    break
+                }
+                composite(CR_VARIABLE_DEFINITION) {
+                    composite(CR_SIMPLE_NAME_ELEMENT) {
+                        nextToken()
+                    }
+                }
+                skipSpaces()
+                if (at(CR_COMMA)) {
+                    nextTokenSkipSpaces()
+                }
+                else break
+            }
+
+            if (tok(CR_IN)) {
+                skipSpaces()
+                parseExpressionInsideMacro()
+            }
+
+            val nestedMacroState = macroState ?: MacroState()
+
+            nestedMacroState.controlNest++
+
+            consumeMacroStatementClosingBrace(nestedMacroState)
+            parseMacroLiteral()
+
+            nestedMacroState.controlNest--
+
+            parseMacroEnd(macroState)
+
+            return CR_MACRO_FOR_STATEMENT
+        }
+
+        private val ifBranchStarts = TokenSet.create(CR_ELSE, CR_ELSIF, CR_END)
+
+        private fun PsiBuilder.parseMacroIfUnless(macroState: MacroState?, isUnless: Boolean, checkEnd: Boolean = true): IElementType {
+            val mComplexExpr = mark()
+
+            nextTokenSkipSpaces()
+
+            inMacroExpression {
+                ensureParseAssignment()
+            }
+
+            if (!at(CR_MACRO_CONTROL_RBRACE) && checkEnd) {
+                if (isUnless) {
+                    parseUnlessAfterCondition()
+                }
+                else {
+                    parseIfAfterCondition(true)
+                }
+                mComplexExpr.done(if (isUnless) CR_UNLESS_EXPRESSION else CR_IF_EXPRESSION)
+
+                skipSpacesAndNewlines()
+
+                consumeMacroStatementClosingBrace(macroState)
+
+                return CR_MACRO_WRAPPER_STATEMENT
+            }
+
+            mComplexExpr.drop()
+
+            val nodeType = if (isUnless) CR_MACRO_UNLESS_STATEMENT else CR_MACRO_IF_STATEMENT
+
+            val nestedMacroState = macroState ?: MacroState()
+
+            nestedMacroState.controlNest++
+
+            consumeMacroStatementClosingBrace(nestedMacroState)
+            parseMacroLiteral()
+
+            nestedMacroState.controlNest--
+
+            if (!at(CR_MACRO_CONTROL_LBRACE)) {
+                error("Expected: '{%'")
+                return nodeType
+            }
+
+            val la = lexer.lookAhead { skipSpacesAndNewlines(); tokenType }
+            if (la !in ifBranchStarts) {
+                unexpected()
+                return nodeType
+            }
+            if (la == CR_END && !checkEnd) return nodeType
+
+            val mNested = mark()
+
+            nextTokenSkipSpacesAndNewlines()
+
+            when (tokenType) {
+                CR_ELSE -> {
+                    mNested.drop()
+
+                    nextTokenSkipSpaces()
+
+                    nestedMacroState.controlNest++
+
+                    consumeMacroStatementClosingBrace(nestedMacroState)
+                    parseMacroLiteral()
+
+                    nestedMacroState.controlNest--
+
+                    if (checkEnd) parseMacroEnd(macroState)
+                }
+
+                CR_ELSIF -> {
+                    if (isUnless) error("'elseif' is not allowed in 'unless'")
+                    parseMacroIfUnless(macroState, false, checkEnd = false)
+                    mNested.done(CR_MACRO_IF_STATEMENT)
+
+                    if (checkEnd) parseMacroEnd(macroState)
+                }
+
+                CR_END -> {
+                    mNested.drop()
+
+                    nextTokenSkipSpaces()
+                    consumeMacroStatementClosingBrace(macroState)
+                }
+            }
+
+            return nodeType
+        }
+
+        private fun PsiBuilder.parseMacroBeginEnd(macroState: MacroState?): IElementType {
+            nextTokenSkipSpaces()
+
+            val nestedMacroState = macroState ?: MacroState()
+
+            nestedMacroState.controlNest++
+
+            consumeMacroStatementClosingBrace(nestedMacroState)
+            parseMacroLiteral()
+
+            nestedMacroState.controlNest--
+
+            parseMacroEnd(macroState)
+
+            return CR_MACRO_BLOCK_STATEMENT
+        }
+
+        private fun PsiBuilder.parseMacroVerbatim(macroState: MacroState?): IElementType {
+            nextTokenSkipSpaces()
+
+            if (!tok(CR_DO)) error("Expected: 'do'")
+            skipSpaces()
+
+            val nestedMacroState = macroState ?: MacroState()
+
+            nestedMacroState.controlNest++
+
+            consumeMacroStatementClosingBrace(nestedMacroState)
+            parseMacroLiteral()
+
+            nestedMacroState.controlNest--
+
+            parseMacroEnd(macroState)
+
+            return CR_MACRO_VERBATIM_STATEMENT
+        }
+
+        private fun PsiBuilder.parseMacroWrapper(macroState: MacroState?) = inMacroExpression {
+            parseExpressions()
+            skipSpacesAndNewlines()
+            consumeMacroStatementClosingBrace(macroState)
+
+            CR_MACRO_WRAPPER_STATEMENT
+        }
+
+        private fun PsiBuilder.parseMacroEnd(macroState: MacroState?) {
+            if (!at(CR_MACRO_CONTROL_LBRACE)) {
+                error("Expected: '{%'")
+                return
+            }
+
+            nextTokenSkipSpacesAndNewlines()
+            if (!tok(CR_END)) error("Expected: 'end'")
+            skipSpaces()
+
+            consumeMacroStatementClosingBrace(macroState)
         }
 
         private fun PsiBuilder.parseHashType(strict: Boolean = true) {

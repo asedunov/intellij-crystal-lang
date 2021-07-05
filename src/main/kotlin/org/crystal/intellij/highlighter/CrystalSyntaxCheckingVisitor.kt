@@ -417,7 +417,8 @@ class CrystalSyntaxCheckingVisitor(
             is CrLibrary,
             is CrFunction,
             is CrAlias,
-            is CrAnnotation -> {
+            is CrAnnotation,
+            is CrMacro -> {
                 val kind = StringUtil.capitalize(o.presentableKind)
                 errorIfInsideDefOrFun(o.defaultAnchor, "$kind definition")
             }

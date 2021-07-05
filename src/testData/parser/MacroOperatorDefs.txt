@@ -1,0 +1,10 @@
+FILE
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement($op)('$op')
+    PsiElement(;)(';')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      <empty list>
+    PsiElement(end)('end')

@@ -2,6 +2,7 @@ package org.crystal.intellij.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.util.text.CharArrayUtil;
 import com.intellij.psi.tree.IElementType;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntStack;
@@ -45,6 +46,10 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   private int zzMarkedPosOld = -1;
   private int zzLexicalStateOld = YYINITIAL;
 
+  private int macroCurlyCount = 0;
+  private final Deque<DelimiterState> delimiterStates = new ArrayDeque<>();
+  private MacroState macroState;
+
   public _CrystalLexer() {
     this((java.io.Reader)null);
   }
@@ -78,6 +83,21 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     return tokenType;
   }
 
+  public void enterMacro(@NotNull MacroState macroState, boolean skipWhitespace) {
+    this.macroState = macroState.copy();
+    yypushbegin(skipWhitespace ? MACRO_SKIP_WHITESPACES : MACRO_START);
+  }
+
+  public void enterMacro(@NotNull MacroState macroState) {
+    this.macroState = macroState.copy();
+    yypushbegin(MACRO_WHITESPACE_ESCAPE);
+  }
+
+  @NotNull
+  public MacroState currentMacroState() {
+      return macroState.copy();
+  }
+
   private boolean eof() {
       return zzMarkedPos == zzBuffer.length();
   }
@@ -99,6 +119,19 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     return type;
   }
 
+  private char yylastchar() {
+      return yycharat(yylength() - 1);
+  }
+
+  private void yypushbackAll() {
+    yypushback(yylength());
+  }
+
+  private void yypushbackAndBegin(int state) {
+    yypushbackAll();
+    yybegin(state);
+  }
+
   private void yypushbegin(int state) {
     states.push(yystate());
     yybegin(state);
@@ -108,6 +141,12 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     int newState = states.isEmpty() ? YYINITIAL : states.popInt();
     if (newState == PERCENT) newState = YYINITIAL;
     yybegin(newState);
+  }
+
+  @NotNull
+  private IElementType popAndHandle(@NotNull IElementType type) {
+      yypop();
+      return handle(type);
   }
 
   @NotNull
@@ -125,6 +164,16 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   @NotNull
   private IElementType startRegex() {
     return pushAndHandle(REGEX_LITERAL_BODY, CR_REGEX_START);
+  }
+
+  private char closingChar(char openChar) {
+    switch (openChar) {
+      case '(': return ')';
+      case '[': return ']';
+      case '{': return '}';
+      case '<': return '>';
+      default: return openChar;
+    }
   }
 
   @Nullable
@@ -169,7 +218,7 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
 
   @NotNull
   private IElementType enterBlock(int blockState, @NotNull IElementType startType, @NotNull IElementType endType) {
-    char ch = yycharat(yylength() - 1);
+    char ch = yylastchar();
     BlockKind kind = blockKindByStartChar(ch);
     if (kind != null) {
       blocks.push(new Block(kind, endType));
@@ -187,14 +236,14 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   }
 
   private void incBlock() {
-    char ch = yycharat(yylength() - 1);
+    char ch = yylastchar();
     BlockKind kind = blockKindByStartChar(ch);
     Block block = blocks.peek();
     if (block != null && block.kind == kind) block.balance++;
   }
 
   private void decBlock() {
-    char ch = yycharat(yylength() - 1);
+    char ch = yylastchar();
     BlockKind kind = blockKindByEndChar(ch);
     Block block = blocks.peek();
     if (block != null && block.kind == kind) block.balance--;
@@ -223,16 +272,13 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
 
   @NotNull
   private IElementType closePrecedingBlockToken(@NotNull IElementType type) {
-    yypushback(yylength());
-    zzStartRead = zzMarkedPos - blockLength;
-    blockLength = 0;
-    return handle(type);
+    yypushbackAll();
+    return closeBlockToken(type);
   }
 
   @Nullable
   private IElementType closePrecedingBlockToken(int nextState, @NotNull IElementType type) {
-    yybegin(nextState);
-    yypushback(yylength());
+    yypushbackAndBegin(nextState);
 
     if (blockLength == 0) return null;
     zzStartRead = zzMarkedPos - blockLength;
@@ -267,9 +313,8 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     CharSequence text = yytext();
     if (StringUtil.equals(StringUtil.trimLeading(text), StringUtil.unquoteString(heredocIds.getFirst()))) {
       heredocIds.pop();
-      yypushback(yylength());
+      yypushbackAndBegin(HEREDOC_END_ID);
       zzStartRead = zzMarkedPos - blockLength;
-      yybegin(HEREDOC_END_ID);
       return handle(CR_HEREDOC_BODY);
     }
     else {
@@ -294,7 +339,8 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     return handle(CR_HEREDOC_END_ID);
   }
 
-  @NotNull IElementType handleSlash() {
+  @NotNull
+  private IElementType handleSlash() {
     if (lexerState.wantsDefOrMacroName) return handle(CR_DIV_OP);
     if (lexerState.slashIsRegex) return startRegex();
     if (eof() || isAsciiWhitespace(zzBuffer.charAt(zzMarkedPos))) return handle(CR_DIV_OP);
@@ -303,7 +349,14 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   }
 
   private boolean isAsciiWhitespace(char c) {
-      return c == ' ' || (c >= 9 && c <= 13);
+    return c == ' ' || (c >= 9 && c <= 13);
+  }
+
+  private void processMacroStartKeyword(boolean nesting) {
+    if (nesting) macroState.nest++;
+    macroState.whitespace = true;
+    macroState.beginningOfLine = false;
+    yybegin(MACRO_MAIN);
   }
 %}
 
@@ -316,6 +369,7 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
 %type IElementType
 
 SINGLE_WHITE_SPACE = " " | \t
+ASCII_WHITESPACE = [\t\f\r\n\x0B\x20]
 WHITE_SPACE = {SINGLE_WHITE_SPACE}+
 SINGLE_NEWLINE = \r\n | [\r\n]
 NEWLINE = {SINGLE_NEWLINE}+
@@ -356,6 +410,7 @@ OP = "+" | "-" | "**" | "*" | "//" | "/" | "===" | "==" | "=~" | "!=" | "!~" | "
 
 ID_START = [a-zA-Z_\u009F-\uFFFF]
 ID_PART = {ID_START} | [0-9]
+ID_PART_OR_END = {ID_PART} | [\?\!]
 ID_BODY = {ID_START} {ID_PART}*
 GLOBAL_MATCH_DATA = \$ [\~\?]
 GLOBAL_MATCH_DATA_INDEX = \$ {DEC_DIGIT}+ "?"?
@@ -376,11 +431,37 @@ BLOCK_END = [\)\]\}\>\|]
 
 SIMPLE_STRING_BLOCK_START = \% q {BLOCK_START}
 STRING_BLOCK_START = \% Q? {BLOCK_START}
+STRING_BLOCK_START_STRICT = \% Q {BLOCK_START}
 COMMAND_BLOCK_START = \% x {BLOCK_START}
 REGEX_BLOCK_START = \% r {BLOCK_START}
 
 STRING_ARRAY_BLOCK_START = \% w {BLOCK_START}
 SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
+
+MACRO_START_KEYWORD1 =
+  "abstract" {WHITE_SPACE} "class"  |
+  "abstract" {WHITE_SPACE} "struct" |
+  "annotation"                      |
+  "begin"                           |
+  "case"                            |
+  "class"                           |
+  "do"                              |
+  "def"                             |
+  "enum"                            |
+  "fun"                             |
+  "lib"                             |
+  "macro"                           |
+  "module"                          |
+  "select"                          |
+  "struct"                          |
+  "union"                           |
+  "yield"
+
+MACRO_START_KEYWORD2 =
+  "if"     |
+  "unless" |
+  "until"  |
+  "while"
 
 %state HEREDOC_START_ID
 %state HEREDOC_HEADER
@@ -406,6 +487,24 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 %state REGEX_BLOCK
 %state STRING_ARRAY_BLOCK
 
+%state MACRO_WHITESPACE_ESCAPE
+%state MACRO_SKIP_WHITESPACES
+%state MACRO_START
+%state MACRO_CONTROL_KEYWORD
+%state MACRO_START_CONTROL_KEYWORD
+%state MACRO_END_CONTROL_KEYWORD
+%state MACRO_CHECK_COMMENT
+%state MACRO_COMMENT
+%state MACRO_NO_DELIMITER
+%state MACRO_END_KEYWORD
+%state MACRO_MAIN
+%state MACRO_CHECK_HEREDOC_START
+%state MACRO_CHECK_HEREDOC_END
+%state MACRO_CHECK_KEYWORD
+%state MACRO_CHECK_KEYWORD2
+%state MACRO_POSTPROCESS_DELIMITER_STATE
+%state MACRO_GENERAL_LITERAL
+
 %state BLOCK_END
 
 %state PERCENT
@@ -416,7 +515,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 
 <HEREDOC_START_ID> {
   {HEREDOC_START_ID}             { return consumeHeredocStartId(); }
-  [^]                            { yypop(); yypushback(yylength()); }
+  ""                             { yypop(); }
 }
 
 <HEREDOC_HEADER> {
@@ -537,15 +636,15 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 
 <CHAR_UNICODE_BLOCK> {
   {VAR_CHAR_CODE}                { return handle(CR_CHAR_CODE); }
-  {UNICODE_BLOCK_ESCAPE_END}     { yypop(); return handle(CR_UNICODE_BLOCK_END); }
-  [^]                            { yypushback(yylength()); yypop(); }
+  {UNICODE_BLOCK_ESCAPE_END}     { return popAndHandle(CR_UNICODE_BLOCK_END); }
+  ""                             { yypop(); }
 }
 
 <STRING_UNICODE_BLOCK> {
   {VAR_CHAR_CODE}                { return handle(CR_CHAR_CODE); }
   {WHITE_SPACE}                  { return handle(CR_WHITESPACE); }
-  {UNICODE_BLOCK_ESCAPE_END}     { yypop(); return handle(CR_UNICODE_BLOCK_END); }
-  [^]                            { yypushback(yylength()); yypop(); }
+  {UNICODE_BLOCK_ESCAPE_END}     { return popAndHandle(CR_UNICODE_BLOCK_END); }
+  ""                             { yypop(); }
 }
 
 <SYMBOL_BODY> {
@@ -565,7 +664,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
     yypop();
     return handle(CR_STRING_RAW);
   }
-  \"                             { yybegin(SYMBOL_BODY); return handle(CR_STRING_START); }
+  \"                             { return beginAndHandle(SYMBOL_BODY, CR_STRING_START); }
 }
 
 <STRING_BLOCK, SIMPLE_STRING_BLOCK, REGEX_BLOCK, STRING_ARRAY_BLOCK> {
@@ -665,6 +764,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   {SYMBOL_ARRAY_BLOCK_START}     { return enterBlock(STRING_ARRAY_BLOCK, CR_SYMBOL_ARRAY_START, CR_SYMBOL_ARRAY_END); }
 
   "%="                           { return beginAndHandle(YYINITIAL, CR_MOD_ASSIGN_OP); }
+  "%}"                           { return beginAndHandle(YYINITIAL, CR_MACRO_CONTROL_RBRACE); }
   "%"                            { return beginAndHandle(YYINITIAL, CR_MOD_OP); }
 }
 
@@ -705,8 +805,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   "/"                            { return handleSlash(); }
   "%"                            {
     if (lexerState.wantsDefOrMacroName) return handle(CR_MOD_OP);
-    yypushback(1);
-    yybegin(PERCENT);
+    yypushbackAndBegin(PERCENT);
   }
 }
 
@@ -806,6 +905,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   "instance_sizeof"              { return handle(CR_INSTANCE_SIZEOF); }
   "is_a?"                        { return handle(CR_IS_A); }
   "lib"                          { return handle(CR_LIB); }
+  "macro"                        { return handle(CR_MACRO); }
   "module"                       { return handle(CR_MODULE); }
   "next"                         { return handle(CR_NEXT); }
   "nil"                          { return handle(CR_NIL); }
@@ -850,9 +950,9 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   {GLOBAL_MATCH_DATA_INDEX}      { return handle(CR_GLOBAL_MATCH_DATA_INDEX); }
   {GLOBAL_ID}                    { return handle(CR_GLOBAL_VAR); }
   {ID_BODY} (\? | \!)? "="?      {
-    if (yycharat(yylength() - 1) == '=') yypushback(1);
+    if (yylastchar() == '=') yypushback(1);
     boolean isConst = Character.isUpperCase(yycharat(0));
-    char lastChar = yycharat(yylength() - 1);
+    char lastChar = yylastchar();
     if (isConst && (lastChar == '?' || lastChar == '!')) yypushback(1);
     return handle(isConst ? CR_CONSTANT : CR_IDENTIFIER);
   }
@@ -867,6 +967,8 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   "[]="                          { return handle(CR_INDEXED_SET_OP); }
   "[]?"                          { return handle(CR_INDEXED_CHECK_OP); }
   "{"                            { return handle(CR_LBRACE); }
+  "{{"                           { return handle(CR_MACRO_EXPRESSION_LBRACE); }
+  "{%"                           { return handle(CR_MACRO_CONTROL_LBRACE); }
   "}"                            { return handle(CR_RBRACE); }
 }
 
@@ -882,4 +984,427 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   "%"                            { return handle(CR_MOD_OP); }
 
   [^]                            { return handle(CR_BAD_CHARACTER); }
+}
+
+<MACRO_WHITESPACE_ESCAPE> {
+  \\ / {ASCII_WHITESPACE}        {
+    lexerState.slashIsRegex = true;
+    yybegin(MACRO_SKIP_WHITESPACES);
+  }
+
+  ""                             {
+    lexerState.slashIsRegex = true;
+    yybegin(MACRO_START);
+  }
+}
+
+<MACRO_SKIP_WHITESPACES> {
+  ({ASCII_WHITESPACE} | {SINGLE_NEWLINE})+ { return beginAndHandle(MACRO_START, CR_WHITESPACE); }
+
+  ""                                       { yybegin(MACRO_START); }
+}
+
+<MACRO_START> {
+  "\\{%" {ASCII_WHITESPACE}*     {
+    macroState.beginningOfLine = false;
+    yybegin(MACRO_CONTROL_KEYWORD);
+  }
+
+  "\\{"                          |
+  "\\%"                          {
+    macroState.beginningOfLine = false;
+    return popAndHandle(CR_MACRO_FRAGMENT);
+  }
+
+  "{{"                           {
+    macroState.beginningOfLine = false;
+    return popAndHandle(CR_MACRO_EXPRESSION_LBRACE);
+  }
+
+  "{%"                           {
+    macroState.beginningOfLine = false;
+    return popAndHandle(CR_MACRO_CONTROL_LBRACE);
+  }
+
+  "{"                            {
+    if (macroCurlyCount > 0) macroCurlyCount++;
+    yybegin(MACRO_CHECK_COMMENT);
+  }
+
+  ""                             { yybegin(MACRO_CHECK_COMMENT); }
+}
+
+<MACRO_CONTROL_KEYWORD> {
+  "end"                          { yybegin(MACRO_END_CONTROL_KEYWORD); }
+  "for"                          { yybegin(MACRO_START_CONTROL_KEYWORD); }
+  "if"                           { yybegin(MACRO_START_CONTROL_KEYWORD); }
+  ""                             { return popAndHandle(CR_MACRO_FRAGMENT); }
+}
+
+<MACRO_CONTROL_KEYWORD> <<EOF>>  { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_START_CONTROL_KEYWORD> {
+  {ID_PART_OR_END}               {
+    yypushbackAll();
+    return popAndHandle(CR_MACRO_FRAGMENT);
+  }
+
+  ""                             {
+    macroState.nest++;
+    return popAndHandle(CR_MACRO_FRAGMENT);
+  }
+}
+
+<MACRO_START_CONTROL_KEYWORD> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_END_CONTROL_KEYWORD> {
+  {ID_PART_OR_END}               {
+    yypushbackAll();
+    return popAndHandle(CR_MACRO_FRAGMENT);
+  }
+
+  ""                             {
+    macroState.nest--;
+    return popAndHandle(CR_MACRO_FRAGMENT);
+  }
+}
+
+<MACRO_END_CONTROL_KEYWORD> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_CHECK_COMMENT> {
+  "#"                            {
+    if (macroState.delimiterState == null) {
+      macroState.comment = true;
+    }
+    else {
+      yypushbackAll();
+    }
+  }
+
+  ""                             {
+    yybegin(macroState.comment ? MACRO_COMMENT : MACRO_NO_DELIMITER);
+  }
+}
+
+<MACRO_CHECK_COMMENT> <<EOF>>    { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_COMMENT> {
+  \n                             {
+    macroState.comment = false;
+    macroState.beginningOfLine = true;
+    macroState.whitespace = true;
+    yybegin(macroState.delimiterState == null ? MACRO_NO_DELIMITER : MACRO_MAIN);
+  }
+
+  "{"                            {
+    yybegin(macroState.delimiterState == null ? MACRO_NO_DELIMITER : MACRO_MAIN);
+  }
+
+  ""                             {
+    yybegin(MACRO_NO_DELIMITER);
+  }
+}
+
+<MACRO_COMMENT> <<EOF>>          { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_NO_DELIMITER> {
+  {SIMPLE_STRING_BLOCK_START}    {
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.STRING, 'q', closingChar(yylastchar()), 1);
+    yybegin(MACRO_MAIN);
+  }
+
+  {STRING_BLOCK_START_STRICT}    {
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.STRING, 'Q', closingChar(yylastchar()), 1);
+    yybegin(MACRO_MAIN);
+  }
+
+  {COMMAND_BLOCK_START}          {
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.COMMAND, 'x', closingChar(yylastchar()), 1);
+    yybegin(MACRO_MAIN);
+  }
+
+  {REGEX_BLOCK_START}            {
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.REGEX, 'r', closingChar(yylastchar()), 1);
+    yybegin(MACRO_MAIN);
+  }
+
+  {STRING_ARRAY_BLOCK_START}     {
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.STRING_ARRAY, 'w', closingChar(yylastchar()), 1);
+    yybegin(MACRO_MAIN);
+  }
+
+  {SYMBOL_ARRAY_BLOCK_START}     {
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.SYMBOL_ARRAY, 'i', closingChar(yylastchar()), 1);
+    yybegin(MACRO_MAIN);
+  }
+
+  "%" {ID_BODY}                  {
+    macroState.beginningOfLine = false;
+    return popAndHandle(CR_MACRO_VAR);
+  }
+
+  "end"                          {
+    macroState.beginningOfLine = false;
+    yybegin(macroState.whitespace ? MACRO_END_KEYWORD : MACRO_MAIN);
+  }
+
+  ""                             {
+    yybegin(MACRO_MAIN);
+  }
+}
+
+<MACRO_NO_DELIMITER> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_END_KEYWORD> {
+  {ID_PART_OR_END}               {
+    yypushbackAll();
+    yybegin(MACRO_MAIN);
+  }
+
+  ""                             {
+    if (macroState.nest == 0 && macroState.controlNest == 0) {
+      return popAndHandle(CR_END);
+    }
+    else {
+      macroState.nest--;
+      yybegin(MACRO_MAIN);
+    }
+  }
+}
+
+<MACRO_END_KEYWORD> <<EOF>> {
+  return popAndHandle(
+    macroState.nest == 0 && macroState.controlNest == 0
+      ? CR_END
+      : CR_MACRO_FRAGMENT
+  );
+}
+
+<MACRO_MAIN> {
+  "{"                            |
+  "\\{"                          |
+  "\\%"                          {
+      yypushbackAll();
+      return popAndHandle(CR_MACRO_FRAGMENT);
+    }
+
+  "end"                          {
+      if (macroState.whitespace && macroState.delimiterState == null) {
+        yypushbackAll();
+        return popAndHandle(CR_MACRO_FRAGMENT);
+      }
+      else {
+        macroState.whitespace = false;
+        macroState.beginningOfLine = false;
+      }
+    }
+
+  \n                             {
+    macroState.whitespace = true;
+    macroState.beginningOfLine = true;
+    Deque<DelimiterState> heredocs = macroState.heredocs;
+    if (macroState.delimiterState == null && heredocs != null && !heredocs.isEmpty()) {
+      macroState.delimiterState = heredocs.removeFirst();
+    }
+    if (macroState.delimiterState != null && macroState.delimiterState.kind == DelimiterKind.HEREDOC) {
+      yybegin(MACRO_CHECK_HEREDOC_END);
+    }
+  }
+
+  "\\\""                         {
+    if (macroState.delimiterState == null) yypushback(1);
+    macroState.whitespace = false;
+  }
+
+  [\\\%]                         {
+    macroState.whitespace = false;
+  }
+
+  [\'\"]                         {
+    char ch = yycharat(0);
+    if (macroState.delimiterState == null) {
+      macroState.delimiterState = DelimiterState.create(DelimiterKind.STRING, ch, ch);
+    }
+    else if (macroState.delimiterState.getEndChar() == ch) {
+      macroState.delimiterState = null;
+    }
+    macroState.whitespace = false;
+  }
+
+  % {BLOCK_START}                {
+    char ch = yylastchar();
+    macroState.delimiterState = DelimiterState.create(DelimiterKind.STRING, ch, closingChar(ch), 1);
+  }
+
+  % {ID_START}                 {
+    macroState.whitespace = false;
+    if (macroState.delimiterState == null) {
+      yypushbackAll();
+      return popAndHandle(CR_MACRO_FRAGMENT);
+    }
+    else {
+      yypushback(1);
+    }
+  }
+
+  "#{"                           {
+      if (macroState.delimiterState == null) {
+        yypushbackAll();
+        return popAndHandle(CR_MACRO_FRAGMENT);
+      }
+      macroCurlyCount++;
+      delimiterStates.push(macroState.delimiterState);
+      macroState.delimiterState = null;
+      macroState.whitespace = false;
+    }
+
+  "#"                            {
+      if (macroState.delimiterState == null) {
+        yypushbackAll();
+        return popAndHandle(CR_MACRO_FRAGMENT);
+      }
+      macroState.whitespace = false;
+    }
+
+  "}"                            {
+    if (macroState.delimiterState != null && macroState.delimiterState.getEndChar() == '}') {
+      macroState.delimiterState = macroState.delimiterState.withOpenCountDelta(-1);
+      if (macroState.delimiterState.openCount == 0) macroState.delimiterState = null;
+    }
+    else if (macroCurlyCount > 0) {
+      macroCurlyCount--;
+      if (macroCurlyCount == 0) macroState.delimiterState = delimiterStates.pop();
+    }
+  }
+
+  "<"                            {
+    if (macroState.delimiterState == null && delimiterStates.isEmpty()) {
+      yypushbackAndBegin(MACRO_CHECK_HEREDOC_START);
+    }
+  }
+
+  ""                             {
+      yybegin(
+        macroState.delimiterState == null && macroState.whitespace
+          ? MACRO_CHECK_KEYWORD
+          : MACRO_POSTPROCESS_DELIMITER_STATE
+      );
+    }
+}
+
+<MACRO_MAIN> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_CHECK_HEREDOC_START> {
+  {HEREDOC_START}{HEREDOC_START_ID} {
+    String id = StringUtil.unquoteString(yytext().subSequence(3, yylength()).toString());
+    if (macroState.heredocs == null) macroState.heredocs = new ArrayDeque<>();
+    macroState.heredocs.addLast(new DelimiterState(DelimiterKind.HEREDOC, id, id));
+    yybegin(MACRO_MAIN);
+  }
+
+  "<"                            {
+    yybegin(MACRO_MAIN);
+  }
+}
+
+<MACRO_CHECK_HEREDOC_END> {
+  [^\'\r\n]+ (\r\n | \n)?         {
+      boolean newLine = yylastchar() == '\n';
+      boolean foundEndId = newLine || eof();
+      int n = yylength();
+      int suffixSize = n > 1 && yycharat(n - 2) == '\r'
+        ? 2
+        : newLine
+          ? 1
+          : 0;
+      if (foundEndId) {
+        int from = 0;
+        while (from < n) {
+          char ch = yycharat(from);
+          if (ch == ' ' || ch == '\t') from++; else break;
+        }
+        int to = n - suffixSize;
+        String currentId = macroState.delimiterState.end;
+        foundEndId = CharArrayUtil.regionMatches(yytext(), from, to, currentId, 0, currentId.length());
+      }
+      if (foundEndId) {
+        Deque<DelimiterState> heredocs = macroState.heredocs;
+        macroState.delimiterState = heredocs != null && !heredocs.isEmpty() ? heredocs.removeFirst() : null;
+        yypushback(suffixSize);
+      }
+      else {
+        yypushbackAll();
+      }
+      yybegin(MACRO_MAIN);
+    }
+
+  ""                              { yybegin(MACRO_MAIN); }
+}
+
+<MACRO_CHECK_HEREDOC_END> <<EOF>> { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_CHECK_KEYWORD> {
+  {MACRO_START_KEYWORD1} / !{ID_PART_OR_END}      {
+    processMacroStartKeyword(true);
+  }
+
+  "abstract" {WHITE_SPACE} "def" !{ID_PART_OR_END}    {
+    processMacroStartKeyword(false);
+  }
+
+  ""                                                  {
+    yybegin(macroState.beginningOfLine ? MACRO_CHECK_KEYWORD2 : MACRO_POSTPROCESS_DELIMITER_STATE);
+  }
+}
+
+<MACRO_CHECK_KEYWORD> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_CHECK_KEYWORD2> {
+  {MACRO_START_KEYWORD2} / !{ID_PART_OR_END}               {
+    processMacroStartKeyword(true);
+  }
+
+  ""                                                       {
+    yybegin(MACRO_POSTPROCESS_DELIMITER_STATE);
+  }
+}
+
+<MACRO_CHECK_KEYWORD2> <<EOF>>    { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_POSTPROCESS_DELIMITER_STATE> {
+  ""                                                      {
+    DelimiterState delimiterState = macroState.delimiterState;
+    if (delimiterState != null) {
+        char ch = yycharat(0);
+        if (delimiterState.getNestChar() == ch) {
+          macroState.delimiterState = delimiterState.withOpenCountDelta(1);
+        }
+        else if (delimiterState.getEndChar() == ch) {
+          macroState.delimiterState = delimiterState.openCount == 1 ? null : delimiterState.withOpenCountDelta(-1);
+        }
+    }
+    yybegin(MACRO_GENERAL_LITERAL);
+  }
+}
+
+<MACRO_POSTPROCESS_DELIMITER_STATE> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
+
+<MACRO_GENERAL_LITERAL> {
+  "=" {ASCII_WHITESPACE}                              {
+    macroState.whitespace = false;
+    macroState.beginningOfLine = true;
+    yybegin(MACRO_MAIN);
+  }
+
+  {ASCII_WHITESPACE}                                  |
+  [\;\(\[\{]                                          {
+    macroState.whitespace = true;
+    yybegin(MACRO_MAIN);
+  }
+
+  [^]                                                 {
+    macroState.whitespace = false;
+    macroState.beginningOfLine = false;
+    yybegin(MACRO_MAIN);
+  }
 }

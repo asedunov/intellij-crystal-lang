@@ -78,6 +78,9 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testGenerics() = doTestSingleFileWithMultiFragments()
     fun testHashesAndTuples() = doTestSingleFileWithMultiFragments()
     fun testLibraries() = doTestSingleFileWithMultiFragments()
+    fun testMacroDefs() = doTestSingleFileWithMultiFragments()
+    fun testMacroExpressions() = doTestSingleFileWithMultiFragments()
+    fun testMacroStatements() = doTestSingleFileWithMultiFragments()
     fun testMisc() = doTestSingleFileWithMultiFragments()
     fun testOperators() = doTestSingleFileWithMultiFragments()
     fun testPseudoConstants() = doTestSingleFileWithMultiFragments()
@@ -351,6 +354,32 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
                     def self.$op(); end;
                 """.trimIndent()
             ) { replace("\$op", op) }
+        }
+    }
+
+    fun testMacroOperatorDefs() {
+        listOf("`", "<<", "<", "<=", "==", "===", "!=", "=~", "!~", ">>", ">", ">=", "+", "-", "*", "/", "//", "~", "%", "&", "|", "^", "**", "[]?", "[]=", "<=>", "&+", "&-", "&*", "&**").forEach { op ->
+            doCustomTest(
+                """
+                    macro $op;end
+                """.trimIndent()
+            ) { replace("\$op", op) }
+        }
+    }
+
+    fun testStringBlocksInMacroFragment() {
+        listOf("(" to ")", "[" to "]", "{" to "}", "<" to ">", "|" to "|").forEach { (open, close) ->
+            doCustomTest(
+                """
+                    {% begin %}%$open %s $close{% end %}
+                    {% begin %}%q$open %s $close{% end %}
+                    {% begin %}%Q$open %s $close{% end %}
+                    {% begin %}%i$open %s $close{% end %}
+                    {% begin %}%w$open %s $close{% end %}
+                    {% begin %}%x$open %s $close{% end %}
+                    {% begin %}%r$open\\A$close{% end %}
+                """.trimIndent()
+            ) { replace("\$open", open).replace("\$close", close) }
         }
     }
 

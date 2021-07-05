@@ -77,6 +77,7 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_IS_A = CrystalKeywordTokenType("is_a?")
 @JvmField val CR_IS_NIL = CrystalKeywordTokenType("nil?")
 @JvmField val CR_LIB = CrystalKeywordTokenType("lib")
+@JvmField val CR_MACRO = CrystalKeywordTokenType("macro")
 @JvmField val CR_MODULE = CrystalKeywordTokenType("module")
 @JvmField val CR_NEXT = CrystalKeywordTokenType("next")
 @JvmField val CR_NIL = CrystalKeywordTokenType("nil")
@@ -217,6 +218,7 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_GLOBAL_MATCH_DATA = CrystalTokenType("<global match data>")
 @JvmField val CR_GLOBAL_MATCH_DATA_INDEX = CrystalTokenType("<global match data index>")
 @JvmField val CR_INSTANCE_VAR = CrystalTokenType("<instance variable>")
+@JvmField val CR_MACRO_VAR = CrystalTokenType("<macro variable>")
 @JvmField val CR_UNDERSCORE = CrystalTokenType("_")
 
 // Numbers
@@ -231,6 +233,10 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_RBRACE = CrystalTokenType("}")
 @JvmField val CR_RBRACKET = CrystalTokenType("]")
 @JvmField val CR_RPAREN = CrystalTokenType(")")
+@JvmField val CR_MACRO_EXPRESSION_LBRACE = CrystalTokenType("{{")
+@JvmField val CR_MACRO_EXPRESSION_RBRACE = CrystalTokenType("}}")
+@JvmField val CR_MACRO_CONTROL_LBRACE = CrystalTokenType("{%")
+@JvmField val CR_MACRO_CONTROL_RBRACE = CrystalTokenType("%}")
 
 // Miscellaneous
 @JvmField val CR_ARROW_OP = CrystalTokenType("->")
@@ -239,6 +245,7 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_COLON = CrystalTokenType(":")
 @JvmField val CR_COMMA = CrystalTokenType(",")
 @JvmField val CR_DOT = CrystalTokenType(".")
+@JvmField val CR_MACRO_FRAGMENT = CrystalTokenType("<macro fragment>")
 @JvmField val CR_QUESTION = CrystalTokenType("?")
 @JvmField val CR_SEMICOLON = CrystalTokenType(";")
 

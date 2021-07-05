@@ -50,4 +50,11 @@ class CrystalLexer : FlexAdapter(_CrystalLexer()) {
     }
 
     fun lookAhead(): IElementType? = delegate.lookAhead()
+
+    val macroState: MacroState
+        get() = delegate.currentMacroState()
+
+    fun enterMacro(macroState: MacroState = MacroState()) = delegate.enterMacro(macroState)
+
+    fun enterMacro(macroState: MacroState, skipWhitespaces: Boolean) = delegate.enterMacro(macroState, skipWhitespaces)
 }

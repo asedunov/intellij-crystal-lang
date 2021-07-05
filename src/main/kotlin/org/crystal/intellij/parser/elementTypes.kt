@@ -22,6 +22,7 @@ val CR_ENUM_DEFINITION = CrCompositeElementType("CR_ENUM_DEFINITION", ::CrEnum)
 val CR_ENUM_CONSTANT_DEFINITION = CrCompositeElementType("CR_ENUM_CONSTANT_DEFINITION", ::CrEnumConstant)
 val CR_FUNCTION_DEFINITION = CrCompositeElementType("CR_FUNCTION_DEFINITION", ::CrFunction)
 val CR_LIBRARY_DEFINITION = CrCompositeElementType("CR_LIBRARY_DEFINITION", ::CrLibrary)
+val CR_MACRO_DEFINITION = CrCompositeElementType("CR_MACRO_DEFINITION", ::CrMacro)
 val CR_METHOD_DEFINITION = CrCompositeElementType("CR_METHOD_DEFINITION", ::CrMethod)
 val CR_MODULE_DEFINITION = CrCompositeElementType("CR_MODULE_DEFINITION", ::CrModule)
 val CR_MULTI_PARAMETER_DEFINITION = CrCompositeElementType("CR_MULTI_PARAMETER_DEFINITION", ::CrMultiParameter)
@@ -62,6 +63,9 @@ val CR_INTEGER_LITERAL_EXPRESSION = CrCompositeElementType("CR_INTEGER_LITERAL_E
 val CR_IS_EXPRESSION = CrCompositeElementType("CR_IS_EXPRESSION", ::CrIsExpression)
 val CR_IS_NIL_EXPRESSION = CrCompositeElementType("CR_IS_NIL_EXPRESSION", ::CrIsNilExpression)
 val CR_LIST_EXPRESSION = CrCompositeElementType("CR_LIST_EXPRESSION", ::CrListExpression)
+val CR_MACRO_EXPRESSION = CrCompositeElementType("CR_MACRO_EXPRESSION", ::CrMacroExpression)
+val CR_MACRO_LITERAL = CrCompositeElementType("CR_MACRO_LITERAL", ::CrMacroLiteral)
+val CR_MACRO_VARIABLE_EXPRESSION = CrCompositeElementType("CR_MACRO_VARIABLE_EXPRESSION", ::CrMacroVariableExpression)
 val CR_NAMED_TUPLE_EXPRESSION = CrCompositeElementType("CR_NAMED_TUPLE_EXPRESSION", ::CrNamedTupleExpression)
 val CR_NEXT_EXPRESSION = CrCompositeElementType("CR_NEXT_EXPRESSION", ::CrNextExpression)
 val CR_NIL_EXPRESSION = CrCompositeElementType("CR_NIL_EXPRESSION", ::CrNilExpression)
@@ -121,6 +125,14 @@ val CR_NAMED_ARGUMENT = CrCompositeElementType("CR_NAMED_ARGUMENT", ::CrNamedArg
 val CR_OUT_ARGUMENT = CrCompositeElementType("CR_OUT_ARGUMENT", ::CrOutArgument)
 val CR_SHORT_BLOCK_ARGUMENT = CrCompositeElementType("CR_SHORT_BLOCK_ARGUMENT", ::CrShortBlockArgument)
 val CR_SPLAT_ARGUMENT = CrCompositeElementType("CR_SPLAT_ARGUMENT", ::CrSplatArgument)
+
+// Macro statements
+val CR_MACRO_BLOCK_STATEMENT = CrCompositeElementType("CR_MACRO_BLOCK_STATEMENT", ::CrMacroBlockStatement)
+val CR_MACRO_FOR_STATEMENT = CrCompositeElementType("CR_MACRO_FOR_STATEMENT", ::CrMacroForStatement)
+val CR_MACRO_IF_STATEMENT = CrCompositeElementType("CR_MACRO_IF_STATEMENT", ::CrMacroIfStatement)
+val CR_MACRO_UNLESS_STATEMENT = CrCompositeElementType("CR_MACRO_UNLESS_STATEMENT", ::CrMacroUnlessStatement)
+val CR_MACRO_VERBATIM_STATEMENT = CrCompositeElementType("CR_MACRO_VERBATIM_STATEMENT", ::CrMacroVerbatimStatement)
+val CR_MACRO_WRAPPER_STATEMENT = CrCompositeElementType("CR_MACRO_WRAPPER_STATEMENT", ::CrMacroWrapperStatement)
 
 // Miscellaneous
 val CR_ASM_CLOBBER_LIST = CrCompositeElementType("CR_ASM_CLOBBER_LIST", ::CrAsmClobberList)

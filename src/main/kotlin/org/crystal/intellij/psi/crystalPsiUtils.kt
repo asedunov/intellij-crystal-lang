@@ -20,6 +20,7 @@ val CrNamedElement.presentableKind: String
         is CrTypeDef -> "type definition"
         is CrTypeParameter -> "type parameter"
         is CrVariable -> "variable"
+        is CrMacro -> "macro"
         is CrNamedTupleEntry -> "named tuple entry"
         is CrNamedArgument -> "named argument"
         is CrLabeledType -> "named type argument"

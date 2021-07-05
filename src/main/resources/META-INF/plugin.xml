@@ -21,5 +21,6 @@
         <lang.psiStructureViewFactory language="Crystal"
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>
         <lang.commenter language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalCommenter"/>
+        <lang.foldingBuilder language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalFoldingBuilder"/>
     </extensions>
 </idea-plugin>

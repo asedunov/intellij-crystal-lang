@@ -25,8 +25,8 @@ FILE
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('3')
       PsiElement(;)(';')
-      PsiWhiteSpace(' ')
-      PsiElement(end)('end')
+    PsiWhiteSpace(' ')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -58,8 +58,8 @@ FILE
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('3')
       PsiElement(;)(';')
-      PsiWhiteSpace(' ')
-      PsiElement(end)('end')
+    PsiWhiteSpace(' ')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -82,8 +82,8 @@ FILE
       PsiWhiteSpace('\n')
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('3')
-      PsiWhiteSpace('\n')
-      PsiElement(end)('end')
+    PsiWhiteSpace('\n')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -130,8 +130,8 @@ FILE
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('3')
       PsiElement(;)(';')
-      PsiWhiteSpace(' ')
-      PsiElement(end)('end')
+    PsiWhiteSpace(' ')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -161,8 +161,8 @@ FILE
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('3')
       PsiElement(;)(';')
-      PsiWhiteSpace(' ')
-      PsiElement(end)('end')
+    PsiWhiteSpace(' ')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -568,8 +568,8 @@ FILE
         PsiWhiteSpace(' ')
         CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
           PsiElement(<integer literal>)('2')
-      PsiWhiteSpace('\n')
-      PsiElement(end)('end')
+    PsiWhiteSpace('\n')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -598,8 +598,8 @@ FILE
         PsiElement(<regex start>)('/')
         PsiElement(<string raw>)(' ')
         PsiElement(<regex end>)('/')
-      PsiWhiteSpace('\n')
-      PsiElement(end)('end')
+    PsiWhiteSpace('\n')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -672,8 +672,8 @@ FILE
       PsiWhiteSpace('\n')
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('2')
-      PsiWhiteSpace('\n')
-      PsiElement(end)('end')
+    PsiWhiteSpace('\n')
+    PsiElement(end)('end')
 
   CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
     CrReferenceExpression(CR_REFERENCE_EXPRESSION)
@@ -1220,8 +1220,8 @@ FILE
     PsiWhiteSpace(' ')
     CrElseClause(CR_ELSE_CLAUSE)
       PsiElement(else)('else')
-      PsiErrorElement:Expected: 'end'
-        <empty list>
+    PsiErrorElement:Expected: 'end'
+      <empty list>
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -1366,8 +1366,8 @@ FILE
       PsiWhiteSpace('\n')
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('3')
-      PsiWhiteSpace('\n')
-      PsiElement(end)('end')
+    PsiWhiteSpace('\n')
+    PsiElement(end)('end')
 
   CrSelectExpression(CR_SELECT_EXPRESSION)
     PsiElement(select)('select')

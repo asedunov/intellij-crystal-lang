@@ -3518,11 +3518,13 @@ class CrystalParser : PsiParser, LightPsiParser {
                                 nextTokenSkipStatementEnd()
 
                                 parseExpressions()
-                                skipStatementEnd()
-
-                                recoverUntil("'end'", true) { at(CR_END) }
-                                tok(CR_END)
                             }
+
+                            skipStatementEnd()
+
+                            recoverUntil("'end'", true) { at(CR_END) }
+                            tok(CR_END)
+
                             break
                         }
 
@@ -3574,11 +3576,13 @@ class CrystalParser : PsiParser, LightPsiParser {
                                 nextTokenSkipStatementEnd()
 
                                 parseExpressions()
-                                skipStatementEnd()
-
-                                recoverUntil("'end'", true) { at(CR_END) }
-                                tok(CR_END)
                             }
+
+                            skipStatementEnd()
+
+                            recoverUntil("'end'", true) { at(CR_END) }
+                            tok(CR_END)
+
                             break
                         }
 

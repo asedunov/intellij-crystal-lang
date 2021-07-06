@@ -591,8 +591,8 @@ FILE
         PsiElement(<string raw>)(' ')
         PsiElement(<regex end>)('/')
       PsiElement(;)(';')
-      PsiWhiteSpace(' ')
-      PsiElement(end)('end')
+    PsiWhiteSpace(' ')
+    PsiElement(end)('end')
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -623,8 +623,8 @@ FILE
         PsiElement(<regex start>)('/')
         PsiElement(<string raw>)(' ')
         PsiElement(<regex end>)('/')
-      PsiWhiteSpace('\n')
-      PsiElement(end)('end')
+    PsiWhiteSpace('\n')
+    PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
     PsiElement(def)('def')

@@ -22,5 +22,8 @@
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>
         <lang.commenter language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalCommenter"/>
         <lang.foldingBuilder language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalFoldingBuilder"/>
+
+        <typedHandler implementation="org.crystal.intellij.editor.CrystalTypedHandler"
+                      order="before selectionQuoting" />
     </extensions>
 </idea-plugin>

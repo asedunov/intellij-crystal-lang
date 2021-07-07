@@ -1,6 +1,7 @@
 package org.crystal.intellij.psi
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.SyntaxTraverser
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.containers.JBIterable
@@ -8,6 +9,9 @@ import org.crystal.intellij.util.firstInstanceOrNull
 
 fun PsiElement.traverser() =
     SyntaxTraverser.psiTraverser(this)
+
+fun PsiElement.parents() =
+    JBIterable.generate(this) { if (it is PsiFile) null else it.parent }
 
 fun PsiElement.allChildren() =
     JBIterable.generate(firstChild) { it.nextSibling }

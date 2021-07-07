@@ -23,4 +23,18 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
             }
         }
     }
+
+    fun testPairedQuoteReplacement() {
+        for (quoteBefore in quotes) {
+            for (quoteAfter in quotes) {
+                if (quoteBefore == quoteAfter) continue
+
+                doTest(
+                    "<selection>${quoteBefore}</selection>foo${quoteBefore}",
+                    quoteAfter,
+                    "${quoteAfter}<caret>foo${quoteAfter}"
+                )
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package org.crystal.intellij.editor
 
+import com.google.common.collect.ImmutableBiMap
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.injected.editor.EditorWindow
@@ -11,11 +12,6 @@ import com.intellij.openapi.editor.ex.EditorEx
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import com.intellij.psi.util.elementType
-import org.crystal.intellij.lexer.CR_CHAR_END
-import org.crystal.intellij.lexer.CR_COMMAND_END
-import org.crystal.intellij.lexer.CR_REGEX_END
-import org.crystal.intellij.lexer.CR_STRING_END
 import org.crystal.intellij.psi.*
 
 class CrystalTypedHandler : TypedHandlerDelegate() {
@@ -23,24 +19,49 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
         if (file !is CrFile) return Result.CONTINUE
 
         // Based on the com.intellij.codeInsight.editorActions.TypedHandler.handleQuote
-        if (CodeInsightSettings.getInstance().AUTOINSERT_PAIR_QUOTE && c.isQuote) {
-            val offset = editor.caretModel.offset
-            val document = editor.document
-            val chars = document.charsSequence
-            val length = document.textLength
 
-            if (offset < length && chars[offset] == c) {
-                if (isClosingQuote(file, offset)) {
-                    EditorModificationUtil.moveCaretRelatively(editor, 1)
-                    return Result.STOP
-                }
+        val settings = CodeInsightSettings.getInstance()
+
+        val c1: Char
+        val c2: Char
+        when {
+            c.isQuote -> {
+                if (!settings.AUTOINSERT_PAIR_QUOTE) return Result.CONTINUE
+                c1 = c
+                c2 = c
             }
 
-            if (c != '/' && !isInsideLiteral(file, offset)) {
-                type(editor, project, "$c$c")
-                EditorModificationUtil.moveCaretRelatively(editor, -1)
+            c.isOpenBracket -> {
+                if (!settings.AUTOINSERT_PAIR_BRACKET) return Result.CONTINUE
+                c1 = c
+                c2 = delimiters[c]!!
+            }
+
+            c.isCloseBracket -> {
+                if (!settings.AUTOINSERT_PAIR_BRACKET) return Result.CONTINUE
+                c1 = delimiters.inverse()[c]!!
+                c2 = c
+            }
+
+            else -> return Result.CONTINUE
+        }
+
+        val offset = editor.caretModel.offset
+        val document = editor.document
+        val chars = document.charsSequence
+        val length = document.textLength
+
+        if (offset < length && chars[offset] == c && c == c2) {
+            if (isClosingQuoteOrBracket(file, offset)) {
+                EditorModificationUtil.moveCaretRelatively(editor, 1)
                 return Result.STOP
             }
+        }
+
+        if (c == c1 && c != '/' && !isInsideLiteral(file, offset)) {
+            type(editor, project, "$c$c2")
+            EditorModificationUtil.moveCaretRelatively(editor, -1)
+            return Result.STOP
         }
 
         return Result.CONTINUE
@@ -50,7 +71,7 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
     override fun beforeSelectionRemoved(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
         if (file !is CrFile) return Result.CONTINUE
 
-        if (!c.isQuote) return Result.CONTINUE
+        val c2 = delimiters[c] ?: return Result.CONTINUE
 
         val selectionModel = editor.selectionModel
         if (!selectionModel.hasSelection()) return Result.CONTINUE
@@ -58,26 +79,31 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
         var selectedText = selectionModel.selectedText
         if (selectedText.isNullOrEmpty()) return Result.CONTINUE
 
-        if (CodeInsightSettings.getInstance().AUTOINSERT_PAIR_QUOTE && selectedText.length == 1) {
+        val settings = CodeInsightSettings.getInstance()
+
+        if (settings.AUTOINSERT_PAIR_QUOTE && selectedText.length == 1) {
             val selectedChar = selectedText.first()
-            if (selectedChar.isQuote &&
+            if (selectedChar.isSimilarDelimiterTo(c) &&
                 selectedChar != c &&
                 replaceQuotesBySelected(c, editor, file, selectionModel, selectedChar)) return Result.STOP
         }
 
-        if (CodeInsightSettings.getInstance().SURROUND_SELECTION_ON_QUOTE_TYPED) {
+        if (settings.SURROUND_SELECTION_ON_QUOTE_TYPED) {
             val selectionStart = selectionModel.selectionStart
             val selectionEnd = selectionModel.selectionEnd
 
             if (selectedText.length > 1) {
                 val firstChar = selectedText.first()
                 val lastChar = selectedText.last()
-                if (firstChar.isQuote && lastChar == firstChar && !selectedText.containsQuoteInside(lastChar)) {
+                if (firstChar.isSimilarDelimiterTo(c) &&
+                    lastChar == delimiters[firstChar] &&
+                    (firstChar.isQuote || firstChar != c) &&
+                    !selectedText.containsQuoteInside(lastChar)) {
                     selectedText = selectedText.substring(1, selectedText.length - 1)
                 }
             }
             val caretOffset = selectionModel.selectionStart
-            val newText = "$c$selectedText$c"
+            val newText = "$c$selectedText$c2"
             val ltrSelection = selectionModel.leadSelectionOffset != selectionModel.selectionEnd
             val restoreStickySelection = editor is EditorEx && editor.isStickySelection
             selectionModel.removeSelection()
@@ -114,6 +140,18 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
     private val Char.isQuote
         get() = this in quotes
 
+    private val Char.isOpenBracket
+        get() = brackets.containsKey(this)
+
+    private val Char.isCloseBracket
+        get() = brackets.containsValue(this)
+
+    private val Char.isBracket
+        get() = isOpenBracket || isCloseBracket
+
+    private fun Char.isSimilarDelimiterTo(ch: Char) =
+        isBracket && ch.isBracket || isQuote && ch.isQuote
+
     private fun String.containsQuoteInside(quote: Char) = indexOf(quote, 1) != lastIndex
 
     private fun replaceQuotesBySelected(
@@ -135,9 +173,14 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
                 val matchingCharOffset = if (isAtStart) range.endOffset - 1 else range.startOffset
                 if (matchingCharOffset < charsSequence.length) {
                     val matchingChar = charsSequence[matchingCharOffset]
-                    if (matchingChar == selectedChar && !document.getText(range).containsQuoteInside(charsSequence[range.endOffset - 1])) {
+                    val otherQuoteMatchesSelected = if (isAtStart) {
+                        matchingChar == delimiters[selectedChar]
+                    } else {
+                        selectedChar == delimiters[matchingChar]
+                    }
+                    if (otherQuoteMatchesSelected && !document.getText(range).containsQuoteInside(charsSequence[range.endOffset - 1])) {
                         document[range.startOffset] = c
-                        document[range.endOffset - 1] = c
+                        document[range.endOffset - 1] = delimiters[c]!!
                         editor.caretModel.moveToOffset(selectionModel.selectionEnd)
                         selectionModel.removeSelection()
                         return true
@@ -163,13 +206,6 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
                 parent is CrSymbolExpression
     }
 
-    private fun isClosingQuote(file: PsiFile, offset: Int): Boolean {
-        return when (file.findElementAt(offset)?.elementType) {
-            CR_CHAR_END, CR_COMMAND_END, CR_REGEX_END, CR_STRING_END -> true
-            else -> false
-        }
-    }
-
     private fun type(editor: Editor, project: Project, text: String) {
         CommandProcessor.getInstance().currentCommandName = EditorBundle.message("typing.in.editor.command.name")
         EditorModificationUtil.insertStringAtCaret(editor, text, true, true)
@@ -178,3 +214,10 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
 }
 
 val quotes = setOf('"', '\'', '`', '/')
+val brackets = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>', '|' to '|')
+val delimiters = ImmutableBiMap.builder<Char, Char>()
+    .apply {
+        for (quote in quotes) put(quote, quote)
+        for ((lBracket, rBracket) in brackets) put(lBracket, rBracket)
+    }
+    .build()!!

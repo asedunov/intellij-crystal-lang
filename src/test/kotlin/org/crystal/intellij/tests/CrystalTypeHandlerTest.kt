@@ -1,6 +1,7 @@
 package org.crystal.intellij.tests
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.crystal.intellij.editor.brackets
 import org.crystal.intellij.editor.quotes
 
 class CrystalTypeHandlerTest : BasePlatformTestCase() {
@@ -9,8 +10,6 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         myFixture.type(ch)
         myFixture.checkResult(after)
     }
-
-    private val bracketMap = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '<', '|' to '|')
 
     private val percentKinds = listOf("", "q", "Q", "i", "r", "w", "x")
 
@@ -23,6 +22,20 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
                     "<selection>${quoteBefore}foo${quoteBefore}</selection>",
                     quoteAfter,
                     "${quoteAfter}<selection><caret>foo</selection>${quoteAfter}"
+                )
+            }
+        }
+    }
+
+    fun testAutoSurroundForBrackets() {
+        for ((leftBefore, rightBefore) in brackets) {
+            for ((leftAfter, rightAfter) in brackets) {
+                if (leftBefore == leftAfter) continue
+
+                doTest(
+                    "<selection>${leftBefore}foo${rightBefore}</selection>",
+                    leftAfter,
+                    "${leftAfter}<selection><caret>foo</selection>${rightAfter}"
                 )
             }
         }
@@ -42,12 +55,36 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    fun testPairedBracketReplacement() {
+        for ((leftBefore, rightBefore) in brackets) {
+            for ((leftAfter, rightAfter) in brackets) {
+                if (leftBefore == leftAfter) continue
+
+                doTest(
+                    "<selection>${leftBefore}</selection>foo${rightBefore}",
+                    leftAfter,
+                    "${leftAfter}<caret>foo${rightAfter}"
+                )
+            }
+        }
+    }
+
     fun testInsertPairQuoteOutsideString() {
         for (quote in quotes - '/') {
             doTest(
                 "x = <caret>",
                 quote,
                 "x = $quote<caret>$quote"
+            )
+        }
+    }
+
+    fun testInsertPairBracketOutsideString() {
+        for ((left, right) in brackets) {
+            doTest(
+                "x = <caret>",
+                left,
+                "x = $left<caret>$right"
             )
         }
     }
@@ -64,6 +101,18 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    fun testInsertPairBracketInsideSimpleString() {
+        for (left in brackets.keys) {
+            for (stringQuote in quotes) {
+                doTest(
+                    "x = $stringQuote<caret>a$stringQuote",
+                    left,
+                    "x = $stringQuote$left<caret>a$stringQuote"
+                )
+            }
+        }
+    }
+
     fun testInsertPairQuoteInsideQuotedSymbol() {
         for (quote in quotes) {
             doTest(
@@ -74,10 +123,20 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    fun testInsertPairBracketInsideQuotedSymbol() {
+        for (left in brackets.keys) {
+            doTest(
+                "x = :\"<caret>a\"",
+                left,
+                "x = :\"$left<caret>a\""
+            )
+        }
+    }
+
     fun testInsertPairQuoteInsidePercentString() {
         for (quote in quotes) {
             for (kind in percentKinds) {
-                for ((lBracket, rBracket) in bracketMap) {
+                for ((lBracket, rBracket) in brackets) {
                     val left = "%$kind$lBracket"
                     val right = "%$kind$rBracket"
                     doTest(
@@ -90,12 +149,38 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    fun testInsertPairBracketInsidePercentString() {
+        for (typedLeft in brackets.keys) {
+            for (kind in percentKinds) {
+                for ((lBracket, rBracket) in brackets) {
+                    val left = "%$kind$lBracket"
+                    val right = "%$kind$rBracket"
+                    doTest(
+                        "x = $left<caret>a$right",
+                        typedLeft,
+                        "x = $left$typedLeft<caret>a$right"
+                    )
+                }
+            }
+        }
+    }
+
     fun testNoInsertBeforeEndQuote() {
         for (quote in quotes) {
             doTest(
                 "x = ${quote}a<caret>${quote}",
                 quote,
                 "x = ${quote}a${quote}<caret>"
+            )
+        }
+    }
+
+    fun testNoInsertBeforeEndBracket() {
+        for ((left, right) in brackets) {
+            doTest(
+                "x = ${left}a<caret>${right}",
+                right,
+                "x = ${left}a${right}<caret>"
             )
         }
     }

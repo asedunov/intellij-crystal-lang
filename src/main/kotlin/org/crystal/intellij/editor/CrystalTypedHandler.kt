@@ -3,17 +3,50 @@ package org.crystal.intellij.editor
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.injected.editor.EditorWindow
-import com.intellij.openapi.editor.Document
-import com.intellij.openapi.editor.Editor
-import com.intellij.openapi.editor.SelectionModel
+import com.intellij.openapi.command.CommandProcessor
+import com.intellij.openapi.command.impl.UndoManagerImpl
+import com.intellij.openapi.command.undo.UndoManager
+import com.intellij.openapi.editor.*
 import com.intellij.openapi.editor.ex.EditorEx
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import org.crystal.intellij.psi.CrFile
-import org.crystal.intellij.psi.parents
+import com.intellij.psi.util.elementType
+import org.crystal.intellij.lexer.CR_CHAR_END
+import org.crystal.intellij.lexer.CR_COMMAND_END
+import org.crystal.intellij.lexer.CR_REGEX_END
+import org.crystal.intellij.lexer.CR_STRING_END
+import org.crystal.intellij.psi.*
 
-// Based on the com.intellij.codeInsight.editorActions.SelectionQuotingTypedHandler
 class CrystalTypedHandler : TypedHandlerDelegate() {
+    override fun beforeCharTyped(c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType): Result {
+        if (file !is CrFile) return Result.CONTINUE
+
+        // Based on the com.intellij.codeInsight.editorActions.TypedHandler.handleQuote
+        if (CodeInsightSettings.getInstance().AUTOINSERT_PAIR_QUOTE && c.isQuote) {
+            val offset = editor.caretModel.offset
+            val document = editor.document
+            val chars = document.charsSequence
+            val length = document.textLength
+
+            if (offset < length && chars[offset] == c) {
+                if (isClosingQuote(file, offset)) {
+                    EditorModificationUtil.moveCaretRelatively(editor, 1)
+                    return Result.STOP
+                }
+            }
+
+            if (c != '/' && !isInsideLiteral(file, offset)) {
+                type(editor, project, "$c$c")
+                EditorModificationUtil.moveCaretRelatively(editor, -1)
+                return Result.STOP
+            }
+        }
+
+        return Result.CONTINUE
+    }
+
+    // Based on the com.intellij.codeInsight.editorActions.SelectionQuotingTypedHandler
     override fun beforeSelectionRemoved(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
         if (file !is CrFile) return Result.CONTINUE
 
@@ -117,6 +150,30 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
 
     private operator fun Document.set(offset: Int, newChar: Char) {
         replaceString(offset, offset + 1, newChar.toString())
+    }
+
+    private fun isInsideLiteral(file: PsiFile, offset: Int): Boolean {
+        val parent = file.findElementAt(offset)?.parent
+        return parent is CrStringLiteralExpression ||
+                parent is CrCharLiteralExpression ||
+                parent is CrCommandExpression ||
+                parent is CrRegexExpression ||
+                parent is CrSymbolArrayExpression ||
+                parent is CrStringArrayExpression ||
+                parent is CrSymbolExpression
+    }
+
+    private fun isClosingQuote(file: PsiFile, offset: Int): Boolean {
+        return when (file.findElementAt(offset)?.elementType) {
+            CR_CHAR_END, CR_COMMAND_END, CR_REGEX_END, CR_STRING_END -> true
+            else -> false
+        }
+    }
+
+    private fun type(editor: Editor, project: Project, text: String) {
+        CommandProcessor.getInstance().currentCommandName = EditorBundle.message("typing.in.editor.command.name")
+        EditorModificationUtil.insertStringAtCaret(editor, text, true, true)
+        (UndoManager.getInstance(project) as UndoManagerImpl).addDocumentAsAffected(editor.document)
     }
 }
 

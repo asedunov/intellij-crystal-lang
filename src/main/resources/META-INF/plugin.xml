@@ -25,5 +25,6 @@
 
         <typedHandler implementation="org.crystal.intellij.editor.CrystalTypedHandler"
                       order="before selectionQuoting" />
+        <backspaceHandlerDelegate implementation="org.crystal.intellij.editor.CrystalBackspaceHandler"/>
     </extensions>
 </idea-plugin>

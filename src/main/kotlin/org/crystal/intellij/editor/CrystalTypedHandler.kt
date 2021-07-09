@@ -137,21 +137,6 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
         return Result.CONTINUE
     }
 
-    private val Char.isQuote
-        get() = this in quotes
-
-    private val Char.isOpenBracket
-        get() = brackets.containsKey(this)
-
-    private val Char.isCloseBracket
-        get() = brackets.containsValue(this)
-
-    private val Char.isBracket
-        get() = isOpenBracket || isCloseBracket
-
-    private fun Char.isSimilarDelimiterTo(ch: Char) =
-        isBracket && ch.isBracket || isQuote && ch.isQuote
-
     private fun String.containsQuoteInside(quote: Char) = indexOf(quote, 1) != lastIndex
 
     private fun replaceQuotesBySelected(
@@ -212,12 +197,3 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
         (UndoManager.getInstance(project) as UndoManagerImpl).addDocumentAsAffected(editor.document)
     }
 }
-
-val quotes = setOf('"', '\'', '`', '/')
-val brackets = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>', '|' to '|')
-val delimiters = ImmutableBiMap.builder<Char, Char>()
-    .apply {
-        for (quote in quotes) put(quote, quote)
-        for ((lBracket, rBracket) in brackets) put(lBracket, rBracket)
-    }
-    .build()!!

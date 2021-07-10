@@ -16,7 +16,8 @@
         <lang.parserDefinition language="Crystal"
                                implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
 
-        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxHighlightingPass$Registrar"/>
+        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxHighlightingPass$Factory"/>
+        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxCheckingPass$Factory"/>
 
         <lang.psiStructureViewFactory language="Crystal"
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>

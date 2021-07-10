@@ -6,22 +6,22 @@ import com.intellij.codeHighlighting.TextEditorHighlightingPassRegistrar
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiElementVisitor
 import org.crystal.intellij.psi.CrFile
+import org.crystal.intellij.psi.CrRecursiveVisitor
 
-class CrystalSyntaxHighlightingPass(
+class CrystalSyntaxCheckingPass(
     file: CrFile,
     document: Document
 ) : AbstractCrystalDumbAwarePass(file, document) {
-    override fun createVisitor(highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor {
-        return CrystalSyntaxHighlightingVisitor(highlightInfos)
+    override fun createVisitor(highlightInfos: MutableList<HighlightInfo>): CrRecursiveVisitor {
+        return CrystalSyntaxCheckingVisitor(highlightInfos)
     }
 
     class Factory : FactoryBase() {
         override fun registerHighlightingPassFactory(registrar: TextEditorHighlightingPassRegistrar, project: Project) {
             registrar.registerTextEditorHighlightingPass(
                 this,
-                TextEditorHighlightingPassRegistrar.Anchor.BEFORE,
+                TextEditorHighlightingPassRegistrar.Anchor.AFTER,
                 Pass.UPDATE_FOLDING,
                 false,
                 false
@@ -29,7 +29,7 @@ class CrystalSyntaxHighlightingPass(
         }
 
         override fun createHighlightingPass(file: CrFile, document: Document): TextEditorHighlightingPass {
-            return CrystalSyntaxHighlightingPass(file, document)
+            return CrystalSyntaxCheckingPass(file, document)
         }
     }
 }

@@ -561,6 +561,21 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                 if (opInfo.forceSlashIsRegex) lexerState.slashIsRegex = true
 
+                val postfixError = when {
+                    opType == CR_PLUS_OP && lexer.lookAhead() == CR_PLUS_OP -> "Postfix increment is not supported, use `exp += 1`"
+                    opType == CR_MINUS_OP && lexer.lookAhead() == CR_MINUS_OP -> "Postfix decrement is not supported, use `exp -= 1`"
+                    else -> null
+                }
+
+                if (postfixError != null) {
+                    m.drop()
+                    val mError = mark()
+                    nextToken()
+                    nextTokenSkipSpaces()
+                    mError.error(postfixError)
+                    break
+                }
+
                 nextTokenSkipSpaces()
 
                 var expected = "<expression>"

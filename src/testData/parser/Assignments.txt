@@ -736,25 +736,19 @@ FILE
       CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('2')
 
-  CrBinaryExpression(CR_BINARY_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-      CrNameElement(CR_NAME_ELEMENT)
-        PsiElement(<identifier>)('x')
+  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrNameElement(CR_NAME_ELEMENT)
+      PsiElement(<identifier>)('x')
+  PsiErrorElement:Postfix increment is not supported, use `exp += 1`
     PsiElement(+)('+')
-    CrUnaryExpression(CR_UNARY_EXPRESSION)
-      PsiElement(+)('+')
-      PsiErrorElement:Expression expected
-        <empty list>
+    PsiElement(+)('+')
 
-  CrBinaryExpression(CR_BINARY_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-      CrNameElement(CR_NAME_ELEMENT)
-        PsiElement(<identifier>)('x')
+  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrNameElement(CR_NAME_ELEMENT)
+      PsiElement(<identifier>)('x')
+  PsiErrorElement:Postfix decrement is not supported, use `exp -= 1`
     PsiElement(-)('-')
-    CrUnaryExpression(CR_UNARY_EXPRESSION)
-      PsiElement(-)('-')
-      PsiErrorElement:Expression expected
-        <empty list>
+    PsiElement(-)('-')
 
   CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
     CrReferenceExpression(CR_REFERENCE_EXPRESSION)

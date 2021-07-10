@@ -6,7 +6,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(=)('=')
     PsiWhiteSpace(' ')
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
   PsiElement(;)(';')
   PsiWhiteSpace(' ')
@@ -71,7 +71,7 @@ FILE
             PsiElement(<constant>)('X')
     PsiElement(,)(',')
     PsiWhiteSpace(' ')
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement())(')')
 
@@ -204,7 +204,7 @@ FILE
         PsiWhiteSpace(' ')
         PsiElement(=)('=')
         PsiWhiteSpace(' ')
-        CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+        CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
           PsiElement(<integer literal>)('1')
     PsiWhiteSpace('\n')
     PsiElement(end)('end')
@@ -297,7 +297,7 @@ FILE
       PsiElement(()('(')
       PsiWhiteSpace('\n')
       PsiWhiteSpace('  ')
-      CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+      CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('1')
       PsiWhiteSpace('\n')
       PsiElement())(')')
@@ -333,7 +333,7 @@ FILE
     PsiElement())(')')
 
   CrAsExpression(CR_AS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(as)('as')
@@ -349,7 +349,7 @@ FILE
     PsiElement())(')')
 
   CrAsExpression(CR_AS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(as?)('as?')
@@ -365,7 +365,7 @@ FILE
     PsiElement())(')')
 
   CrIsExpression(CR_IS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(is_a?)('is_a?')
@@ -381,7 +381,7 @@ FILE
     PsiElement())(')')
 
   CrRespondsToExpression(CR_RESPONDS_TO_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(responds_to?)('responds_to?')
@@ -395,7 +395,7 @@ FILE
     PsiElement())(')')
 
   CrIsNilExpression(CR_IS_NIL_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(nil?)('nil?')
@@ -403,7 +403,7 @@ FILE
     PsiWhiteSpace('\n')
     PsiElement())(')')
 
-  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
   PsiWhiteSpace(' ')
   PsiErrorElement:Expected: <end of expression>
@@ -415,7 +415,7 @@ FILE
         CrNameElement(CR_NAME_ELEMENT)
           PsiElement(<constant>)('Bar')
 
-  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
   PsiWhiteSpace(' ')
   PsiErrorElement:Expected: <end of expression>
@@ -428,7 +428,7 @@ FILE
           PsiElement(<constant>)('Bar')
 
   CrAsExpression(CR_AS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(as)('as')
@@ -440,7 +440,7 @@ FILE
             PsiElement(<constant>)('Bar')
 
   CrAsExpression(CR_AS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(as)('as')
@@ -521,7 +521,7 @@ FILE
     PsiElement())(')')
 
   CrAsExpression(CR_AS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(as?)('as?')
@@ -533,7 +533,7 @@ FILE
             PsiElement(<constant>)('Bar')
 
   CrAsExpression(CR_AS_EXPRESSION)
-    CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
     PsiElement(as?)('as?')

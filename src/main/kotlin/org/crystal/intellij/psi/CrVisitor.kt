@@ -75,6 +75,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitExtendExpression(o: CrExtendExpression) = visitExpression(o)
 
+    open fun visitFloatLiteralExpression(o: CrFloatLiteralExpression) = visitExpression(o)
+
     open fun visitFunction(o: CrFunction) = visitDefinition(o)
 
     open fun visitFunctionLiteralExpression(o: CrFunctionLiteralExpression) = visitExpression(o)
@@ -102,6 +104,8 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitInstanceSizeExpression(o: CrInstanceSizeExpression) = visitExpression(o)
 
     open fun visitInstantiatedType(o: CrInstantiatedType) = visitType(o)
+
+    open fun visitIntegerLiteralExpression(o: CrIntegerLiteralExpression) = visitExpression(o)
 
     open fun visitIsExpression(o: CrIsExpression) = visitExpression(o)
 
@@ -138,8 +142,6 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitNilExpression(o: CrNilExpression) = visitExpression(o)
 
     open fun visitNilableExpression(o: CrNilableExpression) = visitExpression(o)
-
-    open fun visitNumericLiteralExpression(o: CrIntegerLiteralExpression) = visitExpression(o)
 
     open fun visitOffsetExpression(o: CrOffsetExpression) = visitExpression(o)
 

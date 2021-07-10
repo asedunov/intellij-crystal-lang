@@ -11,5 +11,5 @@ FILE
       <empty list>
     PsiElement(end)('end')
   PsiWhiteSpace('\r\n\r\n')
-  CrNumericLiteralExpression(CR_NUMERIC_LITERAL_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')

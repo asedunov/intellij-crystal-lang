@@ -2241,9 +2241,16 @@ class CrystalParser : PsiParser, LightPsiParser {
             nextTokenSkipSpaces()
         }
 
-        private fun PsiBuilder.parseNumericLiteral() = composite(CR_NUMERIC_LITERAL_EXPRESSION) {
-            lexerState.wantsRegex = false
-            nextTokenSkipSpaces()
+        private fun PsiBuilder.parseNumericLiteral(): Boolean {
+            val nodeType = when {
+                at(CR_INTEGER_LITERAL) -> CR_INTEGER_LITERAL_EXPRESSION
+                at(CR_FLOAT_LITERAL) -> CR_FLOAT_LITERAL_EXPRESSION
+                else -> return false
+            }
+            return composite(nodeType) {
+                lexerState.wantsRegex = false
+                nextTokenSkipSpaces()
+            }
         }
 
         private val booleanTokens = TokenSet.create(CR_FALSE, CR_TRUE)

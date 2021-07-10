@@ -1,17 +1,77 @@
 package org.crystal.intellij.highlighter
 
-import com.intellij.lang.annotation.AnnotationHolder
-import com.intellij.lang.annotation.Annotator
-import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.codeHighlighting.*
+import com.intellij.codeInsight.daemon.impl.HighlightInfo
+import com.intellij.codeInsight.daemon.impl.HighlightInfoType
+import com.intellij.codeInsight.daemon.impl.UpdateHighlightersUtil
+import com.intellij.lang.ASTNode
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.TextAttributesKey
+import com.intellij.openapi.progress.ProgressIndicator
+import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiRecursiveElementVisitor
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.lexer.*
+import org.crystal.intellij.psi.CrFile
 import org.crystal.intellij.psi.CrNameElement
 
-class CrystalSyntaxAnnotator : Annotator {
+class CrystalSyntaxHighlightingPass(
+    private val file: CrFile,
+    document: Document
+) : TextEditorHighlightingPass(file.project, document), DumbAware {
+    private val highlightInfos: MutableList<HighlightInfo> = mutableListOf()
+
+    override fun doCollectInformation(progress: ProgressIndicator) {
+        highlightInfos.clear()
+
+        file.accept(object : PsiRecursiveElementVisitor() {
+            override fun visitElement(element: PsiElement) {
+                if (element is LeafPsiElement) {
+                    var tokenType = element.elementType
+                    if (tokenType is CrystalKeywordTokenType && element.parent is CrNameElement) tokenType = CR_IDENTIFIER
+                    val key = attributes[tokenType] ?: return
+                    val info = HighlightInfo
+                        .newHighlightInfo(HighlightInfoType.INFORMATION)
+                        .range(element as ASTNode)
+                        .textAttributes(key)
+                        .create() ?: return
+                    highlightInfos += info
+                }
+                else super.visitElement(element)
+            }
+        })
+    }
+
+    override fun doApplyInformationToEditor() {
+        UpdateHighlightersUtil.setHighlightersToEditor(
+            myProject, myDocument, 0, file.textLength, highlightInfos, colorsScheme, id
+        )
+    }
+
+    class Factory : TextEditorHighlightingPassFactory, DumbAware {
+        override fun createHighlightingPass(file: PsiFile, editor: Editor): TextEditorHighlightingPass? {
+            return if (file is CrFile) CrystalSyntaxHighlightingPass(file, editor.document) else null
+        }
+    }
+
+    class Registrar : TextEditorHighlightingPassFactoryRegistrar, DumbAware {
+        override fun registerHighlightingPassFactory(registrar: TextEditorHighlightingPassRegistrar, project: Project) {
+            registrar.registerTextEditorHighlightingPass(
+                Factory(),
+                TextEditorHighlightingPassRegistrar.Anchor.BEFORE,
+                Pass.UPDATE_FOLDING,
+                false,
+                false
+            )
+        }
+    }
+
     companion object {
         private operator fun <T> MutableMap<IElementType, T>.set(tokens: TokenSet, value: T) {
             tokens.types.forEach { put(it, value) }
@@ -88,18 +148,5 @@ class CrystalSyntaxAnnotator : Annotator {
             map[CR_LPAREN] = PARENTHESES_KEY
             map[CR_RPAREN] = PARENTHESES_KEY
         }
-    }
-    
-    override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element !is LeafPsiElement) return
-        
-        var tokenType = element.elementType
-        if (tokenType is CrystalKeywordTokenType && element.parent is CrNameElement) tokenType = CR_IDENTIFIER
-        val key = attributes[tokenType] ?: return
-        holder
-            .newSilentAnnotation(HighlightSeverity.INFORMATION)
-            .range(element as PsiElement)
-            .textAttributes(key)
-            .create()
     }
 }

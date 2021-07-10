@@ -15,8 +15,8 @@
                   extensions="cr"/>
         <lang.parserDefinition language="Crystal"
                                implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
-        <annotator language="Crystal"
-                   implementationClass="org.crystal.intellij.highlighter.CrystalSyntaxAnnotator"/>
+
+        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxHighlightingPass$Registrar"/>
 
         <lang.psiStructureViewFactory language="Crystal"
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>

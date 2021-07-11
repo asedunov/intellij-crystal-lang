@@ -28,7 +28,7 @@ FILE
   CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
     PsiElement(<string array start>)('%w{')
     PsiElement(<string raw>)('one')
-    PsiElement(<escape>)('\ ')
+    PsiElement(<simple escape>)('\ ')
     PsiElement(<string raw>)('two')
     PsiElement(<string array end>)('}')
 
@@ -41,14 +41,14 @@ FILE
 
   CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
     PsiElement(<string array start>)('%w{')
-    PsiElement(<escape>)('\{')
+    PsiElement(<simple escape>)('\{')
     PsiElement(<string raw>)('one')
     PsiElement(<string array end>)('}')
 
   CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
     PsiElement(<string array start>)('%w{')
     PsiElement(<string raw>)('one')
-    PsiElement(<escape>)('\}')
+    PsiElement(<simple escape>)('\}')
     PsiElement(<string array end>)('}')
 
   CrStringArrayExpression(CR_STRING_ARRAY_EXPRESSION)
@@ -72,7 +72,7 @@ FILE
   CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
     PsiElement(<symbol array start>)('%i(')
     PsiElement(<string raw>)('one')
-    PsiElement(<escape>)('\ ')
+    PsiElement(<simple escape>)('\ ')
     PsiElement(<string raw>)('two')
     PsiElement(<symbol array end>)(')')
 

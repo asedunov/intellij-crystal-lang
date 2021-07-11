@@ -6,15 +6,13 @@ import com.intellij.lang.ParserDefinition
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
-import com.intellij.psi.impl.source.tree.LeafElement
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.lexer.CR_COMMENTS
-import org.crystal.intellij.lexer.CR_WHITESPACES_AND_NEWLINES
 import org.crystal.intellij.lexer.CrystalLexer
-import org.crystal.intellij.psi.CrFileElementType
+import org.crystal.intellij.lexer.CrystalTokenTypeWithFactory
 import org.crystal.intellij.psi.CrFile
+import org.crystal.intellij.psi.CrFileElementType
 
 class CrystalParserDefinition : ParserDefinition, ASTFactory() {
     override fun getWhitespaceTokens() = TokenSet.EMPTY!!
@@ -29,9 +27,9 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
 
     override fun createParser(project: Project?) = CrystalParser()
 
-    override fun createLeaf(type: IElementType, text: CharSequence): LeafElement? {
-        if (type in CR_WHITESPACES_AND_NEWLINES) return PsiWhiteSpaceImpl(text)
-        return super.createLeaf(type, text)
+    override fun createLeaf(type: IElementType, text: CharSequence) = when (type) {
+        is CrystalTokenTypeWithFactory -> type.factory(type, text)
+        else -> super.createLeaf(type, text)
     }
 
     override fun createElement(node: ASTNode): PsiElement {

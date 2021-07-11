@@ -336,7 +336,7 @@ FLOAT_SUFFIX = f ("32" | "64")
 EXP_SUFFIX = e [+-]? {DEC_INT_BODY}
 FLOAT_LITERAL = {DEC_INT_BODY} (\. {DEC_INT_BODY})? {EXP_SUFFIX}? {FLOAT_SUFFIX}?
 
-SPECIAL_CHAR_ESCAPE = [\\abefnrtv]
+SPECIAL_CHAR_ESCAPE = \\ [\\abefnrtv\'0]
 OCTAL_ESCAPE = \\ {OCT_DIGIT}{1, 4}
 HEX_ESCAPE = \\ x {HEX_DIGIT}{0, 2}
 UNICODE_ESCAPE = \\ u {HEX_DIGIT}{0, 4}
@@ -345,10 +345,7 @@ UNICODE_BLOCK_CHAR = {HEX_DIGIT}{1, 6}
 UNICODE_BLOCK_ESCAPE_END = \}
 ANY_CHAR_ESCAPE = \\[^]
 
-COMMON_ESCAPE = \\ ([\\abefnrtv] | u({HEX_DIGIT}{0, 4}))
 VAR_CHAR_CODE = {HEX_DIGIT}{1, 6}
-CHAR_ESCAPE = {COMMON_ESCAPE} | \\ [\'0]
-REGEX_CHAR_ESCAPE = {COMMON_ESCAPE} | \\ ({OCT_DIGIT}{1, 4} | \" | x{HEX_DIGIT}{0, 2}) | \\\/
 
 INTERPOLATION_START = "#{"
 
@@ -447,7 +444,8 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 }
 
 <CHAR_LITERAL_BODY> {
-  {CHAR_ESCAPE}                  { return handle(CR_ESCAPE); }
+  {SPECIAL_CHAR_ESCAPE}          { return handle(CR_SIMPLE_ESCAPE); }
+  {UNICODE_ESCAPE}               { return handle(CR_UNICODE_ESCAPE); }
   {UNICODE_BLOCK_ESCAPE_START}   { yypushbegin(CHAR_UNICODE_BLOCK); return handle(CR_UNICODE_BLOCK_START); }
   \\                             { return handle(CR_BAD_ESCAPE); }
   \'                             { yypop(); return handle(CR_CHAR_END); }
@@ -460,10 +458,10 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 }
 
 <STRING_LITERAL_BODY, COMMAND_LITERAL_BODY, STRING_BLOCK, SYMBOL_BODY> {
-  {OCTAL_ESCAPE}                 |
-  {HEX_ESCAPE}                   |
-  {UNICODE_ESCAPE}               |
-  {ANY_CHAR_ESCAPE}              { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_ESCAPE); }
+  {OCTAL_ESCAPE}                 { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_OCTAL_ESCAPE); }
+  {HEX_ESCAPE}                   { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_HEX_ESCAPE); }
+  {UNICODE_ESCAPE}               { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_UNICODE_ESCAPE); }
+  {ANY_CHAR_ESCAPE}              { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SIMPLE_ESCAPE); }
 
   {UNICODE_BLOCK_ESCAPE_START}   { yypushbegin(STRING_UNICODE_BLOCK); return handle(CR_UNICODE_BLOCK_START); }
 
@@ -502,7 +500,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 
 <REGEX_LITERAL_BODY> {
   \\\/                           |
-  {LINE_CONTINUATION}            { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_ESCAPE); }
+  {LINE_CONTINUATION}            { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SIMPLE_ESCAPE); }
   {INTERPOLATION_START}          {
     return blockLength != 0
       ? closePrecedingBlockToken(CR_STRING_RAW)
@@ -598,7 +596,7 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 
 <REGEX_BLOCK> {
   \\\/                           |
-  {LINE_CONTINUATION}            { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_ESCAPE); }
+  {LINE_CONTINUATION}            { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SIMPLE_ESCAPE); }
 
   {INTERPOLATION_START}          {
     return blockLength != 0
@@ -616,11 +614,11 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
 
 <STRING_ARRAY_BLOCK> {
   \\{SINGLE_WHITE_SPACE}         |
-  \\{SINGLE_NEWLINE}             { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_ESCAPE); }
+  \\{SINGLE_NEWLINE}             { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SIMPLE_ESCAPE); }
 
   \\[\(\)\[\]\{\}\<\>\|]         {
     BlockKind kind = blockKindByStartEndChar(yycharat(1));
-    if (isInBlockOf(kind)) return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_ESCAPE);
+    if (isInBlockOf(kind)) return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SIMPLE_ESCAPE);
 
     yypushback(1);
     extendBlock();

@@ -2284,7 +2284,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseCharLiteral() = composite(CR_CHAR_LITERAL_EXPRESSION) {
             advanceLexer()
             if (!at(CR_CHAR_END)) {
-                if (at(CR_CHAR_RAW) || at(CR_ESCAPE)) nextTokenSkipSpaces()
+                if (at(CR_CHAR_RAW) || at(CR_ESCAPES)) nextTokenSkipSpaces()
                 else parseCharUnicodeBlock()
                 recoverUntil("'''", true) { at(CR_CHAR_END) || at(CR_NEWLINE) }
             }
@@ -2410,7 +2410,11 @@ class CrystalParser : PsiParser, LightPsiParser {
             tok(CR_SYMBOL_ARRAY_END)
         }
 
-        private val stringLiteralTokens = TokenSet.create(CR_STRING_RAW, CR_ESCAPE, CR_LINE_CONTINUATION)
+        private val stringLiteralTokens =
+            TokenSet.orSet(
+                CR_ESCAPES,
+                TokenSet.create(CR_STRING_RAW, CR_LINE_CONTINUATION)
+            )
 
         private fun PsiBuilder.parsePseudoConstant() = composite(CR_PSEUDO_CONSTANT_EXPRESSION) {
             nextTokenSkipSpaces()

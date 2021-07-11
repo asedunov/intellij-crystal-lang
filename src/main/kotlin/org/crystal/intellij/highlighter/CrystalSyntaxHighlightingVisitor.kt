@@ -60,7 +60,7 @@ class CrystalSyntaxHighlightingVisitor(
             map[CR_SEMICOLON] = SEMICOLON_KEY
 
             // Strings
-            map[CR_ESCAPE] = ESCAPE_KEY
+            map[CR_ESCAPES] = ESCAPE_KEY
             map[CR_CHAR_START] = STRING_CONTENT_KEY
             map[CR_CHAR_END] = STRING_CONTENT_KEY
             map[CR_CHAR_CODE] = ESCAPE_KEY

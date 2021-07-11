@@ -2,7 +2,7 @@ FILE
   CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
     PsiElement(<symbol array start>)('%i(')
     PsiElement(<string raw>)('one')
-    PsiElement(<escape>)('\ ')
+    PsiElement(<simple escape>)('\ ')
     PsiElement(<string raw>)('two')
     PsiElement(<symbol array end>)(')')
 
@@ -30,7 +30,7 @@ FILE
   CrSymbolArrayExpression(CR_SYMBOL_ARRAY_EXPRESSION)
     PsiElement(<symbol array start>)('%i{')
     PsiElement(<string raw>)('foo')
-    PsiElement(<escape>)('\n')
+    PsiElement(<simple escape>)('\n')
     PsiElement(<string raw>)('bar')
     PsiWhiteSpace(' ')
     PsiElement(<string raw>)('baz')

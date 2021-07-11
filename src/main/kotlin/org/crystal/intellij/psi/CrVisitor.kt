@@ -67,6 +67,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitEnumConstant(o: CrEnumConstant) = visitDefinition(o)
 
+    open fun visitEscapeElement(o: CrEscapeElement) = visitCrElement(o)
+
     open fun visitExceptionHandler(o: CrExceptionHandler) = visitCrElement(o)
 
     open fun visitExpression(o: CrExpression) = visitCrElement(o)
@@ -92,6 +94,8 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitHeredocLiteralBody(o: CrHeredocLiteralBody) = visitCrElement(o)
 
     open fun visitHeredocExpression(o: CrHeredocExpression) = visitExpression(o)
+
+    open fun visitHexEscapeElement(o: CrHexEscapeElement) = visitEscapeElement(o)
 
     open fun visitIfExpression(o: CrIfExpression) = visitExpression(o)
 
@@ -143,6 +147,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitNilableExpression(o: CrNilableExpression) = visitExpression(o)
 
+    open fun visitOctalEscapeElement(o: CrOctalEscapeElement) = visitEscapeElement(o)
+
     open fun visitOffsetExpression(o: CrOffsetExpression) = visitExpression(o)
 
     open fun visitOutArgumentExpression(o: CrOutArgumentExpression) = visitExpression(o)
@@ -193,6 +199,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitShortBlockExpression(o: CrShortBlockExpression) = visitExpression(o)
 
+    open fun visitSimpleEscapeElement(o: CrSimpleEscapeElement) = visitEscapeElement(o)
+
     open fun visitSimpleParameter(o: CrSimpleParameter) = visitParameter(o)
 
     open fun visitSizeExpression(o: CrSizeExpression) = visitExpression(o)
@@ -240,6 +248,8 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitUnderscoreType(o: CrUnderscoreType) = visitType(o)
 
     open fun visitUnicodeBlock(o: CrUnicodeBlock) = visitCrElement(o)
+
+    open fun visitUnicodeEscapeElement(o: CrUnicodeEscapeElement) = visitEscapeElement(o)
 
     open fun visitUninitializedExpression(o: CrUninitializedExpression) = visitExpression(o)
 

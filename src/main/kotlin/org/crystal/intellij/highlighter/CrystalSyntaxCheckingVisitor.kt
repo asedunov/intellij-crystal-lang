@@ -15,6 +15,10 @@ class CrystalSyntaxCheckingVisitor(
         if (o.value == null) {
             error(o, "The value is out of ${o.kind.typeName} range")
         }
+
+        if (o.prefix == "0") {
+            error(o, "Octal constants should be prefixed with 0o")
+        }
     }
 
     private fun error(anchor: PsiElement, message: String) {

@@ -55,7 +55,7 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
         }
     }
 
-    private val prefix: String
+    val prefix: String
         get() {
             val text = bodyText
             if (text.length < 2 || text[0] != '0') return ""

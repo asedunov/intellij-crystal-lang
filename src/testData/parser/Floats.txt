@@ -7,28 +7,24 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('1.0')
+    PsiElement(<float literal>)('1.0')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('1.0')
+    PsiElement(<float literal>)('1.0')
 
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('0.5')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('0.5')
+    PsiElement(<float literal>)('0.5')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('0.5')
+    PsiElement(<float literal>)('0.5')
 
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('1_234.567_890')
@@ -57,15 +53,13 @@ FILE
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('1.0f32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('1.0f32')
+    PsiElement(<float literal>)('1.0f32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('1.0f32')
+    PsiElement(<float literal>)('1.0f32')
 
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('1.0f32')
@@ -90,15 +84,13 @@ FILE
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('1.0f64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('1.0f64')
+    PsiElement(<float literal>)('1.0f64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
-      PsiElement(<float literal>)('1.0f64')
+    PsiElement(<float literal>)('1.0f64')
 
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('1.0f64')

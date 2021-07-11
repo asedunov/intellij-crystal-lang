@@ -881,12 +881,30 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private val prefixOps = TokenSet.create(CR_NOT_OP, CR_PLUS_OP, CR_MINUS_OP, CR_COMPLEMENT_OP, CR_WRAP_PLUS_OP, CR_WRAP_MINUS_OP)
 
+        private val plusMinus = TokenSet.create(CR_PLUS_OP, CR_MINUS_OP)
+
         private fun PsiBuilder.parsePrefixExpression(): Boolean {
             if (!at(prefixOps)) return false
-            return composite(CR_UNARY_EXPRESSION) {
-                nextTokenSkipSpaces()
-                if (!parsePrefixOperand()) error("Expression expected")
+
+            val isPlusMinus = at(plusMinus)
+
+            val m = mark()
+            var nodeType: IElementType = CR_UNARY_EXPRESSION
+            nextTokenSkipSpaces()
+            if (parsePrefixOperand()) {
+                val lastType = lastType()
+                if (isPlusMinus &&
+                    lastType == CR_INTEGER_LITERAL_EXPRESSION || lastType == CR_FLOAT_LITERAL_EXPRESSION) {
+                    nodeType = lastType
+                    dropLast()
+                }
             }
+            else {
+                error("Expression expected")
+            }
+            m.done(nodeType)
+
+            return true
         }
 
         private fun PsiBuilder.parseAtomicWithSuffix(): Boolean {

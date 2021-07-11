@@ -7,28 +7,24 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('1')
+    PsiElement(<integer literal>)('1')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('1')
+    PsiElement(<integer literal>)('1')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1234')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('1234')
+    PsiElement(<integer literal>)('1234')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('1234')
+    PsiElement(<integer literal>)('1234')
 
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
@@ -52,15 +48,13 @@ FILE
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b_101_0')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b1010')
+    PsiElement(<integer literal>)('0b1010')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b1010')
+    PsiElement(<integer literal>)('0b1010')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFF')
@@ -71,49 +65,42 @@ FILE
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0x_abc_def')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF')
+    PsiElement(<integer literal>)('0xFFFF')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF')
+    PsiElement(<integer literal>)('0xFFFF')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0x80000001')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0x80000001')
+    PsiElement(<integer literal>)('0x80000001')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFFFFF')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFFFFFF')
+    PsiElement(<integer literal>)('0xFFFFFFFF')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123')
+    PsiElement(<integer literal>)('0o123')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123')
+    PsiElement(<integer literal>)('0o123')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123')
+    PsiElement(<integer literal>)('0o123')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123i8')
@@ -126,15 +113,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i8')
+    PsiElement(<integer literal>)('123_i8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i8')
+    PsiElement(<integer literal>)('123_i8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123i16')
@@ -147,15 +132,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i16')
+    PsiElement(<integer literal>)('123_i16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i16')
+    PsiElement(<integer literal>)('123_i16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123i32')
@@ -168,15 +151,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i32')
+    PsiElement(<integer literal>)('123_i32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i32')
+    PsiElement(<integer literal>)('123_i32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123i64')
@@ -189,15 +170,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i64')
+    PsiElement(<integer literal>)('123_i64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i64')
+    PsiElement(<integer literal>)('123_i64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123i128')
@@ -210,15 +189,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i128')
+    PsiElement(<integer literal>)('123_i128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_i128')
+    PsiElement(<integer literal>)('123_i128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123u8')
@@ -231,15 +208,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u8')
+    PsiElement(<integer literal>)('123_u8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u8')
+    PsiElement(<integer literal>)('123_u8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123u16')
@@ -252,15 +227,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u16')
+    PsiElement(<integer literal>)('123_u16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u16')
+    PsiElement(<integer literal>)('123_u16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123u32')
@@ -273,15 +246,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u32')
+    PsiElement(<integer literal>)('123_u32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u32')
+    PsiElement(<integer literal>)('123_u32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123u64')
@@ -294,15 +265,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u64')
+    PsiElement(<integer literal>)('123_u64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u64')
+    PsiElement(<integer literal>)('123_u64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('123u128')
@@ -315,15 +284,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u128')
+    PsiElement(<integer literal>)('123_u128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('123_u128')
+    PsiElement(<integer literal>)('123_u128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFi8')
@@ -336,15 +303,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i8')
+    PsiElement(<integer literal>)('0xFFFF_i8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i8')
+    PsiElement(<integer literal>)('0xFFFF_i8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFi16')
@@ -357,15 +322,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i16')
+    PsiElement(<integer literal>)('0xFFFF_i16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i16')
+    PsiElement(<integer literal>)('0xFFFF_i16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFi32')
@@ -378,15 +341,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i32')
+    PsiElement(<integer literal>)('0xFFFF_i32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i32')
+    PsiElement(<integer literal>)('0xFFFF_i32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFi64')
@@ -399,15 +360,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i64')
+    PsiElement(<integer literal>)('0xFFFF_i64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i64')
+    PsiElement(<integer literal>)('0xFFFF_i64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFi128')
@@ -420,15 +379,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i128')
+    PsiElement(<integer literal>)('0xFFFF_i128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_i128')
+    PsiElement(<integer literal>)('0xFFFF_i128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFu8')
@@ -441,15 +398,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u8')
+    PsiElement(<integer literal>)('0xFFFF_u8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u8')
+    PsiElement(<integer literal>)('0xFFFF_u8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFu16')
@@ -462,15 +417,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u16')
+    PsiElement(<integer literal>)('0xFFFF_u16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u16')
+    PsiElement(<integer literal>)('0xFFFF_u16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFu32')
@@ -483,15 +436,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u32')
+    PsiElement(<integer literal>)('0xFFFF_u32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u32')
+    PsiElement(<integer literal>)('0xFFFF_u32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFu64')
@@ -504,15 +455,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u64')
+    PsiElement(<integer literal>)('0xFFFF_u64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u64')
+    PsiElement(<integer literal>)('0xFFFF_u64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0xFFFFu128')
@@ -525,15 +474,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u128')
+    PsiElement(<integer literal>)('0xFFFF_u128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0xFFFF_u128')
+    PsiElement(<integer literal>)('0xFFFF_u128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123i8')
@@ -546,15 +493,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i8')
+    PsiElement(<integer literal>)('0o123_i8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i8')
+    PsiElement(<integer literal>)('0o123_i8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123i16')
@@ -567,15 +512,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i16')
+    PsiElement(<integer literal>)('0o123_i16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i16')
+    PsiElement(<integer literal>)('0o123_i16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123i32')
@@ -588,15 +531,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i32')
+    PsiElement(<integer literal>)('0o123_i32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i32')
+    PsiElement(<integer literal>)('0o123_i32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123i64')
@@ -609,15 +550,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i64')
+    PsiElement(<integer literal>)('0o123_i64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i64')
+    PsiElement(<integer literal>)('0o123_i64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123i128')
@@ -630,15 +569,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i128')
+    PsiElement(<integer literal>)('0o123_i128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_i128')
+    PsiElement(<integer literal>)('0o123_i128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123u8')
@@ -651,15 +588,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u8')
+    PsiElement(<integer literal>)('0o123_u8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u8')
+    PsiElement(<integer literal>)('0o123_u8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123u16')
@@ -672,15 +607,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u16')
+    PsiElement(<integer literal>)('0o123_u16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u16')
+    PsiElement(<integer literal>)('0o123_u16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123u32')
@@ -693,15 +626,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u32')
+    PsiElement(<integer literal>)('0o123_u32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u32')
+    PsiElement(<integer literal>)('0o123_u32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123u64')
@@ -714,15 +645,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u64')
+    PsiElement(<integer literal>)('0o123_u64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u64')
+    PsiElement(<integer literal>)('0o123_u64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0o123u128')
@@ -735,15 +664,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u128')
+    PsiElement(<integer literal>)('0o123_u128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0o123_u128')
+    PsiElement(<integer literal>)('0o123_u128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011i8')
@@ -756,15 +683,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i8')
+    PsiElement(<integer literal>)('0b01011_i8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i8')
+    PsiElement(<integer literal>)('0b01011_i8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011i16')
@@ -777,15 +702,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i16')
+    PsiElement(<integer literal>)('0b01011_i16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i16')
+    PsiElement(<integer literal>)('0b01011_i16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011i32')
@@ -798,15 +721,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i32')
+    PsiElement(<integer literal>)('0b01011_i32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i32')
+    PsiElement(<integer literal>)('0b01011_i32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011i64')
@@ -819,15 +740,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i64')
+    PsiElement(<integer literal>)('0b01011_i64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i64')
+    PsiElement(<integer literal>)('0b01011_i64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011i128')
@@ -840,15 +759,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i128')
+    PsiElement(<integer literal>)('0b01011_i128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_i128')
+    PsiElement(<integer literal>)('0b01011_i128')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011u8')
@@ -861,15 +778,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u8')
+    PsiElement(<integer literal>)('0b01011_u8')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u8')
+    PsiElement(<integer literal>)('0b01011_u8')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011u16')
@@ -882,15 +797,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u16')
+    PsiElement(<integer literal>)('0b01011_u16')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u16')
+    PsiElement(<integer literal>)('0b01011_u16')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011u32')
@@ -903,15 +816,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u32')
+    PsiElement(<integer literal>)('0b01011_u32')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u32')
+    PsiElement(<integer literal>)('0b01011_u32')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011u64')
@@ -924,15 +835,13 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u64')
+    PsiElement(<integer literal>)('0b01011_u64')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u64')
+    PsiElement(<integer literal>)('0b01011_u64')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('0b01011u128')
@@ -945,12 +854,10 @@ FILE
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('hello')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u128')
+    PsiElement(<integer literal>)('0b01011_u128')
 
-  CrUnaryExpression(CR_UNARY_EXPRESSION)
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-      PsiElement(<integer literal>)('0b01011_u128')
+    PsiElement(<integer literal>)('0b01011_u128')

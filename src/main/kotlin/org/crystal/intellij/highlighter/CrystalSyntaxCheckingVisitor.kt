@@ -33,6 +33,14 @@ class CrystalSyntaxCheckingVisitor(
     }
 
     override fun visitUnicodeEscapeElement(o: CrUnicodeEscapeElement) {
+        handleUnicode(o)
+    }
+
+    override fun visitCharCodeElement(o: CrCharCodeElement) {
+        handleUnicode(o)
+    }
+
+    private fun handleUnicode(o: CrCharEscapeHolder) {
         val message = when (o.escapedChar) {
             null -> "Invalid Unicode codepoint"
             in Char.MIN_SURROGATE..Char.MAX_SURROGATE -> "Invalid Unicode codepoint (surrogate half)"

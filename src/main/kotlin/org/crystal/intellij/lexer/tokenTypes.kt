@@ -6,10 +6,7 @@ import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.CrystalLanguage
-import org.crystal.intellij.psi.CrHexEscapeElement
-import org.crystal.intellij.psi.CrOctalEscapeElement
-import org.crystal.intellij.psi.CrSimpleEscapeElement
-import org.crystal.intellij.psi.CrUnicodeEscapeElement
+import org.crystal.intellij.psi.*
 
 open class CrystalTokenType(val name: String) : IElementType(name, CrystalLanguage)
 
@@ -186,7 +183,7 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_UNICODE_ESCAPE = CrystalTokenTypeWithFactory("<unicode escape>", ::CrUnicodeEscapeElement)
 
 // Non-escape char/string/symbol components
-@JvmField val CR_CHAR_CODE = CrystalTokenType("<char code>")
+@JvmField val CR_CHAR_CODE = CrystalTokenTypeWithFactory("<char code>", ::CrCharCodeElement)
 @JvmField val CR_CHAR_END = CrystalTokenType("<char end>")
 @JvmField val CR_CHAR_RAW = CrystalTokenType("<char raw>")
 @JvmField val CR_CHAR_START = CrystalTokenType("<char start>")

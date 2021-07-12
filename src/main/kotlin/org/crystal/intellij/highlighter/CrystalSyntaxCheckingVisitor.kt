@@ -4,6 +4,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.psi.PsiElement
 import org.crystal.intellij.psi.CrIntegerLiteralExpression
+import org.crystal.intellij.psi.CrOctalEscapeElement
 import org.crystal.intellij.psi.CrRecursiveVisitor
 
 class CrystalSyntaxCheckingVisitor(
@@ -21,6 +22,14 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitOctalEscapeElement(o: CrOctalEscapeElement) {
+        super.visitOctalEscapeElement(o)
+
+        if (o.escapedChar > maxOctalChar) {
+            error(o, "Octal value may not exceed 377 (decimal 256)")
+        }
+    }
+
     private fun error(anchor: PsiElement, message: String) {
         val info = HighlightInfo
             .newHighlightInfo(HighlightInfoType.ERROR)
@@ -28,5 +37,9 @@ class CrystalSyntaxCheckingVisitor(
             .descriptionAndTooltip(message)
             .create() ?: return
         highlightInfos += info
+    }
+
+    companion object {
+        private const val maxOctalChar = 255.toChar()
     }
 }

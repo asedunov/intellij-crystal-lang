@@ -3,10 +3,7 @@ package org.crystal.intellij.highlighter
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.psi.PsiElement
-import org.crystal.intellij.psi.CrHexEscapeElement
-import org.crystal.intellij.psi.CrIntegerLiteralExpression
-import org.crystal.intellij.psi.CrOctalEscapeElement
-import org.crystal.intellij.psi.CrRecursiveVisitor
+import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
     private val highlightInfos: MutableList<HighlightInfo>
@@ -33,6 +30,15 @@ class CrystalSyntaxCheckingVisitor(
         if (o.escapedChar == null) {
             error(o, "Invalid hex escape")
         }
+    }
+
+    override fun visitUnicodeEscapeElement(o: CrUnicodeEscapeElement) {
+        val message = when (o.escapedChar) {
+            null -> "Invalid Unicode codepoint"
+            in Char.MIN_SURROGATE..Char.MAX_SURROGATE -> "Invalid Unicode codepoint (surrogate half)"
+            else -> return
+        }
+        error(o, message)
     }
 
     private fun error(anchor: PsiElement, message: String) {

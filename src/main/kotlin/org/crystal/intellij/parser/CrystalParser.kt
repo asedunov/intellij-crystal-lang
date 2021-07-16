@@ -1061,6 +1061,9 @@ class CrystalParser : PsiParser, LightPsiParser {
                                 when {
                                     at(CR_ASSIGN_OP) -> {
                                         if (lexer.lookAhead { tok(CR_LPAREN) && at(CR_MUL_OP) }) {
+                                            val mAssign = m.precede()
+                                            m.done(CR_REFERENCE_EXPRESSION)
+
                                             nextTokenSkipSpaces()
 
                                             composite(CR_PARENTHESIZED_EXPRESSION) {
@@ -1070,7 +1073,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                                                 tok(CR_RPAREN)
                                             }
 
-                                            m.done(CR_ASSIGNMENT_EXPRESSION)
+                                            mAssign.done(CR_ASSIGNMENT_EXPRESSION)
                                             continue
                                         }
                                         else if (lexer.lookAhead {

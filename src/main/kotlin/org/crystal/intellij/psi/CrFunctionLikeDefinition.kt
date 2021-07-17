@@ -1,6 +1,6 @@
 package org.crystal.intellij.psi
 
-interface CrFunctionLikeDefinition : CrDefinition {
+sealed interface CrFunctionLikeDefinition : CrDefinition {
     val parameterList: CrParameterList?
         get() = childOfType()
 

@@ -2,6 +2,7 @@ package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
@@ -12,8 +13,18 @@ import org.crystal.intellij.psi.*
 class CrystalSyntaxCheckingVisitor(
     private val highlightInfos: MutableList<HighlightInfo>
 ) : CrRecursiveVisitor() {
-    private var methodNest = 0
     private var funNest = 0
+
+    override fun visitElement(element: PsiElement) {
+        val parent = element.parent
+        val isFunBody = element is CrBlockExpression && (parent is CrFunction || parent is CrMethod)
+        if (isFunBody) inFun {
+            super.visitElement(element)
+        }
+        else {
+            super.visitElement(element)
+        }
+    }
 
     override fun visitIntegerLiteralExpression(o: CrIntegerLiteralExpression) {
         super.visitIntegerLiteralExpression(o)
@@ -85,16 +96,43 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    override fun visitMethod(o: CrMethod) {
-        methodNest++
-        super.visitMethod(o)
-        methodNest--
+    override fun visitRequireExpression(o: CrRequireExpression) {
+        super.visitRequireExpression(o)
+
+        errorIfInsideDefOrFun(o, "'require'")
     }
 
-    override fun visitFunction(o: CrFunction) {
-        funNest++
-        super.visitFunction(o)
-        funNest--
+    override fun visitIncludeExpression(o: CrIncludeExpression) {
+        super.visitIncludeExpression(o)
+
+        errorIfInsideDefOrFun(o, "'include'")
+    }
+
+    override fun visitExtendExpression(o: CrExtendExpression) {
+        super.visitExtendExpression(o)
+
+        errorIfInsideDefOrFun(o, "'extend'")
+    }
+
+    override fun visitDefinition(o: CrDefinition) {
+        super.visitDefinition(o)
+
+        o.abstractModifier?.let { errorIfInsideDefOrFun(it, "'abstract'") }
+        when (o) {
+            is CrMethod,
+            is CrClass,
+            is CrStruct,
+            is CrModule,
+            is CrEnum,
+            is CrLibrary,
+            is CrFunction,
+            is CrAlias,
+            is CrAnnotation -> {
+                val anchor = o.nameElement ?: o.firstChild
+                val kind = StringUtil.capitalize(o.presentableKind)
+                errorIfInsideDefOrFun(anchor, "$kind definition")
+            }
+        }
     }
 
     private fun checkIsWritable(e: CrExpression, op: PsiElement) {
@@ -115,7 +153,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrPathExpression -> {
                 if (isCombo) error(e, "Can't reassign to constant")
                 if (e.parent is CrListExpression) error(e, "Multiple assignment is not allowed for constants")
-                if (methodNest > 0 || funNest > 0) error(e, "Constant definition is not allowed in method/function body")
+                errorIfInsideDefOrFun(e, "Constant definition")
             }
 
             is CrIndexedExpression -> return
@@ -131,6 +169,18 @@ class CrystalSyntaxCheckingVisitor(
             else -> return
         }
         error(o, message)
+    }
+
+    private inline fun inFun(body: () -> Unit) {
+        funNest++
+        body()
+        funNest--
+    }
+
+    private fun errorIfInsideDefOrFun(anchor: PsiElement, message: String) {
+        if (funNest > 0) {
+            error(anchor, "$message is not allowed in method/function body")
+        }
     }
 
     private fun error(anchor: PsiElement, message: String) {

@@ -1,12 +1,13 @@
 package org.crystal.intellij.psi
 
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ABSTRACT
 import org.crystal.intellij.lexer.CR_PRIVATE
 import org.crystal.intellij.lexer.CR_PROTECTED
 
-interface CrDefinition : CrExpression, CrNameElementHolder, PsiNameIdentifierOwner {
+sealed interface CrDefinition : CrExpression, CrNameElementHolder, PsiNameIdentifierOwner {
     override fun accept(visitor: CrVisitor) = visitor.visitDefinition(this)
 
     val visibility: CrVisibility?
@@ -27,6 +28,9 @@ interface CrDefinition : CrExpression, CrNameElementHolder, PsiNameIdentifierOwn
             }
         }
 
+    val abstractModifier: PsiElement?
+        get() = allChildren().firstOrNull { it.elementType == CR_ABSTRACT }
+
     val isAbstract: Boolean
-        get() = allChildren().any { it.elementType == CR_ABSTRACT }
+        get() = abstractModifier != null
 }

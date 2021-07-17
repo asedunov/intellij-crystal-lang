@@ -60,6 +60,15 @@ class CrystalSyntaxCheckingVisitor(
         checkIsWritable(lhs, o.operation)
     }
 
+    override fun visitBlockExpression(o: CrBlockExpression) {
+        super.visitBlockExpression(o)
+
+        val p = o.parent
+        if (p is CrCallExpression && p.name == "[]=") {
+            error(o, "Setter method '[]=' cannot be called with a block")
+        }
+    }
+
     override fun visitMethod(o: CrMethod) {
         methodNest++
         super.visitMethod(o)

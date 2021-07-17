@@ -138,6 +138,28 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitTypeParameterList(o: CrTypeParameterList) {
+        super.visitTypeParameterList(o)
+
+        if (o.parent !is CrTypeDefinition) return
+
+        for ((name, typeParameters) in o.typeParameters.groupBy { it.name }) {
+            if (typeParameters.size <= 1) continue
+            for (typeParameter in typeParameters) {
+                error(typeParameter, "Duplicated type parameter name: $name")
+            }
+        }
+
+        var foundSplat = false
+        for (typeParameter in o.typeParameters) {
+            if (!typeParameter.isSplat) continue
+            if (foundSplat) {
+                error(typeParameter, "Splat type parameter already specified")
+            }
+            foundSplat = true
+        }
+    }
+
     override fun visitDefinition(o: CrDefinition) {
         super.visitDefinition(o)
 
@@ -152,9 +174,8 @@ class CrystalSyntaxCheckingVisitor(
             is CrFunction,
             is CrAlias,
             is CrAnnotation -> {
-                val anchor = o.nameElement ?: o.firstChild
                 val kind = StringUtil.capitalize(o.presentableKind)
-                errorIfInsideDefOrFun(anchor, "$kind definition")
+                errorIfInsideDefOrFun(o.defaultAnchor, "$kind definition")
             }
         }
     }
@@ -206,6 +227,9 @@ class CrystalSyntaxCheckingVisitor(
             error(anchor, "$message is not allowed in method/function body")
         }
     }
+
+    private val CrDefinition.defaultAnchor
+        get() = nameElement ?: firstChild
 
     private fun error(anchor: PsiElement, message: String) {
         val info = HighlightInfo

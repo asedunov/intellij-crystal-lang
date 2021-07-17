@@ -2756,11 +2756,15 @@ class CrystalParser : PsiParser, LightPsiParser {
                 lexerState.slashIsRegex = true
                 nextTokenSkipSpacesAndNewlines()
 
-                withTypeDeclarationCount {
-                    ensureParseAssignment()
+                if (at(CR_PSEUDO_CONSTANTS)) {
+                    parsePseudoConstant()
                 }
-
-                skipSpaces()
+                else {
+                    withTypeDeclarationCount {
+                        ensureParseAssignment()
+                    }
+                    skipSpaces()
+                }
             }
 
             pushVarName(paramName)

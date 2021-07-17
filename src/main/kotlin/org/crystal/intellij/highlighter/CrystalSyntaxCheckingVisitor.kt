@@ -5,6 +5,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
+import org.crystal.intellij.lexer.CR_GLOBAL_VAR
 import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
@@ -43,6 +44,14 @@ class CrystalSyntaxCheckingVisitor(
 
     override fun visitCharCodeElement(o: CrCharCodeElement) {
         handleUnicode(o)
+    }
+
+    override fun visitReferenceExpression(o: CrReferenceExpression) {
+        super.visitReferenceExpression(o)
+
+        if (o.nameElement?.tokenType == CR_GLOBAL_VAR) {
+            error(o, "Global variables are not supported, use class variables instead")
+        }
     }
 
     override fun visitAssignmentExpression(o: CrAssignmentExpression) {

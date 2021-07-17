@@ -56,9 +56,9 @@ a.b += 1
 
 @@b += 1
 
-$a = 1
+<error descr="Global variables are not supported, use class variables instead">$a</error> = 1
 
-$a += 1
+<error descr="Global variables are not supported, use class variables instead">$a</error> += 1
 
 a[1, 2] = 3
 

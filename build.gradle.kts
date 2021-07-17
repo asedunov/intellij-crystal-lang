@@ -1,7 +1,7 @@
 plugins {
     id("org.jetbrains.intellij") version "1.0"
     java
-    kotlin("jvm") version "1.5.0"
+    kotlin("jvm") version "1.5.20"
 }
 
 group = "org.crystal.intellij"

@@ -114,6 +114,30 @@ class CrystalSyntaxCheckingVisitor(
         errorIfInsideDefOrFun(o, "'extend'")
     }
 
+    override fun visitExceptionHandler(o: CrExceptionHandler) {
+        super.visitExceptionHandler(o)
+
+        var foundCatchAll = false
+        var foundRescue = false
+        for (child in o.allChildren()) {
+            when (child) {
+                is CrRescueClause -> {
+                    if (child.variable?.type != null) {
+                        if (foundCatchAll) error(child.keyword, "Specific rescue must come before catch-all rescue")
+                    } else {
+                        if (foundCatchAll) error(child.keyword, "Catch-all rescue can only be specified once")
+                        foundCatchAll = true
+                    }
+                    foundRescue = true
+                }
+
+                is CrElseClause -> {
+                    if (!foundRescue) error(child.keyword, "'else' is useless without 'rescue'")
+                }
+            }
+        }
+    }
+
     override fun visitDefinition(o: CrDefinition) {
         super.visitDefinition(o)
 

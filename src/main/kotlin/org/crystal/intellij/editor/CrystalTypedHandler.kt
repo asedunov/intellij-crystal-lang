@@ -1,6 +1,5 @@
 package org.crystal.intellij.editor
 
-import com.google.common.collect.ImmutableBiMap
 import com.intellij.codeInsight.CodeInsightSettings
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.injected.editor.EditorWindow

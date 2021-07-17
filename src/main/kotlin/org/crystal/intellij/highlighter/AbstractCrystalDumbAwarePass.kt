@@ -11,9 +11,7 @@ import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiRecursiveVisitor
 import org.crystal.intellij.psi.CrFile
-import org.crystal.intellij.psi.CrRecursiveVisitor
 
 abstract class AbstractCrystalDumbAwarePass(
     protected val file: CrFile,

@@ -1,4 +1,3 @@
 package org.crystal.intellij.psi
 
-sealed interface CrMethodReceiver : CrElement {
-}
+sealed interface CrMethodReceiver : CrElement

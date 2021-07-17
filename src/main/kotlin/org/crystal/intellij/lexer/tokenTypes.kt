@@ -323,10 +323,14 @@ val CR_ASSIGN_COMBO_OPERATORS: TokenSet = TokenSet.create(
     CR_XOR_ASSIGN_OP,
 )
 
-val CR_ALL_OPERATORS: TokenSet = TokenSet.orSet(
-    CR_BASE_OPERATORS,
+val CR_ASSIGN_OPERATORS: TokenSet = TokenSet.orSet(
     TokenSet.create(CR_ASSIGN_OP),
     CR_ASSIGN_COMBO_OPERATORS
+)
+
+val CR_ALL_OPERATORS: TokenSet = TokenSet.orSet(
+    CR_BASE_OPERATORS,
+    CR_ASSIGN_OPERATORS,
 )
 
 val CR_NUMBERS: TokenSet = TokenSet.create(CR_INTEGER_LITERAL, CR_FLOAT_LITERAL)

@@ -4031,6 +4031,8 @@ FILE
         PsiWhiteSpace(' ')
         CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
           PsiElement(<integer literal>)('2')
+      PsiErrorElement:Expected: '<assignment>'
+        <empty list>
       PsiElement(})('}')
 
   CrNamedTupleExpression(CR_NAMED_TUPLE_EXPRESSION)

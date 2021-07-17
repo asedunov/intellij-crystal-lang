@@ -714,17 +714,23 @@ class CrystalParser : PsiParser, LightPsiParser {
             allowComma: Boolean = false
         ): Boolean {
             lastLHSVarNames.clear()
-            return doParseAssignment(allowSuffix, allowComma)
+            return doParseAssignment(allowSuffix, allowComma, true)
         }
 
         private fun PsiBuilder.doParseAssignment(
             allowSuffix: Boolean = true,
-            allowComma: Boolean = false
+            allowComma: Boolean = false,
+            forceAssignForList: Boolean = false
         ): Boolean {
             val m = mark()
             if (!parseRootExpression(if (allowComma) 0 else 1)) {
                 m.drop()
                 return false
+            }
+            if (forceAssignForList && lastType() == CR_LIST_EXPRESSION && !at(CR_ASSIGN_OPERATORS)) {
+                m.drop()
+                error("Expected: '<assignment>'")
+                return true
             }
             var foundAssignment = false
             while (!eof()) {
@@ -759,9 +765,14 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                             else -> {
                                 val curLastLHSVarNames = SmartHashSet(lastLHSVarNames)
-                                doParseAssignment(allowComma = allowComma).also {
+                                val parsedRHS = doParseAssignment(allowComma = allowComma)
+                                if (parsedRHS) {
                                     pushVarNames(curLastLHSVarNames)
                                 }
+                                else {
+                                    error("Expected: <expression>")
+                                }
+                                parsedRHS
                             }
                         }
                         if (needsNewScope) popDef()
@@ -775,7 +786,10 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                         nextTokenSkipSpacesAndNewlines()
 
-                        if (!doParseAssignment(allowComma = allowComma)) break
+                        if (!doParseAssignment(allowComma = allowComma)) {
+                            error("Expected: <expression>")
+                            break
+                        }
                     }
                     else -> break
                 }

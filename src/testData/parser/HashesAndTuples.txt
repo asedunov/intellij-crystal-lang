@@ -231,7 +231,7 @@ FILE
   CrHashExpression(CR_HASH_EXPRESSION)
     PsiElement({)('{')
     CrHashEntry(CR_HASH_ENTRY)
-      CrIndexedLHSExpression(CR_INDEXED_LHS_EXPRESSION)
+      CrIndexedExpression(CR_INDEXED_EXPRESSION)
         CrReferenceExpression(CR_REFERENCE_EXPRESSION)
           CrNameElement(CR_NAME_ELEMENT)
             PsiElement(<identifier>)('a')

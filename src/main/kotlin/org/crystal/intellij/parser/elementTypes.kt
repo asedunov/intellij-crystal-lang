@@ -56,7 +56,6 @@ class CrCompositeElementType(
 @JvmField val CR_HEREDOC_EXPRESSION = CrCompositeElementType("CR_HEREDOC_EXPRESSION", ::CrHeredocExpression)
 @JvmField val CR_IF_EXPRESSION = CrCompositeElementType("CR_IF_EXPRESSION", ::CrIfExpression)
 @JvmField val CR_INDEXED_EXPRESSION = CrCompositeElementType("CR_INDEXED_EXPRESSION", ::CrIndexedExpression)
-@JvmField val CR_INDEXED_LHS_EXPRESSION = CrCompositeElementType("CR_INDEXED_LHS_EXPRESSION", ::CrIndexedLHSExpression)
 @JvmField val CR_INCLUDE_EXPRESSION = CrCompositeElementType("CR_INCLUDE_EXPRESSION", ::CrIncludeExpression)
 @JvmField val CR_INSTANCE_SIZE_EXPRESSION = CrCompositeElementType("CR_INSTANCE_SIZE_EXPRESSION", ::CrInstanceSizeExpression)
 @JvmField val CR_INTEGER_LITERAL_EXPRESSION = CrCompositeElementType("CR_INTEGER_LITERAL_EXPRESSION", ::CrIntegerLiteralExpression)

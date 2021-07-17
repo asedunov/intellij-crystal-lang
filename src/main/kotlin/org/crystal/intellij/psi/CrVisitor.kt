@@ -105,8 +105,6 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitIndexedExpression(o: CrIndexedExpression) = visitExpression(o)
 
-    open fun visitIndexedLHSExpression(o: CrIndexedLHSExpression) = visitExpression(o)
-
     open fun visitInstanceSizeExpression(o: CrInstanceSizeExpression) = visitExpression(o)
 
     open fun visitInstantiatedType(o: CrInstantiatedType) = visitType(o)

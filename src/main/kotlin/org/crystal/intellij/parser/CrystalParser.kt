@@ -1126,7 +1126,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     at(CR_INDEXED_OP) -> {
                         lexerState.wantsRegex = false
-                        compositeSuffix(CR_INDEXED_LHS_EXPRESSION) {
+                        compositeSuffix(CR_INDEXED_EXPRESSION) {
                             nextTokenSkipSpaces()
                         }
                     }

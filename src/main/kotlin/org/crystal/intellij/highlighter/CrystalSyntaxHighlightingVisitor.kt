@@ -19,7 +19,9 @@ class CrystalSyntaxHighlightingVisitor(
         super.visitElement(element)
         if (element is LeafPsiElement) {
             var tokenType = element.elementType
-            if (tokenType is CrystalKeywordTokenType && element.parent is CrNameElement) tokenType = CR_IDENTIFIER
+            if (tokenType is CrystalKeywordTokenType &&
+                tokenType != CR_SELF &&
+                element.parent is CrNameElement) tokenType = CR_IDENTIFIER
             val key = attributes[tokenType] ?: return
             val info = HighlightInfo
                 .newHighlightInfo(HighlightInfoType.INFORMATION)

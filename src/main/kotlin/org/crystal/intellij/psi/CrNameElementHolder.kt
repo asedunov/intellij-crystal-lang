@@ -1,6 +1,5 @@
 package org.crystal.intellij.psi
 
-interface CrNameElementHolder : CrElement {
+sealed interface CrNameElementHolder : CrElement {
     val nameElement: CrNameElement?
-        get() = childOfType()
 }

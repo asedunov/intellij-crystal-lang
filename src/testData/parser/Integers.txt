@@ -30,7 +30,7 @@ FILE
     CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')
-    CrNameElement(CR_NAME_ELEMENT)
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)

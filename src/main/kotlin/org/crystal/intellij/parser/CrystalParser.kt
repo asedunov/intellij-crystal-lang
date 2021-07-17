@@ -988,7 +988,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 at(idTokens) -> parseVarOrCall()
                 at(CR_CLASS_VAR) || at(CR_INSTANCE_VAR) -> parseRefOrVarDeclaration()
                 at(CR_UNDERSCORE) -> composite(CR_REFERENCE_EXPRESSION) {
-                    composite(CR_NAME_ELEMENT) { nextToken() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                 }
                 at(CR_GLOBAL_IDS) -> parseGlobalReference()
 
@@ -1029,7 +1029,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                         when {
                             at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR) || at(CR_UNDERSCORE) -> finishComposite(CR_REFERENCE_EXPRESSION, m) {
-                                composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                             }
 
                             at(CR_IS_A) -> finishComposite(CR_IS_EXPRESSION, m) {
@@ -1068,7 +1068,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                                 val hasSpace = lexer.lookAhead() == CR_WHITESPACE
                                 lexerState.wantsRegex = hasSpace
-                                composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
                                 var isCall = false
 
@@ -1365,7 +1365,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 if (m == null) {
                     m = mark()
                     when {
-                        isNamedTupleStart() -> composite(CR_NAME_ELEMENT) { advanceNotSymbol() }
+                        isNamedTupleStart() -> composite(CR_SIMPLE_NAME_ELEMENT) { advanceNotSymbol() }
                         at(CR_STRING_START) -> parseStringLiteral()
                         else -> {
                             error("Expected: <named argument>")
@@ -1440,7 +1440,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseCallBlockArgAfterDot(m: PsiBuilder.Marker) {
             when {
                 at(CR_INSTANCE_VAR) -> finishComposite(CR_REFERENCE_EXPRESSION, m) {
-                    composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                 }
 
                 at(CR_IS_A) -> {
@@ -1562,7 +1562,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
             if (at(idTokens) || at(CR_INSTANCE_VAR) || at(CR_UNDERSCORE)) {
                 composite(CR_REFERENCE_EXPRESSION) {
-                    composite(CR_NAME_ELEMENT) { nextToken() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                 }
             }
             else {
@@ -1688,7 +1688,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseTokenAsParam() {
             composite(CR_SIMPLE_PARAMETER_DEFINITION) {
-                composite(CR_NAME_ELEMENT) {
+                composite(CR_SIMPLE_NAME_ELEMENT) {
                     nextTokenSkipSpacesAndNewlines()
                 }
             }
@@ -1760,7 +1760,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseTokenWithOptEmptyParens(withNameElement: Boolean = false) {
             if (withNameElement) {
-                composite(CR_NAME_ELEMENT) { nextToken() }
+                composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
             }
             else {
                 nextToken()
@@ -1929,7 +1929,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseNamedTupleTail(mFirstEntry: PsiBuilder.Marker?) {
             val m = mFirstEntry ?: mark()
 
-            if (mFirstEntry == null) composite(CR_NAME_ELEMENT) {
+            if (mFirstEntry == null) composite(CR_SIMPLE_NAME_ELEMENT) {
                 advanceNotSymbol()
             }
 
@@ -1948,7 +1948,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 while (!at(CR_RBRACE)) {
                     val mEntry = mark()
                     when {
-                        isNamedTupleStart() -> composite(CR_NAME_ELEMENT) {
+                        isNamedTupleStart() -> composite(CR_SIMPLE_NAME_ELEMENT) {
                             advanceNotSymbol()
                         }
                         at(CR_STRING_START) -> parseStringLiteral()
@@ -2077,7 +2077,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             val m = markBeforeLast()
             dropLast()
 
-            if (lastType() == CR_PATH) {
+            if (lastType() == CR_PATH_NAME_ELEMENT) {
                 compositeSuffix(CR_PATH_TYPE) {}
             }
 
@@ -2119,7 +2119,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     if (at(idTokens)) {
                         argNames += lexer.tokenText
                         composite(CR_SIMPLE_PARAMETER_DEFINITION) {
-                            composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
                             if (at(CR_COLON)) {
                                 nextTokenSkipSpacesAndNewlines()
                                 parseBareProcType()
@@ -2174,7 +2174,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             when {
                 at(idTokens) -> {
                     var isAssign = false
-                    composite(CR_NAME_ELEMENT) {
+                    composite(CR_SIMPLE_NAME_ELEMENT) {
                         nextToken()
                         if (at(CR_ASSIGN_OP)) {
                             isAssign = true
@@ -2195,7 +2195,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     parseGeneric()
                     if (at(CR_DOT)) {
                         advanceToDefName()
-                        composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
                         error("Expected: '.'")
@@ -2204,12 +2204,12 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
 
                 at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR) -> {
-                    composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     if (at(CR_DOT)) {
                         compositeSuffix(CR_REFERENCE_EXPRESSION) {}
 
                         advanceToDefName()
-                        composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
                         error("Expected: '.'")
@@ -2441,7 +2441,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             if (!nextComesColonSpace()) return parser()
 
             return composite(CR_VARIABLE_DEFINITION) {
-                composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                 parseVarDefinitionTail()
             }
         }
@@ -2460,7 +2460,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.consumeDefName() {
             val isId = at(idTokens)
-            composite(CR_NAME_ELEMENT) {
+            composite(CR_SIMPLE_NAME_ELEMENT) {
                 nextToken()
                 if (isId && at(CR_ASSIGN_OP)) nextToken()
             }
@@ -2626,7 +2626,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     }
 
                     composite(CR_TYPE_PARAMETER_DEFINITION) {
-                        composite(CR_NAME_ELEMENT) { nextToken() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                     }
 
                     if (at(CR_COMMA)) {
@@ -2681,7 +2681,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     if (at(CR_MUL_OP)) nextToken()
                     if (at(CR_CONSTANT)) {
-                        composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
                         error("Expected: <type name>")
@@ -2793,7 +2793,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             var hasExternalName = false
 
             if (allowExternalName && (at(idTokens) || at(CR_STRING_START))) {
-                composite(CR_NAME_ELEMENT) {
+                composite(CR_SIMPLE_NAME_ELEMENT) {
                     when {
                         at(idTokens) -> nextToken()
                         at(CR_STRING_START) -> {
@@ -2823,7 +2823,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
             if (doNextToken) {
                 if (hasInternalName) {
-                    composite(CR_NAME_ELEMENT) { nextToken() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                 }
                 else {
                     nextToken()
@@ -2859,16 +2859,16 @@ class CrystalParser : PsiParser, LightPsiParser {
 
             val expectedNameTokens = if (isTopLevel) idTokens else cidTokens
             if (!at(expectedNameTokens)) error("Expected: <function name>")
-            composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
             if (at(CR_ASSIGN_OP)) {
                 nextTokenSkipSpacesAndNewlines()
 
                 when {
-                    at(cidTokens) -> composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                    at(cidTokens) -> composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
                     at(CR_STRING_START) -> {
-                        composite(CR_NAME_ELEMENT) { parseStringLiteral() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { parseStringLiteral() }
                         skipSpaces()
                     }
 
@@ -2918,7 +2918,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                 if (at(idTokens)) {
                     val argName = lexer.tokenText
-                    composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
                     if (at(CR_COLON)) {
                         nextTokenSkipSpacesAndNewlines()
                         parseBareProcType()
@@ -2958,7 +2958,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 error("Expected: <type name>")
                 return true
             }
-            composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
             if (!at(CR_ASSIGN_OP)) {
                 error("Expected: '='")
@@ -2977,7 +2977,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 error("Expected: <type name>")
                 return true
             }
-            composite(CR_NAME_ELEMENT) { nextToken() }
+            composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
             skipStatementEnd()
 
             composite(CR_BODY) { parseCStructOrUnionBodyExpressions() }
@@ -3013,7 +3013,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             val m = mark()
 
             composite(CR_C_FIELD_DEFINITION) {
-                composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
             }
 
             val isMultiField = at(CR_COMMA)
@@ -3027,7 +3027,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
 
                 composite(CR_C_FIELD_DEFINITION) {
-                    composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
                 }
             }
 
@@ -3079,7 +3079,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 when {
                     at(CR_CONSTANT) -> {
                         composite(CR_ENUM_CONSTANT_DEFINITION) {
-                            composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
                             if (at(CR_ASSIGN_OP)) {
                                 nextTokenSkipSpacesAndNewlines()
@@ -3115,7 +3115,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     at(CR_CLASS_VAR) -> {
                         composite(CR_REFERENCE_EXPRESSION) {
-                            composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                         }
 
                         if (at(CR_ASSIGN_OP)) {
@@ -3158,7 +3158,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 if (at(CR_CONSTANT)) {
-                    composite(CR_NAME_ELEMENT) { nextToken() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                 }
                 else {
                     error("Expected: <library name>")
@@ -3212,13 +3212,13 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
 
                 at(CR_GLOBAL_VAR) -> composite(CR_VARIABLE_DEFINITION) {
-                    composite(CR_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
                     if (at(CR_ASSIGN_OP)) {
                         nextTokenSkipSpaces()
 
                         if (at(cidTokens)) {
-                            composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                         }
                         else {
                             error("Expected: <identifier/constant>")
@@ -3283,7 +3283,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     pushVarName(lexer.tokenText)
 
                     composite(CR_VARIABLE_DEFINITION) {
-                        composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                         if (at(CR_COLON)) {
                             nextTokenSkipSpacesAndNewlines()
                             if (at(CR_CONSTANT) || at(CR_PATH_OP)) {
@@ -3740,7 +3740,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     when {
                         at(CR_INSTANCE_VAR) -> composite(CR_REFERENCE_EXPRESSION) {
-                            composite(CR_NAME_ELEMENT) { nextToken() }
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                         }
 
                         at(CR_INTEGER_LITERAL) -> parseNumericLiteral()
@@ -3761,7 +3761,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         
         private fun PsiBuilder.parseRefOrVarDeclaration(): Boolean {
             lexerState.wantsRegex = false
-            composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
             if (typeDeclarationCount == 0 && at(CR_COLON)) {
                 compositeSuffix(CR_VARIABLE_DEFINITION) {
@@ -3811,14 +3811,14 @@ class CrystalParser : PsiParser, LightPsiParser {
                     at(CR_PLUS_OP) || at(CR_MINUS_OP)
                 }) {
                 return composite(CR_REFERENCE_EXPRESSION) {
-                    composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                    composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                 }
             }
 
             val m = mark()
 
             lexerState.wantsRegex = false
-            composite(CR_NAME_ELEMENT) { nextToken() }
+            composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
 
             if (at(CR_WHITESPACES)) {
                 lexerState.wantsRegex = !isVar
@@ -3860,7 +3860,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             val isGlobalMatchData = name == "$~" || name == "$?"
 
             lexerState.wantsRegex = false
-            composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
             if (isGlobalMatchData && lexer.lookAhead() == CR_ASSIGN_OP) pushVarName(name)
         }
@@ -4232,10 +4232,10 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                 when {
                     isNamedTupleStart() -> {
-                        composite(CR_NAME_ELEMENT) { nextToken() }
+                        composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                     }
 
-                    at(CR_STRING_START) -> composite(CR_NAME_ELEMENT) { parseStringLiteral() }
+                    at(CR_STRING_START) -> composite(CR_SIMPLE_NAME_ELEMENT) { parseStringLiteral() }
 
                     else -> {
                         error("Expected: <identifier> or <string literal>")
@@ -4321,7 +4321,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             parsePath()
         }
 
-        private fun PsiBuilder.parsePath() = composite(CR_PATH) {
+        private fun PsiBuilder.parsePath() = composite(CR_PATH_NAME_ELEMENT) {
             if (at(CR_PATH_OP)) nextTokenSkipSpacesAndNewlines()
 
             ensureParseRefType()
@@ -4337,7 +4337,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             if (!at(CR_CONSTANT)) return false
             return composite(CR_REFERENCE_EXPRESSION) {
                 lexerState.wantsRegex = false
-                composite(CR_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
             }
         }
 

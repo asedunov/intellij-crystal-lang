@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 
 class CrCStruct(node: ASTNode) : CrDefinitionImpl(node),
                                  CrBodyHolder,
-                                 CrTypeDefinition {
+                                 CrTypeDefinition,
+                                 CrSimpleNameElementHolder {
     override fun accept(visitor: CrVisitor) = visitor.visitCStruct(this)
 }

@@ -5,8 +5,8 @@ import com.intellij.psi.util.elementType
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.lexer.CR_PATH_OP
 
-open class CrPath(node: ASTNode) : CrElementImpl(node) {
-    override fun accept(visitor: CrVisitor) = visitor.visitPath(this)
+open class CrPathNameElement(node: ASTNode) : CrNameElement(node) {
+    override fun accept(visitor: CrVisitor) = visitor.visitPathNameElement(this)
 
     val isGlobal: Boolean
         get() = firstChild?.elementType == CR_PATH_OP

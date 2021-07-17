@@ -110,7 +110,7 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
 
     override fun getLocationString(): String? {
         if (definition is CrPathBasedDefinition) {
-            val path = definition.path ?: return null
+            val path = definition.nameElement ?: return null
             val isGlobal = path.isGlobal
             val items = path.items.toMutableList()
             items.removeLastOrNull()

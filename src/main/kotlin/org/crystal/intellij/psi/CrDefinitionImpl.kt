@@ -8,7 +8,7 @@ sealed class CrDefinitionImpl(node: ASTNode) : CrExpressionImpl(node), CrDefinit
     override fun getNameIdentifier() = nameElement
 
     override fun getName(): String? {
-        if (this is CrPathBasedDefinition) return path?.name
+        if (this is CrPathBasedDefinition) return nameElement?.name
         return super.getName()
     }
 

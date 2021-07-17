@@ -161,7 +161,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitParameterList(o: CrParameterList) = visitCrElement(o)
 
-    open fun visitPath(o: CrPath) = visitCrElement(o)
+    open fun visitPathNameElement(o: CrPathNameElement) = visitNameElement(o)
 
     open fun visitPathExpression(o: CrPathExpression) = visitExpression(o)
 
@@ -200,6 +200,8 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitShortBlockExpression(o: CrShortBlockExpression) = visitExpression(o)
 
     open fun visitSimpleEscapeElement(o: CrSimpleEscapeElement) = visitEscapeElement(o)
+
+    open fun visitSimpleNameElement(o: CrSimpleNameElement) = visitNameElement(o)
 
     open fun visitSimpleParameter(o: CrSimpleParameter) = visitParameter(o)
 

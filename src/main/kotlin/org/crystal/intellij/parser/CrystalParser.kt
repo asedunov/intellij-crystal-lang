@@ -2673,7 +2673,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseTypeVars() {
-            if (at(CR_LPAREN)) composite(CR_PARAMETER_LIST) {
+            if (at(CR_LPAREN)) composite(CR_TYPE_PARAMETER_LIST) {
                 nextTokenSkipSpacesAndNewlines()
                 while (!eof()) {
                     val m = mark()

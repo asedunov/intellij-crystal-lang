@@ -5,6 +5,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
+import org.crystal.intellij.lexer.CR_END_LINE_
 import org.crystal.intellij.lexer.CR_GLOBAL_VAR
 import org.crystal.intellij.psi.*
 
@@ -51,6 +52,12 @@ class CrystalSyntaxCheckingVisitor(
 
         if (o.nameElement?.tokenType == CR_GLOBAL_VAR) {
             error(o, "Global variables are not supported, use class variables instead")
+        }
+    }
+
+    override fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) {
+        if (o.tokenType == CR_END_LINE_ && o.parent !is CrSimpleParameter) {
+            error(o, "__END_LINE__ can only be used in default argument value")
         }
     }
 

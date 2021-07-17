@@ -357,7 +357,9 @@ OP = "+" | "-" | "**" | "*" | "//" | "/" | "===" | "==" | "=~" | "!=" | "!~" | "
 ID_START = [a-zA-Z_\u009F-\uFFFF]
 ID_PART = {ID_START} | [0-9]
 ID_BODY = {ID_START} {ID_PART}*
-GLOBAL_ID = \$ (\~ | \? | {DEC_DIGIT}+ "?"? | {ID_PART}+)
+GLOBAL_MATCH_DATA = \$ [\~\?]
+GLOBAL_MATCH_DATA_INDEX = \$ {DEC_DIGIT}+ "?"?
+GLOBAL_ID = \$ {ID_PART}+
 GENERAL_ID = {ID_BODY} (\? | \!)? "="?
 CLASS_VAR_ID = "@@"{ID_BODY}
 INSTANCE_VAR_ID = "@"{ID_BODY}
@@ -837,6 +839,8 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   "__LINE__"                     { return handle(CR_LINE_); }
 
   "_"                            { return handle(CR_UNDERSCORE); }
+  {GLOBAL_MATCH_DATA}            { return handle(CR_GLOBAL_MATCH_DATA); }
+  {GLOBAL_MATCH_DATA_INDEX}      { return handle(CR_GLOBAL_MATCH_DATA_INDEX); }
   {GLOBAL_ID}                    { return handle(CR_GLOBAL_VAR); }
   {ID_BODY} (\? | \!)? "="?      {
     if (yycharat(yylength() - 1) == '=') yypushback(1);

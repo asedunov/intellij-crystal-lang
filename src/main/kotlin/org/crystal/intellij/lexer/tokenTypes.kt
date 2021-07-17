@@ -213,6 +213,8 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_CONSTANT = CrystalTokenType("<constant>")
 @JvmField val CR_IDENTIFIER = CrystalTokenType("<identifier>")
 @JvmField val CR_GLOBAL_VAR = CrystalTokenType("<global variable>")
+@JvmField val CR_GLOBAL_MATCH_DATA = CrystalTokenType("<global match data>")
+@JvmField val CR_GLOBAL_MATCH_DATA_INDEX = CrystalTokenType("<global match data index>")
 @JvmField val CR_INSTANCE_VAR = CrystalTokenType("<instance variable>")
 @JvmField val CR_UNDERSCORE = CrystalTokenType("_")
 
@@ -338,3 +340,5 @@ val CR_NUMBERS: TokenSet = TokenSet.create(CR_INTEGER_LITERAL, CR_FLOAT_LITERAL)
 val CR_KEYWORDS: TokenSet = CrystalKeywordTokenType.tokenSet()
 
 val CR_PSEUDO_CONSTANTS: TokenSet = TokenSet.create(CR_DIR_, CR_END_LINE_, CR_FILE_, CR_LINE_)
+
+val CR_GLOBAL_IDS: TokenSet = TokenSet.create(CR_GLOBAL_VAR, CR_GLOBAL_MATCH_DATA, CR_GLOBAL_MATCH_DATA_INDEX)

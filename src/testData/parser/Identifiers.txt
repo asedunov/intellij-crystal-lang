@@ -15,15 +15,15 @@ FILE
 
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrNameElement(CR_NAME_ELEMENT)
-      PsiElement(<global variable>)('$~')
+      PsiElement(<global match data>)('$~')
 
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrNameElement(CR_NAME_ELEMENT)
-      PsiElement(<global variable>)('$?')
+      PsiElement(<global match data>)('$?')
 
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrNameElement(CR_NAME_ELEMENT)
-      PsiElement(<global variable>)('$123')
+      PsiElement(<global match data index>)('$123')
 
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrNameElement(CR_NAME_ELEMENT)

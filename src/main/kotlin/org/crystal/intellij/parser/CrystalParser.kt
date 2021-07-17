@@ -677,9 +677,9 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private val referenceTokens = TokenSet.orSet(
             cidTokens,
+            CR_GLOBAL_IDS,
             TokenSet.create(
                 CR_UNDERSCORE,
-                CR_GLOBAL_VAR,
                 CR_CLASS_VAR,
                 CR_INSTANCE_VAR
             )
@@ -990,7 +990,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 at(CR_UNDERSCORE) -> composite(CR_REFERENCE_EXPRESSION) {
                     composite(CR_NAME_ELEMENT) { nextToken() }
                 }
-                at(CR_GLOBAL_VAR) -> parseGlobalReference()
+                at(CR_GLOBAL_IDS) -> parseGlobalReference()
 
                 else -> false
             }

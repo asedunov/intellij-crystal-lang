@@ -90,7 +90,7 @@ class CrystalSyntaxHighlightingVisitor(
             // Names
             map[CR_IDENTIFIER] = IDENTIFIER_KEY
             map[CR_CONSTANT] = CONSTANT_KEY
-            map[CR_GLOBAL_VAR] = GLOBAL_VARIABLE_KEY
+            map[CR_GLOBAL_IDS] = GLOBAL_VARIABLE_KEY
             map[CR_CLASS_VAR] = CLASS_VARIABLE_KEY
             map[CR_INSTANCE_VAR] = INSTANCE_VARIABLE_KEY
             map[CR_UNDERSCORE] = IDENTIFIER_KEY

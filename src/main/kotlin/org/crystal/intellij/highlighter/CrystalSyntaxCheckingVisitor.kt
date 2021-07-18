@@ -94,6 +94,14 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitHashExpression(o: CrHashExpression) {
+        super.visitHashExpression(o)
+
+        if (o.entries.isEmpty && o.type == null) {
+            error(o, "Empty hash literals must have an explicit type")
+        }
+    }
+
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 

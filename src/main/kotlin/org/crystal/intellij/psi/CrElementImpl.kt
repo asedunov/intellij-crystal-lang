@@ -13,4 +13,9 @@ abstract class CrElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), CrElem
         if (this is CrNameElementHolder) return nameElement?.name
         return super.getName()
     }
+
+    override fun getTextOffset(): Int {
+        val offset = if (this is CrNameElementHolder) nameElement?.textOffset else null
+        return offset ?: super.getTextOffset()
+    }
 }

@@ -78,6 +78,14 @@ class CrystalSyntaxCheckingVisitor(
         handleUnicode(o)
     }
 
+    override fun visitArrayLiteralExpression(o: CrArrayLiteralExpression) {
+        super.visitArrayLiteralExpression(o)
+
+        if (o.expressions.isEmpty && o.type == null) {
+            error(o, "Empty array literals must have an explicit type")
+        }
+    }
+
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 

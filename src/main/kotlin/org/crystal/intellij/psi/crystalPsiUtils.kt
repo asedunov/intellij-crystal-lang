@@ -1,6 +1,6 @@
 package org.crystal.intellij.psi
 
-val CrDefinition.presentableKind: String
+val CrNamedElement.presentableKind: String
     get() = when (this) {
         is CrAlias -> "alias"
         is CrAnnotation -> "annotation"
@@ -18,4 +18,5 @@ val CrDefinition.presentableKind: String
         is CrTypeDef -> "type definition"
         is CrTypeParameter -> "type parameter"
         is CrVariable -> "variable"
+        is CrNamedTupleEntry -> "named tuple entry"
     }

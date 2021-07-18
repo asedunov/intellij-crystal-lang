@@ -8,7 +8,10 @@ import org.crystal.intellij.lexer.CR_SELF
 class CrSimpleNameElement(node: ASTNode) : CrNameElement(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitSimpleNameElement(this)
 
-    override fun getName(): String? = text
+    override fun getName(): String? {
+        val e = firstChild
+        return if (e is CrStringLiteralExpression) e.stringValue else text
+    }
 
     val tokenType: IElementType?
         get() = firstChild?.elementType

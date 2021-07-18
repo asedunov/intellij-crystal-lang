@@ -91,7 +91,10 @@ class CrystalSyntaxCheckingVisitor(
 
         if (o.constructorType != null) {
             error(o, "Can't use named tuple syntax for Hash-like literal, use '=>' instead")
+            return
         }
+
+        checkDuplicateNames(o.entries)
     }
 
     override fun visitHashExpression(o: CrHashExpression) {
@@ -267,11 +270,11 @@ class CrystalSyntaxCheckingVisitor(
         funNest--
     }
 
-    private fun checkDuplicateNames(definitions: JBIterable<out CrDefinition>) {
-        for ((name, definitionGroup) in definitions.groupBy { it.name }) {
-            if (definitionGroup.size <= 1) continue
-            for (definition in definitionGroup) {
-                error(definition.defaultAnchor, "Duplicated ${definition.presentableKind} name: $name")
+    private fun checkDuplicateNames(elements: JBIterable<out CrNamedElement>) {
+        for ((name, elementGroup) in elements.groupBy { it.name }) {
+            if (elementGroup.size <= 1) continue
+            for (element in elementGroup) {
+                error(element.defaultAnchor, "Duplicated ${element.presentableKind} name: $name")
             }
         }
     }
@@ -288,7 +291,7 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    private val CrDefinition.defaultAnchor
+    private val CrNamedElement.defaultAnchor
         get() = nameElement ?: firstChild
 
     private fun error(anchor: PsiElement, message: String) {

@@ -86,6 +86,14 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitNamedTupleExpression(o: CrNamedTupleExpression) {
+        super.visitNamedTupleExpression(o)
+
+        if (o.constructorType != null) {
+            error(o, "Can't use named tuple syntax for Hash-like literal, use '=>' instead")
+        }
+    }
+
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 

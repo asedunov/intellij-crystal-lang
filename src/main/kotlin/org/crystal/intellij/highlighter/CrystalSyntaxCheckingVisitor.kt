@@ -5,6 +5,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
 import org.crystal.intellij.lexer.CR_END_LINE_
 import org.crystal.intellij.lexer.CR_GLOBAL_VAR
@@ -138,17 +139,18 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitFunctionLiteralExpression(o: CrFunctionLiteralExpression) {
+        super.visitFunctionLiteralExpression(o)
+
+        checkDuplicateNames(o.parameterList?.parameters ?: JBIterable.empty())
+    }
+
     override fun visitTypeParameterList(o: CrTypeParameterList) {
         super.visitTypeParameterList(o)
 
         if (o.parent !is CrTypeDefinition) return
 
-        for ((name, typeParameters) in o.typeParameters.groupBy { it.name }) {
-            if (typeParameters.size <= 1) continue
-            for (typeParameter in typeParameters) {
-                error(typeParameter, "Duplicated type parameter name: $name")
-            }
-        }
+        checkDuplicateNames(o.typeParameters)
 
         var foundSplat = false
         for (typeParameter in o.typeParameters) {
@@ -220,6 +222,15 @@ class CrystalSyntaxCheckingVisitor(
         funNest++
         body()
         funNest--
+    }
+
+    private fun checkDuplicateNames(definitions: JBIterable<out CrDefinition>) {
+        for ((name, definitionGroup) in definitions.groupBy { it.name }) {
+            if (definitionGroup.size <= 1) continue
+            for (definition in definitionGroup) {
+                error(definition.defaultAnchor, "Duplicated ${definition.presentableKind} name: $name")
+            }
+        }
     }
 
     private fun errorIfInsideDefOrFun(anchor: PsiElement, message: String) {

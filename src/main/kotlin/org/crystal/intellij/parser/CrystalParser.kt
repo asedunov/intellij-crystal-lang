@@ -1186,7 +1186,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                                     parseCallArg()
 
                                     val lastType = lastType()
-                                    if (at(CR_COLON) && lastType == CR_STRING_LITERAL_EXPRESSION) {
+                                    if (at(CR_COLON) && lastType in CR_STRING_LITERALS) {
                                         parseCallNamedArgs(mNamedArg, true)
                                     }
                                     else {
@@ -1333,7 +1333,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                         parseCallArg()
 
                         val lastType = lastType()
-                        if (at(CR_COLON) && lastType == CR_STRING_LITERAL_EXPRESSION) {
+                        if (at(CR_COLON) && lastType in CR_STRING_LITERALS) {
                             parseCallNamedArgs(mNamedArg, allowNewline = false)
                             break
                         }
@@ -1361,12 +1361,19 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.doParseCallNamedArgs(mFirstArg: PsiBuilder.Marker?, allowNewline: Boolean) {
             var m = mFirstArg
+
+            if (m != null && lastType() in CR_STRING_LITERALS) {
+                val mOuter = m.precede()
+                m.done(CR_SIMPLE_NAME_ELEMENT)
+                m = mOuter
+            }
+
             while (!eof()) {
                 if (m == null) {
                     m = mark()
                     when {
                         isNamedTupleStart() -> composite(CR_SIMPLE_NAME_ELEMENT) { advanceNotSymbol() }
-                        at(CR_STRING_START) -> parseStringLiteral()
+                        at(CR_STRING_START) -> composite(CR_SIMPLE_NAME_ELEMENT) { parseStringLiteral() }
                         else -> {
                             error("Expected: <named argument>")
                             break
@@ -1867,7 +1874,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                         error("Space not allowed between named argument name and ':'")
                     }
                     
-                    if (lastType() == CR_STRING_LITERAL_EXPRESSION) {
+                    if (lastType() in CR_STRING_LITERALS) {
                         parseNamedTupleTail(mEntry)
                         m.done(CR_NAMED_TUPLE_EXPRESSION)
                         return true
@@ -1927,7 +1934,13 @@ class CrystalParser : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseNamedTupleTail(mFirstEntry: PsiBuilder.Marker?) {
-            val m = mFirstEntry ?: mark()
+            var m = mFirstEntry ?: mark()
+
+            if (mFirstEntry != null && lastType() in CR_STRING_LITERALS) {
+                val mOuter = m.precede()
+                m.done(CR_SIMPLE_NAME_ELEMENT)
+                m = mOuter
+            }
 
             if (mFirstEntry == null) composite(CR_SIMPLE_NAME_ELEMENT) {
                 advanceNotSymbol()
@@ -1951,7 +1964,9 @@ class CrystalParser : PsiParser, LightPsiParser {
                         isNamedTupleStart() -> composite(CR_SIMPLE_NAME_ELEMENT) {
                             advanceNotSymbol()
                         }
-                        at(CR_STRING_START) -> parseStringLiteral()
+                        at(CR_STRING_START) -> composite(CR_SIMPLE_NAME_ELEMENT) {
+                            parseStringLiteral()
+                        }
                     }
                     if (at(CR_WHITESPACES)) {
                         error("Space not allowed between named argument name and ':'")

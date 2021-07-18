@@ -2,6 +2,7 @@ package org.crystal.intellij.parser
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.CrystalLanguage
 import org.crystal.intellij.psi.*
 
@@ -142,3 +143,10 @@ class CrCompositeElementType(
 @JvmField val CR_TYPE_PARAMETER_LIST = CrCompositeElementType("CR_TYPE_PARAMETER_LIST", ::CrTypeParameterList)
 @JvmField val CR_UNICODE_BLOCK = CrCompositeElementType("CR_UNICODE_BLOCK", ::CrUnicodeBlock)
 @JvmField val CR_WHEN_CLAUSE = CrCompositeElementType("CR_WHEN_CLAUSE", ::CrWhenClause)
+
+// Type sets
+
+@JvmField val CR_STRING_LITERALS = TokenSet.create(
+    CR_STRING_LITERAL_EXPRESSION,
+    CR_CONCATENATED_STRING_LITERAL_EXPRESSION
+)

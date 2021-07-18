@@ -3,10 +3,7 @@ package org.crystal.intellij.tests
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.CrCharValueHolder
-import org.crystal.intellij.psi.CrIntegerKind
-import org.crystal.intellij.psi.CrIntegerLiteralExpression
-import org.crystal.intellij.psi.allDescendants
+import org.crystal.intellij.psi.*
 import org.crystal.intellij.util.firstInstanceOrNull
 
 class PsiAttributeTest : BasePlatformTestCase() {
@@ -29,6 +26,10 @@ class PsiAttributeTest : BasePlatformTestCase() {
 
     private fun checkCharValue(text: String, value: Char?) {
         check(text, CrCharValueHolder::charValue, value)
+    }
+
+    private fun checkStringValue(text: String, value: String?) {
+        check(text, CrStringValueHolder::stringValue, value)
     }
 
     fun testIntegerKinds() {
@@ -480,5 +481,120 @@ class PsiAttributeTest : BasePlatformTestCase() {
         checkCharValue("\"\\u{10FFFF}\"", '￿')
         checkCharValue("\"\\u{110000}\"", null)
         checkCharValue("\"\\u{AAAAAA}\"", null)
+    }
+
+    fun testSpecialEscapes() {
+        checkCharValue("'\\a'", '\u0007')
+        checkCharValue("'\\b'", '\b')
+        checkCharValue("'\\e'", '\u001B')
+        checkCharValue("'\\f'", '\u000C')
+        checkCharValue("'\\n'", '\n')
+        checkCharValue("'\\r'", '\r')
+        checkCharValue("'\\t'", '\t')
+        checkCharValue("'\\v'", '\u000B')
+
+        checkCharValue("\"\\a\"", '\u0007')
+        checkCharValue("\"\\b\"", '\b')
+        checkCharValue("\"\\e\"", '\u001B')
+        checkCharValue("\"\\f\"", '\u000C')
+        checkCharValue("\"\\n\"", '\n')
+        checkCharValue("\"\\r\"", '\r')
+        checkCharValue("\"\\t\"", '\t')
+        checkCharValue("\"\\v\"", '\u000B')
+    }
+
+    fun testStringValues() {
+        checkStringValue("\"abc\"\\\n\"def\"", "abcdef")
+
+        checkStringValue("\"abc#{123}def\"", null)
+        checkStringValue("\"abc\\ndef\"", "abc\ndef")
+        checkStringValue("\"abc\\(def\"", "abc(def")
+        checkStringValue("\"abc\"\\\n\"def\"", "abcdef")
+        checkStringValue("\"abc\\u{4A 4B 4C}\"", "abcJKL")
+
+        checkStringValue("%(abc#{123}def)", null)
+        checkStringValue("%(abc\\ndef)", "abc\ndef")
+        checkStringValue("%(abc\\(def)", "abc(def")
+        checkStringValue("%(abc)\\\n%[def]", "abcdef")
+        checkStringValue("%(abc\\u{4A 4B 4C})", "abcJKL")
+
+        checkStringValue("%[abc#{123}def]", null)
+        checkStringValue("%[abc\\ndef]", "abc\ndef")
+        checkStringValue("%[abc\\[def]", "abc[def")
+        checkStringValue("%[abc]\\\n%(def)", "abcdef")
+        checkStringValue("%[abc\\u{4A 4B 4C}]", "abcJKL")
+
+        checkStringValue("%{abc#{123}def}", null)
+        checkStringValue("%{abc\\ndef}", "abc\ndef")
+        checkStringValue("%{abc\\{def}", "abc{def")
+        checkStringValue("%{abc}\\\n%[def]", "abcdef")
+        checkStringValue("%{abc\\u{4A 4B 4C}}", "abcJKL")
+
+        checkStringValue("%<abc#{123}def>", null)
+        checkStringValue("%<abc\\ndef>", "abc\ndef")
+        checkStringValue("%<abc\\<def>", "abc<def")
+        checkStringValue("%<abc>\\\n%(def)", "abcdef")
+        checkStringValue("%<abc\\u{4A 4B 4C}>", "abcJKL")
+
+        checkStringValue("%|abc#{123}def|", null)
+        checkStringValue("%|abc\\ndef|", "abc\ndef")
+        checkStringValue("%|abc\\|def|", "abc|def")
+        checkStringValue("%|abc|\\\n%[def]", "abcdef")
+        checkStringValue("%|abc\\u{4A 4B 4C}|", "abcJKL")
+
+        checkStringValue("%Q(abc#{123}def)", null)
+        checkStringValue("%Q(abc\\ndef)", "abc\ndef")
+        checkStringValue("%Q(abc\\(def)", "abc(def")
+        checkStringValue("%Q(abc)\\\n%Q[def]", "abcdef")
+        checkStringValue("%Q(abc\\u{4A 4B 4C})", "abcJKL")
+
+        checkStringValue("%Q[abc#{123}def]", null)
+        checkStringValue("%Q[abc\\ndef]", "abc\ndef")
+        checkStringValue("%Q[abc\\[def]", "abc[def")
+        checkStringValue("%Q[abc]\\\n%Q(def)", "abcdef")
+        checkStringValue("%Q[abc\\u{4A 4B 4C}]", "abcJKL")
+
+        checkStringValue("%Q{abc#{123}def}", null)
+        checkStringValue("%Q{abc\\ndef}", "abc\ndef")
+        checkStringValue("%Q{abc\\{def}", "abc{def")
+        checkStringValue("%Q{abc}\\\n%Q[def]", "abcdef")
+        checkStringValue("%Q{abc\\u{4A 4B 4C}}", "abcJKL")
+
+        checkStringValue("%Q<abc#{123}def>", null)
+        checkStringValue("%Q<abc\\ndef>", "abc\ndef")
+        checkStringValue("%Q<abc\\<def>", "abc<def")
+        checkStringValue("%Q<abc>\\\n%Q(def)", "abcdef")
+        checkStringValue("%Q<abc\\u{4A 4B 4C}>", "abcJKL")
+
+        checkStringValue("%Q|abc#{123}def|", null)
+        checkStringValue("%Q|abc\\ndef|", "abc\ndef")
+        checkStringValue("%Q|abc\\|def|", "abc|def")
+        checkStringValue("%Q|abc|\\\n%Q[def]", "abcdef")
+        checkStringValue("%Q|abc\\u{4A 4B 4C}|", "abcJKL")
+
+        checkStringValue("%q(abc#{123}def)", "abc#{123}def")
+        checkStringValue("%q(abc\\ndef)", "abc\\ndef")
+        checkStringValue("%q(abc)\\\n%q[def]", "abcdef")
+        checkStringValue("%q(abc\\u{4A 4B 4C})", "abc\\u{4A 4B 4C}")
+
+        checkStringValue("%q[abc#{123}def]", "abc#{123}def")
+        checkStringValue("%q[abc\\ndef]", "abc\\ndef")
+        checkStringValue("%q[abc]\\\n%q(def)", "abcdef")
+        checkStringValue("%q[abc\\u{4A 4B 4C}]", "abc\\u{4A 4B 4C}")
+
+        checkStringValue("%q{abc#{123}def}", "abc#{123}def")
+        checkStringValue("%q{abc\\ndef}", "abc\\ndef")
+        checkStringValue("%q{abc}\\\n%q[def]", "abcdef")
+        checkStringValue("%q{abc\\u{4A 4B 4C}}", "abc\\u{4A 4B 4C}")
+
+        checkStringValue("%q<abc#{123}def>", "abc#{123}def")
+        checkStringValue("%q<abc\\ndef>", "abc\\ndef")
+        checkStringValue("%q<abc>\\\n%q(def)", "abcdef")
+        checkStringValue("%q<abc\\u{4A 4B 4C}>", "abc\\u{4A 4B 4C}")
+
+        checkStringValue("%q|abc#{123}def|", "abc#{123}def")
+        checkStringValue("%q|abc\\ndef|", "abc\\ndef")
+        checkStringValue("%q|abc|\\\n%q[def]", "abcdef")
+        checkStringValue("%q|abc\\u{4A 4B 4C}|", "abc\\u{4A 4B 4C}")
     }
 }

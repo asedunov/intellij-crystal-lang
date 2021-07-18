@@ -60,7 +60,7 @@ class CrystalSyntaxCheckingVisitor(
 
     override fun visitOctalEscapeElement(o: CrOctalEscapeElement) {
         if (o.escapedChar > maxOctalChar) {
-            error(o, "Octal value may not exceed 377 (decimal 256)")
+            error(o, "Octal value may not exceed 377 (decimal 255)")
         }
     }
 

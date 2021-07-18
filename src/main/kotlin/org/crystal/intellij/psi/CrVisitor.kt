@@ -177,6 +177,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitRangeExpression(o: CrRangeExpression) = visitExpression(o)
 
+    open fun visitRawEscapeElement(o: CrRawEscapeElement) = visitEscapeElement(o)
+
     open fun visitReferenceExpression(o: CrReferenceExpression) = visitExpression(o)
 
     open fun visitRegexExpression(o: CrRegexExpression) = visitExpression(o)
@@ -206,6 +208,8 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitSimpleParameter(o: CrSimpleParameter) = visitParameter(o)
 
     open fun visitSizeExpression(o: CrSizeExpression) = visitExpression(o)
+
+    open fun visitSpecialEscapeElement(o: CrSpecialEscapeElement) = visitEscapeElement(o)
 
     open fun visitSplatExpression(o: CrSplatExpression) = visitExpression(o)
 

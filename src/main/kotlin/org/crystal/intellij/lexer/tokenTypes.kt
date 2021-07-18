@@ -179,7 +179,8 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 // Escapes
 @JvmField val CR_HEX_ESCAPE = CrystalTokenTypeWithFactory("<hex escape>", ::CrHexEscapeElement)
 @JvmField val CR_OCTAL_ESCAPE = CrystalTokenTypeWithFactory("<octal escape>", ::CrOctalEscapeElement)
-@JvmField val CR_SIMPLE_ESCAPE = CrystalTokenTypeWithFactory("<simple escape>", ::CrSimpleEscapeElement)
+@JvmField val CR_RAW_ESCAPE = CrystalTokenTypeWithFactory("<raw escape>", ::CrRawEscapeElement)
+@JvmField val CR_SPECIAL_ESCAPE = CrystalTokenTypeWithFactory("<special escape>", ::CrSpecialEscapeElement)
 @JvmField val CR_UNICODE_ESCAPE = CrystalTokenTypeWithFactory("<unicode escape>", ::CrUnicodeEscapeElement)
 
 // Non-escape char/string/symbol components
@@ -257,7 +258,8 @@ val CR_WHITESPACES_AND_NEWLINES: TokenSet = TokenSet.create(
 val CR_ESCAPES: TokenSet = TokenSet.create(
     CR_HEX_ESCAPE,
     CR_OCTAL_ESCAPE,
-    CR_SIMPLE_ESCAPE,
+    CR_RAW_ESCAPE,
+    CR_SPECIAL_ESCAPE,
     CR_UNICODE_ESCAPE
 )
 

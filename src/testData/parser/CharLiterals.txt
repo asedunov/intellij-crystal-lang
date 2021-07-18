@@ -6,52 +6,52 @@ FILE
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\a')
+    PsiElement(<special escape>)('\a')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\b')
+    PsiElement(<special escape>)('\b')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\n')
+    PsiElement(<special escape>)('\n')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\t')
+    PsiElement(<special escape>)('\t')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\v')
+    PsiElement(<special escape>)('\v')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\f')
+    PsiElement(<special escape>)('\f')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\r')
+    PsiElement(<special escape>)('\r')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\0')
+    PsiElement(<raw escape>)('\0')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\'')
+    PsiElement(<raw escape>)('\'')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)
     PsiElement(<char start>)(''')
-    PsiElement(<simple escape>)('\\')
+    PsiElement(<raw escape>)('\\')
     PsiElement(<char end>)(''')
 
   CrCharLiteralExpression(CR_CHAR_LITERAL_EXPRESSION)

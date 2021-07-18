@@ -200,7 +200,7 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_STRING_ARRAY_END = CrystalTokenType("<string array end>")
 @JvmField val CR_STRING_ARRAY_START = CrystalTokenType("<string array start>")
 @JvmField val CR_STRING_END = CrystalTokenType("<string end>")
-@JvmField val CR_STRING_RAW = CrystalTokenType("<string raw>")
+@JvmField val CR_STRING_RAW = CrystalTokenTypeWithFactory("<string raw>", ::CrStringRawElement)
 @JvmField val CR_STRING_START = CrystalTokenType("<string start>")
 @JvmField val CR_SYMBOL_ARRAY_END = CrystalTokenType("<symbol array end>")
 @JvmField val CR_SYMBOL_ARRAY_START = CrystalTokenType("<symbol array start>")

@@ -219,6 +219,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitStringLiteralExpression(o: CrStringLiteralExpression) = visitExpression(o)
 
+    open fun visitStringRawElement(o: CrStringRawElement) = visitCrElement(o)
+
     open fun visitStruct(o: CrStruct) = visitDefinition(o)
 
     open fun visitSupertypeClause(o: CrSupertypeClause) = visitCrElement(o)

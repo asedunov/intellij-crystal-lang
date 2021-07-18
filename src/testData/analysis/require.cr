@@ -1,15 +1,19 @@
 require "foo"
 
+begin
+  require "foo"
+end
+
 class TestClass
-    require "foo"
+    <error descr="'require' is not allowed in type body">require "foo"</error>
 end
 
 module TestModule
-    require "foo"
+    <error descr="'require' is not allowed in type body">require "foo"</error>
 end
 
 struct TestStruct
-    require "foo"
+    <error descr="'require' is not allowed in type body">require "foo"</error>
 end
 
 def testDef

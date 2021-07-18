@@ -15,15 +15,19 @@ class CrystalSyntaxCheckingVisitor(
     private val highlightInfos: MutableList<HighlightInfo>
 ) : CrRecursiveVisitor() {
     private var funNest = 0
+    private var typeNest = 0
 
     override fun visitElement(element: PsiElement) {
-        val parent = element.parent
-        val isFunBody = element is CrBlockExpression && (parent is CrFunction || parent is CrMethod)
-        if (isFunBody) inFun {
-            super.visitElement(element)
-        }
-        else {
-            super.visitElement(element)
+        when {
+            element.isFunBody -> inFun {
+                super.visitElement(element)
+            }
+            element.isTypeBody -> inType {
+                super.visitElement(element)
+            }
+            else -> {
+                super.visitElement(element)
+            }
         }
     }
 
@@ -147,6 +151,7 @@ class CrystalSyntaxCheckingVisitor(
         super.visitRequireExpression(o)
 
         errorIfInsideDefOrFun(o, "'require'")
+        errorIfInsideType(o, "'require'")
     }
 
     override fun visitIncludeExpression(o: CrIncludeExpression) {
@@ -264,10 +269,22 @@ class CrystalSyntaxCheckingVisitor(
         error(o, message)
     }
 
+    private val PsiElement.isFunBody
+        get() = this is CrBlockExpression && parent is CrFunctionLikeDefinition
+
+    private val PsiElement.isTypeBody
+        get() = this is CrBody && parent is CrClasslikeDefinition
+
     private inline fun inFun(body: () -> Unit) {
         funNest++
         body()
         funNest--
+    }
+
+    private inline fun inType(body: () -> Unit) {
+        typeNest++
+        body()
+        typeNest--
     }
 
     private fun checkDuplicateNames(elements: JBIterable<out CrNamedElement>) {
@@ -288,6 +305,12 @@ class CrystalSyntaxCheckingVisitor(
     private fun errorIfInsideDefOrFun(anchor: PsiElement, message: String) {
         if (funNest > 0) {
             error(anchor, "$message is not allowed in method/function body")
+        }
+    }
+
+    private fun errorIfInsideType(anchor: PsiElement, message: String) {
+        if (typeNest > 0) {
+            error(anchor, "$message is not allowed in type body")
         }
     }
 

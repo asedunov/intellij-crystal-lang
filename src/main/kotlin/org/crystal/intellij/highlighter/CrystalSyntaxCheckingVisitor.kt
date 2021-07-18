@@ -39,6 +39,25 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitStringLiteralExpression(o: CrStringLiteralExpression) {
+        super.visitStringLiteralExpression(o)
+
+        var p = o.parent
+        if (p is CrConcatenatedStringLiteralExpression) p = p.parent
+        val context = when (p) {
+            is CrRequireExpression -> "'require' expression"
+            is CrNameElement -> when (p.parent) {
+                is CrFunction -> "function name"
+                is CrNamedArgumentExpression, is CrLabeledType -> "named argument"
+                is CrParameter -> "external name"
+                is CrNamedTupleEntry -> "named tuple name"
+                else -> return
+            }
+            else -> return
+        }
+        errorIfInterpolated(o, context)
+    }
+
     override fun visitOctalEscapeElement(o: CrOctalEscapeElement) {
         if (o.escapedChar > maxOctalChar) {
             error(o, "Octal value may not exceed 377 (decimal 256)")
@@ -230,6 +249,12 @@ class CrystalSyntaxCheckingVisitor(
             for (definition in definitionGroup) {
                 error(definition.defaultAnchor, "Duplicated ${definition.presentableKind} name: $name")
             }
+        }
+    }
+
+    private fun errorIfInterpolated(literal: CrStringLiteralExpression, context: String) {
+        for (interpolation in literal.childrenOfType<CrStringInterpolation>()) {
+            error(interpolation, "Interpolation is not allowed in $context")
         }
     }
 

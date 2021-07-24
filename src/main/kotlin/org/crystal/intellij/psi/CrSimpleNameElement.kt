@@ -3,7 +3,6 @@ package org.crystal.intellij.psi
 import com.intellij.lang.ASTNode
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.elementType
-import org.crystal.intellij.lexer.CR_SELF
 
 class CrSimpleNameElement(node: ASTNode) : CrNameElement(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitSimpleNameElement(this)
@@ -16,12 +15,9 @@ class CrSimpleNameElement(node: ASTNode) : CrNameElement(node) {
     val tokenType: IElementType?
         get() = firstChild?.elementType
 
-    val isSelf: Boolean
-        get() = tokenType == CR_SELF
+    val isQuestion: Boolean
+        get() = name?.lastOrNull() == '?'
 
-    val isQuestionOrExclamation: Boolean
-        get() {
-            val last = name?.lastOrNull()
-            return last == '?' || last == '!'
-        }
+    val isExclamation: Boolean
+        get() = name?.lastOrNull() == '?'
 }

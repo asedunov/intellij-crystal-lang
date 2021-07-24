@@ -6,9 +6,7 @@ import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.util.containers.JBIterable
-import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
-import org.crystal.intellij.lexer.CR_END_LINE_
-import org.crystal.intellij.lexer.CR_GLOBAL_VAR
+import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
@@ -190,6 +188,77 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitCaseExpression(o: CrCaseExpression) {
+        super.visitCaseExpression(o)
+
+        val condition = o.condition
+        val isTupleCondition = condition is CrTupleExpression
+        val conditionSize = condition.tupleSizeIfAny()
+
+        val whenClauses = o.whenClauses
+        if (whenClauses.isNotEmpty) {
+            val isExhaustive = whenClauses.first()!!.isExhaustive
+            if (isExhaustive) {
+                if (condition == null) {
+                    error(o.keyword, "Exhaustive 'case' expression (case ... in) requires a condition")
+                }
+
+                val elseClause = o.elseClause
+                if (elseClause != null) {
+                    error(elseClause.keyword, "Exhaustive 'case' expression doesn't allow an 'else'")
+                }
+            }
+
+            for (whenClause in whenClauses) {
+                if (whenClause.isExhaustive != isExhaustive) {
+                    val message = if (isExhaustive) "Expected 'in', not 'when'" else "Expected 'when', not 'in'"
+                    error(whenClause.keyword, message)
+                }
+
+                val expression = whenClause.expression
+
+                val expressionSize = expression.tupleSizeIfAny()
+                if (isTupleCondition && expression is CrTupleExpression) {
+                    if (expressionSize != conditionSize) {
+                        error(
+                            expression,
+                            "Wrong number of tuple elements (given $expressionSize, expected $conditionSize)"
+                        )
+                    }
+
+                    if (isExhaustive) {
+                        expression.expressions.forEach { it.errorIfInvalidForExhaustion() }
+                    }
+                }
+                else {
+                    if (expression is CrReferenceExpression &&
+                        expression.nameElement?.tokenType == CR_UNDERSCORE) {
+                        val message = if (isExhaustive)
+                            "'when _' is not supported"
+                        else
+                            "'when _' is not supported, use 'else' block instead"
+                        error(expression, message)
+                    }
+
+                    if (isExhaustive) {
+                        expression?.errorIfInvalidForExhaustion()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun visitSelectExpression(o: CrSelectExpression) {
+        super.visitSelectExpression(o)
+
+        for (whenClause in o.whenClauses) {
+            val expression = whenClause.expression ?: continue
+            if (!expression.isValidForSelectWhen()) {
+                error(expression, "invalid 'when' expression in 'select': must be an assignment or call")
+            }
+        }
+    }
+
     override fun visitFunctionLiteralExpression(o: CrFunctionLiteralExpression) {
         super.visitFunctionLiteralExpression(o)
 
@@ -233,6 +302,42 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    private fun CrExpression.isValidForSelectWhen(): Boolean {
+        var e = this
+        if (e is CrAssignmentExpression) {
+            if (e.opSign != CR_ASSIGN_OP) return false
+            if (e.isSemanticCall) return true
+            e = e.rhs ?: return true
+        }
+        return e.isSemanticCall
+    }
+
+    private fun CrExpression.errorIfInvalidForExhaustion() {
+        if (!isValidForExhaustion()) {
+            error(this, "Invalid 'in'-condition for an exhaustive 'case'")
+        }
+    }
+
+    private fun CrExpression.isValidForExhaustion(): Boolean {
+        when (this) {
+            is CrNilExpression,
+            is CrBooleanLiteralExpression,
+            is CrPathExpression,
+            is CrTypeExpression -> return true
+            is CrReferenceExpression -> {
+                val nameElement = nameElement ?: return false
+                if (nameElement.tokenType == CR_UNDERSCORE) return true
+                val receiver = receiver
+                if (nameElement.tokenType == CR_CLASS &&
+                    receiver is CrPathExpression || receiver is CrTypeExpression) return true
+                if (hasImplicitReceiver && nameElement.isQuestion) return true
+            }
+        }
+        return false
+    }
+
+    private fun CrExpression?.tupleSizeIfAny() = (this as? CrTupleExpression)?.expressions?.size() ?: -1
+
     private fun checkIsWritable(e: CrExpression, op: PsiElement) {
         val isCombo = op.elementType in CR_ASSIGN_COMBO_OPERATORS
         when (e) {
@@ -242,9 +347,13 @@ class CrystalSyntaxCheckingVisitor(
             }
 
             is CrReferenceExpression -> {
-                if (e.nameElement?.isSelf == true) error(e, "Can't change the value of self")
-                if (e.nameElement?.isQuestionOrExclamation == true) {
-                    error(e, "Assignment is now allowed for ?/! method calls")
+                e.nameElement?.let { nameElement ->
+                    if (nameElement.tokenType == CR_SELF) {
+                        error(e, "Can't change the value of self")
+                    }
+                    if (nameElement.isQuestion || nameElement.isExclamation) {
+                        error(e, "Assignment is now allowed for ?/! method calls")
+                    }
                 }
             }
 

@@ -28,12 +28,12 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
 
     private fun StringBuilder.appendNameAndSignature(definition: CrDefinition) {
         when (definition) {
-            is CrSimpleParameter -> definition.externalNameElement?.let { appendName(it).append(" ") }
+            is CrSimpleParameter -> definition.externalNameElement?.let { appendSpaced(it.presentableText).append(" ") }
             is CrMethod -> definition.receiver?.let { appendReceiver(it).append(".") }
         }
-        append(definition.name ?: "???")
+        append(definition.nameElement.presentableText)
         if (definition is CrFunction) {
-            definition.externalNameElement?.let { appendSpaced("=").appendName(it) }
+            definition.externalNameElement?.let { appendSpaced("=").appendSpaced(it.presentableText) }
         }
         if (definition is CrFunctionLikeDefinition) {
             definition.parameterList?.parameters?.joinTo(
@@ -45,10 +45,15 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
         }
     }
 
-    private fun StringBuilder.appendName(nameElement: CrNameElement?) = appendSpaced(nameElement?.text ?: "???")
+    private val CrNameElement?.presentableText: String
+        get() = when (this) {
+            is CrSimpleNameElement -> text
+            is CrPathNameElement -> name
+            else -> null
+        } ?: "???"
 
     private fun StringBuilder.appendReceiver(receiver: CrMethodReceiver) = when (receiver) {
-        is CrReferenceExpression -> appendName(receiver.nameElement)
+        is CrReferenceExpression -> appendSpaced(receiver.nameElement.presentableText)
         is CrType -> appendType(receiver)
     }
 

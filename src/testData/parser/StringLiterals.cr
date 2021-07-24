@@ -1252,3 +1252,51 @@ b|
 
 
 %Q(
+
+
+"abc\u{4A 4B 4C}"
+
+
+%(abc\u{4A 4B 4C})
+
+
+%[abc\u{4A 4B 4C}]
+
+
+%{abc\u{4A 4B 4C}}
+
+
+%<abc\u{4A 4B 4C}>
+
+
+%|abc\u{4A 4B 4C}|
+
+
+%Q(abc\u{4A 4B 4C})
+
+
+%Q[abc\u{4A 4B 4C}]
+
+
+%Q{abc\u{4A 4B 4C}}
+
+
+%Q<abc\u{4A 4B 4C}>
+
+
+%Q|abc\u{4A 4B 4C}|
+
+
+%q(abc\u{4A 4B 4C})
+
+
+%q[abc\u{4A 4B 4C}]
+
+
+%q{abc\u{4A 4B 4C}}
+
+
+%q<abc\u{4A 4B 4C}>
+
+
+%q|abc\u{4A 4B 4C}|

@@ -467,7 +467,12 @@ SYMBOL_ARRAY_BLOCK_START = \% i {BLOCK_START}
   {SPECIAL_CHAR_ESCAPE}          { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SPECIAL_ESCAPE); }
   {ANY_CHAR_ESCAPE}              { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_RAW_ESCAPE); }
 
-  {UNICODE_BLOCK_ESCAPE_START}   { yypushbegin(STRING_UNICODE_BLOCK); return handle(CR_UNICODE_BLOCK_START); }
+  {UNICODE_BLOCK_ESCAPE_START}   {
+    if (blockLength != 0) return closePrecedingBlockToken(CR_STRING_RAW);
+
+    yypushbegin(STRING_UNICODE_BLOCK);
+    return handle(CR_UNICODE_BLOCK_START);
+  }
 
   {INTERPOLATION_START}          {
     return blockLength != 0

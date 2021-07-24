@@ -2420,7 +2420,10 @@ public class _CrystalLexer implements FlexLexer {
             // fall through
           case 351: break;
           case 148: 
-            { yypushbegin(STRING_UNICODE_BLOCK); return handle(CR_UNICODE_BLOCK_START);
+            { if (blockLength != 0) return closePrecedingBlockToken(CR_STRING_RAW);
+
+    yypushbegin(STRING_UNICODE_BLOCK);
+    return handle(CR_UNICODE_BLOCK_START);
             } 
             // fall through
           case 352: break;

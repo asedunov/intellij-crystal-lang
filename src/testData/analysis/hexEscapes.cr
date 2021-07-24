@@ -1,19 +1,13 @@
-#EXTRA_ATTRIBUTE: CrHexEscapeElement.getEscapedChar
+"<error descr="Invalid hex escape">\x</error>"
 
-"<error descr="Invalid hex escape"><warning descr="">\x</warning></error>"
+"<error descr="Invalid hex escape">\xA</error>"
 
-"<error descr="Invalid hex escape"><warning descr="">\xA</warning></error>"
+"<error descr="Invalid hex escape">\xA</error>z"
 
-"<error descr="Invalid hex escape"><warning descr="">\xA</warning></error>z"
+"\xA1"
 
-"<warning descr="¡">\xA1</warning>"
+"\xA1c"
 
-"<warning descr="«">\xab</warning>"
+"<error descr="Invalid hex escape">\x</error>x"
 
-"<warning descr="¡">\xA1</warning>c"
-
-"<warning descr="Þ">\xde</warning>f"
-
-"<error descr="Invalid hex escape"><warning descr="">\x</warning></error>x"
-
-"<error descr="Invalid hex escape"><warning descr="">\x</warning></error>xx"
+"<error descr="Invalid hex escape">\x</error>xx"

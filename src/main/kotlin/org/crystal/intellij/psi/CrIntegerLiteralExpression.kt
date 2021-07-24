@@ -24,7 +24,7 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
             return deduceKind()
         }
 
-    private val radix: Int
+    val radix: Int
         get() = when(prefix) {
             "0b" -> 2
             "0o", "0" -> 8

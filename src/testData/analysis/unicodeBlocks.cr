@@ -1,33 +1,31 @@
-#EXTRA_ATTRIBUTE: CrCharCodeElement.getEscapedChar
+'\u{1}'
 
-'\u{<warning descr="">1</warning>}'
+'\u{1A}'
 
-'\u{<warning descr="">1A</warning>}'
+'\u{1Ab}'
 
-'\u{<warning descr="ƫ">1Ab</warning>}'
+'\u{1Ab2D}'
 
-'\u{<warning descr="ꬭ">1Ab2D</warning>}'
+'\u{01Ab2D}'
 
-'\u{<warning descr="ꬭ">01Ab2D</warning>}'
+'\u{10FFFF}'
 
-'\u{<warning descr="￿">10FFFF</warning>}'
+'\u{<error descr="Invalid Unicode codepoint">110000</error>}'
 
-'\u{<error descr="Invalid Unicode codepoint"><warning descr="">110000</warning></error>}'
+'\u{<error descr="Invalid Unicode codepoint">AAAAAA</error>}'
 
-'\u{<error descr="Invalid Unicode codepoint"><warning descr="">AAAAAA</warning></error>}'
+"\u{1}"
 
-"\u{<warning descr="">1</warning>}"
+"\u{1A}"
 
-"\u{<warning descr="">1A</warning>}"
+"\u{1Ab}"
 
-"\u{<warning descr="ƫ">1Ab</warning>}"
+"\u{1Ab2D}"
 
-"\u{<warning descr="ꬭ">1Ab2D</warning>}"
+"\u{01Ab2D}"
 
-"\u{<warning descr="ꬭ">01Ab2D</warning>}"
+"\u{10FFFF}"
 
-"\u{<warning descr="￿">10FFFF</warning>}"
+"\u{<error descr="Invalid Unicode codepoint">110000</error>}"
 
-"\u{<error descr="Invalid Unicode codepoint"><warning descr="">110000</warning></error>}"
-
-"\u{<error descr="Invalid Unicode codepoint"><warning descr="">AAAAAA</warning></error>}"
+"\u{<error descr="Invalid Unicode codepoint">AAAAAA</error>}"

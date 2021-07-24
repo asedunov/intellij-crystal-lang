@@ -1,45 +1,41 @@
-#EXTRA_ATTRIBUTE: CrUnicodeEscapeElement.getEscapedChar
+'<error descr="Invalid Unicode codepoint">\u</error>'
 
-'<error descr="Invalid Unicode codepoint"><warning descr="">\u</warning></error>'
+'<error descr="Invalid Unicode codepoint">\uA</error>'
 
-'<error descr="Invalid Unicode codepoint"><warning descr="">\uA</warning></error>'
+'<error descr="Invalid Unicode codepoint">\uAB</error>'
 
-'<error descr="Invalid Unicode codepoint"><warning descr="">\uAB</warning></error>'
+'<error descr="Invalid Unicode codepoint">\uAB1</error>'
 
-'<error descr="Invalid Unicode codepoint"><warning descr="">\uAB1</warning></error>'
+'\uAB12'
 
-'<warning descr="ꬒ">\uAB12</warning>'
+'\uaBc5'
 
-'<warning descr="ꬒ">\uAB12</warning>'
+'<error descr="Invalid Unicode codepoint (surrogate half)">\uDABC</error>'
 
-'<warning descr="ꯅ">\uaBc5</warning>'
+'\uEEEE'
 
-'<error descr="Invalid Unicode codepoint (surrogate half)"><warning>\uDABC</warning></error>'
+"<error descr="Invalid Unicode codepoint">\u</error>"
 
-'<warning descr="">\uEEEE</warning>'
+"<error descr="Invalid Unicode codepoint">\u</error>x"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\u</warning></error>"
+"<error descr="Invalid Unicode codepoint">\uA</error>"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\u</warning></error>x"
+"<error descr="Invalid Unicode codepoint">\uA</error>x"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\uA</warning></error>"
+"<error descr="Invalid Unicode codepoint">\uAB</error>"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\uA</warning></error>x"
+"<error descr="Invalid Unicode codepoint">\uAB</error>x"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\uAB</warning></error>"
+"<error descr="Invalid Unicode codepoint">\uAB1</error>"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\uAB</warning></error>x"
+"<error descr="Invalid Unicode codepoint">\uAB1</error>x"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\uAB1</warning></error>"
+"\uAB12"
 
-"<error descr="Invalid Unicode codepoint"><warning descr="">\uAB1</warning></error>x"
+"\uAB12x"
 
-"<warning descr="ꬒ">\uAB12</warning>"
+"\uaBc5"
 
-"<warning descr="ꬒ">\uAB12</warning>x"
+"<error descr="Invalid Unicode codepoint (surrogate half)">\uDABC</error>"
 
-"<warning descr="ꯅ">\uaBc5</warning>"
-
-"<error descr="Invalid Unicode codepoint (surrogate half)"><warning>\uDABC</warning></error>"
-
-"<warning descr="">\uEEEE</warning>"
+"\uEEEE"

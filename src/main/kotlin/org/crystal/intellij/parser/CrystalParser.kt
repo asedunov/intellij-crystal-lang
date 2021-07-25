@@ -3484,7 +3484,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
         }
 
-        private val caseBranchTokens = TokenSet.create(CR_WHEN, CR_ELSE, CR_END)
+        private val caseBranchTokens = TokenSet.create(CR_WHEN, CR_IN, CR_ELSE, CR_END)
 
         private fun PsiBuilder.parseWhenExpressionEnd(): Boolean {
             lexerState.slashIsRegex = true

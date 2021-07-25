@@ -256,3 +256,8 @@ case x; when 1; when _; end
 case x; when 1, _; end
 
 select #
+
+case
+in false then 0
+in true then 0
+end

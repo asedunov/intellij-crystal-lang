@@ -504,7 +504,8 @@ class PsiAttributeTest : BasePlatformTestCase() {
     }
 
     fun testStringValues() {
-        checkStringValue("\"abc\"\\\n\"def\"", "abcdef")
+        checkStringValue("\"abc\\\ndef\"", "abcdef")
+        checkStringValue("\"abc\\\n   def\"", "abcdef")
 
         checkStringValue("\"abc#{123}def\"", null)
         checkStringValue("\"abc\\ndef\"", "abc\ndef")

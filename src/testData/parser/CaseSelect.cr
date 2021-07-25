@@ -254,3 +254,5 @@ case x; when _; end
 case x; when 1; when _; end
 
 case x; when 1, _; end
+
+select #

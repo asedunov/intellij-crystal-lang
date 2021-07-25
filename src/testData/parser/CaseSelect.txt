@@ -1896,3 +1896,10 @@ FILE
       CrBody(CR_BODY)
         <empty list>
     PsiElement(end)('end')
+
+  CrSelectExpression(CR_SELECT_EXPRESSION)
+    PsiElement(select)('select')
+    PsiErrorElement:Expected: 'when', 'else' or 'end'
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiComment(CR_LINE_COMMENT)('#')

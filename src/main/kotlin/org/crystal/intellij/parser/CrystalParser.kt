@@ -3671,7 +3671,10 @@ class CrystalParser : PsiParser, LightPsiParser {
                             break
                         }
 
-                        else -> error("Expected: 'when', 'else' or 'end'")
+                        else -> {
+                            error("Expected: 'when', 'else' or 'end'")
+                            break
+                        }
                     }
                 }
             }

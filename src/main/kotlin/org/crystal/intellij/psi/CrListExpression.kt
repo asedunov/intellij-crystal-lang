@@ -1,11 +1,11 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.util.containers.JBIterable
+import kotlin.reflect.KClass
 
-class CrListExpression(node: ASTNode) : CrExpressionImpl(node) {
+class CrListExpression(node: ASTNode) : CrExpressionImpl(node), CrListElement<CrExpression> {
     override fun accept(visitor: CrVisitor) = visitor.visitListExpression(this)
 
-    val expressions: JBIterable<CrExpression>
-        get() = childrenOfType()
+    override val elementClass: KClass<CrExpression>
+        get() = CrExpression::class
 }

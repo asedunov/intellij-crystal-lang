@@ -428,7 +428,7 @@ FILE
     CrBlockExpression(CR_BLOCK_EXPRESSION)
       PsiElement(do)('do')
       PsiWhiteSpace(' ')
-      CrParameterList(CR_PARAMETER_LIST)
+      CrBlockParameterList(CR_BLOCK_PARAMETER_LIST)
         PsiElement(|)('|')
         CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)

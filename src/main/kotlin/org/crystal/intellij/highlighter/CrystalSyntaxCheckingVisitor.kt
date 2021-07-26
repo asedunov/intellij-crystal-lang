@@ -127,8 +127,8 @@ class CrystalSyntaxCheckingVisitor(
         val lhs = o.lhs ?: return
         val rhs = o.rhs ?: return
 
-        val leftCount = (lhs as? CrListExpression)?.expressions?.size() ?: 1
-        val rightCount = (rhs as? CrListExpression)?.expressions?.size() ?: 1
+        val leftCount = (lhs as? CrListExpression)?.elements?.size() ?: 1
+        val rightCount = (rhs as? CrListExpression)?.elements?.size() ?: 1
         if (rightCount != 1 && leftCount != rightCount) {
             error(o, "Multiple assignment count mismatch")
         }
@@ -262,7 +262,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitFunctionLiteralExpression(o: CrFunctionLiteralExpression) {
         super.visitFunctionLiteralExpression(o)
 
-        checkDuplicateNames(o.parameterList?.parameters ?: JBIterable.empty())
+        checkDuplicateNames(o.parameterList?.elements ?: JBIterable.empty())
     }
 
     override fun visitTypeParameterList(o: CrTypeParameterList) {
@@ -270,10 +270,10 @@ class CrystalSyntaxCheckingVisitor(
 
         if (o.parent !is CrTypeDefinition) return
 
-        checkDuplicateNames(o.typeParameters)
+        checkDuplicateNames(o.elements)
 
         var foundSplat = false
-        for (typeParameter in o.typeParameters) {
+        for (typeParameter in o.elements) {
             if (!typeParameter.isSplat) continue
             if (foundSplat) {
                 error(typeParameter, "Splat type parameter already specified")
@@ -343,7 +343,7 @@ class CrystalSyntaxCheckingVisitor(
         when (e) {
             is CrListExpression -> {
                 if (isCombo) error(op, "Combined multiple assignments are not allowed")
-                e.expressions.forEach { checkIsWritable(it, op) }
+                e.elements.forEach { checkIsWritable(it, op) }
             }
 
             is CrReferenceExpression -> {

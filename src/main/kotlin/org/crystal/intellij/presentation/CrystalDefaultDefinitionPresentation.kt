@@ -36,7 +36,7 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
             definition.externalNameElement?.let { appendSpaced("=").appendSpaced(it.presentableText) }
         }
         if (definition is CrFunctionLikeDefinition) {
-            definition.parameterList?.parameters?.joinTo(
+            definition.parameterList?.elements?.joinTo(
                 this,
                 prefix = "(",
                 postfix = ")",
@@ -80,7 +80,7 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
         is CrInstantiatedType ->
             appendType(type.constructorType)
                 .append("(")
-                .append(type.argumentList?.componentTypes ?: JBIterable.empty()) { appendType(it) }
+                .append(type.argumentList?.elements ?: JBIterable.empty()) { appendType(it) }
                 .append(")")
         is CrLabeledType -> append(type.nameElement?.text ?: "???").append(": ").appendType(type.innerType)
         is CrMetaclassType -> appendType(type.innerType).append(".class")

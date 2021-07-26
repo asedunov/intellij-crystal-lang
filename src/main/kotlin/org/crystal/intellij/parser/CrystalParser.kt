@@ -1620,7 +1620,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseOptBlockParamList() {
             if (!at(CR_OR_OP)) return
-            composite(CR_PARAMETER_LIST) {
+            composite(CR_BLOCK_PARAMETER_LIST) {
                 nextTokenSkipSpacesAndNewlines()
                 while (!eof()) {
                     val m = mark()

@@ -122,6 +122,7 @@ val CR_UNDERSCORE_TYPE = CrCompositeElementType("CR_UNDERSCORE_TYPE", ::CrUnders
 val CR_UNION_TYPE = CrCompositeElementType("CR_UNION_TYPE", ::CrUnionType)
 
 // Miscellaneous
+val CR_BLOCK_PARAMETER_LIST = CrCompositeElementType("CR_BLOCK_PARAMETER_LIST", ::CrBlockParameterList)
 val CR_BODY = CrCompositeElementType("CR_BODY", ::CrBody)
 val CR_C_FIELD_GROUP = CrCompositeElementType("CR_C_FIELD_GROUP", ::CrCFieldGroup)
 val CR_ELSE_CLAUSE = CrCompositeElementType("CR_ELSE_CLAUSE", ::CrElseClause)

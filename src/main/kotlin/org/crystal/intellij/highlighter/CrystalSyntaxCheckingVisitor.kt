@@ -5,6 +5,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import com.intellij.util.SmartList
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
@@ -112,6 +113,22 @@ class CrystalSyntaxCheckingVisitor(
 
         if (o.nameElement?.tokenType == CR_GLOBAL_VAR) {
             error(o, "Global variables are not supported, use class variables instead")
+        }
+    }
+
+    override fun visitCallExpression(o: CrCallExpression) {
+        super.visitCallExpression(o)
+
+        if (o.receiver == null) {
+            val blocks = SmartList<CrExpression>()
+            val fullBlock = o.blockArgument
+            o.argumentList?.elements?.forEach {
+                if (it is CrShortBlockExpression) blocks += it
+            }
+            if (fullBlock != null) blocks += fullBlock
+            for (i in 1 until blocks.size) {
+                error(blocks[i], "Can't use captured and non-captured blocks together")
+            }
         }
     }
 

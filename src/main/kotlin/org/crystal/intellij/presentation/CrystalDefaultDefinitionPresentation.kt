@@ -19,8 +19,6 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
     override fun getPresentableText() = getPresentableText(definition)
 
     private fun getPresentableText(definition: CrDefinition) = buildString {
-        if (definition is CrVariadicParameter) return definition.text
-
         appendNameAndSignature(definition)
         appendType(definition)
         appendRHS(definition)
@@ -36,12 +34,16 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
             definition.externalNameElement?.let { appendSpaced("=").appendSpaced(it.presentableText) }
         }
         if (definition is CrFunctionLikeDefinition) {
-            definition.parameterList?.elements?.joinTo(
-                this,
-                prefix = "(",
-                postfix = ")",
-                transform = this@CrystalDefinitionPresentation::getPresentableText
-            )
+            val parameterList = definition.parameterList ?: return
+            val parameters = parameterList.elements
+            val isVariadic = definition is CrFunction && parameterList.isVariadic
+            append("(")
+            parameters.joinTo(this, transform = this@CrystalDefinitionPresentation::getPresentableText)
+            if (isVariadic) {
+                if (parameters.isNotEmpty) append(", ")
+                append("...")
+            }
+            append(")")
         }
     }
 

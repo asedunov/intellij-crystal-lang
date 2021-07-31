@@ -33,3 +33,6 @@ inline fun <reified T : PsiElement> PsiElement.nextSiblingOfType(): T? =
 
 fun PsiElement.skipWhitespacesAndCommentsForward(): PsiElement? =
     PsiTreeUtil.skipWhitespacesAndCommentsForward(this)
+
+fun PsiElement.skipWhitespacesAndCommentsBackward(): PsiElement? =
+    PsiTreeUtil.skipWhitespacesAndCommentsBackward(this)

@@ -271,8 +271,6 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitVariable(o: CrVariable) = visitDefinition(o)
 
-    open fun visitVariadicParameter(o: CrVariadicParameter) = visitParameter(o)
-
     open fun visitVisibilityExpression(o: CrVisibilityExpression) = visitExpression(o)
 
     open fun visitWithExpression(o: CrWithExpression) = visitExpression(o)

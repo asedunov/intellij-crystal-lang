@@ -1,6 +1,9 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.util.elementType
+import org.crystal.intellij.lexer.CR_EXCL_RANGE_OP
+import org.crystal.intellij.lexer.CR_RPAREN
 import kotlin.reflect.KClass
 
 class CrParameterList(node: ASTNode) : CrElementImpl(node), CrListElement<CrSimpleParameter> {
@@ -8,4 +11,11 @@ class CrParameterList(node: ASTNode) : CrElementImpl(node), CrListElement<CrSimp
 
     override val elementClass: KClass<CrSimpleParameter>
         get() = CrSimpleParameter::class
+
+    val isVariadic: Boolean
+        get() {
+            var e = lastChild
+            if (e.elementType == CR_RPAREN) e = e.skipWhitespacesAndCommentsBackward()
+            return e.elementType == CR_EXCL_RANGE_OP
+        }
 }

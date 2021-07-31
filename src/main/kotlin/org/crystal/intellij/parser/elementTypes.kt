@@ -30,7 +30,6 @@ val CR_STRUCT_DEFINITION = CrCompositeElementType("CR_STRUCT_DEFINITION", ::CrSt
 val CR_TYPE_DEFINITION = CrCompositeElementType("CR_TYPE_DEFINITION", ::CrTypeDef)
 val CR_TYPE_PARAMETER_DEFINITION = CrCompositeElementType("CR_TYPE_PARAMETER_DEFINITION", ::CrTypeParameter)
 val CR_VARIABLE_DEFINITION = CrCompositeElementType("CR_VARIABLE_DECLARATION", ::CrVariable)
-val CR_VARIADIC_PARAMETER_DEFINITION = CrCompositeElementType("CR_VARIADIC_PARAMETER_DEFINITION", ::CrVariadicParameter)
 
 // Expressions
 val CR_ANNOTATION_EXPRESSION = CrCompositeElementType("CR_ANNOTATION_EXPRESSION", ::CrAnnotationExpression)

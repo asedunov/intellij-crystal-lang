@@ -2923,7 +2923,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 if (at(CR_RPAREN)) break
 
                 if (at(CR_EXCL_RANGE_OP)) {
-                    composite(CR_VARIADIC_PARAMETER_DEFINITION) { nextTokenSkipSpacesAndNewlines() }
+                    nextTokenSkipSpacesAndNewlines()
                     recoverUntil("')'", true) { at(CR_RPAREN) }
                     break
                 }

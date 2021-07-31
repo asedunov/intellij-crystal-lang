@@ -389,6 +389,17 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitVariable(o: CrVariable) {
+        super.visitVariable(o)
+
+        if ((o.parent as? CrBody)?.parent is CrLibrary) {
+            val nameElement = o.nameElement ?: return
+            if (nameElement.tokenType == CR_GLOBAL_VAR && nameElement.name?.firstOrNull()?.isUpperCase() == true) {
+                error(nameElement, "External variables must start with lowercase")
+            }
+        }
+    }
+
     override fun visitDefinition(o: CrDefinition) {
         super.visitDefinition(o)
 

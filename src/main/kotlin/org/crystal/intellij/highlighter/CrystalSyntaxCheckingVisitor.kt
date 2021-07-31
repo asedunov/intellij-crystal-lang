@@ -318,6 +318,15 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitOffsetExpression(o: CrOffsetExpression) {
+        super.visitOffsetExpression(o)
+
+        val offset = o.offset
+        if (offset is CrIntegerLiteralExpression && offset.kind != CrIntegerKind.I32) {
+            error(offset, "Integer offset must have Int32 type")
+        }
+    }
+
     override fun visitTypeArgumentList(o: CrTypeArgumentList) {
         super.visitTypeArgumentList(o)
 

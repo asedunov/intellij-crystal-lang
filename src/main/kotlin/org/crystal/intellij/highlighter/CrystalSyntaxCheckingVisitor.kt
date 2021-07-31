@@ -127,7 +127,7 @@ class CrystalSyntaxCheckingVisitor(
             }
             if (fullBlock != null) blocks += fullBlock
             for (i in 1 until blocks.size) {
-                error(blocks[i], "Can't use captured and non-captured blocks together")
+                error(blocks[i], "Multiple block arguments are not allowed")
             }
         }
     }

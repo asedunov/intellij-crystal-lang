@@ -3,14 +3,14 @@ foo(1) {}
 foo(1) do
 end
 
-foo(&x) <error descr="Can't use captured and non-captured blocks together">{}</error>
+foo(&x) <error descr="Multiple block arguments are not allowed">{}</error>
 
-foo(&x) <error descr="Can't use captured and non-captured blocks together">do
+foo(&x) <error descr="Multiple block arguments are not allowed">do
 end</error>
 
-foo(&x, <error descr="Can't use captured and non-captured blocks together">&y</error>)
+foo(&x, <error descr="Multiple block arguments are not allowed">&y</error>)
 
-foo(&x, <error descr="Can't use captured and non-captured blocks together">&y</error>) <error descr="Can't use captured and non-captured blocks together">{}</error>
+foo(&x, <error descr="Multiple block arguments are not allowed">&y</error>) <error descr="Multiple block arguments are not allowed">{}</error>
 
-foo(&x, <error descr="Can't use captured and non-captured blocks together">&y</error>) <error descr="Can't use captured and non-captured blocks together">do
+foo(&x, <error descr="Multiple block arguments are not allowed">&y</error>) <error descr="Multiple block arguments are not allowed">do
 end</error>

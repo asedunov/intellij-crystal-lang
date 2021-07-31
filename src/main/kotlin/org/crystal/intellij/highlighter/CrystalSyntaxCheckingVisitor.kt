@@ -119,10 +119,11 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitCallExpression(o: CrCallExpression) {
         super.visitCallExpression(o)
 
+        val arguments = o.argumentList?.elements ?: JBIterable.empty()
         if (o.receiver == null) {
             val blocks = SmartList<CrExpression>()
             val fullBlock = o.blockArgument
-            o.argumentList?.elements?.forEach {
+            arguments.forEach {
                 if (it is CrShortBlockExpression) blocks += it
             }
             if (fullBlock != null) blocks += fullBlock
@@ -130,6 +131,8 @@ class CrystalSyntaxCheckingVisitor(
                 error(blocks[i], "Multiple block arguments are not allowed")
             }
         }
+
+        checkDuplicateNames(arguments.filter(CrNamedArgumentExpression::class.java))
     }
 
     override fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) {

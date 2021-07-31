@@ -309,6 +309,18 @@ class CrystalSyntaxCheckingVisitor(
         checkDuplicateNames(o.parameterList?.elements ?: JBIterable.empty())
     }
 
+    override fun visitTypeArgumentList(o: CrTypeArgumentList) {
+        super.visitTypeArgumentList(o)
+
+        checkDuplicateNames(o.elements.filter(CrLabeledType::class.java))
+    }
+
+    override fun visitNamedTupleType(o: CrNamedTupleType) {
+        super.visitNamedTupleType(o)
+
+        checkDuplicateNames(o.componentTypes.filter(CrLabeledType::class.java))
+    }
+
     override fun visitTypeParameterList(o: CrTypeParameterList) {
         super.visitTypeParameterList(o)
 

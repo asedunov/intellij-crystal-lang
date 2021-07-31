@@ -22,6 +22,7 @@ val CrNamedElement.presentableKind: String
         is CrVariable -> "variable"
         is CrNamedTupleEntry -> "named tuple entry"
         is CrNamedArgument -> "named argument"
+        is CrLabeledType -> "named type argument"
     }
 
 val CrExpression.isSemanticCall: Boolean

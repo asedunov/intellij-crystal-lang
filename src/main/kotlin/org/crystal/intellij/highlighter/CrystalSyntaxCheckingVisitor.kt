@@ -134,6 +134,29 @@ class CrystalSyntaxCheckingVisitor(
         }
 
         checkDuplicateNames(arguments.filter(CrNamedArgument::class.java))
+
+        var foundDoubleSplat = false
+        for (argument in arguments) {
+            when (argument) {
+                is CrDoubleSplatArgument -> {
+                    foundDoubleSplat = true
+                }
+
+                is CrSplatArgument -> {
+                    if (foundDoubleSplat) error(argument, "Splat not allowed after double splat")
+                }
+
+                is CrOutArgument -> {
+                    if (foundDoubleSplat) error(argument, "Out argument not allowed after double splat")
+                }
+
+                is CrExpression, is CrNamedArgument -> {
+                    if (foundDoubleSplat) error(argument, "Argument not allowed after double splat")
+                }
+
+                is CrShortBlockArgument -> {}
+            }
+        }
     }
 
     override fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) {

@@ -309,6 +309,15 @@ class CrystalSyntaxCheckingVisitor(
         checkDuplicateNames(o.parameterList?.elements ?: JBIterable.empty())
     }
 
+    override fun visitPointerExpression(o: CrPointerExpression) {
+        super.visitPointerExpression(o)
+
+        val argument = o.argument
+        if (argument is CrReferenceExpression && argument.nameElement?.tokenType == CR_SELF) {
+            error(o, "Can't take address of self")
+        }
+    }
+
     override fun visitTypeArgumentList(o: CrTypeArgumentList) {
         super.visitTypeArgumentList(o)
 

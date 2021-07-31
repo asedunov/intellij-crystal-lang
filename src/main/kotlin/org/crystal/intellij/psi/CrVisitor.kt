@@ -57,7 +57,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitDefinition(o: CrDefinition) = visitExpression(o)
 
-    open fun visitDoubleSplatExpression(o: CrDoubleSplatExpression) = visitExpression(o)
+    open fun visitDoubleSplatArgument(o: CrDoubleSplatArgument) = visitCrElement(o)
 
     open fun visitDoubleSplatType(o: CrDoubleSplatType) = visitType(o)
 
@@ -133,7 +133,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitNameElement(o: CrNameElement) = visitCrElement(o)
 
-    open fun visitNamedArgumentExpression(o: CrNamedArgumentExpression) = visitExpression(o)
+    open fun visitNamedArgument(o: CrNamedArgument) = visitCrElement(o)
 
     open fun visitNamedTupleEntry(o: CrNamedTupleEntry) = visitCrElement(o)
 
@@ -153,7 +153,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitOffsetExpression(o: CrOffsetExpression) = visitExpression(o)
 
-    open fun visitOutArgumentExpression(o: CrOutArgumentExpression) = visitExpression(o)
+    open fun visitOutArgument(o: CrOutArgument) = visitCrElement(o)
 
     open fun visitParenthesizedExpression(o: CrParenthesizedExpression) = visitExpression(o)
 
@@ -201,7 +201,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitSelfType(o: CrSelfType) = visitType(o)
 
-    open fun visitShortBlockExpression(o: CrShortBlockExpression) = visitExpression(o)
+    open fun visitShortBlockArgument(o: CrShortBlockArgument) = visitCrElement(o)
 
     open fun visitSimpleEscapeElement(o: CrSimpleEscapeElement) = visitEscapeElement(o)
 
@@ -213,7 +213,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitSpecialEscapeElement(o: CrSpecialEscapeElement) = visitEscapeElement(o)
 
-    open fun visitSplatExpression(o: CrSplatExpression) = visitExpression(o)
+    open fun visitSplatArgument(o: CrSplatArgument) = visitCrElement(o)
 
     open fun visitSplatType(o: CrSplatType) = visitType(o)
 

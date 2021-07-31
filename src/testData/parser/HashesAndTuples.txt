@@ -616,7 +616,7 @@ FILE
           PsiElement(<identifier>)('foo')
         CrArgumentList(CR_PARENTHESIZED_ARGUMENT_LIST)
           PsiElement(()('(')
-          CrShortBlockExpression(CR_SHORT_BLOCK_EXPRESSION)
+          CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
             PsiElement(&)('&')
             CrReferenceExpression(CR_REFERENCE_EXPRESSION)
               PsiElement(.)('.')

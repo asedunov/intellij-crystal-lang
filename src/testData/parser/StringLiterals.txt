@@ -494,7 +494,7 @@ FILE
       PsiElement(<identifier>)('foo')
     CrArgumentList(CR_PARENTHESIZED_ARGUMENT_LIST)
       PsiElement(()('(')
-      CrNamedArgumentExpression(CR_NAMED_ARGUMENT_EXPRESSION)
+      CrNamedArgument(CR_NAMED_ARGUMENT)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('regex')
         PsiElement(:)(':')

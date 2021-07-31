@@ -397,7 +397,7 @@ FILE
       PsiElement(<identifier>)('foo')
     PsiWhiteSpace(' ')
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
-      CrShortBlockExpression(CR_SHORT_BLOCK_EXPRESSION)
+      CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
         CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)
           PsiElement(->)('->')

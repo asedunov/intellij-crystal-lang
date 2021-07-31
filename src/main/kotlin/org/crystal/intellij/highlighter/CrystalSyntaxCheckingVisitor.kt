@@ -51,7 +51,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrRequireExpression -> "'require' expression"
             is CrNameElement -> when (p.parent) {
                 is CrFunction -> "function name"
-                is CrNamedArgumentExpression, is CrLabeledType -> "named argument"
+                is CrNamedArgument, is CrLabeledType -> "named argument"
                 is CrParameter -> "external name"
                 is CrNamedTupleEntry -> "named tuple name"
                 else -> return
@@ -120,11 +120,12 @@ class CrystalSyntaxCheckingVisitor(
         super.visitCallExpression(o)
 
         val arguments = o.argumentList?.elements ?: JBIterable.empty()
+
         if (o.receiver == null) {
-            val blocks = SmartList<CrExpression>()
+            val blocks = SmartList<CrCallArgument>()
             val fullBlock = o.blockArgument
             arguments.forEach {
-                if (it is CrShortBlockExpression) blocks += it
+                if (it is CrShortBlockArgument) blocks += it
             }
             if (fullBlock != null) blocks += fullBlock
             for (i in 1 until blocks.size) {
@@ -132,7 +133,7 @@ class CrystalSyntaxCheckingVisitor(
             }
         }
 
-        checkDuplicateNames(arguments.filter(CrNamedArgumentExpression::class.java))
+        checkDuplicateNames(arguments.filter(CrNamedArgument::class.java))
     }
 
     override fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) {

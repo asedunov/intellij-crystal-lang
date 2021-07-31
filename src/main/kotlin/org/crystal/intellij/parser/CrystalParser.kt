@@ -1150,7 +1150,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseSingleArg() {
             if (at(CR_MUL_OP)) {
-                composite(CR_SPLAT_EXPRESSION) {
+                composite(CR_SPLAT_ARGUMENT) {
                     nextTokenSkipSpaces()
                     ensureParseAssignment()
                 }
@@ -1396,7 +1396,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     ensureParseAssignment()
                 }
 
-                m.done(CR_NAMED_ARGUMENT_EXPRESSION)
+                m.done(CR_NAMED_ARGUMENT)
                 m = null
 
                 skipSpaces()
@@ -1419,7 +1419,7 @@ class CrystalParser : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseCallBlockArg() {
-            composite(CR_SHORT_BLOCK_EXPRESSION) {
+            composite(CR_SHORT_BLOCK_ARGUMENT) {
                 nextTokenSkipSpaces()
 
                 if (at(CR_DOT)) {
@@ -1540,12 +1540,12 @@ class CrystalParser : PsiParser, LightPsiParser {
             if (lexer.lookAhead() != CR_WHITESPACE) {
                 when {
                     at(CR_MUL_OP) -> {
-                        splatType = CR_SPLAT_EXPRESSION
+                        splatType = CR_SPLAT_ARGUMENT
                         nextToken()
                     }
 
                     at(CR_EXP_OP) -> {
-                        splatType = CR_DOUBLE_SPLAT_EXPRESSION
+                        splatType = CR_DOUBLE_SPLAT_ARGUMENT
                         nextToken()
                     }
                 }
@@ -1562,7 +1562,7 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseOut() = composite(CR_OUT_ARGUMENT_EXPRESSION) {
+        private fun PsiBuilder.parseOut() = composite(CR_OUT_ARGUMENT) {
             nextTokenSkipSpacesAndNewlines()
 
             if (at(idTokens)) pushVarName(lexer.tokenText)

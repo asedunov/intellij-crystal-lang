@@ -34,8 +34,8 @@ class CrystalParser : PsiParser, LightPsiParser {
 
             addOp(OpInfo(CR_QUESTION, 1, isLeft = false, nodeType = CR_CONDITIONAL_EXPRESSION, forceSlashIsRegex = false))
 
-            addOp(OpInfo(CR_INCL_RANGE_OP, 2, nodeType = CR_RANGE_EXPRESSION, forceSlashIsRegex = false))
-            addOp(OpInfo(CR_EXCL_RANGE_OP, 2, nodeType = CR_RANGE_EXPRESSION, forceSlashIsRegex = false))
+            addOp(OpInfo(CR_INCL_RANGE_OP, 2, forceSlashIsRegex = false))
+            addOp(OpInfo(CR_EXCL_RANGE_OP, 2, forceSlashIsRegex = false))
 
             addOp(OpInfo(CR_OROR_OP, 3))
 
@@ -887,7 +887,7 @@ class CrystalParser : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseUnaryRange(): Boolean {
             if (!at(rangeOps)) return false
-            return composite(CR_RANGE_EXPRESSION) {
+            return composite(CR_UNARY_EXPRESSION) {
                 nextTokenSkipSpaces()
                 if (!rangeNextCondition()) parseRootExpression(OpTable.getOp(CR_OROR_OP)!!.precedence)
             }

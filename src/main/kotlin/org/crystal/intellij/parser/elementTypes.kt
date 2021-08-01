@@ -70,7 +70,6 @@ val CR_PARENTHESIZED_EXPRESSION = CrCompositeElementType("CR_PARENTHESIZED_EXPRE
 val CR_PATH_EXPRESSION = CrCompositeElementType("CR_PATH_EXPRESSION", ::CrPathExpression)
 val CR_POINTER_EXPRESSION = CrCompositeElementType("CR_POINTER_EXPRESSION", ::CrPointerExpression)
 val CR_PSEUDO_CONSTANT_EXPRESSION = CrCompositeElementType("CR_PSEUDO_CONSTANT_EXPRESSION", ::CrPseudoConstantExpression)
-val CR_RANGE_EXPRESSION = CrCompositeElementType("CR_RANGE_EXPRESSION", ::CrRangeExpression)
 val CR_REFERENCE_EXPRESSION = CrCompositeElementType("CR_REFERENCE_EXPRESSION", ::CrReferenceExpression)
 val CR_REGEX_EXPRESSION = CrCompositeElementType("CR_REGEX_EXPRESSION", ::CrRegexExpression)
 val CR_REQUIRE_EXPRESSION = CrCompositeElementType("CR_REQUIRE_EXPRESSION", ::CrRequireExpression)

@@ -177,8 +177,6 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) = visitExpression(o)
 
-    open fun visitRangeExpression(o: CrRangeExpression) = visitExpression(o)
-
     open fun visitRawEscapeElement(o: CrRawEscapeElement) = visitEscapeElement(o)
 
     open fun visitReferenceExpression(o: CrReferenceExpression) = visitExpression(o)

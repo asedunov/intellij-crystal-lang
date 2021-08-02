@@ -12,6 +12,9 @@ class CrSimpleParameter(node: ASTNode) : CrParameter(node), CrDefinitionWithDefa
             return if (secondNameElement is CrSimpleNameElement) return firstNameElement else null
         }
 
+    val externalName: String?
+        get() = externalNameElement?.name
+
     override val nameElement: CrSimpleNameElement?
         get() {
             val externalNameElement = externalNameElement ?: return childOfType()

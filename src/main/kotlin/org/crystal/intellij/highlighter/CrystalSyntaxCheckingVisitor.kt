@@ -420,6 +420,135 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    private enum class ParamListState {
+        POSITIONAL,
+        NAMED,
+        BLOCK,
+        END
+    }
+
+    private fun reportInvalidListState(state: ParamListState, parameter: CrSimpleParameter) {
+        val message = when (state) {
+            ParamListState.POSITIONAL -> return
+            ParamListState.NAMED -> "Multiple splat parameters are not allowed"
+            ParamListState.BLOCK -> "Only block parameter is allowed after double splat"
+            ParamListState.END -> "No parameters are allowed after block"
+        }
+        error(parameter, message)
+    }
+
+    override fun visitMethod(o: CrMethod) {
+        super.visitMethod(o)
+
+        val methodName = o.name ?: ""
+
+        if (methodName in nonOverloadableOperators) {
+            error(o.nameElement!!, "'$methodName' is a pseudo-method and can't be redefined")
+        }
+
+        val parameters = o.parameterList?.elements?.toList() ?: emptyList()
+
+        var splat: CrSimpleParameter? = null
+        var doubleSplat: CrSimpleParameter? = null
+        var block: CrSimpleParameter? = null
+
+        var state = ParamListState.POSITIONAL
+        var foundDefaultValue = false
+        for (parameter in parameters) {
+            val kind = parameter.kind
+            val nameElement = parameter.nameElement
+            val name = nameElement?.name
+
+            errorIfInvalidName(parameter)
+
+            when (kind) {
+                CrParameterKind.ORDINARY -> {
+                    if (state != ParamListState.POSITIONAL && state != ParamListState.NAMED) {
+                        reportInvalidListState(state, parameter)
+                    }
+                }
+
+                CrParameterKind.SPLAT -> {
+                    if (state != ParamListState.POSITIONAL) {
+                        reportInvalidListState(state, parameter)
+                    }
+                    else {
+                        splat = parameter
+                        if (nameElement == null) {
+                            val nextKind = parameter.nextSiblingOfType<CrSimpleParameter>()?.kind
+                            if (nextKind == null ||
+                                nextKind == CrParameterKind.BLOCK ||
+                                nextKind == CrParameterKind.DOUBLE_SPLAT) {
+                                error(parameter, "Named parameters must follow bare *")
+                            }
+                        }
+                    }
+                    state = state.coerceAtLeast(ParamListState.NAMED)
+                    parameter.defaultValue?.let { error(it, "Splat parameter can't have a default value") }
+                }
+
+                CrParameterKind.DOUBLE_SPLAT -> {
+                    if (state != ParamListState.POSITIONAL && state != ParamListState.NAMED) {
+                        reportInvalidListState(state, parameter)
+                    }
+                    else {
+                        doubleSplat = parameter
+                        if (nameElement == null) {
+                            error(parameter, "Double splat must have a name")
+                        }
+                    }
+                    state = state.coerceAtLeast(ParamListState.BLOCK)
+                    parameter.defaultValue?.let { error(it, "Double splat parameter can't have a default value") }
+                }
+
+                CrParameterKind.BLOCK -> {
+                    if (state == ParamListState.END) {
+                        reportInvalidListState(state, parameter)
+                    }
+                    else {
+                        block = parameter
+                    }
+                    state = ParamListState.END
+                }
+            }
+
+            val externalNameElement = parameter.externalNameElement
+            if (externalNameElement != null) {
+                val externalName = externalNameElement.name
+                if (externalName == name) {
+                    error(externalNameElement, "When specified, external name must be different than internal nam")
+                }
+            }
+
+            if (parameter.defaultValue != null) {
+                foundDefaultValue = true
+            }
+            else if (foundDefaultValue && state == ParamListState.POSITIONAL && kind == CrParameterKind.ORDINARY) {
+                error(parameter, "Parameter must have a default value")
+            }
+        }
+
+        val hasAnySplats = splat != null || doubleSplat != null
+        if (methodName.endsWith('=')) {
+            if (methodName != "[]=" && (parameters.size > 1 || hasAnySplats)) {
+                val firstKind = parameters.first().kind
+                var offset = 0
+                if (firstKind != CrParameterKind.SPLAT && firstKind != CrParameterKind.DOUBLE_SPLAT) {
+                    offset++
+                }
+                for (i in offset until parameters.size) {
+                    error(parameters[i], "Setter method '${methodName}' cannot have more than one parameter")
+                }
+            }
+            else if (block != null) {
+                error(block, "Setter method '${methodName}' cannot have a block")
+            }
+        }
+
+        checkDuplicateNames(parameters)
+        checkDuplicateNames(parameters, { externalNameElement }, { "external name" })
+    }
+
     private fun CrExpression.isValidForSelectWhen(): Boolean {
         var e = this
         if (e is CrAssignmentExpression) {
@@ -516,13 +645,16 @@ class CrystalSyntaxCheckingVisitor(
 
     private fun <T : CrNamedElement> checkDuplicateNames(
         elements: Iterable<T>,
-        nameGetter: T.() -> String? = { name },
+        nameElementGetter: T.() -> CrNameElement? = { nameElement },
         kindGetter: T.() -> String = { presentableKind }
     ) {
-        for ((name, elementGroup) in elements.groupBy { it.nameGetter() }) {
+        for ((name, elementGroup) in elements.groupBy { it.nameElementGetter()?.name }) {
             if (name == null || elementGroup.size <= 1) continue
             for (element in elementGroup) {
-                error(element.defaultAnchor, "Duplicated ${element.kindGetter()} name: $name")
+                error(
+                    element.nameElementGetter() ?: element,
+                    "Duplicated ${element.kindGetter()} name: $name"
+                )
             }
         }
     }
@@ -570,6 +702,19 @@ class CrystalSyntaxCheckingVisitor(
 
     companion object {
         private const val maxOctalChar = 255.toChar()
+
+        private val nonOverloadableOperators = setOf(
+            "&&",
+            "||",
+            "..",
+            "...",
+            "!",
+            "is_a?",
+            "as",
+            "as?",
+            "responds_to?",
+            "nil?"
+        )
 
         private val invalidInternalNames = setOf(
             "begin", "nil", "true", "false", "yield", "with", "abstract",

@@ -5,6 +5,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.CrystalLanguage
 import org.crystal.intellij.psi.*
+import org.crystal.intellij.stubs.elementTypes.CrStubElementTypes
 
 class CrCompositeElementType(
     debugName: String,
@@ -12,25 +13,25 @@ class CrCompositeElementType(
 ) : IElementType(debugName, CrystalLanguage)
 
 // Definitions
-val CR_ALIAS_DEFINITION = CrCompositeElementType("CR_ALIAS_DEFINITION", ::CrAlias)
-val CR_ANNOTATION_DEFINITION = CrCompositeElementType("CR_ANNOTATION_DEFINITION", ::CrAnnotation)
-val CR_CLASS_DEFINITION = CrCompositeElementType("CR_CLASS_DEFINITION", ::CrClass)
-val CR_C_FIELD_DEFINITION = CrCompositeElementType("CR_C_FIELD_DEFINITION", ::CrCField)
-val CR_C_STRUCT_DEFINITION = CrCompositeElementType("CR_C_STRUCT_DEFINITION", ::CrCStruct)
-val CR_C_UNION_DEFINITION = CrCompositeElementType("CR_C_UNION_DEFINITION", ::CrCUnion)
-val CR_ENUM_DEFINITION = CrCompositeElementType("CR_ENUM_DEFINITION", ::CrEnum)
-val CR_ENUM_CONSTANT_DEFINITION = CrCompositeElementType("CR_ENUM_CONSTANT_DEFINITION", ::CrEnumConstant)
-val CR_FUNCTION_DEFINITION = CrCompositeElementType("CR_FUNCTION_DEFINITION", ::CrFunction)
-val CR_LIBRARY_DEFINITION = CrCompositeElementType("CR_LIBRARY_DEFINITION", ::CrLibrary)
-val CR_MACRO_DEFINITION = CrCompositeElementType("CR_MACRO_DEFINITION", ::CrMacro)
-val CR_METHOD_DEFINITION = CrCompositeElementType("CR_METHOD_DEFINITION", ::CrMethod)
-val CR_MODULE_DEFINITION = CrCompositeElementType("CR_MODULE_DEFINITION", ::CrModule)
+val CR_ALIAS_DEFINITION = CrStubElementTypes.ALIAS
+val CR_ANNOTATION_DEFINITION = CrStubElementTypes.ANNOTATION
+val CR_CLASS_DEFINITION = CrStubElementTypes.CLASS
+val CR_C_FIELD_DEFINITION = CrStubElementTypes.C_FIELD
+val CR_C_STRUCT_DEFINITION = CrStubElementTypes.C_STRUCT
+val CR_C_UNION_DEFINITION = CrStubElementTypes.C_UNION
+val CR_ENUM_DEFINITION = CrStubElementTypes.ENUM
+val CR_ENUM_CONSTANT_DEFINITION = CrStubElementTypes.ENUM_CONSTANT
+val CR_FUNCTION_DEFINITION = CrStubElementTypes.FUNCTION
+val CR_LIBRARY_DEFINITION = CrStubElementTypes.LIBRARY
+val CR_MACRO_DEFINITION = CrStubElementTypes.MACRO
+val CR_METHOD_DEFINITION = CrStubElementTypes.METHOD
+val CR_MODULE_DEFINITION = CrStubElementTypes.MODULE
 val CR_MULTI_PARAMETER_DEFINITION = CrCompositeElementType("CR_MULTI_PARAMETER_DEFINITION", ::CrMultiParameter)
-val CR_SIMPLE_PARAMETER_DEFINITION = CrCompositeElementType("CR_SIMPLE_PARAMETER_DEFINITION", ::CrSimpleParameter)
-val CR_STRUCT_DEFINITION = CrCompositeElementType("CR_STRUCT_DEFINITION", ::CrStruct)
-val CR_TYPE_DEFINITION = CrCompositeElementType("CR_TYPE_DEFINITION", ::CrTypeDef)
-val CR_TYPE_PARAMETER_DEFINITION = CrCompositeElementType("CR_TYPE_PARAMETER_DEFINITION", ::CrTypeParameter)
-val CR_VARIABLE_DEFINITION = CrCompositeElementType("CR_VARIABLE_DECLARATION", ::CrVariable)
+val CR_SIMPLE_PARAMETER_DEFINITION = CrStubElementTypes.SIMPLE_PARAMETER
+val CR_STRUCT_DEFINITION = CrStubElementTypes.STRUCT
+val CR_TYPE_DEFINITION = CrStubElementTypes.TYPEDEF
+val CR_TYPE_PARAMETER_DEFINITION = CrStubElementTypes.TYPE_PARAMETER
+val CR_VARIABLE_DEFINITION = CrStubElementTypes.VARIABLE
 
 // Expressions
 val CR_ANNOTATION_EXPRESSION = CrCompositeElementType("CR_ANNOTATION_EXPRESSION", ::CrAnnotationExpression)
@@ -100,24 +101,24 @@ val CR_WITH_EXPRESSION = CrCompositeElementType("CR_WITH_EXPRESSION", ::CrWithEx
 val CR_YIELD_EXPRESSION = CrCompositeElementType("CR_YIELD_EXPRESSION", ::CrYieldExpression)
 
 // Type elements
-val CR_DOUBLE_SPLAT_TYPE = CrCompositeElementType("CR_DOUBLE_SPLAT_TYPE", ::CrDoubleSplatType)
-val CR_EXPRESSION_TYPE = CrCompositeElementType("CR_EXPRESSION_TYPE", ::CrExpressionType)
-val CR_HASH_TYPE = CrCompositeElementType("CR_HASH_TYPE", ::CrHashType)
-val CR_INSTANTIATED_TYPE = CrCompositeElementType("CR_INSTANTIATED_TYPE", ::CrInstantiatedType)
-val CR_LABELED_TYPE = CrCompositeElementType("CR_LABELED_TYPE", ::CrLabeledType)
-val CR_METACLASS_TYPE = CrCompositeElementType("CR_METACLASS_TYPE", ::CrMetaclassType)
-val CR_NAMED_TUPLE_TYPE = CrCompositeElementType("CR_NAMED_TUPLE_TYPE", ::CrNamedTupleType)
-val CR_NILABLE_TYPE = CrCompositeElementType("CR_NILABLE_TYPE", ::CrNilableType)
-val CR_PARENTHESIZED_TYPE = CrCompositeElementType("CR_PARENTHESIZED_TYPE", ::CrParenthesizedType)
-val CR_PATH_TYPE = CrCompositeElementType("CR_PATH_TYPE", ::CrPathType)
-val CR_POINTER_TYPE = CrCompositeElementType("CR_POINTER_TYPE", ::CrPointerType)
-val CR_PROC_TYPE = CrCompositeElementType("CR_PROC_TYPE", ::CrProcType)
-val CR_SELF_TYPE = CrCompositeElementType("CR_SELF_TYPE", ::CrSelfType)
-val CR_SPLAT_TYPE = CrCompositeElementType("CR_SPLAT_TYPE", ::CrSplatType)
-val CR_STATIC_ARRAY_TYPE = CrCompositeElementType("CR_STATIC_ARRAY_TYPE", ::CrStaticArrayType)
-val CR_TUPLE_TYPE = CrCompositeElementType("CR_TUPLE_TYPE", ::CrTupleType)
-val CR_UNDERSCORE_TYPE = CrCompositeElementType("CR_UNDERSCORE_TYPE", ::CrUnderscoreType)
-val CR_UNION_TYPE = CrCompositeElementType("CR_UNION_TYPE", ::CrUnionType)
+val CR_DOUBLE_SPLAT_TYPE = CrStubElementTypes.DOUBLE_SPLAT_TYPE
+val CR_EXPRESSION_TYPE = CrStubElementTypes.EXPRESSION_TYPE
+val CR_HASH_TYPE = CrStubElementTypes.HASH_TYPE
+val CR_INSTANTIATED_TYPE = CrStubElementTypes.INSTANTIATED_TYPE
+val CR_LABELED_TYPE = CrStubElementTypes.LABELED_TYPE
+val CR_METACLASS_TYPE = CrStubElementTypes.METACLASS_TYPE
+val CR_NAMED_TUPLE_TYPE = CrStubElementTypes.NAMED_TUPLE_TYPE
+val CR_NILABLE_TYPE = CrStubElementTypes.NILABLE_TYPE
+val CR_PARENTHESIZED_TYPE = CrStubElementTypes.PARENTHESIZED_TYPE
+val CR_PATH_TYPE = CrStubElementTypes.PATH_TYPE
+val CR_POINTER_TYPE = CrStubElementTypes.POINTER_TYPE
+val CR_PROC_TYPE = CrStubElementTypes.PROC_TYPE
+val CR_SELF_TYPE = CrStubElementTypes.SELF_TYPE
+val CR_SPLAT_TYPE = CrStubElementTypes.SPLAT_TYPE
+val CR_STATIC_ARRAY_TYPE = CrStubElementTypes.STATIC_ARRAY_TYPE
+val CR_TUPLE_TYPE = CrStubElementTypes.TUPLE_TYPE
+val CR_UNDERSCORE_TYPE = CrStubElementTypes.UNDERSCORE_TYPE
+val CR_UNION_TYPE = CrStubElementTypes.UNION_TYPE
 
 // Arguments
 val CR_DOUBLE_SPLAT_ARGUMENT = CrCompositeElementType("CR_DOUBLE_SPLAT_ARGUMENT", ::CrDoubleSplatArgument)
@@ -147,17 +148,17 @@ val CR_ENSURE_CLAUSE = CrCompositeElementType("CR_ENSURE_CLAUSE", ::CrEnsureClau
 val CR_EXCEPTION_HANDLER = CrCompositeElementType("CR_EXCEPTION_HANDLER", ::CrExceptionHandler)
 val CR_HASH_ENTRY = CrCompositeElementType("CR_HASH_ENTRY", ::CrHashEntry)
 val CR_HEREDOC_LITERAL_BODY = CrCompositeElementType("CR_HEREDOC_LITERAL_BODY", ::CrHeredocLiteralBody)
-val CR_SIMPLE_NAME_ELEMENT = CrCompositeElementType("CR_SIMPLE_NAME_ELEMENT", ::CrSimpleNameElement)
 val CR_NAMED_TUPLE_ENTRY = CrCompositeElementType("CR_NAMED_TUPLE_ENTRY", ::CrNamedTupleEntry)
 val CR_PARAMETER_LIST = CrCompositeElementType("CR_PARAMETER_LIST", ::CrParameterList)
 val CR_PARENTHESIZED_ARGUMENT_LIST = CrCompositeElementType("CR_PARENTHESIZED_ARGUMENT_LIST", ::CrArgumentList)
-val CR_PATH_NAME_ELEMENT = CrCompositeElementType("CR_PATH_NAME_ELEMENT", ::CrPathNameElement)
+val CR_PATH_NAME_ELEMENT = CrStubElementTypes.PATH_NAME
 val CR_RESCUE_CLAUSE = CrCompositeElementType("CR_RESCUE_CLAUSE", ::CrRescueClause)
+val CR_SIMPLE_NAME_ELEMENT = CrStubElementTypes.SIMPLE_NAME
 val CR_SPACED_ARGUMENT_LIST = CrCompositeElementType("CR_SPACED_ARGUMENT_LIST", ::CrArgumentList)
 val CR_STRING_INTERPOLATION = CrCompositeElementType("CR_STRING_INTERPOLATION", ::CrStringInterpolation)
 val CR_SUPERTYPE_CLAUSE = CrCompositeElementType("CR_SUPERTYPE_CLAUSE", ::CrSupertypeClause)
 val CR_THEN_CLAUSE = CrCompositeElementType("CR_THEN_CLAUSE", ::CrThenClause)
-val CR_TYPE_ARGUMENT_LIST = CrCompositeElementType("CR_TYPE_ARGUMENT_LIST", ::CrTypeArgumentList)
+val CR_TYPE_ARGUMENT_LIST = CrStubElementTypes.TYPE_ARGUMENT_LIST
 val CR_TYPE_PARAMETER_LIST = CrCompositeElementType("CR_TYPE_PARAMETER_LIST", ::CrTypeParameterList)
 val CR_UNICODE_BLOCK = CrCompositeElementType("CR_UNICODE_BLOCK", ::CrUnicodeBlock)
 val CR_WHEN_CLAUSE = CrCompositeElementType("CR_WHEN_CLAUSE", ::CrWhenClause)

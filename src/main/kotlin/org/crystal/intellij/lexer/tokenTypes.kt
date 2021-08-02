@@ -351,3 +351,13 @@ val CR_KEYWORDS: TokenSet = CrystalKeywordTokenType.tokenSet()
 val CR_PSEUDO_CONSTANTS: TokenSet = TokenSet.create(CR_DIR_, CR_END_LINE_, CR_FILE_, CR_LINE_)
 
 val CR_GLOBAL_IDS: TokenSet = TokenSet.create(CR_GLOBAL_VAR, CR_GLOBAL_MATCH_DATA, CR_GLOBAL_MATCH_DATA_INDEX)
+
+val CR_IDS = TokenSet.orSet(
+    CR_KEYWORDS,
+    TokenSet.create(CR_IDENTIFIER)
+)
+
+val CR_CIDS = TokenSet.orSet(
+    CR_IDS,
+    TokenSet.create(CR_CONSTANT)
+)

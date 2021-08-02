@@ -6,12 +6,13 @@ import com.intellij.psi.SyntaxTraverser
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.util.firstInstanceOrNull
+import kotlin.reflect.KClass
 
 fun PsiElement.traverser() =
     SyntaxTraverser.psiTraverser(this)
 
-fun PsiElement.parents() =
-    JBIterable.generate(this) { if (it is PsiFile) null else it.parent }
+fun PsiElement.parents(strict: Boolean = true) =
+    JBIterable.generate(if (strict) parent else this) { if (it is PsiFile) null else it.parent }
 
 fun PsiElement.allChildren() =
     JBIterable.generate(firstChild) { it.nextSibling }
@@ -25,8 +26,17 @@ fun PsiElement.nextSiblingsStrict() =
 inline fun <reified T : PsiElement> PsiElement.childrenOfType(): JBIterable<T> =
     allChildren().filter(T::class.java)
 
+inline fun <reified T : PsiElement> PsiElement.stubChildrenOfType(): JBIterable<T> =
+    JBIterable.from(PsiTreeUtil.getStubChildrenOfTypeAsList(this, T::class.java))
+
+fun <T : PsiElement> PsiElement.stubChildrenOfType(klass: KClass<T>): JBIterable<T> =
+    JBIterable.from(PsiTreeUtil.getStubChildrenOfTypeAsList(this, klass.java))
+
 inline fun <reified T : PsiElement> PsiElement.childOfType(): T? =
     allChildren().firstInstanceOrNull()
+
+inline fun <reified T : PsiElement> PsiElement.stubChildOfType(): T? =
+    PsiTreeUtil.getStubChildOfType(this, T::class.java)
 
 inline fun <reified T : PsiElement> PsiElement.nextSiblingOfType(): T? =
     nextSiblingsStrict().firstInstanceOrNull()

@@ -1,0 +1,17 @@
+CrFileStubImpl
+  CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+  CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+  CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X, Y, A])
+  CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[X, Y, A])
+  CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[M])
+    CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X, Y, A])
+    CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[X, Y, A])

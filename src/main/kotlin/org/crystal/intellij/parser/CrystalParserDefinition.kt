@@ -5,7 +5,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
-import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.config.LanguageLevel
@@ -14,7 +13,8 @@ import org.crystal.intellij.lexer.CR_COMMENTS
 import org.crystal.intellij.lexer.CrystalLexer
 import org.crystal.intellij.lexer.CrystalTokenTypeWithFactory
 import org.crystal.intellij.psi.CrFile
-import org.crystal.intellij.psi.CrFileElementType
+import org.crystal.intellij.stubs.elementTypes.CrStubElementType
+import org.crystal.intellij.stubs.elementTypes.CrStubElementTypes
 
 class CrystalParserDefinition : ParserDefinition, ASTFactory() {
     override fun getWhitespaceTokens() = TokenSet.EMPTY!!
@@ -23,7 +23,7 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
 
     override fun getStringLiteralElements() = TokenSet.EMPTY!!
 
-    override fun getFileNodeType() = CrFileElementType
+    override fun getFileNodeType() = CrStubElementTypes.FILE
 
     override fun createLexer(project: Project?): CrystalLexer {
         val languageLevel = project?.crystalSettings?.languageLevel ?: LanguageLevel.LATEST_STABLE
@@ -40,10 +40,10 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
         else -> super.createLeaf(type, text)
     }
 
-    override fun createElement(node: ASTNode): PsiElement {
-        val type = node.elementType
-        if (type !is CrCompositeElementType) throw AssertionError("Unknown element type: $type")
-        return type.factory(node)
+    override fun createElement(node: ASTNode) = when (val type = node.elementType) {
+        is CrCompositeElementType -> type.factory(node)
+        is CrStubElementType<*, *> -> type.astPsiFactory(node)
+        else -> throw AssertionError("Unknown element type: $type")
     }
 
     override fun createFile(viewProvider: FileViewProvider) = CrFile(viewProvider)

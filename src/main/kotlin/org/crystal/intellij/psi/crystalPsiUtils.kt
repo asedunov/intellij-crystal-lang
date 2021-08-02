@@ -1,6 +1,8 @@
 package org.crystal.intellij.psi
 
+import com.intellij.extapi.psi.StubBasedPsiElementBase
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementVisitor
 import org.crystal.intellij.lexer.*
 
 val CrNamedElement.presentableKind: String
@@ -27,6 +29,19 @@ val CrNamedElement.presentableKind: String
         is CrLabeledType -> "named type argument"
     }
 
+val CrElement.elementName: String?
+    get() = if (this is CrNameElementHolder) nameElement?.name else null
+
+val CrElement.elementOffset: Int
+    get() {
+        val offset = if (this is CrNameElementHolder) nameElement?.textOffset else null
+        return offset ?: textRange.startOffset
+    }
+
+fun CrElement.acceptElement(visitor: PsiElementVisitor) {
+    if (visitor is CrVisitor) accept(visitor) else visitor.visitElement(this)
+}
+
 val CrExpression.isSemanticCall: Boolean
     get() = when (this) {
         is CrCallExpression -> true
@@ -43,6 +58,10 @@ val CrExpression.isSemanticCall: Boolean
     }
 
 fun CrDefinition.getParentSkipModifiers(): PsiElement? {
+    (this as? StubBasedPsiElementBase<*>)?.greenStub?.let {
+        return it.parentStub?.psi
+    }
+
     var e : PsiElement = this
     while (true) {
         val p = e.parent

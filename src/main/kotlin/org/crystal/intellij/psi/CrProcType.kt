@@ -1,18 +1,19 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.util.elementType
-import com.intellij.util.containers.JBIterable
-import org.crystal.intellij.lexer.CR_ARROW_OP
+import org.crystal.intellij.parser.CR_PROC_TYPE
+import org.crystal.intellij.stubs.api.CrTypeStub
 
-class CrProcType(node: ASTNode) : CrType(node) {
+class CrProcType : CrType {
+    constructor(stub: CrTypeStub) : super(stub, CR_PROC_TYPE)
+
+    constructor(node: ASTNode) : super(node)
+
     override fun accept(visitor: CrVisitor) = visitor.visitProcType(this)
 
-    val inputTypes: JBIterable<CrType>
-        get() = allChildren()
-            .takeWhile { it.elementType != CR_ARROW_OP }
-            .filter(CrType::class.java)
+    val inputList: CrTypeArgumentList
+        get() = stubChildOfType()!!
 
     val outputType: CrType?
-        get() = lastChild as? CrType
+        get() = stubChildOfType()
 }

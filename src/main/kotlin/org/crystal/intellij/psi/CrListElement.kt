@@ -7,5 +7,5 @@ sealed interface CrListElement<T : CrElement> : CrElement {
     val elementClass: KClass<T>
 
     val elements: JBIterable<T>
-        get() = allChildren().filter(elementClass.java)
+        get() = stubChildrenOfType(elementClass)
 }

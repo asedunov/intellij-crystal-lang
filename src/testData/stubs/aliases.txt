@@ -1,0 +1,35 @@
+CrFileStubImpl
+  CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_PATH_TYPE:CrTypeStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+  CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PRIVATE)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_PATH_TYPE:CrTypeStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+  CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_PATH_TYPE:CrTypeStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+  CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X, Y, A])
+    CR_PATH_TYPE:CrTypeStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+  CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[X, Y, A])
+    CR_PATH_TYPE:CrTypeStubImpl
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+  CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[M])
+    CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+      CR_PATH_TYPE:CrTypeStubImpl
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+    CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X, Y, A])
+      CR_PATH_TYPE:CrTypeStubImpl
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+    CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[X, Y, A])
+      CR_PATH_TYPE:CrTypeStubImpl
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])

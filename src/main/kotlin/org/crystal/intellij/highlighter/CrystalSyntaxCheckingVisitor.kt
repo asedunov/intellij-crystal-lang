@@ -420,7 +420,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitDefinition(o: CrDefinition) {
         super.visitDefinition(o)
 
-        o.abstractModifier?.let { errorIfInsideDefOrFun(it, "'abstract'") }
+        (o as? CrDefinitionWithFqName)?.abstractModifier?.let { errorIfInsideDefOrFun(it, "'abstract'") }
         when (o) {
             is CrMethod,
             is CrClass,
@@ -474,7 +474,7 @@ class CrystalSyntaxCheckingVisitor(
             error(o.nameElement!!, "'$defName' is a pseudo-method and can't be redefined")
         }
 
-        val parameters = o.parameterList?.elements?.toList() ?: emptyList()
+        val parameters = o.parameters.toList()
 
         var splat: CrSimpleParameter? = null
         var doubleSplat: CrSimpleParameter? = null
@@ -657,7 +657,7 @@ class CrystalSyntaxCheckingVisitor(
         get() = this is CrBlockExpression && parent is CrFunctionLikeDefinition
 
     private val PsiElement.isTypeBody
-        get() = this is CrBody && parent is CrClasslikeDefinition
+        get() = this is CrBody && parent is CrClasslikeDefinition<*, *>
 
     private inline fun inFun(body: () -> Unit) {
         funNest++

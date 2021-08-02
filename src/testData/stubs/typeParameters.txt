@@ -1,0 +1,33 @@
+CrFileStubImpl
+  CR_CLASS_DEFINITION:CrClassStubImpl(isAbstract=false, visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=T)
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=U)
+  CR_STRUCT_DEFINITION:CrStructStubImpl(isAbstract=false, visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=T)
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=U)
+  CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PUBLIC)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A])
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=T)
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=U)
+  CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
+    CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=foo)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=t)
+      CR_PATH_TYPE:CrTypeStubImpl
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[T])
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=u)
+      CR_PATH_TYPE:CrTypeStubImpl
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[U])
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=T)
+    CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=U)

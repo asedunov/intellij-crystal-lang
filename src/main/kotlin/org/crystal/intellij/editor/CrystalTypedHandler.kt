@@ -148,7 +148,7 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
         val selectionStart = selectionModel.selectionStart
         val document = editor.document
         val charsSequence = document.charsSequence
-        file.findElementAt(selectionStart)?.parents()?.forEach { element ->
+        file.findElementAt(selectionStart)?.parents(false)?.forEach { element ->
             val range = element.textRange
             if (range == null || range.length < 2) return@forEach
 

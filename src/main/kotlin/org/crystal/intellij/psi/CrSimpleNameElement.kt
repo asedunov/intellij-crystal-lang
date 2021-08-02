@@ -6,11 +6,23 @@ import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_CLASS_VAR
 import org.crystal.intellij.lexer.CR_GLOBAL_VAR
 import org.crystal.intellij.lexer.CR_INSTANCE_VAR
+import org.crystal.intellij.parser.CR_SIMPLE_NAME_ELEMENT
+import org.crystal.intellij.stubs.api.CrNameStub
 
-class CrSimpleNameElement(node: ASTNode) : CrNameElement(node) {
+class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
+    companion object {
+        val EMPTY_ARRAY = arrayOf<CrSimpleNameElement>()
+    }
+
+    constructor(stub: CrNameStub<*>) : super(stub, CR_SIMPLE_NAME_ELEMENT)
+
+    constructor(node: ASTNode) : super(node)
+
     override fun accept(visitor: CrVisitor) = visitor.visitSimpleNameElement(this)
 
     override fun getName(): String? {
+        greenStub?.let { return it.actualName }
+
         val e = firstChild
         if (e is CrStringLiteralExpression) return e.stringValue
         val name = text
@@ -20,6 +32,12 @@ class CrSimpleNameElement(node: ASTNode) : CrNameElement(node) {
             else -> name
         }
     }
+
+    override val sourceName: String?
+        get() {
+            greenStub?.let { return it.sourceName }
+            return text
+        }
 
     val tokenType: IElementType?
         get() = firstChild?.elementType

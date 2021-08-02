@@ -678,23 +678,13 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return false
         }
 
-        private val idTokens = TokenSet.orSet(
-            CR_KEYWORDS,
-            TokenSet.create(CR_IDENTIFIER)
-        )
-
-        private val cidTokens = TokenSet.orSet(
-            idTokens,
-            TokenSet.create(CR_CONSTANT)
-        )
-
         private val instanceOrClassVarTokens = TokenSet.create(
             CR_CLASS_VAR,
             CR_INSTANCE_VAR
         )
 
         private val referenceTokens = TokenSet.orSet(
-            cidTokens,
+            CR_CIDS,
             CR_GLOBAL_IDS,
             TokenSet.create(
                 CR_UNDERSCORE,
@@ -753,7 +743,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             var foundAssignment = false
             while (!eof()) {
                 when {
-                    at(idTokens) -> {
+                    at(CR_IDS) -> {
                         if (!allowSuffix) unexpected()
                         break
                     }
@@ -835,7 +825,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
                     at(CR_RESCUE) -> parseReduceOrEnsureExpression(CR_RESCUE_CLAUSE, CR_RESCUE_EXPRESSION)
                     at(CR_ENSURE) -> parseReduceOrEnsureExpression(CR_ENSURE_CLAUSE, CR_ENSURE_EXPRESSION)
-                    at(idTokens) -> break
+                    at(CR_IDS) -> break
                     else -> {
                         if (!(eof() || at(suffixStopTokens) || atEndToken())) {
                             unexpected()
@@ -1007,7 +997,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 at(CR_NEXT) -> parseJumpExpression(CR_NEXT_EXPRESSION)
 
                 at(CR_CONSTANT) -> parseGenericOrCustomLiteral()
-                at(idTokens) -> parseVarOrCall()
+                at(CR_IDS) -> parseVarOrCall()
                 at(CR_CLASS_VAR) -> parseRefOrVarDeclaration()
                 at(CR_INSTANCE_VAR) -> {
                     if (inMacroExpression && lexer.tokenText == "@type") {
@@ -1353,7 +1343,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                             break
                         }
 
-                        if (at(idTokens) && lexer.lookAhead() == CR_COLON) {
+                        if (at(CR_IDS) && lexer.lookAhead() == CR_COLON) {
                             parseCallNamedArgs(null, allowNewline = false)
                             break
                         }
@@ -1595,9 +1585,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseOut() = composite(CR_OUT_ARGUMENT) {
             nextTokenSkipSpacesAndNewlines()
 
-            if (at(idTokens)) pushVarName(lexer.tokenText)
+            if (at(CR_IDS)) pushVarName(lexer.tokenText)
 
-            if (at(idTokens) || at(CR_INSTANCE_VAR) || at(CR_UNDERSCORE)) {
+            if (at(CR_IDS) || at(CR_INSTANCE_VAR) || at(CR_UNDERSCORE)) {
                 composite(CR_REFERENCE_EXPRESSION) {
                     composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
                 }
@@ -1661,7 +1651,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     var argName: String? = null
 
                     val hasParam = when {
-                        at(idTokens) || at(CR_UNDERSCORE) -> {
+                        at(CR_IDS) || at(CR_UNDERSCORE) -> {
                             argName = lexer.tokenText
                             parseTokenAsParam()
                             true
@@ -1706,7 +1696,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 while (!eof()) {
-                    val hasParam = at(idTokens) || at(CR_UNDERSCORE)
+                    val hasParam = at(CR_IDS) || at(CR_UNDERSCORE)
                     if (hasParam) {
                         pushVarName(lexer.tokenText)
                         parseTokenAsParam()
@@ -1955,7 +1945,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.isNamedTupleStart(): Boolean {
-            return at(cidTokens) && lexer.lookAhead { tok(CR_COLON) && !tok(CR_COLON) }
+            return at(CR_CIDS) && lexer.lookAhead { tok(CR_COLON) && !tok(CR_COLON) }
         }
 
         private fun PsiBuilder.parseTupleTail() {
@@ -2113,7 +2103,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpacesAndNewlines()
 
             when {
-                at(idTokens) -> parseVarOrCall()
+                at(CR_IDS) -> parseVarOrCall()
                 at(CR_CONSTANT) -> parseGenericOrCustomLiteral()
                 else -> {
                     m.error("Expected: <identifier> or <type name>")
@@ -2173,7 +2163,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 while (!eof()) {
-                    if (at(idTokens)) {
+                    if (at(CR_IDS)) {
                         argNames += lexer.tokenText
                         composite(CR_SIMPLE_PARAMETER_DEFINITION) {
                             composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
@@ -2229,7 +2219,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.doParseFunPointer() {
             when {
-                at(idTokens) -> {
+                at(CR_IDS) -> {
                     var isAssign = false
                     composite(CR_SIMPLE_NAME_ELEMENT) {
                         nextToken()
@@ -2311,7 +2301,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 while (!at(CR_RPAREN)) {
-                    if (at(idTokens) && lexer.lookAhead() == CR_COLON) {
+                    if (at(CR_IDS) && lexer.lookAhead() == CR_COLON) {
                         doParseCallNamedArgs(null, allowNewline = true)
                         recoverUntil("')'", true) { at(CR_RPAREN) }
                         break
@@ -2516,7 +2506,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.consumeDefOrMacroName() {
-            val isId = at(idTokens)
+            val isId = at(CR_IDS)
             composite(CR_SIMPLE_NAME_ELEMENT) {
                 nextToken()
                 if (isId && at(CR_ASSIGN_OP)) nextToken()
@@ -2573,7 +2563,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             if (beforeParamList) {
                 when (la) {
                     CR_END -> errorMessage = "Expected: ';' or <newline>"
-                    CR_MUL_OP, CR_EXP_OP, in idTokens -> errorMessage = "Parentheses are mandatory for macro arguments"
+                    CR_MUL_OP, CR_EXP_OP, in CR_IDS -> errorMessage = "Parentheses are mandatory for macro arguments"
                     CR_DOT -> errorMessage = "Macro can't have a receiver"
                     CR_LPAREN -> enterMacro = false
                     CR_SEMICOLON, CR_NEWLINE -> preAdvance = true
@@ -2602,7 +2592,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
             else {
                 val mName = mark() as LazyPsiBuilder.StartMarker
-                if (at(idTokens) && lexer.lookAhead() == CR_ASSIGN_OP) nextToken()
+                if (at(CR_IDS) && lexer.lookAhead() == CR_ASSIGN_OP) nextToken()
                 advanceToMacroBody(true, mName, CR_SIMPLE_NAME_ELEMENT)
                 if (at(CR_LPAREN)) parseParamList(true)
             }
@@ -2762,7 +2752,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private val defTokenForParenWarn = TokenSet.orSet(
-            idTokens,
+            CR_IDS,
             TokenSet.create(
                 CR_INSTANCE_VAR,
                 CR_CLASS_VAR,
@@ -2773,7 +2763,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         )
 
         private val defNameTokens = TokenSet.orSet(
-            cidTokens,
+            CR_CIDS,
             CR_BASE_OPERATORS,
             TokenSet.create(CR_BACKQUOTE)
         )
@@ -2987,10 +2977,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             var foundStringLiteral = false
             var hasExternalName = false
 
-            if (allowExternalName && (at(idTokens) || at(CR_STRING_START))) {
+            if (allowExternalName && (at(CR_IDS) || at(CR_STRING_START))) {
                 composite(CR_SIMPLE_NAME_ELEMENT) {
                     when {
-                        at(idTokens) -> nextToken()
+                        at(CR_IDS) -> nextToken()
                         at(CR_STRING_START) -> {
                             parseStringLiteral()
                             foundStringLiteral = true
@@ -3005,7 +2995,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 doNextToken = false
             }
 
-            val hasInternalName = at(idTokens) || at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR)
+            val hasInternalName = at(CR_IDS) || at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR)
             if (hasInternalName) {
                 doNextToken = true
             }
@@ -3052,7 +3042,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             nextTokenSkipSpacesAndNewlines()
 
-            val expectedNameTokens = if (isTopLevel) idTokens else cidTokens
+            val expectedNameTokens = if (isTopLevel) CR_IDS else CR_CIDS
             if (!at(expectedNameTokens)) error("Expected: <function name>")
             composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
@@ -3060,7 +3050,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 when {
-                    at(cidTokens) -> composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                    at(CR_CIDS) -> composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
                     at(CR_STRING_START) -> {
                         composite(CR_SIMPLE_NAME_ELEMENT) { parseStringLiteral() }
@@ -3111,7 +3101,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 val m = mark()
                 val tokenIndex = rawTokenIndex()
 
-                if (at(idTokens)) {
+                if (at(CR_IDS)) {
                     val argName = lexer.tokenText
                     composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
                     if (at(CR_COLON)) {
@@ -3195,7 +3185,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                     at(CR_ELSE) || at(CR_END) -> break
 
-                    at(idTokens) -> parseCStructOrUnionFields()
+                    at(CR_IDS) -> parseCStructOrUnionFields()
 
                     at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpressionCheckNesting(null)
 
@@ -3220,7 +3210,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             while (at(CR_COMMA)) {
                 nextTokenSkipSpacesAndNewlines()
 
-                if (!at(idTokens)) {
+                if (!at(CR_IDS)) {
                     error("Expected: <variable name>")
                     break
                 }
@@ -3297,7 +3287,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         }
                     }
 
-                    at(idTokens) -> {
+                    at(CR_IDS) -> {
                         val m = mark()
 
                         if (at(CR_PRIVATE) || at(CR_PROTECTED)) nextTokenSkipSpaces()
@@ -3421,7 +3411,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     if (at(CR_ASSIGN_OP)) {
                         nextTokenSkipSpaces()
 
-                        if (at(cidTokens)) {
+                        if (at(CR_CIDS)) {
                             composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                         }
                         else {
@@ -3487,7 +3477,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpaces()
 
             when {
-                at(idTokens) -> {
+                at(CR_IDS) -> {
                     pushVarName(lexer.tokenText)
 
                     composite(CR_VARIABLE_DEFINITION) {
@@ -4242,7 +4232,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseMacroFor(macroState: MacroState?): IElementType {
             nextTokenSkipSpaces()
             while (true) {
-                if (!at(idTokens)) {
+                if (!at(CR_IDS)) {
                     error("Expected: <identifier>")
                     break
                 }
@@ -4477,7 +4467,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             val token = tokenType
 
-            if (token in cidTokens) {
+            if (token in CR_CIDS) {
                 advance()
                 return !at(CR_COLON) && when(token) {
                     CR_TYPEOF -> true

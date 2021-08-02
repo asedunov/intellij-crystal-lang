@@ -14,6 +14,8 @@ sealed class FqName(
 
     override fun hashCode() = fullName.hashCode()
 
+    override fun toString() = fullName
+
     companion object {
         fun of(fullName: String?): FqName? {
             if (fullName.isNullOrEmpty()) return null

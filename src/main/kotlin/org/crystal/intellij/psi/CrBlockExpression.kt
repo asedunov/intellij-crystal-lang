@@ -4,4 +4,7 @@ import com.intellij.lang.ASTNode
 
 class CrBlockExpression(node: ASTNode) : CrExpressionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitBlockExpression(this)
+
+    val parameterList: CrBlockParameterList?
+        get() = childOfType()
 }

@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.util.SmartList
 import com.intellij.util.containers.JBIterable
+import com.intellij.util.containers.MultiMap
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
 
@@ -186,6 +187,38 @@ class CrystalSyntaxCheckingVisitor(
         val p = o.parent
         if (p is CrCallExpression && p.name == "[]=") {
             error(o, "Setter method '[]=' cannot be called with a block")
+        }
+
+        var splat: CrParameter? = null
+        val parameters = o.parameterList?.elements ?: JBIterable.empty()
+        val paramsByName = MultiMap<String, CrSimpleParameter>()
+
+        fun processParameterName(parameter: CrSimpleParameter) {
+            errorIfInvalidName(parameter)
+
+            if (parameter.nameElement?.tokenType == CR_IDENTIFIER) {
+                paramsByName.putValue(parameter.name, parameter)
+            }
+        }
+
+        for (parameter in parameters) {
+            if (parameter.kind == CrParameterKind.SPLAT) {
+                if (splat != null) {
+                    error(parameter, "Splat parameter is already specified")
+                }
+                else splat = parameter
+            }
+
+            when (parameter) {
+                is CrSimpleParameter -> processParameterName(parameter)
+                is CrMultiParameter -> parameter.elements.forEach(::processParameterName)
+            }
+        }
+
+        for ((name, parameterGroup) in paramsByName.entrySet()) {
+            if (parameterGroup.size > 1) {
+                parameterGroup.forEach { error(it, "Duplicated parameter name: $name") }
+            }
         }
     }
 
@@ -470,11 +503,26 @@ class CrystalSyntaxCheckingVisitor(
         typeNest--
     }
 
-    private fun checkDuplicateNames(elements: JBIterable<out CrNamedElement>) {
-        for ((name, elementGroup) in elements.groupBy { it.name }) {
-            if (elementGroup.size <= 1) continue
+    private fun <T : CrNamedElement> checkDuplicateNames(
+        elements: Iterable<T>,
+        nameGetter: T.() -> String? = { name },
+        kindGetter: T.() -> String = { presentableKind }
+    ) {
+        for ((name, elementGroup) in elements.groupBy { it.nameGetter() }) {
+            if (name == null || elementGroup.size <= 1) continue
             for (element in elementGroup) {
-                error(element.defaultAnchor, "Duplicated ${element.presentableKind} name: $name")
+                error(element.defaultAnchor, "Duplicated ${element.kindGetter()} name: $name")
+            }
+        }
+    }
+
+    private fun errorIfInvalidName(element: CrNamedElement) {
+        val nameElement = element.nameElement as? CrSimpleNameElement ?: return
+        val tokenType = nameElement.tokenType
+        if (tokenType == CR_IDENTIFIER || tokenType is CrystalKeywordTokenType) {
+            val name = nameElement.name
+            if (name in invalidInternalNames) {
+                error(nameElement, "Cannot use '$name' as a ${element.presentableKind} name")
             }
         }
     }
@@ -511,5 +559,14 @@ class CrystalSyntaxCheckingVisitor(
 
     companion object {
         private const val maxOctalChar = 255.toChar()
+
+        private val invalidInternalNames = setOf(
+            "begin", "nil", "true", "false", "yield", "with", "abstract",
+            "def", "require", "case", "select", "if", "unless", "include",
+            "extend", "class", "struct", "module", "enum", "while", "until", "return",
+            "next", "break", "lib", "fun", "alias", "pointerof", "sizeof", "offsetof",
+            "instance_sizeof", "typeof", "private", "protected", "asm", "out",
+            "self", "in", "end"
+        )
     }
 }

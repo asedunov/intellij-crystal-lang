@@ -593,6 +593,8 @@ class CrystalParser : PsiParser, LightPsiParser {
                 var parsed: Boolean = parsePrimaryExpression()
                 if (parsed) parseHigherPrecedence(opInfo)
 
+                if (opType == CR_COMMA && parsed) recordLastParsedRefName()
+
                 if (isConditional && parsed) {
                     skipSpacesAndNewlines()
                     parsed = parsed && tok(CR_COLON)

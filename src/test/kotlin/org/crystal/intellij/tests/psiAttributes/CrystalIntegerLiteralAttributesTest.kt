@@ -1,17 +1,9 @@
-package org.crystal.intellij.tests
+package org.crystal.intellij.tests.psiAttributes
 
-import com.intellij.psi.PsiElement
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import junit.framework.TestCase
-import org.crystal.intellij.psi.*
-import org.crystal.intellij.util.firstInstanceOrNull
+import org.crystal.intellij.psi.CrIntegerKind
+import org.crystal.intellij.psi.CrIntegerLiteralExpression
 
-class PsiAttributeTest : BasePlatformTestCase() {
-    private inline fun <reified T : PsiElement> check(text: String, attribute: T.() -> Any?, expected: Any?) {
-        myFixture.configureByText("a.cr", text)
-        TestCase.assertEquals(expected, myFixture.file.allDescendants().firstInstanceOrNull<T>()!!.attribute())
-    }
-
+class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
     private fun checkIntKind(text: String, kind: CrIntegerKind) {
         check(text, CrIntegerLiteralExpression::kind, kind)
     }
@@ -22,14 +14,6 @@ class PsiAttributeTest : BasePlatformTestCase() {
 
     private fun checkIntValue(text: String, value: Any?) {
         check<CrIntegerLiteralExpression>(text, { value?.toString() }, value?.toString())
-    }
-
-    private fun checkCharValue(text: String, value: Char?) {
-        check(text, CrCharValueHolder::charValue, value)
-    }
-
-    private fun checkStringValue(text: String, value: String?) {
-        check(text, CrStringValueHolder::stringValue, value)
     }
 
     fun testIntegerKinds() {
@@ -215,14 +199,14 @@ class PsiAttributeTest : BasePlatformTestCase() {
         checkIntValue("-0o200000_i32", -65536)
         checkIntValue("-0o20000000000_i32", -2147483648)
         checkIntValue("-0o25252525252_i32", null)
-        
+
         checkIntValue("0o400_u32", 256)
         checkIntValue("0o200000_u32", 65536)
         checkIntValue("0o37_777_777_777_u32", 4294967295)
         checkIntValue("0o37777777777_u32", 4294967295)
         checkIntValue("0o40000000000_u32", null)
         checkIntValue("-0o1_u32", null)
-        
+
         checkIntValue("0o1_i64", 1)
         checkIntValue("0o777_777_777_777_777_777_777_i64", 9223372036854775807)
         checkIntValue("0o777777777777777777777_i64", 9223372036854775807)
@@ -342,7 +326,7 @@ class PsiAttributeTest : BasePlatformTestCase() {
         checkIntValue("-1_u128", null)
     }
 
-    fun testHexhIntegers() {
+    fun testHexIntegers() {
         checkIntValue("0x1_i8", 1)
         checkIntValue("0x1_A_i8", 26)
         checkIntValue("0x7F_i8", 127)
@@ -423,179 +407,5 @@ class PsiAttributeTest : BasePlatformTestCase() {
         checkIntValue("0x10000000000000000_u128", null)
         checkIntValue("0x11111111111111111_u128", null)
         checkIntValue("-0x1_u128", null)
-    }
-
-    fun testOctalEscapes() {
-        checkCharValue("\"\\5\"", '\u0005')
-        checkCharValue("\"\\52\"", '*')
-        checkCharValue("\"\\377\"", 'ÿ')
-        checkCharValue("\"\\0377\"", 'ÿ')
-    }
-
-    fun testHexEscapes() {
-        checkCharValue("\"\\x\"", null)
-        checkCharValue("\"\\xA\"", null)
-        checkCharValue("\"\\xA1\"", '¡')
-        checkCharValue("\"\\xab\"", '«')
-        checkCharValue("\"\\xDE\"", 'Þ')
-    }
-
-    fun testUnicodeEscapes() {
-        checkCharValue("'\\u''", null)
-        checkCharValue("'\\uA'", null)
-        checkCharValue("'\\uAB'", null)
-        checkCharValue("'\\uAB1'", null)
-        checkCharValue("'\\uAB12'", 'ꬒ')
-        checkCharValue("'\\uaBc5'", 'ꯅ')
-        checkCharValue("'\\uDABC'", '\uDABC')
-        checkCharValue("'\\uEEEE'", '')
-
-        checkCharValue("\"\\u\"", null)
-        checkCharValue("\"\\ux\"", null)
-        checkCharValue("\"\\uA\"", null)
-        checkCharValue("\"\\uAB\"", null)
-        checkCharValue("\"\\uAB1\"", null)
-        checkCharValue("\"\\uAB12\"", 'ꬒ')
-        checkCharValue("\"\\uaBc5\"", 'ꯅ')
-        checkCharValue("\"\\uDABC\"", '\uDABC')
-        checkCharValue("\"\\uEEEE\"", '')
-    }
-
-    fun testUnicodeBlocks() {
-        checkCharValue("'\\u{1}\'", '\u0001')
-        checkCharValue("'\\u{1A}\'", '\u001A')
-        checkCharValue("'\\u{1Ab}\'", 'ƫ')
-        checkCharValue("'\\u{1Ab2}\'", '᪲')
-        checkCharValue("'\\u{1Ab2D}\'", 'ꬭ')
-        checkCharValue("'\\u{01Ab2D}\'", 'ꬭ')
-        checkCharValue("'\\u{10FFFF}\'", '￿')
-        checkCharValue("'\\u{110000}\'", null)
-        checkCharValue("'\\u{AAAAAA}\'", null)
-
-        checkCharValue("\"\\u{1}\"", '\u0001')
-        checkCharValue("\"\\u{1A}\"", '\u001A')
-        checkCharValue("\"\\u{1Ab}\"", 'ƫ')
-        checkCharValue("\"\\u{1Ab2}\"", '᪲')
-        checkCharValue("\"\\u{1Ab2D}\"", 'ꬭ')
-        checkCharValue("\"\\u{01Ab2D}\"", 'ꬭ')
-        checkCharValue("\"\\u{10FFFF}\"", '￿')
-        checkCharValue("\"\\u{110000}\"", null)
-        checkCharValue("\"\\u{AAAAAA}\"", null)
-    }
-
-    fun testSpecialEscapes() {
-        checkCharValue("'\\a'", '\u0007')
-        checkCharValue("'\\b'", '\b')
-        checkCharValue("'\\e'", '\u001B')
-        checkCharValue("'\\f'", '\u000C')
-        checkCharValue("'\\n'", '\n')
-        checkCharValue("'\\r'", '\r')
-        checkCharValue("'\\t'", '\t')
-        checkCharValue("'\\v'", '\u000B')
-
-        checkCharValue("\"\\a\"", '\u0007')
-        checkCharValue("\"\\b\"", '\b')
-        checkCharValue("\"\\e\"", '\u001B')
-        checkCharValue("\"\\f\"", '\u000C')
-        checkCharValue("\"\\n\"", '\n')
-        checkCharValue("\"\\r\"", '\r')
-        checkCharValue("\"\\t\"", '\t')
-        checkCharValue("\"\\v\"", '\u000B')
-    }
-
-    fun testStringValues() {
-        checkStringValue("\"abc\\\ndef\"", "abcdef")
-        checkStringValue("\"abc\\\n   def\"", "abcdef")
-
-        checkStringValue("\"abc#{123}def\"", null)
-        checkStringValue("\"abc\\ndef\"", "abc\ndef")
-        checkStringValue("\"abc\\(def\"", "abc(def")
-        checkStringValue("\"abc\"\\\n\"def\"", "abcdef")
-        checkStringValue("\"abc\\u{4A 4B 4C}\"", "abcJKL")
-
-        checkStringValue("%(abc#{123}def)", null)
-        checkStringValue("%(abc\\ndef)", "abc\ndef")
-        checkStringValue("%(abc\\(def)", "abc(def")
-        checkStringValue("%(abc)\\\n%[def]", "abcdef")
-        checkStringValue("%(abc\\u{4A 4B 4C})", "abcJKL")
-
-        checkStringValue("%[abc#{123}def]", null)
-        checkStringValue("%[abc\\ndef]", "abc\ndef")
-        checkStringValue("%[abc\\[def]", "abc[def")
-        checkStringValue("%[abc]\\\n%(def)", "abcdef")
-        checkStringValue("%[abc\\u{4A 4B 4C}]", "abcJKL")
-
-        checkStringValue("%{abc#{123}def}", null)
-        checkStringValue("%{abc\\ndef}", "abc\ndef")
-        checkStringValue("%{abc\\{def}", "abc{def")
-        checkStringValue("%{abc}\\\n%[def]", "abcdef")
-        checkStringValue("%{abc\\u{4A 4B 4C}}", "abcJKL")
-
-        checkStringValue("%<abc#{123}def>", null)
-        checkStringValue("%<abc\\ndef>", "abc\ndef")
-        checkStringValue("%<abc\\<def>", "abc<def")
-        checkStringValue("%<abc>\\\n%(def)", "abcdef")
-        checkStringValue("%<abc\\u{4A 4B 4C}>", "abcJKL")
-
-        checkStringValue("%|abc#{123}def|", null)
-        checkStringValue("%|abc\\ndef|", "abc\ndef")
-        checkStringValue("%|abc\\|def|", "abc|def")
-        checkStringValue("%|abc|\\\n%[def]", "abcdef")
-        checkStringValue("%|abc\\u{4A 4B 4C}|", "abcJKL")
-
-        checkStringValue("%Q(abc#{123}def)", null)
-        checkStringValue("%Q(abc\\ndef)", "abc\ndef")
-        checkStringValue("%Q(abc\\(def)", "abc(def")
-        checkStringValue("%Q(abc)\\\n%Q[def]", "abcdef")
-        checkStringValue("%Q(abc\\u{4A 4B 4C})", "abcJKL")
-
-        checkStringValue("%Q[abc#{123}def]", null)
-        checkStringValue("%Q[abc\\ndef]", "abc\ndef")
-        checkStringValue("%Q[abc\\[def]", "abc[def")
-        checkStringValue("%Q[abc]\\\n%Q(def)", "abcdef")
-        checkStringValue("%Q[abc\\u{4A 4B 4C}]", "abcJKL")
-
-        checkStringValue("%Q{abc#{123}def}", null)
-        checkStringValue("%Q{abc\\ndef}", "abc\ndef")
-        checkStringValue("%Q{abc\\{def}", "abc{def")
-        checkStringValue("%Q{abc}\\\n%Q[def]", "abcdef")
-        checkStringValue("%Q{abc\\u{4A 4B 4C}}", "abcJKL")
-
-        checkStringValue("%Q<abc#{123}def>", null)
-        checkStringValue("%Q<abc\\ndef>", "abc\ndef")
-        checkStringValue("%Q<abc\\<def>", "abc<def")
-        checkStringValue("%Q<abc>\\\n%Q(def)", "abcdef")
-        checkStringValue("%Q<abc\\u{4A 4B 4C}>", "abcJKL")
-
-        checkStringValue("%Q|abc#{123}def|", null)
-        checkStringValue("%Q|abc\\ndef|", "abc\ndef")
-        checkStringValue("%Q|abc\\|def|", "abc|def")
-        checkStringValue("%Q|abc|\\\n%Q[def]", "abcdef")
-        checkStringValue("%Q|abc\\u{4A 4B 4C}|", "abcJKL")
-
-        checkStringValue("%q(abc#{123}def)", "abc#{123}def")
-        checkStringValue("%q(abc\\ndef)", "abc\\ndef")
-        checkStringValue("%q(abc)\\\n%q[def]", "abcdef")
-        checkStringValue("%q(abc\\u{4A 4B 4C})", "abc\\u{4A 4B 4C}")
-
-        checkStringValue("%q[abc#{123}def]", "abc#{123}def")
-        checkStringValue("%q[abc\\ndef]", "abc\\ndef")
-        checkStringValue("%q[abc]\\\n%q(def)", "abcdef")
-        checkStringValue("%q[abc\\u{4A 4B 4C}]", "abc\\u{4A 4B 4C}")
-
-        checkStringValue("%q{abc#{123}def}", "abc#{123}def")
-        checkStringValue("%q{abc\\ndef}", "abc\\ndef")
-        checkStringValue("%q{abc}\\\n%q[def]", "abcdef")
-        checkStringValue("%q{abc\\u{4A 4B 4C}}", "abc\\u{4A 4B 4C}")
-
-        checkStringValue("%q<abc#{123}def>", "abc#{123}def")
-        checkStringValue("%q<abc\\ndef>", "abc\\ndef")
-        checkStringValue("%q<abc>\\\n%q(def)", "abcdef")
-        checkStringValue("%q<abc\\u{4A 4B 4C}>", "abc\\u{4A 4B 4C}")
-
-        checkStringValue("%q|abc#{123}def|", "abc#{123}def")
-        checkStringValue("%q|abc\\ndef|", "abc\\ndef")
-        checkStringValue("%q|abc|\\\n%q[def]", "abcdef")
-        checkStringValue("%q|abc\\u{4A 4B 4C}|", "abc\\u{4A 4B 4C}")
     }
 }

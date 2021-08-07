@@ -36,6 +36,8 @@
 
         <filePropertyPusher implementation="org.crystal.intellij.config.CrystalLanguageLevelPusher"/>
 
+        <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
+
         <stubElementTypeHolder class="org.crystal.intellij.stubs.elementTypes.CrStubElementTypes"/>
     </extensions>
 </idea-plugin>

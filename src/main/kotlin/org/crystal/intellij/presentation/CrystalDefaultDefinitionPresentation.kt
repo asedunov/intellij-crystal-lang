@@ -2,10 +2,9 @@ package org.crystal.intellij.presentation
 
 import com.intellij.navigation.ColoredItemPresentation
 import com.intellij.openapi.editor.colors.TextAttributesKey
+import com.intellij.openapi.util.Iconable
 import com.intellij.psi.util.elementType
-import com.intellij.ui.RowIcon
 import com.intellij.util.containers.JBIterable
-import org.crystal.intellij.CrystalIcons
 import org.crystal.intellij.lexer.CR_PATH_OP
 import org.crystal.intellij.parser.CR_REFERENCE_EXPRESSION
 import org.crystal.intellij.psi.*
@@ -131,35 +130,6 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
         return null
     }
 
-    override fun getIcon(unused: Boolean): Icon {
-        val baseIcon = when (definition) {
-            is CrModule -> CrystalIcons.MODULE
-            is CrLibrary -> CrystalIcons.LIBRARY
-            is CrClass -> if (definition.isAbstract) CrystalIcons.ABSTRACT_CLASS else CrystalIcons.CLASS
-            is CrStruct -> if (definition.isAbstract) CrystalIcons.ABSTRACT_STRUCT else CrystalIcons.STRUCT
-            is CrEnum -> CrystalIcons.ENUM
-            is CrCStruct -> CrystalIcons.STRUCT
-            is CrCUnion -> CrystalIcons.UNION
-            is CrAlias -> CrystalIcons.ALIAS
-            is CrTypeDef -> CrystalIcons.TYPEDEF
-            is CrAnnotation -> CrystalIcons.ANNOTATION
-            is CrMacro -> CrystalIcons.MACRO
-            is CrMethod -> if (definition.isAbstract) CrystalIcons.ABSTRACT_METHOD else CrystalIcons.METHOD
-            is CrFunction -> CrystalIcons.FUNCTION
-            is CrEnumConstant -> CrystalIcons.CONSTANT
-            is CrCField -> CrystalIcons.CFIELD
-            is CrVariable -> if (definition.isGlobal) CrystalIcons.GLOBAL_VARIABLE else CrystalIcons.VARIABLE
-            else -> null
-        }
-        val visibilityIcon = when (definition.visibility) {
-            CrVisibility.PRIVATE -> CrystalIcons.PRIVATE
-            CrVisibility.PROTECTED -> CrystalIcons.PROTECTED
-            CrVisibility.PUBLIC -> CrystalIcons.PUBLIC
-            else -> null
-        }
-        return RowIcon(2).apply {
-            setIcon(baseIcon, 0)
-            setIcon(visibilityIcon, 1)
-        }
-    }
+    override fun getIcon(unused: Boolean): Icon =
+        definition.getIcon(Iconable.ICON_FLAG_VISIBILITY or Iconable.ICON_FLAG_READ_STATUS)
 }

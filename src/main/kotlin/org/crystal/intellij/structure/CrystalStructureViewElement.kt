@@ -3,11 +3,15 @@ package org.crystal.intellij.structure
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase
 import com.intellij.navigation.ItemPresentation
+import org.crystal.intellij.presentation.CrystalStructureViewDefinitionPresentation
 import org.crystal.intellij.psi.*
 import javax.swing.Icon
 
 class CrystalStructureViewElement(element: CrElement) : PsiTreeElementBase<CrElement>(element) {
-    private val presentation = element.presentation
+    private val presentation = if (element is CrDefinition)
+        CrystalStructureViewDefinitionPresentation(element)
+    else
+        element.presentation
 
     override fun getChildrenBase(): Collection<StructureViewTreeElement> {
         val container = when (val element = element) {

@@ -39,5 +39,11 @@
         <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
 
         <stubElementTypeHolder class="org.crystal.intellij.stubs.elementTypes.CrStubElementTypes"/>
+        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeShortNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalFunctionShortNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalVariableShortNameIndex"/>
+
+        <gotoClassContributor implementation="org.crystal.intellij.navigation.CrystalGotoClassContributor"/>
+        <gotoSymbolContributor implementation="org.crystal.intellij.navigation.CrystalGotoSymbolContributor"/>
     </extensions>
 </idea-plugin>

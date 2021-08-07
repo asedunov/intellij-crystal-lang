@@ -7,9 +7,9 @@ import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.stubs.StubIndexKey
 import org.crystal.intellij.psi.CrDefinitionWithFqName
 
-object CrystalTypeShortNameIndex : StringStubIndexExtension<CrDefinitionWithFqName>() {
+object CrystalVariableShortNameIndex : StringStubIndexExtension<CrDefinitionWithFqName>() {
     private val KEY = StubIndexKey.createIndexKey<String, CrDefinitionWithFqName>(
-        CrystalTypeShortNameIndex::class.java.canonicalName
+        CrystalVariableShortNameIndex::class.java.canonicalName
     )
 
     override fun getKey() = KEY

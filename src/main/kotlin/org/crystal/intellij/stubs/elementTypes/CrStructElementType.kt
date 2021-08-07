@@ -1,12 +1,14 @@
 package org.crystal.intellij.stubs.elementTypes
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.stubs.IndexSink
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import org.crystal.intellij.psi.CrStruct
 import org.crystal.intellij.stubs.api.CrStructStub
 import org.crystal.intellij.stubs.impl.CrStructStubImpl
+import org.crystal.intellij.stubs.indexes.indexType
 
 object CrStructElementType : CrStubElementType<CrStruct, CrStructStub>(
     "CR_STRUCT_DEFINITION",
@@ -27,4 +29,6 @@ object CrStructElementType : CrStubElementType<CrStruct, CrStructStub>(
         val visibility = dataStream.readVisibility()
         return CrStructStubImpl(parentStub, this, isAbstract, visibility)
     }
+
+    override fun indexStub(stub: CrStructStub, sink: IndexSink) = indexType(stub, sink)
 }

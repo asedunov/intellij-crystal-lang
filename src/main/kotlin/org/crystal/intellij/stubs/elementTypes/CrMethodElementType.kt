@@ -1,12 +1,14 @@
 package org.crystal.intellij.stubs.elementTypes
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.stubs.IndexSink
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import org.crystal.intellij.psi.CrMethod
 import org.crystal.intellij.stubs.api.CrMethodStub
 import org.crystal.intellij.stubs.impl.CrMethodStubImpl
+import org.crystal.intellij.stubs.indexes.indexFunction
 
 object CrMethodElementType : CrStubElementType<CrMethod, CrMethodStub>(
     "CR_METHOD_DEFINITION",
@@ -26,5 +28,9 @@ object CrMethodElementType : CrStubElementType<CrMethod, CrMethodStub>(
         val isAbstract = dataStream.readBoolean()
         val visibility = dataStream.readVisibility()
         return CrMethodStubImpl(parentStub, this, isAbstract, visibility)
+    }
+
+    override fun indexStub(stub: CrMethodStub, sink: IndexSink) {
+        indexFunction(stub, sink)
     }
 }

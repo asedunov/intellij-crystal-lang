@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode
 class CrCUnion(node: ASTNode) : CrDefinitionImpl(node),
                                 CrBodyHolder,
                                 CrTypeDefinition,
-                                CrSimpleNameElementHolder {
+                                CrSimpleNameElementHolder,
+                                CrDefinitionWithFqName {
     override fun accept(visitor: CrVisitor) = visitor.visitCUnion(this)
 }

@@ -4,7 +4,7 @@ import org.crystal.intellij.psi.CrCharValueHolder
 
 class CrystalCharValueTest : CrystalPsiAttributeTest() {
     private fun checkCharValue(text: String, value: Char?) {
-        check(text, CrCharValueHolder::charValue, value)
+        checkFirst(text, CrCharValueHolder::charValue, value)
     }
 
     fun testOctalEscapes() {

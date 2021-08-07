@@ -2,7 +2,7 @@ package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
 
-class CrCField(node: ASTNode) : CrDefinitionImpl(node), CrTypedDefinition, CrSimpleNameElementHolder {
+class CrCField(node: ASTNode) : CrDefinitionImpl(node), CrTypedDefinition, CrSimpleNameElementHolder, CrDefinitionWithFqName {
     override fun accept(visitor: CrVisitor) = visitor.visitCField(this)
 
     override val type: CrType?

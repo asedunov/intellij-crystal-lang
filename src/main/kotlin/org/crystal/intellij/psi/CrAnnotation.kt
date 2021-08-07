@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 
 class CrAnnotation(node: ASTNode) : CrDefinitionImpl(node),
                                     CrPathBasedDefinition,
-                                    CrTypeDefinition {
+                                    CrTypeDefinition,
+                                    CrDefinitionWithFqName {
     override fun accept(visitor: CrVisitor) = visitor.visitAnnotation(this)
 }

@@ -4,7 +4,7 @@ import org.crystal.intellij.psi.CrStringValueHolder
 
 class CrystalStringValueTest : CrystalPsiAttributeTest() {
     private fun checkStringValue(text: String, value: String?) {
-        check(text, CrStringValueHolder::stringValue, value)
+        checkFirst(text, CrStringValueHolder::stringValue, value)
     }
 
     fun testStringValues() {

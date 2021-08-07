@@ -5,15 +5,15 @@ import org.crystal.intellij.psi.CrIntegerLiteralExpression
 
 class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
     private fun checkIntKind(text: String, kind: CrIntegerKind) {
-        check(text, CrIntegerLiteralExpression::kind, kind)
+        checkFirst(text, CrIntegerLiteralExpression::kind, kind)
     }
 
     private fun checkIntRadix(text: String, value: Int) {
-        check(text, CrIntegerLiteralExpression::radix, value)
+        checkFirst(text, CrIntegerLiteralExpression::radix, value)
     }
 
     private fun checkIntValue(text: String, value: Any?) {
-        check<CrIntegerLiteralExpression>(text, { value?.toString() }, value?.toString())
+        checkFirst<CrIntegerLiteralExpression>(text, { value?.toString() }, value?.toString())
     }
 
     fun testIntegerKinds() {

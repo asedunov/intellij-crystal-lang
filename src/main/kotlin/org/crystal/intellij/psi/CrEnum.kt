@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode
 class CrEnum(node: ASTNode) : CrDefinitionImpl(node),
                               CrPathBasedDefinition,
                               CrBodyHolder,
-                              CrTypeDefinition {
+                              CrTypeDefinition,
+                              CrDefinitionWithFqName {
     override fun accept(visitor: CrVisitor) = visitor.visitEnum(this)
 }

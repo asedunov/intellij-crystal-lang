@@ -1,6 +1,6 @@
 package org.crystal.intellij.psi
 
-sealed interface CrAliasLikeDefinition : CrTypeDefinition, CrDefinitionWithFqName {
+sealed interface CrAliasLikeDefinition : CrDefinitionWithFqName {
     val rhsType: CrType?
         get() = childOfType()
 }

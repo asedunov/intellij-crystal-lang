@@ -3901,20 +3901,23 @@ class CrystalParser : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseBareProcType() {
-            val mProcType = mark()
+            val m = mark()
 
             parseUnionType(allowSplat = true)
             if (!(at(CR_ARROW_OP) || at(CR_COMMA) && atTypeStart(true))) {
-                mProcType.drop()
+                m.drop()
                 return
             }
 
+            val mProcType = m.precede()
             finishComposite(CR_PROC_TYPE, mProcType) {
-                if (!at(CR_ARROW_OP)) {
-                    while (!eof()) {
-                        nextTokenSkipSpacesAndNewlines()
-                        parseUnionType(allowSplat = true)
-                        if (!(at(CR_COMMA) && atTypeStart(true))) break
+                finishComposite(CR_TYPE_ARGUMENT_LIST, m) {
+                    if (!at(CR_ARROW_OP)) {
+                        while (!eof()) {
+                            nextTokenSkipSpacesAndNewlines()
+                            parseUnionType(allowSplat = true)
+                            if (!(at(CR_COMMA) && atTypeStart(true))) break
+                        }
                     }
                 }
 
@@ -4095,7 +4098,10 @@ class CrystalParser : PsiParser, LightPsiParser {
                 mOuter.done(CR_PARENTHESIZED_TYPE)
                 skipSpaces()
 
-                if (at(CR_ARROW_OP)) compositeSuffix(CR_PROC_TYPE) { parseProcTypeOutput() }
+                if (at(CR_ARROW_OP)) {
+                    (latestDoneMarker as LazyPsiBuilder.StartMarker).remapTokenType(CR_TYPE_ARGUMENT_LIST)
+                    compositeSuffix(CR_PROC_TYPE) { parseProcTypeOutput() }
+                }
             }
             else {
                 while (at(CR_COMMA)) {
@@ -4105,8 +4111,9 @@ class CrystalParser : PsiParser, LightPsiParser {
                 }
 
                 if (at(CR_ARROW_OP)) {
-                    parseProcTypeOutput()
-                    mInner.done(CR_PROC_TYPE)
+                    mInner.done(CR_TYPE_ARGUMENT_LIST)
+
+                    compositeSuffix(CR_PROC_TYPE) { parseProcTypeOutput() }
 
                     recoverUntil("')'", true) { at(CR_RPAREN) }
                     tok(CR_RPAREN)
@@ -4118,7 +4125,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     recoverUntil("')'", true) { at(CR_RPAREN) }
                     tok(CR_RPAREN)
                     mInner.drop()
-                    mOuter.done(CR_PARENTHESIZED_TYPE)
+                    mOuter.done(CR_TYPE_ARGUMENT_LIST)
 
                     skipSpaces()
 
@@ -4231,7 +4238,8 @@ class CrystalParser : PsiParser, LightPsiParser {
                     }
 
                     if (at(CR_ARROW_OP)) {
-                        finishComposite(CR_PROC_TYPE, m) { parseProcTypeOutput() }
+                        m.done(CR_TYPE_ARGUMENT_LIST)
+                        compositeSuffix(CR_PROC_TYPE) { parseProcTypeOutput() }
                     }
                     else {
                         m.drop()

@@ -328,6 +328,10 @@ public class LazyPsiBuilder extends UnprotectedUserDataHolder implements PsiBuil
       return myType;
     }
 
+    public void remapTokenType(@NotNull IElementType type) {
+      myType = type;
+    }
+
     @Override
     public void setCustomEdgeTokenBinders(final WhitespacesAndCommentsBinder left, final WhitespacesAndCommentsBinder right) {
       if (left != null) {

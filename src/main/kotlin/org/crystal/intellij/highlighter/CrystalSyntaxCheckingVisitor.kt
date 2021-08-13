@@ -57,6 +57,10 @@ class CrystalSyntaxCheckingVisitor(
                 is CrNamedTupleEntry -> "named tuple name"
                 else -> return
             }
+            is CrAsmExpression -> "asm"
+            is CrAsmOperand -> "asm operand"
+            is CrAsmClobberList -> "asm clobber"
+            is CrAsmOptionsList -> "asm option"
             else -> return
         }
         errorIfInterpolated(o, context)
@@ -717,7 +721,7 @@ class CrystalSyntaxCheckingVisitor(
         )
 
         private val invalidInternalNames = setOf(
-            "begin", "nil", "true", "false", "yield", "with", "abstract",
+            "asm", "begin", "nil", "true", "false", "yield", "with", "abstract",
             "def", "require", "case", "select", "if", "unless", "include",
             "extend", "class", "struct", "module", "enum", "while", "until", "return",
             "next", "break", "lib", "fun", "alias", "pointerof", "sizeof", "offsetof",

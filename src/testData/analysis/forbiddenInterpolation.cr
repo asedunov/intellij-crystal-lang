@@ -91,3 +91,17 @@ end
 def foo(x : Foo("abc<error descr="Interpolation is not allowed in named argument">#{123}</error>)"\
                 "def<error descr="Interpolation is not allowed in named argument">#{456}</error>)": Int32))
 end
+
+asm("<error descr="Interpolation is not allowed in asm">#{x}</error>" : "a"(0))
+
+asm("n"\
+    "op": "a"(0))
+
+asm("<error descr="Interpolation is not allowed in asm">#{x}</error>"\
+    "op": "a"(0))
+
+asm("nop" : "<error descr="Interpolation is not allowed in asm operand">#{x}</error>"(0), "a"(1))
+
+asm("nop" ::: "<error descr="Interpolation is not allowed in asm clobber">#{x}</error>", "eax")
+
+asm("nop" :::: "<error descr="Interpolation is not allowed in asm option">#{foo}</error>", "intel")

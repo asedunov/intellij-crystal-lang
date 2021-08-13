@@ -966,6 +966,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                 at(CR_PRIVATE) -> parseVisibility()
                 at(CR_PROTECTED) -> parseVisibility()
 
+                at(CR_ASM) -> parseAsm()
                 at(CR_BEGIN) -> parseBegin()
                 at(CR_YIELD) -> parseYield()
                 at(CR_WITH) -> parseWith()
@@ -3346,6 +3347,91 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
 
             if (isMulti) m.done(CR_UNION_TYPE) else m.drop()
+        }
+
+        private fun PsiBuilder.parseAsm() = varDeclarationOrElse {
+            composite(CR_ASM_EXPRESSION) {
+                nextTokenSkipSpaces()
+                if (!tok(CR_LPAREN)) {
+                    error("Expected: '('")
+                    return@composite
+                }
+                skipSpacesAndNewlines()
+                if (!at(CR_STRING_START)) {
+                    error("Expected: <string literal>")
+                    return@composite
+                }
+                parseStringLiteral()
+                skipSpacesAndNewlines()
+
+                var partIndex = 0
+                while (!(eof() || at(CR_RPAREN))) {
+                    when (tokenType) {
+                        CR_COLON -> {
+                            nextTokenSkipSpacesAndNewlines()
+                            partIndex += 1
+                        }
+                        CR_PATH_OP -> {
+                            nextTokenSkipSpacesAndNewlines()
+                            partIndex += 2
+                        }
+                        else -> {
+                            recoverUntil("':'", true, { at(CR_RPAREN) }) { at(CR_COLON) or at(CR_PATH_OP) }
+                            break
+                        }
+                    }
+                    if (partIndex > 4) break
+                    if (at(CR_STRING_START)) {
+                        when (partIndex) {
+                            1, 2 -> parseAsmOperands()
+                            3 -> parseAsmClobbers()
+                            4 -> parseAsmOptions()
+                        }
+                    }
+                }
+                recoverUntil("')'", true) { at(CR_RPAREN) }
+                tok(CR_RPAREN)
+                skipSpaces()
+            }
+        }
+
+        private fun PsiBuilder.parseAsmOperands() = composite(CR_ASM_OPERAND_LIST) {
+            while (true) {
+                parseAsmOperand()
+                if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()
+                if (!at(CR_STRING_START)) break
+            }
+        }
+
+        private fun PsiBuilder.parseAsmOperand() = composite(CR_ASM_OPERAND) {
+            parseStringLiteral()
+            if (!tok(CR_LPAREN)) {
+                error("Expected: '('")
+                return@composite
+            }
+            skipSpacesAndNewlines()
+            parseExpression()
+            recoverUntil("')'", true) { at(CR_RPAREN) }
+            tok(CR_RPAREN)
+            skipSpacesAndNewlines()
+        }
+
+        private fun PsiBuilder.parseAsmClobbers() = composite(CR_ASM_CLOBBER_LIST) {
+            while (true) {
+                parseStringLiteral()
+                skipSpacesAndNewlines()
+                if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()
+                if (!at(CR_STRING_START)) break
+            }
+        }
+
+        private fun PsiBuilder.parseAsmOptions() = composite(CR_ASM_OPTIONS_LIST) {
+            while (true) {
+                parseStringLiteral()
+                skipSpacesAndNewlines()
+                if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()
+                if (!at(CR_STRING_START)) break
+            }
         }
 
         private fun PsiBuilder.parseBegin() = varDeclarationOrElse {

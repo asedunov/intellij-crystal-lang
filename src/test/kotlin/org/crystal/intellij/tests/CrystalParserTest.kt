@@ -64,6 +64,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         doCheckResult(myFullDataPath, "$name.txt", actualTree.toString())
     }
 
+    fun testAsm() = doTestSingleFileWithMultiFragments()
     fun testAnnotations() = doTestSingleFileWithMultiFragments()
     fun testArrayLiterals() = doTestSingleFileWithMultiFragments()
     fun testAssignments() = doTestSingleFileWithMultiFragments()

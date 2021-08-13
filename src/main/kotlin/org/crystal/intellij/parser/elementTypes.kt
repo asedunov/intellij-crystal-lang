@@ -35,6 +35,7 @@ val CR_VARIABLE_DEFINITION = CrCompositeElementType("CR_VARIABLE_DECLARATION", :
 val CR_ANNOTATION_EXPRESSION = CrCompositeElementType("CR_ANNOTATION_EXPRESSION", ::CrAnnotationExpression)
 val CR_ARRAY_LITERAL_EXPRESSION = CrCompositeElementType("CR_ARRAY_LITERAL_EXPRESSION", ::CrArrayLiteralExpression)
 val CR_AS_EXPRESSION = CrCompositeElementType("CR_AS_EXPRESSION", ::CrAsExpression)
+val CR_ASM_EXPRESSION = CrCompositeElementType("CR_ASM_EXPRESSION", ::CrAsmExpression)
 val CR_ASSIGNMENT_EXPRESSION = CrCompositeElementType("CR_ASSIGNMENT_EXPRESSION", ::CrAssignmentExpression)
 val CR_BINARY_EXPRESSION = CrCompositeElementType("CR_BINARY_EXPRESSION", ::CrBinaryExpression)
 val CR_BLOCK_EXPRESSION = CrCompositeElementType("CR_BLOCK_EXPRESSION", ::CrBlockExpression)
@@ -122,6 +123,10 @@ val CR_SHORT_BLOCK_ARGUMENT = CrCompositeElementType("CR_SHORT_BLOCK_ARGUMENT", 
 val CR_SPLAT_ARGUMENT = CrCompositeElementType("CR_SPLAT_ARGUMENT", ::CrSplatArgument)
 
 // Miscellaneous
+val CR_ASM_CLOBBER_LIST = CrCompositeElementType("CR_ASM_CLOBBER_LIST", ::CrAsmClobberList)
+val CR_ASM_OPERAND = CrCompositeElementType("CR_ASM_OPERAND", ::CrAsmOperand)
+val CR_ASM_OPERAND_LIST = CrCompositeElementType("CR_ASM_OPERAND_LIST", ::CrAsmOperandList)
+val CR_ASM_OPTIONS_LIST = CrCompositeElementType("CR_ASM_OPTIONS_LIST", ::CrAsmOptionsList)
 val CR_BLOCK_PARAMETER_LIST = CrCompositeElementType("CR_BLOCK_PARAMETER_LIST", ::CrBlockParameterList)
 val CR_BODY = CrCompositeElementType("CR_BODY", ::CrBody)
 val CR_C_FIELD_GROUP = CrCompositeElementType("CR_C_FIELD_GROUP", ::CrCFieldGroup)

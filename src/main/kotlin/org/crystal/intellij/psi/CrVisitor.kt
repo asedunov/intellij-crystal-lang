@@ -14,7 +14,17 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitArrayLiteralExpression(o: CrArrayLiteralExpression) = visitExpression(o)
 
     open fun visitAsExpression(o: CrAsExpression) = visitExpression(o)
-    
+
+    open fun visitAsmClobberList(o: CrAsmClobberList) = visitCrElement(o)
+
+    open fun visitAsmExpression(o: CrAsmExpression) = visitExpression(o)
+
+    open fun visitAsmOperand(o: CrAsmOperand) = visitCrElement(o)
+
+    open fun visitAsmOperandList(o: CrAsmOperandList) = visitCrElement(o)
+
+    open fun visitAsmOptionsList(o: CrAsmOptionsList) = visitCrElement(o)
+
     open fun visitAssignmentExpression(o: CrAssignmentExpression) = visitExpression(o)
 
     open fun visitBinaryExpression(o: CrBinaryExpression) = visitExpression(o)

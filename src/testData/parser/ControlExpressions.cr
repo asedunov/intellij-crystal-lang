@@ -165,3 +165,7 @@ case 1 == 1 a; when 2; end
 case 1 == 1; when 2 a; end
 
 require 1
+
+break when true
+
+begin 1 end / 2

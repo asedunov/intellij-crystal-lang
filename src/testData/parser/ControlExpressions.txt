@@ -1057,3 +1057,25 @@ FILE
   PsiWhiteSpace(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<integer literal>)('1')
+
+  CrBreakExpression(CR_BREAK_EXPRESSION)
+    PsiElement(break)('break')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(when)('when')
+    PsiWhiteSpace(' ')
+    PsiElement(true)('true')
+
+  CrBinaryExpression(CR_BINARY_EXPRESSION)
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      PsiElement(begin)('begin')
+      PsiWhiteSpace(' ')
+      CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+        PsiElement(<integer literal>)('1')
+      PsiWhiteSpace(' ')
+      PsiElement(end)('end')
+    PsiWhiteSpace(' ')
+    PsiElement(/)('/')
+    PsiWhiteSpace(' ')
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('2')

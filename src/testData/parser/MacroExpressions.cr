@@ -22,9 +22,29 @@ puts {{**1}}
 
 enum Foo; {{1}}; end
 
-{{ {{ 1 }} }}
+{{ {{1}} }}
+
+{% {{1}} %}
+
+{% if true %} %foo{ {{1}} } {% end %}
+
+{% if {{true}} %} 1 {% elsif {{true}} %} 2 {% end %}
+
+{% unless {{true}} %} 1 {% end %}
+
+{% for x in {{y}} %} 1 {% end %}
 
 {{ {% 1 %} }}
+
+{% {% 1 %} %}
+
+{% if true %} %foo{ {% 1 %} } {% end %}
+
+{% if {% true %} %} 1 {% elsif {% true %} %} 2 {% end %}
+
+{% unless {% true %} %} 1 {% end %}
+
+{% for x in {% y %} %} 1 {% end %}
 
 def foo;{{@type}};end
 

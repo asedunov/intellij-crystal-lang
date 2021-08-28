@@ -953,8 +953,8 @@ class CrystalParser : PsiParser, LightPsiParser {
                 at(CR_PATH_OP) -> parseGenericOrGlobalCall()
                 at(CR_ARROW_OP) -> parseFunLiteralOrPointer()
                 at(CR_ANNO_LBRACKET) -> parseAnnotation()
-                at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
-                at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
+                at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpressionCheckNesting(null)
+                at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControlCheckNesting(null)
                 at(CR_NUMBERS) -> parseNumericLiteral()
                 at(CR_CHAR_START) -> parseCharLiteral()
                 at(CR_STRING_START) -> parseStringLiteral()
@@ -3190,9 +3190,9 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     at(idTokens) -> parseCStructOrUnionFields()
 
-                    at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+                    at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpressionCheckNesting(null)
 
-                    at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
+                    at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControlCheckNesting(null)
 
                     at(CR_SEMICOLON) || at(CR_NEWLINE) -> skipStatementEnd()
 
@@ -3325,9 +3325,9 @@ class CrystalParser : PsiParser, LightPsiParser {
 
                     at(CR_ANNO_LBRACKET) -> parseAnnotation()
 
-                    at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+                    at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpressionCheckNesting(null)
 
-                    at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
+                    at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControlCheckNesting(null)
 
                     at(CR_SEMICOLON) || at(CR_NEWLINE) -> skipStatementEnd()
 
@@ -3435,9 +3435,9 @@ class CrystalParser : PsiParser, LightPsiParser {
                     skipStatementEnd()
                 }
 
-                at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpression(null)
+                at(CR_MACRO_EXPRESSION_LBRACE) -> parseMacroExpressionCheckNesting(null)
 
-                at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControl(null)
+                at(CR_MACRO_CONTROL_LBRACE) -> parseMacroControlCheckNesting(null)
 
                 else -> false
             }
@@ -4161,6 +4161,18 @@ class CrystalParser : PsiParser, LightPsiParser {
             parseMacroExpressionEnd(macroState)
         }
 
+        private fun PsiBuilder.parseMacroExpressionCheckNesting(macroState: MacroState?): Boolean {
+            if (inMacroExpression) {
+                val m = mark()
+                parseMacroExpression(macroState)
+                m.error("Can't nest macro expressions")
+            }
+            else {
+                parseMacroExpression(macroState)
+            }
+            return true
+        }
+
         private fun PsiBuilder.parseExpressionInsideMacro() = inMacroExpression {
             if (at(CR_MUL_OP) || at(CR_EXP_OP)) nextTokenSkipSpaces()
 
@@ -4198,6 +4210,18 @@ class CrystalParser : PsiParser, LightPsiParser {
             }
             m.done(nodeType)
             skipSpaces()
+            return true
+        }
+
+        private fun PsiBuilder.parseMacroControlCheckNesting(macroState: MacroState?) : Boolean {
+            if (inMacroExpression) {
+                val m = mark()
+                parseMacroControl(macroState)
+                m.error("Can't nest macro expressions")
+            }
+            else {
+                parseMacroControl(macroState)
+            }
             return true
         }
 

@@ -1,0 +1,18 @@
+-Macros.cr
+ [macro1]
+ macro2()
+ macro3(x)
+ macro4(x, s)
+ macro5(x, y, z)
+ macro6(x y)
+ macro7("x" y)
+ macro8(x = ...)
+ -MyClass
+  foo
+ -MyEnum
+  foo
+ MyLib
+ -MyModule
+  foo
+ -MyStruct
+  foo

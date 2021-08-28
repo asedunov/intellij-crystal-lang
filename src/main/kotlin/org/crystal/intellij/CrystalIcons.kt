@@ -20,6 +20,7 @@ object CrystalIcons {
     val GLOBAL_VARIABLE = AllIcons.Nodes.Gvariable
     val LANGUAGE = load("language")
     val LIBRARY = load("library")
+    val MACRO = load("macro")
     val METHOD = PlatformIcons.METHOD_ICON!!
     val MODULE = load("module")
     val PRIVATE = PlatformIcons.PRIVATE_ICON!!

@@ -143,6 +143,7 @@ class CrystalDefinitionPresentation(private val definition: CrDefinition) : Colo
             is CrAlias -> CrystalIcons.ALIAS
             is CrTypeDef -> CrystalIcons.TYPEDEF
             is CrAnnotation -> CrystalIcons.ANNOTATION
+            is CrMacro -> CrystalIcons.MACRO
             is CrMethod -> if (definition.isAbstract) CrystalIcons.ABSTRACT_METHOD else CrystalIcons.METHOD
             is CrFunction -> CrystalIcons.FUNCTION
             is CrEnumConstant -> CrystalIcons.CONSTANT

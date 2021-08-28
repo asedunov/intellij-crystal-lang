@@ -445,10 +445,20 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitMethod(o: CrMethod) {
         super.visitMethod(o)
 
-        val methodName = o.name ?: ""
+        processMethodOrMacro(o)
+    }
 
-        if (methodName in nonOverloadableOperators) {
-            error(o.nameElement!!, "'$methodName' is a pseudo-method and can't be redefined")
+    override fun visitMacro(o: CrMacro) {
+        super.visitMacro(o)
+
+        processMethodOrMacro(o)
+    }
+
+    private fun processMethodOrMacro(o: CrFunctionLikeDefinition) {
+        val defName = o.name ?: ""
+
+        if (defName in nonOverloadableOperators) {
+            error(o.nameElement!!, "'$defName' is a pseudo-method and can't be redefined")
         }
 
         val parameters = o.parameterList?.elements?.toList() ?: emptyList()
@@ -534,19 +544,19 @@ class CrystalSyntaxCheckingVisitor(
         }
 
         val hasAnySplats = splat != null || doubleSplat != null
-        if (methodName.endsWith('=')) {
-            if (methodName != "[]=" && (parameters.size > 1 || hasAnySplats)) {
+        if (o is CrMethod && defName.endsWith('=')) {
+            if (defName != "[]=" && (parameters.size > 1 || hasAnySplats)) {
                 val firstKind = parameters.first().kind
                 var offset = 0
                 if (firstKind != CrParameterKind.SPLAT && firstKind != CrParameterKind.DOUBLE_SPLAT) {
                     offset++
                 }
                 for (i in offset until parameters.size) {
-                    error(parameters[i], "Setter method '${methodName}' cannot have more than one parameter")
+                    error(parameters[i], "Setter method '${defName}' cannot have more than one parameter")
                 }
             }
             else if (block != null) {
-                error(block, "Setter method '${methodName}' cannot have a block")
+                error(block, "Setter method '${defName}' cannot have a block")
             }
         }
 
@@ -724,7 +734,7 @@ class CrystalSyntaxCheckingVisitor(
         private val invalidInternalNames = setOf(
             "asm", "begin", "nil", "true", "false", "yield", "with", "abstract",
             "def", "require", "case", "select", "if", "unless", "include",
-            "extend", "class", "struct", "module", "enum", "while", "until", "return",
+            "extend", "class", "struct", "macro", "module", "enum", "while", "until", "return",
             "next", "break", "lib", "fun", "alias", "pointerof", "sizeof", "offsetof",
             "instance_sizeof", "typeof", "private", "protected", "asm", "out",
             "self", "in", "end"

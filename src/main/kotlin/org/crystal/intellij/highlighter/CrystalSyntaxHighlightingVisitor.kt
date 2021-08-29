@@ -86,6 +86,7 @@ class CrystalSyntaxHighlightingVisitor(
             map[CR_SYMBOL_ARRAY_END] = SYMBOL_ARRAY_KEY
             map[CR_UNICODE_BLOCK_START] = ESCAPE_KEY
             map[CR_UNICODE_BLOCK_END] = ESCAPE_KEY
+            map[CR_MACRO_FRAGMENT] = STRING_CONTENT_KEY
 
             // Names
             map[CR_IDENTIFIER] = IDENTIFIER_KEY
@@ -95,6 +96,7 @@ class CrystalSyntaxHighlightingVisitor(
             map[CR_INSTANCE_VAR] = INSTANCE_VARIABLE_KEY
             map[CR_UNDERSCORE] = IDENTIFIER_KEY
             map[CR_BACKQUOTE] = IDENTIFIER_KEY
+            map[CR_MACRO_VAR] = IDENTIFIER_KEY
 
             // Numbers
             map[CR_NUMBERS] = NUMBER_KEY
@@ -107,6 +109,10 @@ class CrystalSyntaxHighlightingVisitor(
             map[CR_RBRACKET] = BRACKETS_KEY
             map[CR_LPAREN] = PARENTHESES_KEY
             map[CR_RPAREN] = PARENTHESES_KEY
+            map[CR_MACRO_EXPRESSION_LBRACE] = BRACES_KEY
+            map[CR_MACRO_EXPRESSION_RBRACE] = BRACES_KEY
+            map[CR_MACRO_CONTROL_LBRACE] = BRACES_KEY
+            map[CR_MACRO_CONTROL_RBRACE] = BRACES_KEY
         }
     }
 }

@@ -27,5 +27,11 @@
         <typedHandler implementation="org.crystal.intellij.editor.CrystalTypedHandler"
                       order="before selectionQuoting" />
         <backspaceHandlerDelegate implementation="org.crystal.intellij.editor.CrystalBackspaceHandler"/>
+
+        <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectSettings"/>
+
+        <projectConfigurable id="crystal.settings"
+                             groupId="language"
+                             instance="org.crystal.intellij.config.CrystalSettingsConfigurable"/>
     </extensions>
 </idea-plugin>

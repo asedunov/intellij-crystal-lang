@@ -2657,17 +2657,11 @@ class CrystalParser : PsiParser, LightPsiParser {
             tok(CR_RBRACE)
         }
 
-        private fun PsiBuilder.parseDef(
-            isAbstract: Boolean = false,
-            isMacroDef: Boolean = false
-        ) = varDeclarationOrElse {
-            composite(CR_METHOD_DEFINITION) { doParseDef(isAbstract, isMacroDef) }
+        private fun PsiBuilder.parseDef(isAbstract: Boolean = false) = varDeclarationOrElse {
+            composite(CR_METHOD_DEFINITION) { doParseDef(isAbstract) }
         }
 
-        private fun PsiBuilder.doParseDef(
-            isAbstract: Boolean = false,
-            isMacroDef: Boolean = false
-        ) {
+        private fun PsiBuilder.doParseDef(isAbstract: Boolean = false) {
             this@ParserImpl.isMacroDef = false
             inDef {
                 stopOnDo = false

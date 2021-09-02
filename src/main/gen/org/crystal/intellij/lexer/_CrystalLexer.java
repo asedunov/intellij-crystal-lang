@@ -2782,8 +2782,13 @@ public class _CrystalLexer implements FlexLexer {
           case 155: 
             { macroState.whitespace = false;
     if (macroState.delimiterState != null) {
-      char expected = ll.isOrGreater(CRYSTAL_1_1) ? macroState.delimiterState.getEndChar() : '"';
-      if (yylastchar() == expected) break;
+      char lastChar = yylastchar();
+      if (ll.isOrGreater(CRYSTAL_1_1)) {
+        if (lastChar == '\\' || lastChar == macroState.delimiterState.getEndChar()) break;
+      }
+      else {
+        if (lastChar == '"') break;
+      }
     }
     yypushback(1);
             } 

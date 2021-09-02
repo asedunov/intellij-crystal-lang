@@ -38,6 +38,18 @@ macro foo
 '\''
 end
 
+macro foo
+'\\'
+end
+
+macro foo
+"\'"
+end
+
+macro foo
+"\\"
+end
+
 macro foo; {% foo = 1 }; end
 
 macro def foo : String; 1; end

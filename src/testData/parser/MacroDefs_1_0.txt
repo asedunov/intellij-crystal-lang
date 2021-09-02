@@ -9,3 +9,34 @@ FILE
       PsiElement(<macro fragment>)(''\''\nend')
     PsiErrorElement:Expected: 'end'
       <empty list>
+
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiWhiteSpace('\n')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)(''\\'\n')
+    PsiElement(end)('end')
+
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiWhiteSpace('\n')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)('"\'"\n')
+    PsiElement(end)('end')
+
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiWhiteSpace('\n')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)('"\\"\nend')
+    PsiErrorElement:Expected: 'end'
+      <empty list>

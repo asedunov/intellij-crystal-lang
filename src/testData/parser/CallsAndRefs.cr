@@ -728,3 +728,12 @@ foo { 1 + 2 }; 1
 foo do
   1 + 2
 end; 1
+
+
+foo = 1; foo a: 1
+
+
+foo = 1; foo {}
+
+
+foo = 1; foo &x

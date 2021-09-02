@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import org.crystal.intellij.config.LanguageLevel;
+
+import static org.crystal.intellij.config.LanguageLevel.*;
 import static org.crystal.intellij.lexer.TokenTypesKt.*;
 
 %%
@@ -34,6 +37,8 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     }
   }
 
+  private LanguageLevel ll = LanguageLevel.LATEST_STABLE;
+
   private final LexerState lexerState = new LexerState();
 
   private final IntStack states = new IntArrayList();
@@ -50,8 +55,9 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   private final Deque<DelimiterState> delimiterStates = new ArrayDeque<>();
   private MacroState macroState;
 
-  public _CrystalLexer() {
+  public _CrystalLexer(@NotNull LanguageLevel languageLevel) {
     this((java.io.Reader)null);
+    this.ll = languageLevel;
   }
 
   public LexerState getLexerState() {
@@ -1211,9 +1217,13 @@ MACRO_START_KEYWORD2 =
     }
   }
 
-  "\\\""                         {
-    if (macroState.delimiterState == null) yypushback(1);
+  "\\" [^]                       {
     macroState.whitespace = false;
+    if (macroState.delimiterState != null) {
+      char expected = ll.isOrGreater(CRYSTAL_1_1) ? macroState.delimiterState.getEndChar() : '"';
+      if (yylastchar() == expected) break;
+    }
+    yypushback(1);
   }
 
   [\\\%]                         {

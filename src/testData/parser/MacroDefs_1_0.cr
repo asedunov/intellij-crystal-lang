@@ -1,0 +1,3 @@
+macro foo
+'\''
+end

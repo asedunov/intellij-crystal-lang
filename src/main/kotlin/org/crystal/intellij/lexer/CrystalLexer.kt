@@ -2,8 +2,9 @@ package org.crystal.intellij.lexer
 
 import com.intellij.lexer.FlexAdapter
 import com.intellij.psi.tree.IElementType
+import org.crystal.intellij.config.LanguageLevel
 
-class CrystalLexer : FlexAdapter(_CrystalLexer()) {
+class CrystalLexer(languageLevel: LanguageLevel) : FlexAdapter(_CrystalLexer(languageLevel)) {
     interface LookAhead {
         val tokenType: IElementType?
 

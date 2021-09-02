@@ -4,12 +4,21 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.hasErrorElementInRange
 import com.intellij.testFramework.ParsingTestCase
 import junit.framework.TestCase
+import org.crystal.intellij.config.CrystalProjectSettings
+import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CrystalParserDefinition
+import org.crystal.intellij.tests.util.withLanguageLevel
 import java.io.File
 
 class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinition()) {
     override fun getTestDataPath(): String = File("src/testData").absolutePath
+
+    override fun setUp() {
+        super.setUp()
+
+        project.registerService(CrystalProjectSettings::class.java)
+    }
 
     private fun doTestError(code: String) {
         myFile = createPsiFile("a", code)
@@ -79,6 +88,9 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testHashesAndTuples() = doTestSingleFileWithMultiFragments()
     fun testLibraries() = doTestSingleFileWithMultiFragments()
     fun testMacroDefs() = doTestSingleFileWithMultiFragments()
+    fun testMacroDefs_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+        doTestSingleFileWithMultiFragments()
+    }
     fun testMacroExpressions() = doTestSingleFileWithMultiFragments()
     fun testMacroStatements() = doTestSingleFileWithMultiFragments()
     fun testMisc() = doTestSingleFileWithMultiFragments()

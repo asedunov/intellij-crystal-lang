@@ -53,3 +53,11 @@ macro foo;%var;end
 macro foo;%var{1, x} = hello;end
 
 macro !;end
+
+{{ foo.nil? }}
+
+{{ foo &.nil? }}
+
+{{ foo.nil?(foo) }}
+
+{{ nil?(foo) }}

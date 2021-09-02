@@ -92,6 +92,9 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         doTestSingleFileWithMultiFragments()
     }
     fun testMacroExpressions() = doTestSingleFileWithMultiFragments()
+    fun testMacroExpressions_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+        doTestSingleFileWithMultiFragments()
+    }
     fun testMacroStatements() = doTestSingleFileWithMultiFragments()
     fun testMisc() = doTestSingleFileWithMultiFragments()
     fun testOperators() = doTestSingleFileWithMultiFragments()

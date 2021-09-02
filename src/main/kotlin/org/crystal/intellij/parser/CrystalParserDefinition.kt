@@ -30,7 +30,10 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
         return CrystalLexer(languageLevel)
     }
 
-    override fun createParser(project: Project?) = CrystalParser()
+    override fun createParser(project: Project?): CrystalParser {
+        val languageLevel = project?.crystalSettings?.languageLevel ?: LanguageLevel.LATEST_STABLE
+        return CrystalParser(languageLevel)
+    }
 
     override fun createLeaf(type: IElementType, text: CharSequence) = when (type) {
         is CrystalTokenTypeWithFactory -> type.factory(type, text)

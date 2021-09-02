@@ -5,11 +5,12 @@ import com.intellij.lang.impl.PsiBuilderAdapter
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.containers.SmartHashSet
+import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.builder.LazyPsiBuilder
 import java.util.*
 
-class CrystalParser : PsiParser, LightPsiParser {
+class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
     private class OpInfo(
         val opType: IElementType,
         val precedence: Int,
@@ -1071,7 +1072,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                                 parseRespondsTo()
                             }
 
-                            at(CR_IS_NIL) -> finishComposite(CR_IS_NIL_EXPRESSION, m) {
+                            (!inMacroExpression || ll < LanguageLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> finishComposite(CR_IS_NIL_EXPRESSION, m) {
                                 parseTokenWithOptEmptyParens()
                             }
 
@@ -1500,7 +1501,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     parseAtomicMethodSuffixSpecial()
                 }
 
-                at(CR_IS_NIL) -> {
+                (!inMacroExpression || ll < LanguageLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> {
                     finishComposite(CR_IS_NIL_EXPRESSION, m) {
                         parseTokenWithOptEmptyParens()
                     }
@@ -4080,7 +4081,7 @@ class CrystalParser : PsiParser, LightPsiParser {
                     parseRespondsTo()
                 }
 
-                at(CR_IS_NIL) -> return composite(CR_IS_NIL_EXPRESSION) {
+                (!inMacroExpression || ll < LanguageLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> return composite(CR_IS_NIL_EXPRESSION) {
                     parseTokenWithOptEmptyParens()
                 }
             }

@@ -1845,7 +1845,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpacesAndNewlines()
 
             while (!(eof() || at(CR_RBRACKET))) {
+                if (ll >= LanguageLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
                 parseAssignment()
+
                 if (at(CR_COMMA)) {
                     lexerState.slashIsRegex = true
                     nextTokenSkipSpacesAndNewlines()
@@ -1891,6 +1893,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             val mEntry = mark()
 
+            val firstIsSplat = ll >= LanguageLevel.CRYSTAL_1_1 && at(CR_MUL_OP)
+            if (firstIsSplat) nextTokenSkipSpacesAndNewlines()
+
             ensureParseAssignment()
 
             recoverUntil("':', '=>', ',', '}', '<newline>'", true) {
@@ -1899,6 +1904,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             when {
                 at(CR_COLON) -> {
+                    if (firstIsSplat) unexpected()
+
                     val last = latestDoneMarker
                     if (last != null && last.endOffset != rawTokenTypeStart(0)) {
                         error("Space not allowed between named argument name and ':'")
@@ -1935,6 +1942,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     m.done(CR_TUPLE_EXPRESSION)
                     return true
                 }
+                at(CR_BIG_ARROW_OP) -> {
+                    if (firstIsSplat) unexpected()
+                }
             }
 
             lexerState.slashIsRegex = true
@@ -1950,7 +1960,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseTupleTail() {
             while (!at(CR_RBRACE)) {
+                if (ll >= LanguageLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
                 parseAssignment()
+
                 if (at(CR_COMMA)) {
                     nextTokenSkipSpacesAndNewlines()
                 }

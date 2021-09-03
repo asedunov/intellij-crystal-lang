@@ -100,6 +100,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testOperators() = doTestSingleFileWithMultiFragments()
     fun testPseudoConstants() = doTestSingleFileWithMultiFragments()
     fun testPseudoMethods() = doTestSingleFileWithMultiFragments()
+    fun testSplatsInCollectionLiterals() = doTestSingleFileWithMultiFragments()
     fun testSimpleLiterals() = doTestSingleFileWithMultiFragments()
     fun testStringLiterals() = doTestSingleFileWithMultiFragments("\n\n\n")
     fun testSymbols() = doTestSingleFileWithMultiFragments()

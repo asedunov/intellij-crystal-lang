@@ -13,8 +13,8 @@ class CrystalSyntaxCheckingPass(
     file: CrFile,
     document: Document
 ) : AbstractCrystalDumbAwarePass(file, document) {
-    override fun createVisitor(highlightInfos: MutableList<HighlightInfo>): CrRecursiveVisitor {
-        return CrystalSyntaxCheckingVisitor(highlightInfos)
+    override fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): CrRecursiveVisitor {
+        return CrystalSyntaxCheckingVisitor(file, highlightInfos)
     }
 
     class Factory : FactoryBase() {

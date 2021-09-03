@@ -8,12 +8,17 @@ import com.intellij.psi.util.elementType
 import com.intellij.util.SmartList
 import com.intellij.util.containers.JBIterable
 import com.intellij.util.containers.MultiMap
+import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
+    file: CrFile,
     private val highlightInfos: MutableList<HighlightInfo>
 ) : CrRecursiveVisitor() {
+    private val ll = file.project.crystalSettings.languageLevel
+
     private var funNest = 0
     private var typeNest = 0
 
@@ -275,6 +280,14 @@ class CrystalSyntaxCheckingVisitor(
         val condition = o.condition
         val isTupleCondition = condition is CrTupleExpression
         val conditionSize = condition.tupleSizeIfAny()
+
+        if (ll >= LanguageLevel.CRYSTAL_1_1 && isTupleCondition) {
+            for (child in condition!!.allChildren()) {
+                if (child.elementType == CR_MUL_OP) {
+                    error(child, "Splat is not allowed inside case expression")
+                }
+            }
+        }
 
         val whenClauses = o.whenClauses
         if (whenClauses.isNotEmpty) {

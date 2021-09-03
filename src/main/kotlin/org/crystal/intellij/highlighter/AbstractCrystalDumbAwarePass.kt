@@ -19,11 +19,11 @@ abstract class AbstractCrystalDumbAwarePass(
 ) : TextEditorHighlightingPass(file.project, document), DumbAware {
     private val highlightInfos: MutableList<HighlightInfo> = mutableListOf()
 
-    protected abstract fun createVisitor(highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor
+    protected abstract fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor
 
     override fun doCollectInformation(progress: ProgressIndicator) {
         highlightInfos.clear()
-        file.accept(createVisitor(highlightInfos))
+        file.accept(createVisitor(file, highlightInfos))
     }
 
     override fun doApplyInformationToEditor() {

@@ -13,7 +13,7 @@ class CrystalSyntaxHighlightingPass(
     file: CrFile,
     document: Document
 ) : AbstractCrystalDumbAwarePass(file, document) {
-    override fun createVisitor(highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor {
+    override fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor {
         return CrystalSyntaxHighlightingVisitor(highlightInfos)
     }
 

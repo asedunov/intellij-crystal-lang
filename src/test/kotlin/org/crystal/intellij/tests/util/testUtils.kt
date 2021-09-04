@@ -13,11 +13,11 @@ fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
 fun Project.withLanguageLevel(level: LanguageLevel, body: () -> Unit) {
     val settings = crystalSettings
     val oldLevel = settings.languageLevel
-    settings.languageLevel = level
+    settings.setLanguageLevelSilently(level)
     try {
         body()
     }
     finally {
-        settings.languageLevel = oldLevel
+        settings.setLanguageLevelSilently(oldLevel)
     }
 }

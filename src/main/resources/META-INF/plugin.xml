@@ -33,5 +33,7 @@
         <projectConfigurable id="crystal.settings"
                              groupId="language"
                              instance="org.crystal.intellij.config.CrystalSettingsConfigurable"/>
+
+        <filePropertyPusher implementation="org.crystal.intellij.config.CrystalLanguageLevelPusher"/>
     </extensions>
 </idea-plugin>

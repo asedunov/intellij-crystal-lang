@@ -8,7 +8,7 @@ import org.junit.runners.Parameterized
 import java.io.File
 
 @RunWith(Parameterized::class)
-class CrystalFoldingTest(private val testName: String) : BasePlatformTestCase() {
+class CrystalFoldingTest(private val testFile: File) : BasePlatformTestCase() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
@@ -22,6 +22,6 @@ class CrystalFoldingTest(private val testName: String) : BasePlatformTestCase() 
 
     @Test
     fun testFolding() {
-        myFixture.testFolding("${myFixture.testDataPath}/$testName.cr")
+        myFixture.testFolding(testFile.path)
     }
 }

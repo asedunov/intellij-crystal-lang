@@ -8,7 +8,7 @@ import java.io.File
 fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
     File("src/testData/$dirName")
         .listFiles { file -> file.name.endsWith(".cr") && !file.name.endsWith(".after.cr") }
-        ?.map { arrayOf(it.nameWithoutExtension) } ?: emptyList()
+        ?.map { arrayOf(it) } ?: emptyList()
 
 fun Project.withLanguageLevel(level: LanguageLevel, body: () -> Unit) {
     val settings = crystalSettings

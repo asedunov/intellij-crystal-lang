@@ -10,7 +10,7 @@ import org.junit.runners.Parameterized
 import java.io.File
 
 @RunWith(Parameterized::class)
-class CrystalCommenterTest(private val testName: String) : BasePlatformTestCase() {
+class CrystalCommenterTest(private val testFile: File) : BasePlatformTestCase() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
@@ -24,9 +24,10 @@ class CrystalCommenterTest(private val testName: String) : BasePlatformTestCase(
 
     @Test
     fun testCommenter() {
-        myFixture.configureByFile("$testName.cr")
+        myFixture.testDataPath = testFile.parent
+        myFixture.configureByFile(testFile.name)
         myFixture.performEditorAction(IdeActions.ACTION_COMMENT_LINE)
-        val expectedFilePath = "${myFixture.testDataPath}/$testName.after.cr"
+        val expectedFilePath = File(testFile.parentFile, testFile.nameWithoutExtension + ".after.cr").path
         assertSameLinesWithFile(expectedFilePath, EditorTestUtil.getTextWithCaretsAndSelections(myFixture.editor))
     }
 }

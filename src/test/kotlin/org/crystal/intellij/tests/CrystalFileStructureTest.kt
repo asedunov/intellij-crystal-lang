@@ -2,7 +2,6 @@ package org.crystal.intellij.tests
 
 import com.intellij.testFramework.FileStructureTestBase
 import com.intellij.testFramework.PlatformTestUtil
-import com.intellij.util.PathUtil
 import org.crystal.intellij.CrystalFileType
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test
@@ -11,14 +10,16 @@ import org.junit.runners.Parameterized
 import java.io.File
 
 @RunWith(Parameterized::class)
-class CrystalFileStructureTest(private val testName: String) : FileStructureTestBase() {
+class CrystalFileStructureTest(private val testFile: File) : FileStructureTestBase() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun testFiles() = getCrystalTestFilesAsParameters("structureView")
     }
 
-    override fun getTestName(lowercaseFirstLetter: Boolean) = testName
+    override fun getTestName(lowercaseFirstLetter: Boolean): String {
+        return PlatformTestUtil.lowercaseFirstLetter(testFile.nameWithoutExtension, lowercaseFirstLetter)
+    }
 
     override fun setUp() {
         super.setUp()
@@ -26,9 +27,9 @@ class CrystalFileStructureTest(private val testName: String) : FileStructureTest
     }
 
     override fun checkResult() {
-        val expectedFileName = myFixture.testDataPath + "/" + PathUtil.makeFileName(testName, "tree")
+        val expectedFilePath = File(testFile.parentFile, testFile.nameWithoutExtension + ".tree").path
         PlatformTestUtil.waitWhileBusy(myPopupFixture.tree)
-        assertSameLinesWithFile(expectedFileName, PlatformTestUtil.print(myPopupFixture.tree, true).trim { it <= ' ' })
+        assertSameLinesWithFile(expectedFilePath, PlatformTestUtil.print(myPopupFixture.tree, true).trim { it <= ' ' })
     }
 
     override fun getFileExtension() = CrystalFileType.defaultExtension

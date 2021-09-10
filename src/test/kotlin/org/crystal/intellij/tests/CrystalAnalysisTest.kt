@@ -8,7 +8,7 @@ import org.junit.runners.Parameterized
 import java.io.File
 
 @RunWith(Parameterized::class)
-class CrystalAnalysisTest(private val testName: String) : BasePlatformTestCase() {
+class CrystalAnalysisTest(private val testFile: File) : BasePlatformTestCase() {
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
@@ -22,7 +22,8 @@ class CrystalAnalysisTest(private val testName: String) : BasePlatformTestCase()
 
     @Test
     fun testHighlighting() {
-        myFixture.configureByFile("$testName.cr")
+        myFixture.testDataPath = testFile.parent
+        myFixture.configureByFile(testFile.name)
         myFixture.checkHighlighting(true, false, true)
     }
 }

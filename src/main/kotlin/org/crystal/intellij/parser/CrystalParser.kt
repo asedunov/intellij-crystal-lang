@@ -2873,7 +2873,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpacesAndNewlines()
 
             while (!at(CR_RPAREN)) {
-                parseParam(!inMacroDef)
+                parseParam(inMacroDef)
 
                 if (at(CR_COMMA)) {
                     nextTokenSkipSpacesAndNewlines()
@@ -2894,10 +2894,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseParam(allowRestrictions: Boolean) = composite(CR_SIMPLE_PARAMETER_DEFINITION) {
+        private fun PsiBuilder.parseParam(inMacroDef: Boolean) = composite(CR_SIMPLE_PARAMETER_DEFINITION) {
             if (at(CR_AND_OP)) {
                 nextTokenSkipSpacesAndNewlines()
-                parseBlockParam()
+                parseBlockParam(inMacroDef)
                 skipSpacesAndNewlines()
                 return@composite
             }
@@ -2912,11 +2912,11 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             foundSpaceInLastArg = false
             var paramName = ""
             if (!(isAnySplat && (at(CR_COMMA) || at(CR_RPAREN)))) {
-                parseParamName(!isAnySplat)
+                parseParamName(!isAnySplat, inMacroDef)
                 lastTokenTextInProductionIf(CR_IDENTIFIER)?.let { paramName = it }
             }
 
-            if (allowRestrictions && at(CR_COLON)) {
+            if (!inMacroDef && at(CR_COLON)) {
                 if (!foundSpaceInLastArg) error("Space required before colon in type restriction")
                 advanceLexer()
                 if (!at(CR_WHITESPACES)) error("Space required after colon in type restriction")
@@ -2957,10 +2957,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private val unnamedBlockParamMarkers = TokenSet.create(CR_RPAREN, CR_NEWLINE, CR_COLON, CR_COMMA)
 
-        private fun PsiBuilder.parseBlockParam() {
+        private fun PsiBuilder.parseBlockParam(inMacroDef: Boolean) {
             var paramName = ""
             if (!at(unnamedBlockParamMarkers)) {
-                parseParamName(false)
+                parseParamName(false, inMacroDef)
                 lastTokenTextInProductionIf(CR_IDENTIFIER)?.let { paramName = it }
             }
 
@@ -2972,7 +2972,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             pushVarName(paramName)
         }
 
-        private fun PsiBuilder.parseParamName(allowExternalName: Boolean) {
+        private fun PsiBuilder.parseParamName(allowExternalName: Boolean, inMacroDef: Boolean) {
             var doNextToken = true
             var foundStringLiteral = false
             var hasExternalName = false
@@ -2996,6 +2996,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
 
             val hasInternalName = at(CR_IDS) || at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR)
+            when (tokenType) {
+                CR_INSTANCE_VAR -> if (inMacroDef) error("Can't use instance variable in macro")
+                CR_CLASS_VAR -> if (inMacroDef) error("Can't use class variable in macro")
+            }
             if (hasInternalName) {
                 doNextToken = true
             }

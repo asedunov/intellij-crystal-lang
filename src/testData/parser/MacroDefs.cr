@@ -131,3 +131,7 @@ macro foo
     %foo
   FOO
 end
+
+macro foo(@var); end
+
+macro foo(@@var); end

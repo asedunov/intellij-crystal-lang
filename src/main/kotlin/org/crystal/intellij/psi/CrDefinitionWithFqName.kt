@@ -8,7 +8,7 @@ sealed interface CrDefinitionWithFqName : CrDefinition {
         get() {
             if (this is CrPathBasedDefinition && nameElement?.isGlobal == true) return localFqName
 
-            val parentFqName = when (val parent = parent) {
+            val parentFqName = when (val parent = getParentSkipModifiers()) {
                 is CrFile -> null
                 is CrBody -> (parent.parent as? CrBodyHolder)?.fqName as? StableFqName
                 else -> return null

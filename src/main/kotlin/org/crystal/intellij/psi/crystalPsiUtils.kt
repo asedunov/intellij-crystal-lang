@@ -1,5 +1,6 @@
 package org.crystal.intellij.psi
 
+import com.intellij.psi.PsiElement
 import org.crystal.intellij.lexer.*
 
 val CrNamedElement.presentableKind: String
@@ -40,3 +41,14 @@ val CrExpression.isSemanticCall: Boolean
         is CrAssignmentExpression -> opSign == CR_ASSIGN_OP && lhs?.isSemanticCall == true
         else -> false
     }
+
+fun CrDefinition.getParentSkipModifiers(): PsiElement? {
+    var e : PsiElement = this
+    while (true) {
+        val p = e.parent
+        if (p is CrVisibilityExpression || p is CrAnnotationExpression) {
+            e = p
+        }
+        else return p
+    }
+}

@@ -45,6 +45,41 @@ class CrystalFqNameTest : CrystalPsiAttributeTest() {
         )
     }
 
+    fun testModifiers() {
+        checkFqName(
+            """
+            private class A
+            end
+            """.trimIndent(),
+            "A"
+        )
+        checkFqName(
+            """
+            @[Foo]
+            class A
+            end
+            """.trimIndent(),
+            "A"
+        )
+        checkFqName(
+            """
+            @[Foo]
+            @[Bar]
+            class A
+            end
+            """.trimIndent(),
+            "A"
+        )
+        checkFqName(
+            """
+            @[Foo] 
+            private class A
+            end
+            """.trimIndent(),
+            "A"
+        )
+    }
+
     fun testNestedPaths() {
         checkFqName(
             """

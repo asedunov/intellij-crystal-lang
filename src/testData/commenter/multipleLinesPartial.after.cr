@@ -1,5 +1,5 @@
 def foo
   # 1<selection>00
-  # 20<<caret>/selection>0
+  # 20</selection>0<caret>
   3
 end

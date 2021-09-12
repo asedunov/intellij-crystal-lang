@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "org.crystal.intellij"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -24,5 +23,13 @@ dependencies {
 }
 
 intellij {
-    version.set("2021.1.3")
+    version.set(project.properties["ideaVersion"] as String)
+}
+
+tasks {
+    patchPluginXml {
+        version.set(project.properties["version"] as String)
+        sinceBuild.set(project.properties["ideaSinceBuild"] as String)
+        untilBuild.set(project.properties["ideaUntilBuild"] as String)
+    }
 }

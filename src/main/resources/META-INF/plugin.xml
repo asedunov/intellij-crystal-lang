@@ -3,7 +3,12 @@
     <name>Crystal</name>
     <vendor email="alexey.sedunov@gmail.com">Alexey Sedunov</vendor>
 
-    <description><![CDATA[IntelliJ plugin for Crystal language (https://crystal-lang.org/)]]></description>
+    <description><![CDATA[Adds support of the Crystal language:
+    <ul>
+      <li>Basic syntax highlighting</li>
+      <li>File structure view</li>
+      <li>Go to Class/Go to Symbol navigation</li>
+    </ul>]]></description>
 
     <depends>com.intellij.modules.platform</depends>
 

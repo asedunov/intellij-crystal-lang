@@ -13,11 +13,11 @@ class CrystalProjectSettings @JvmOverloads constructor(
     private val project: Project? = null
 ) : PersistentStateComponent<CrystalProjectSettings> {
     @Attribute("languageLevel")
-    private var _languageLevel: LanguageLevel? = null
+    private var _languageLevel: LanguageLevel = LanguageLevel.LATEST_STABLE
 
     @get:Transient
     var languageLevel: LanguageLevel
-        get() = _languageLevel ?: LanguageLevel.LATEST_STABLE
+        get() = _languageLevel
         set(value) {
             if (value != _languageLevel) {
                 _languageLevel = value
@@ -31,7 +31,6 @@ class CrystalProjectSettings @JvmOverloads constructor(
     }
 
     override fun getState(): CrystalProjectSettings {
-        if (_languageLevel == null) _languageLevel = LanguageLevel.LATEST_STABLE
         return this
     }
 

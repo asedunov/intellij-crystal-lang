@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiFile
 import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.asSpecificVersion
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.psi.childrenOfType
 import java.io.File
@@ -15,13 +16,13 @@ fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
 
 fun Project.withLanguageLevel(level: LanguageLevel, body: () -> Unit) {
     val settings = crystalSettings
-    val oldLevel = settings.languageLevel
-    settings.setLanguageLevelSilently(level)
+    val oldVersion = settings.languageVersion
+    settings.setLanguageLevelSilently(level.asSpecificVersion())
     try {
         body()
     }
     finally {
-        settings.setLanguageLevelSilently(oldLevel)
+        settings.setLanguageLevelSilently(oldVersion)
     }
 }
 

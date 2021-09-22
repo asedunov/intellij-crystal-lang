@@ -18,3 +18,7 @@ cache:
 
 script:
   - ./gradlew clean test
+
+branches:
+  only:
+    - v0.1

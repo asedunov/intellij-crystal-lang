@@ -30,7 +30,7 @@ class CrystalLanguageLevelPusher : FileIntPropertyPusher<String> {
     override fun getDefaultValue() = LanguageLevel.LATEST_STABLE.name
 
     override fun getImmediateValue(project: Project, file: VirtualFile?): String {
-        return project.crystalSettings.languageLevel.name
+        return project.crystalSettings.languageVersion.level.name
     }
 
     override fun getImmediateValue(module: Module): String? = null

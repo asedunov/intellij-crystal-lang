@@ -17,7 +17,7 @@ class CrystalSyntaxCheckingVisitor(
     file: CrFile,
     private val highlightInfos: MutableList<HighlightInfo>
 ) : CrRecursiveVisitor() {
-    private val ll = file.project.crystalSettings.languageLevel
+    private val ll = file.project.crystalSettings.languageVersion.level
 
     private var funNest = 0
     private var typeNest = 0

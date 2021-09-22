@@ -17,9 +17,9 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
             cell {
                 label(CrystalBundle.message("language.level.label"))
                 comboBox(
-                    DefaultComboBoxModel(LanguageLevel.values()),
-                    settings::languageLevel,
-                    listCellRenderer { value, _, _ -> setText(value.shortName) }
+                    DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
+                    settings::languageVersion,
+                    listCellRenderer { value, _, _ -> setText(value.description) }
                 )
             }
         }

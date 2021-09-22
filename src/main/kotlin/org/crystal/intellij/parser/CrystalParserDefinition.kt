@@ -26,12 +26,12 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
     override fun getFileNodeType() = CrStubElementTypes.FILE
 
     override fun createLexer(project: Project?): CrystalLexer {
-        val languageLevel = project?.crystalSettings?.languageLevel ?: LanguageLevel.LATEST_STABLE
+        val languageLevel = project?.crystalSettings?.languageVersion?.level ?: LanguageLevel.LATEST_STABLE
         return CrystalLexer(languageLevel)
     }
 
     override fun createParser(project: Project?): CrystalParser {
-        val languageLevel = project?.crystalSettings?.languageLevel ?: LanguageLevel.LATEST_STABLE
+        val languageLevel = project?.crystalSettings?.languageVersion?.level ?: LanguageLevel.LATEST_STABLE
         return CrystalParser(languageLevel)
     }
 

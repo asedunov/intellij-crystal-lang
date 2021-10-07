@@ -45,5 +45,7 @@
 
         <gotoClassContributor implementation="org.crystal.intellij.navigation.CrystalGotoClassContributor"/>
         <gotoSymbolContributor implementation="org.crystal.intellij.navigation.CrystalGotoSymbolContributor"/>
+
+        <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
     </extensions>
 </idea-plugin>

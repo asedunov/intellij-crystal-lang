@@ -3734,7 +3734,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 lexerState.slashIsRegex = true
                 skipStatementEnd()
 
-                composite(CR_BODY) { parseExpressions() }
+                composite(CR_BLOCK_EXPRESSION) { parseExpressions() }
                 skipStatementEnd()
 
                 recoverUntil("'end'", true) { at(CR_END) }
@@ -3858,7 +3858,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                                 }
                             }
 
-                            composite(CR_BODY) { parseExpressions() }
+                            composite(CR_BLOCK_EXPRESSION) { parseExpressions() }
                             skipSpacesAndNewlines()
                         }
 
@@ -3913,7 +3913,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                                 }
                                 skipStatementEnd()
 
-                                composite(CR_BODY) {
+                                composite(CR_BLOCK_EXPRESSION) {
                                     parseExpressions()
                                 }
                                 skipSpacesAndNewlines()

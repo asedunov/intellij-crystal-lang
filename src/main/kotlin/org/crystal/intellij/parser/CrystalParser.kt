@@ -3675,9 +3675,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             when {
                 at(CR_ELSE) -> {
                     lexerState.slashIsRegex = true
-                    nextTokenSkipStatementEnd()
-
                     composite(CR_ELSE_CLAUSE) {
+                        nextTokenSkipStatementEnd()
                         parseExpressions()
                     }
                 }
@@ -3713,9 +3712,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             if (at(CR_ELSE)) {
                 lexerState.slashIsRegex = true
-                nextTokenSkipStatementEnd()
-
                 composite(CR_ELSE_CLAUSE) {
+                    nextTokenSkipStatementEnd()
                     parseExpressions()
                 }
             }

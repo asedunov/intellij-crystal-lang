@@ -1,4 +1,4 @@
-foo do<fold text='...'>
+foo do<fold text=' ... '>
     1
     2
     3

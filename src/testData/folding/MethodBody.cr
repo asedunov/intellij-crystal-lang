@@ -1,5 +1,5 @@
-def foo
-  <fold text='...'>1
+def foo<fold text=' ... '>
+  1
   2
-  3</fold>
-end
+  3
+</fold>end

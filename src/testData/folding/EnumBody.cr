@@ -1,5 +1,5 @@
-enum Foo
-  <fold text='...'>A
+enum Foo<fold text=' ... '>
+  A
   B
-  C</fold>
-end
+  C
+</fold>end

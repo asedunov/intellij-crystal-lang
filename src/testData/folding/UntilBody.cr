@@ -1,5 +1,5 @@
-until false
-  <fold text='...'>1
+until false<fold text=' ... '>
+  1
   2
-  3</fold>
-end
+  3
+</fold>end

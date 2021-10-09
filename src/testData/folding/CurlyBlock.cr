@@ -1,4 +1,4 @@
-foo {<fold text='...'>
+foo {<fold text=' ... '>
     1
     2
     3

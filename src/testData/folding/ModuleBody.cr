@@ -1,5 +1,5 @@
-module Foo
-  <fold text='...'>1
+module Foo<fold text=' ... '>
+  1
   2
-  3</fold>
-end
+  3
+</fold>end

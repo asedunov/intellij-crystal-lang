@@ -1,13 +1,13 @@
 case
-    when x
-        <fold text='...'>1
+    when x<fold text=' ...'>
+        1
         2
         3</fold>
-    when y
-        <fold text='...'>1
+    when y<fold text=' ...'>
+        1
         2
         3</fold>
-    <fold text='...'>else
+    else<fold text=' ...'>
         1
         2
         3</fold>

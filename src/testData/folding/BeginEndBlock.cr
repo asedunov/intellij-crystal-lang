@@ -1,4 +1,4 @@
-begin<fold text='...'>
+begin<fold text=' ... '>
     1
     2
     3

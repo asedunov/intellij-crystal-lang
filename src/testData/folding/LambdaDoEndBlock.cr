@@ -1,4 +1,4 @@
--> do<fold text='...'>
+-> do<fold text=' ... '>
     1
     2
     3

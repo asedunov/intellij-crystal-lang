@@ -1,5 +1,5 @@
-class Foo
-  <fold text='...'>1
+class Foo<fold text=' ... '>
+  1
   2
-  3</fold>
-end
+  3
+</fold>end

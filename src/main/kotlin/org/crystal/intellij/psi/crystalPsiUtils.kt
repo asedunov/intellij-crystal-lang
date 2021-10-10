@@ -22,7 +22,12 @@ val CrNamedElement.presentableKind: String
         is CrParameter -> "parameter"
         is CrTypeDef -> "type definition"
         is CrTypeParameter -> "type parameter"
-        is CrVariable -> "variable"
+        is CrVariable -> when (nameElement?.innerElementType) {
+            in CR_GLOBAL_IDS -> "global variable"
+            CR_INSTANCE_VAR -> "instance variable"
+            CR_CLASS_VAR -> "class variable"
+            else -> "variable"
+        }
         is CrMacro -> "macro"
         is CrNamedTupleEntry -> "named tuple entry"
         is CrNamedArgument -> "named argument"
@@ -52,7 +57,7 @@ val CrExpression.isSemanticCall: Boolean
         is CrUnaryExpression -> opSign != CR_NOT_OP
         is CrIndexedExpression -> true
         is CrCommandExpression -> true
-        is CrReferenceExpression -> receiver != null && nameElement?.tokenType == CR_IDENTIFIER
+        is CrReferenceExpression -> receiver != null && nameElement?.innerElementType == CR_IDENTIFIER
         is CrAssignmentExpression -> opSign == CR_ASSIGN_OP && lhs?.isSemanticCall == true
         else -> false
     }

@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
-import org.crystal.intellij.lexer.CR_CIDS
+import org.crystal.intellij.parser.CR_STRING_LITERAL_EXPRESSION
 import org.crystal.intellij.psi.CrSimpleNameElement
 import org.crystal.intellij.stubs.api.CrNameStub
 import org.crystal.intellij.stubs.impl.CrFullNameStubImpl
@@ -16,10 +16,10 @@ object CrSimpleNameStubElementType : CrStubElementType<CrSimpleNameElement, CrNa
     ::CrSimpleNameElement
 ) {
     override fun createStub(psi: CrSimpleNameElement, parentStub: StubElement<out PsiElement>?): CrNameStub<CrSimpleNameElement> {
-        return if (psi.tokenType in CR_CIDS)
-            CrSingleNameStubImpl(parentStub, this, psi.name)
-        else
+        return if (psi.innerElementType == CR_STRING_LITERAL_EXPRESSION)
             CrFullNameStubImpl(parentStub, this, psi.name, psi.sourceName)
+        else
+            CrSingleNameStubImpl(parentStub, this, psi.name)
     }
 
     override fun serialize(stub: CrNameStub<CrSimpleNameElement>, dataStream: StubOutputStream) {

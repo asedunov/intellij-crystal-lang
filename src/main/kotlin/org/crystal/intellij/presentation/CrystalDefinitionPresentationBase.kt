@@ -47,11 +47,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
     }
 
     private val CrNameElement?.presentableText: String
-        get() = when (this) {
-            is CrSimpleNameElement -> text
-            is CrPathNameElement -> name
-            else -> null
-        } ?: "???"
+        get() = this?.sourceName ?: "???"
 
     private fun StringBuilder.appendReceiver(receiver: CrMethodReceiver) = when (receiver) {
         is CrReferenceExpression -> appendSpaced(receiver.nameElement.presentableText)

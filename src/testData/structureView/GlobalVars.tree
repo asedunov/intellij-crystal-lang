@@ -1,4 +1,4 @@
 -GlobalVars.cr
  -[MyLib]
-  $bar : Int
-  $foo : Int
+  bar : Int
+  foo : Int

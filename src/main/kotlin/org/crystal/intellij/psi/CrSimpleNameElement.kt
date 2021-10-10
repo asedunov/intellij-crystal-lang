@@ -36,10 +36,12 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
     override val sourceName: String?
         get() {
             greenStub?.let { return it.sourceName }
-            return text
+
+            val e = firstChild
+            return if (e is CrStringLiteralExpression) e.text else name
         }
 
-    val tokenType: IElementType?
+    val innerElementType: IElementType?
         get() = firstChild?.elementType
 
     val isQuestion: Boolean

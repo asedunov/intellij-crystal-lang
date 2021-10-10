@@ -1,8 +1,8 @@
 # SEARCH_TEXT: foo
-# RESULT: variable @@foo in X
-# RESULT: variable @@fooBar in X
-# RESULT: variable @foo in X
-# RESULT: variable @fooBar in X
+# RESULT: class variable foo in X
+# RESULT: class variable fooBar in X
+# RESULT: instance variable foo in X
+# RESULT: instance variable fooBar in X
 # RESULT: variable foo
 # RESULT: variable fooBar
 

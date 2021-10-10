@@ -2,6 +2,7 @@ package org.crystal.intellij
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader
+import com.intellij.ui.LayeredIcon
 import com.intellij.util.PlatformIcons
 
 object CrystalIcons {
@@ -14,6 +15,11 @@ object CrystalIcons {
     val ANNOTATION = PlatformIcons.ANNOTATION_TYPE_ICON!!
     val CFIELD = AllIcons.Nodes.Field
     val CLASS = PlatformIcons.CLASS_ICON!!
+    val INSTANCE_VARIABLE = load("instanceVariable")
+    val CLASS_VARIABLE = LayeredIcon(2).apply {
+        setIcon(INSTANCE_VARIABLE, 0)
+        setIcon(AllIcons.Nodes.StaticMark, 1)
+    }
     val CONSTANT = load("constant")
     val ENUM = PlatformIcons.ENUM_ICON!!
     val FUNCTION = PlatformIcons.FUNCTION_ICON!!

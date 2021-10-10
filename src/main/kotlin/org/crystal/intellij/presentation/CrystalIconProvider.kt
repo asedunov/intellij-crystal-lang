@@ -5,6 +5,9 @@ import com.intellij.openapi.util.Iconable
 import com.intellij.psi.PsiElement
 import com.intellij.ui.RowIcon
 import org.crystal.intellij.CrystalIcons
+import org.crystal.intellij.lexer.CR_CLASS_VAR
+import org.crystal.intellij.lexer.CR_GLOBAL_IDS
+import org.crystal.intellij.lexer.CR_INSTANCE_VAR
 import org.crystal.intellij.psi.*
 import javax.swing.Icon
 
@@ -28,7 +31,12 @@ class CrystalIconProvider : IconProvider() {
             is CrFunction -> CrystalIcons.FUNCTION
             is CrEnumConstant -> CrystalIcons.CONSTANT
             is CrCField -> CrystalIcons.CFIELD
-            is CrVariable -> if (element.isGlobal) CrystalIcons.GLOBAL_VARIABLE else CrystalIcons.VARIABLE
+            is CrVariable -> when (element.nameElement?.innerElementType) {
+                in CR_GLOBAL_IDS -> CrystalIcons.GLOBAL_VARIABLE
+                CR_INSTANCE_VAR -> CrystalIcons.INSTANCE_VARIABLE
+                CR_CLASS_VAR -> CrystalIcons.CLASS_VARIABLE
+                else -> CrystalIcons.VARIABLE
+            }
             else -> return null
         }
         if (element is CrDefinitionWithFqName && flags and Iconable.ICON_FLAG_VISIBILITY > 0) {

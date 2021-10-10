@@ -121,7 +121,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 
-        if (o.nameElement?.tokenType == CR_GLOBAL_VAR) {
+        if (o.nameElement?.innerElementType == CR_GLOBAL_VAR) {
             error(o, "Global variables are not supported, use class variables instead")
         }
     }
@@ -205,7 +205,7 @@ class CrystalSyntaxCheckingVisitor(
         fun processParameterName(parameter: CrSimpleParameter) {
             errorIfInvalidName(parameter)
 
-            if (parameter.nameElement?.tokenType == CR_IDENTIFIER) {
+            if (parameter.nameElement?.innerElementType == CR_IDENTIFIER) {
                 paramsByName.putValue(parameter.name, parameter)
             }
         }
@@ -326,7 +326,7 @@ class CrystalSyntaxCheckingVisitor(
                 }
                 else {
                     if (expression is CrReferenceExpression &&
-                        expression.nameElement?.tokenType == CR_UNDERSCORE) {
+                        expression.nameElement?.innerElementType == CR_UNDERSCORE) {
                         val message = if (isExhaustive)
                             "'when _' is not supported"
                         else
@@ -363,7 +363,7 @@ class CrystalSyntaxCheckingVisitor(
         super.visitPointerExpression(o)
 
         val argument = o.argument
-        if (argument is CrReferenceExpression && argument.nameElement?.tokenType == CR_SELF) {
+        if (argument is CrReferenceExpression && argument.nameElement?.innerElementType == CR_SELF) {
             error(o, "Can't take address of self")
         }
     }
@@ -411,7 +411,7 @@ class CrystalSyntaxCheckingVisitor(
 
         if ((o.parent as? CrBody)?.parent is CrLibrary) {
             val nameElement = o.nameElement ?: return
-            if (nameElement.tokenType == CR_GLOBAL_VAR && nameElement.name?.firstOrNull()?.isUpperCase() == true) {
+            if (nameElement.innerElementType == CR_GLOBAL_VAR && nameElement.name?.firstOrNull()?.isUpperCase() == true) {
                 error(nameElement, "External variables must start with lowercase")
             }
         }
@@ -601,9 +601,9 @@ class CrystalSyntaxCheckingVisitor(
             is CrTypeExpression -> return true
             is CrReferenceExpression -> {
                 val nameElement = nameElement ?: return false
-                if (nameElement.tokenType == CR_UNDERSCORE) return true
+                if (nameElement.innerElementType == CR_UNDERSCORE) return true
                 val receiver = receiver
-                if (nameElement.tokenType == CR_CLASS &&
+                if (nameElement.innerElementType == CR_CLASS &&
                     receiver is CrPathExpression || receiver is CrTypeExpression) return true
                 if (hasImplicitReceiver && nameElement.isQuestion) return true
             }
@@ -623,7 +623,7 @@ class CrystalSyntaxCheckingVisitor(
 
             is CrReferenceExpression -> {
                 e.nameElement?.let { nameElement ->
-                    if (nameElement.tokenType == CR_SELF) {
+                    if (nameElement.innerElementType == CR_SELF) {
                         error(e, "Can't change the value of self")
                     }
                     if (nameElement.isQuestion || nameElement.isExclamation) {
@@ -689,7 +689,7 @@ class CrystalSyntaxCheckingVisitor(
 
     private fun errorIfInvalidName(element: CrNamedElement) {
         val nameElement = element.nameElement as? CrSimpleNameElement ?: return
-        val tokenType = nameElement.tokenType
+        val tokenType = nameElement.innerElementType
         if (tokenType == CR_IDENTIFIER || tokenType is CrystalKeywordTokenType) {
             val name = nameElement.name
             if (name in invalidInternalNames) {

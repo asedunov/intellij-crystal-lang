@@ -22,7 +22,7 @@ sealed interface CrDefinitionWithFqName : CrDefinition {
             return when (nameElement) {
                 is CrPathNameElement -> nameElement.getLocalFqName(parentFqName)
                 is CrSimpleNameElement -> {
-                    val isConstant = nameElement.tokenType == CR_CONSTANT
+                    val isConstant = nameElement.innerElementType == CR_CONSTANT
                     val name = name ?: NO_NAME
                     return if (isConstant) StableFqName(name, parentFqName) else MemberFqName(name, parentFqName)
                 }

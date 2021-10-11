@@ -10,8 +10,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Crystal"
                   language="Crystal"
-                  implementationClass="org.crystal.intellij.CrystalFileType" 
-                  fieldName="INSTANCE" 
+                  implementationClass="org.crystal.intellij.CrystalFileType"
+                  fieldName="INSTANCE"
                   extensions="cr"/>
         <lang.parserDefinition language="Crystal"
                                implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
@@ -38,6 +38,8 @@
 
         <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
 
+        <elementDescriptionProvider implementation="org.crystal.intellij.presentation.CrystalElementDescriptionProvider"/>
+
         <stubElementTypeHolder class="org.crystal.intellij.stubs.elementTypes.CrStubElementTypes"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeShortNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalFunctionShortNameIndex"/>
@@ -45,6 +47,9 @@
 
         <gotoClassContributor implementation="org.crystal.intellij.navigation.CrystalGotoClassContributor"/>
         <gotoSymbolContributor implementation="org.crystal.intellij.navigation.CrystalGotoSymbolContributor"/>
+
+        <targetElementEvaluator language="Crystal"
+                                implementationClass="org.crystal.intellij.navigation.CrystalTargetElementEvaluator"/>
 
         <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
     </extensions>

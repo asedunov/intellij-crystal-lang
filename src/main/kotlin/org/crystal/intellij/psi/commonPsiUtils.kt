@@ -14,6 +14,12 @@ fun PsiElement.traverser() =
 fun PsiElement.parents(strict: Boolean = true) =
     JBIterable.generate(if (strict) parent else this) { if (it is PsiFile) null else it.parent }
 
+fun PsiElement.parentStubOrPsi() =
+    PsiTreeUtil.getStubOrPsiParent(this)
+
+inline fun <reified T : PsiElement> PsiElement.parentStubOrPsiOfType() =
+    PsiTreeUtil.getStubOrPsiParentOfType(this, T::class.java)
+
 fun PsiElement.allChildren() =
     JBIterable.generate(firstChild) { it.nextSibling }
 

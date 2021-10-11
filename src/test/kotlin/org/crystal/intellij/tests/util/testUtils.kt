@@ -26,6 +26,13 @@ fun Project.withLanguageLevel(level: LanguageLevel, body: () -> Unit) {
     }
 }
 
+fun PsiFile.hasDirective(directive: String): Boolean {
+    for (comment in childrenOfType<PsiComment>()) {
+        if (comment.text.trim() == directive) return true
+    }
+    return false
+}
+
 fun PsiFile.findDirective(prefix: String): String? {
     for (comment in childrenOfType<PsiComment>()) {
         val text = comment.text

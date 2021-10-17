@@ -89,9 +89,7 @@ class CrBlock(
 
         is CrCaseExpression, is CrSelectExpression -> {
             next == null ||
-                    next is CrElseClause ||
-                    next is CrWhenClause ||
-                    (next.elementType == CR_END && (prev is CrElseClause || prev is CrWhenClause))
+                    (next is CrElseClause || next is CrWhenClause || next.elementType == CR_END) && (prev is CrElseClause || prev is CrWhenClause)
         }
 
         else -> false

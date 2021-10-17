@@ -1,0 +1,3 @@
+select
+else
+  a<caret>

@@ -1,0 +1,2 @@
+module Foo
+  a<caret>

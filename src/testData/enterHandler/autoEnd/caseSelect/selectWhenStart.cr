@@ -1,0 +1,2 @@
+select
+when y()<caret>

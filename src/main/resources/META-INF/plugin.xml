@@ -27,6 +27,7 @@
         <typedHandler implementation="org.crystal.intellij.editor.CrystalTypedHandler"
                       order="before selectionQuoting" />
         <backspaceHandlerDelegate implementation="org.crystal.intellij.editor.CrystalBackspaceHandler"/>
+        <enterHandlerDelegate implementation="org.crystal.intellij.editor.CrystalEnterHandler"/>
 
         <langCodeStyleSettingsProvider implementation="org.crystal.intellij.formatter.CrystalCodeStyleSettingsProvider"/>
         <lang.formatter language="Crystal"

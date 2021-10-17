@@ -1,0 +1,3 @@
+begin
+  begin<caret>
+end

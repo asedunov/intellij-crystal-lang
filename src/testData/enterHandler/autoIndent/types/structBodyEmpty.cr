@@ -1,0 +1,2 @@
+struct Foo<caret>
+end

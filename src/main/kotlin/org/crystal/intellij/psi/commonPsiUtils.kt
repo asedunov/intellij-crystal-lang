@@ -1,8 +1,6 @@
 package org.crystal.intellij.psi
 
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
-import com.intellij.psi.SyntaxTraverser
+import com.intellij.psi.*
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.util.firstInstanceOrNull
@@ -52,3 +50,22 @@ fun PsiElement.skipWhitespacesAndCommentsForward(): PsiElement? =
 
 fun PsiElement.skipWhitespacesAndCommentsBackward(): PsiElement? =
     PsiTreeUtil.skipWhitespacesAndCommentsBackward(this)
+
+fun PsiElement.deepestLast() = PsiTreeUtil.getDeepestLast(this)
+
+fun PsiElement.prevLeaf() = PsiTreeUtil.prevLeaf(this)
+
+fun PsiElement.leavesBackward() =
+    generateSequence(this) { PsiTreeUtil.prevLeaf(it) }
+
+fun PsiElement.significantLeafToTheLeft() =
+    leavesBackward().dropWhile { it is PsiWhiteSpace || it is PsiComment }.firstOrNull()
+
+fun PsiElement.lastSignificantLeaf(): PsiElement? {
+    val deepestLast = deepestLast()
+    val lastLeaf = deepestLast.significantLeafToTheLeft()
+    if (lastLeaf is PsiErrorElement) {
+        return deepestLast.prevLeaf()?.significantLeafToTheLeft()
+    }
+    return lastLeaf
+}

@@ -33,7 +33,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitBlockParameterList(o: CrBlockParameterList) = visitCrElement(o)
 
-    open fun visitBodyClause(o: CrBody) = visitCrElement(o)
+    open fun visitBody(o: CrBody) = visitCrElement(o)
 
     open fun visitBooleanLiteralExpression(o: CrBooleanLiteralExpression) = visitExpression(o)
 

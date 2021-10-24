@@ -1,0 +1,4 @@
+select
+else
+  <caret>
+end

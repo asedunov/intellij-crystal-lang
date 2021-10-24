@@ -1,0 +1,2 @@
+macro foo<caret>
+end

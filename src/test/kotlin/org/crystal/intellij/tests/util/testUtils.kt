@@ -1,6 +1,7 @@
 package org.crystal.intellij.tests.util
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiFile
 import org.crystal.intellij.config.LanguageLevel
@@ -10,9 +11,9 @@ import org.crystal.intellij.psi.childrenOfType
 import java.io.File
 
 fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
-    File("src/testData/$dirName")
-        .listFiles { file -> file.name.endsWith(".cr") && !file.name.endsWith(".after.cr") }
-        ?.map { arrayOf(it) } ?: emptyList()
+    FileUtil.fileTraverser(File("src/testData/$dirName"))
+        .filter { file -> file.name.endsWith(".cr") && !file.name.endsWith(".after.cr") }
+        .map { arrayOf(it as Any) }.toList()
 
 fun Project.withLanguageLevel(level: LanguageLevel, body: () -> Unit) {
     val settings = crystalSettings

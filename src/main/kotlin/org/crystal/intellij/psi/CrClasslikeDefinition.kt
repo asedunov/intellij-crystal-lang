@@ -7,7 +7,7 @@ import org.crystal.intellij.stubs.api.CrDefinitionWithFqNameStub
 sealed class CrClasslikeDefinition<
         Psi : CrClasslikeDefinition<Psi, Stub>,
         Stub : CrDefinitionWithFqNameStub<Psi>
-> : CrDefinitionWithFqNameImpl<Psi, Stub>, CrBodyHolder, CrPathBasedDefinition {
+> : CrDefinitionWithFqNameImpl<Psi, Stub>, CrDefinitionWithBody, CrPathBasedDefinition {
     constructor(stub: Stub, nodeType: IStubElementType<*, *>) : super(stub, nodeType)
 
     constructor(node: ASTNode) : super(node)

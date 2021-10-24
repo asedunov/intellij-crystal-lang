@@ -1038,12 +1038,9 @@ FILE
       PsiWhiteSpace(' ')
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('2')
-      PsiErrorElement:Expected: ',', ';' or <newline>
-        <empty list>
       PsiWhiteSpace(' ')
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-        CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
-          PsiElement(<identifier>)('a')
+      PsiErrorElement:Expected: 'then', ',', ';' or <newline>
+        PsiElement(<identifier>)('a')
       PsiElement(;)(';')
       PsiWhiteSpace(' ')
       CrBlockExpression(CR_BLOCK_EXPRESSION)

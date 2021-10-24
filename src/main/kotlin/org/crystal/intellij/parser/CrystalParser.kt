@@ -3759,6 +3759,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseWhenExpressionEnd(): Boolean {
             lexerState.slashIsRegex = true
 
+            recoverUntil("'then', ',', ';' or <newline>", true) {
+                at(CR_THEN) || at(CR_COMMA) || at(CR_SEMICOLON) || at(CR_NEWLINE)
+            }
+
             when {
                 at(CR_THEN) -> {
                     nextTokenSkipSpacesAndNewlines()
@@ -3777,10 +3781,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 at(CR_SEMICOLON) -> {
                     skipStatementEnd()
                     return true
-                }
-
-                else -> {
-                    error("Expected: ',', ';' or <newline>")
                 }
             }
 

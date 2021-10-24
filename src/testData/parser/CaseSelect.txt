@@ -1161,10 +1161,12 @@ FILE
       PsiWhiteSpace(' ')
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('2')
-      PsiErrorElement:Expected: ',', ';' or <newline>
+      PsiErrorElement:Expected: 'then', ',', ';' or <newline>
         <empty list>
       CrBlockExpression(CR_BLOCK_EXPRESSION)
         <empty list>
+    PsiErrorElement:Expected: 'when', 'else' or 'end'
+      <empty list>
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')
@@ -1192,10 +1194,12 @@ FILE
       PsiWhiteSpace(' ')
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('2')
-      PsiErrorElement:Expected: ',', ';' or <newline>
+      PsiErrorElement:Expected: 'then', ',', ';' or <newline>
         <empty list>
       CrBlockExpression(CR_BLOCK_EXPRESSION)
         <empty list>
+    PsiErrorElement:Expected: 'when', 'else' or 'end'
+      <empty list>
 
   CrCaseExpression(CR_CASE_EXPRESSION)
     PsiElement(case)('case')

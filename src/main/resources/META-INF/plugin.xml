@@ -28,6 +28,10 @@
                       order="before selectionQuoting" />
         <backspaceHandlerDelegate implementation="org.crystal.intellij.editor.CrystalBackspaceHandler"/>
 
+        <langCodeStyleSettingsProvider implementation="org.crystal.intellij.formatter.CrystalCodeStyleSettingsProvider"/>
+        <lang.formatter language="Crystal"
+                        implementationClass="org.crystal.intellij.formatter.CrystalFormattingModelBuilder"/>
+
         <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectSettings"/>
 
         <projectConfigurable id="crystal.settings"

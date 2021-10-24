@@ -1,0 +1,2 @@
+annotation Foo<caret>
+end

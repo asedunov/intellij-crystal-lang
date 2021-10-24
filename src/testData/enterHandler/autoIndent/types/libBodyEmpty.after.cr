@@ -1,0 +1,3 @@
+lib Foo
+  <caret>
+end

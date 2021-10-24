@@ -15,7 +15,7 @@ sealed interface CrDefinitionWithFqName : CrDefinition {
 
             val parentFqName = when (val parent = getParentSkipModifiers()) {
                 is CrFile -> null
-                is CrBody -> (parent.parent as? CrBodyHolder)?.fqName as? StableFqName
+                is CrBody -> (parent.parent as? CrDefinitionWithBody)?.fqName as? StableFqName
                 else -> return null
             }
             val nameElement = nameElement ?: return null

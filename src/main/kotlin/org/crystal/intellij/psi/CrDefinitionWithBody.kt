@@ -1,6 +1,6 @@
 package org.crystal.intellij.psi
 
-sealed interface CrBodyHolder : CrDefinitionWithFqName {
+sealed interface CrDefinitionWithBody : CrDefinitionWithFqName {
     val body: CrBody?
         get() = childOfType()
 }

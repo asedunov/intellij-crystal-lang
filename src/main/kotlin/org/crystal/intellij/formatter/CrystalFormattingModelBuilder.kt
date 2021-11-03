@@ -8,7 +8,7 @@ import com.intellij.psi.formatter.DocumentBasedFormattingModel
 class CrystalFormattingModelBuilder : FormattingModelBuilder {
     override fun createModel(formattingContext: FormattingContext): FormattingModel {
         val settings = formattingContext.codeStyleSettings
-        val rootBlock = CrBlock(formattingContext.node, settings)
+        val rootBlock = CrBlock(formattingContext.node, null, settings)
         val file = formattingContext.containingFile
         return DocumentBasedFormattingModel(rootBlock, file.project, settings, file.fileType, file)
     }

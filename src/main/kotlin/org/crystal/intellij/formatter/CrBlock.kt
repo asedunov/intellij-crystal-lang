@@ -17,6 +17,7 @@ import org.crystal.intellij.psi.*
 
 class CrBlock(
     node: ASTNode,
+    private val parent: CrBlock?,
     private val settings: CodeStyleSettings
 ) : AbstractBlock(node, null, null) {
     override fun getSpacing(child1: Block?, child2: Block): Spacing? = null
@@ -31,14 +32,31 @@ class CrBlock(
 
         for (childNode in childNodes) {
             if (childNode.psi !is PsiWhiteSpace) {
-                childBlocks += CrBlock(childNode, settings)
+                childBlocks += CrBlock(childNode, this, settings)
             }
         }
 
         return childBlocks
     }
 
-    override fun getIndent(): Indent? = Indent.getNoneIndent()
+    override fun getIndent(): Indent? {
+        val indentOptions = settings.getCommonSettings(CrystalLanguage).indentOptions
+        val useRelativeIndent = indentOptions != null && indentOptions.USE_RELATIVE_INDENTS
+        val psi = node.psi
+        val psiParent = parent?.node?.psi
+        return when {
+            psiParent is CrBlockExpression &&
+                    psiParent.firstChild.elementType in CR_BLOCK_DELIMITERS &&
+                    psi.elementType !in CR_BLOCK_DELIMITERS -> Indent.getNormalIndent(useRelativeIndent)
+            psi is CrBlockExpression &&
+                    psi.firstChild.elementType !in CR_BLOCK_DELIMITERS -> Indent.getNormalIndent(useRelativeIndent)
+            psi is CrBody -> Indent.getNormalIndent(useRelativeIndent)
+            psi is CrThenClause -> Indent.getNormalIndent(useRelativeIndent)
+            psiParent is CrElseClause &&
+                    psi.elementType !is CrystalKeywordTokenType -> Indent.getNormalIndent(useRelativeIndent)
+            else -> Indent.getNoneIndent()
+        }
+    }
 
     override fun getChildAttributes(newChildIndex: Int): ChildAttributes {
         return ChildAttributes(getChildIndent(newChildIndex), null)
@@ -115,5 +133,7 @@ class CrBlock(
             CR_LPAREN, CR_LBRACKET, CR_LBRACE, CR_MACRO_EXPRESSION_LBRACE, CR_MACRO_CONTROL_LBRACE,
             CR_DOT, CR_PATH_OP, CR_IN, CR_COMMA, CR_BIG_ARROW_OP, CR_INTERPOLATION_START, CR_QUESTION, CR_COLON
         )
+
+        private val CR_BLOCK_DELIMITERS = TokenSet.create(CR_BEGIN, CR_DO, CR_LBRACE, CR_END, CR_RBRACE)
     }
 }

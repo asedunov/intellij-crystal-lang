@@ -40,13 +40,23 @@ class CrystalSyntaxCheckingVisitor(
         super.visitIntegerLiteralExpression(o)
 
         if (o.value == null) {
-            error(o, "The value is out of ${o.kind.typeName} range")
+            error(o, o.kind.outOfValueError)
         }
 
         if (o.prefix == "0") {
             error(o, "Octal constants should be prefixed with 0o")
         }
     }
+
+    private val CrIntegerKind.outOfValueError: String
+        get() {
+            val literalKind = when(this) {
+                CrIntegerKind.I128 -> CrIntegerKind.I64
+                CrIntegerKind.U128 -> CrIntegerKind.U64
+                else -> return "The value is out of $typeName range"
+            }
+            return "The value is out of ${literalKind.typeName} range. $typeName literals that don't fit in an ${literalKind.typeName} are currently not supported"
+        }
 
     override fun visitStringLiteralExpression(o: CrStringLiteralExpression) {
         super.visitStringLiteralExpression(o)

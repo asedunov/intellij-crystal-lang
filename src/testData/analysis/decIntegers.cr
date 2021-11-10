@@ -56,14 +56,14 @@
 
 9223372036854775807_i128
 
-<error descr="The value is out of Int128 range">9223372036854775808_i128</error>
+<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">9223372036854775808_i128</error>
 
 -9223372036854775808_i128
 
-<error descr="The value is out of Int128 range">-9333333333333333333_i128</error>
+<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">-9333333333333333333_i128</error>
 
 18446744073709551615_u128
 
-<error descr="The value is out of UInt128 range">18446744073709551616_u128</error>
+<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">18446744073709551616_u128</error>
 
-<error descr="The value is out of UInt128 range">-1_u128</error>
+<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">-1_u128</error>

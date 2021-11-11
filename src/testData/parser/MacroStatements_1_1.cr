@@ -1,0 +1,1 @@
+{% for _, x, _ in y %}body{% end %}

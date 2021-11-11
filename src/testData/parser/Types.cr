@@ -50,8 +50,6 @@ x : *T -> R
 
 def foo(x : *T -> R); end
 
-typeof(1)
-
 foo :: Foo
 
 @foo :: Foo

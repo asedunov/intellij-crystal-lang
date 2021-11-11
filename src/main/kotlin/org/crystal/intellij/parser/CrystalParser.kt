@@ -990,6 +990,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 at(CR_INSTANCE_SIZEOF) -> parseSizeOf(CR_INSTANCE_SIZE_EXPRESSION)
                 at(CR_OFFSETOF) -> parseOffsetOf()
                 at(CR_POINTEROF) -> parsePointerOf()
+                at(CR_TYPEOF) -> varDeclarationOrElse { parseTypeOf(CR_TYPEOF_EXPRESSION) }
                 at(CR_WHILE) -> parseWhileOrUntil(CR_WHILE_EXPRESSION)
                 at(CR_UNTIL) -> parseWhileOrUntil(CR_UNTIL_EXPRESSION)
                 at(CR_RETURN) -> parseJumpExpression(CR_RETURN_EXPRESSION)
@@ -4609,7 +4610,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseAtomicType(): Boolean {
             return when {
                 at(selfTypeTokens) -> composite(CR_SELF_TYPE) { nextTokenSkipSpaces() }
-                at(CR_TYPEOF) -> parseTypeOf()
+                at(CR_TYPEOF) -> parseTypeOf(CR_EXPRESSION_TYPE)
                 at(CR_UNDERSCORE) -> composite(CR_UNDERSCORE_TYPE) { nextTokenSkipSpaces() }
                 at(CR_CONSTANT) || at(CR_PATH_OP) -> parseGeneric()
                 at(CR_ARROW_OP) -> composite(CR_PROC_TYPE) { parseProcTypeOutput() }
@@ -4669,7 +4670,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.parseTypeOf(): Boolean = composite(CR_EXPRESSION_TYPE) {
+        private fun PsiBuilder.parseTypeOf(nodeType: IElementType): Boolean = composite(nodeType) {
             nextTokenSkipSpaces()
 
             if (!at(CR_LPAREN)) {

@@ -50,6 +50,8 @@ instance_sizeof(
   Int32
 )
 
+typeof(1)
+
 typeof(
   1
 )

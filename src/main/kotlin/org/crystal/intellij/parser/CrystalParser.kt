@@ -79,13 +79,59 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         fun getOp(type: IElementType) = infoByType[type]
     }
 
+    private class ScopeHandler {
+        private val defVars = ArrayDeque<HashSet<String>>().apply { push(HashSet()) }
+
+        private fun pushDef(names: Set<String> = emptySet()) {
+            defVars.push(HashSet(names))
+        }
+
+        private fun popDef() {
+            defVars.pop()
+        }
+
+        fun pushVarName(name: String) {
+            defVars.peek() += name
+        }
+
+        fun pushVarNames(names: Set<String>) {
+            names.forEach { pushVarName(it) }
+        }
+
+        fun isVarInScope(name: String) = name in defVars.peek()
+
+        inline fun <T> withIsolatedVarScope(
+            createScope: Boolean = true,
+            body: () -> T
+        ): T {
+            if (!createScope) return body()
+            try {
+                pushDef()
+                return body()
+            }
+            finally {
+                popDef()
+            }
+        }
+
+        inline fun <T> withLexicalVarScope(body: () -> T): T {
+            try {
+                pushDef(defVars.peek())
+                return body()
+            }
+            finally {
+                popDef()
+            }
+        }
+    }
+
     inner class ParserImpl(private val builder: PsiBuilder) {
         private val lexer = builder.asLazyBuilder().lexer as CrystalLexer
         private val lexerState = lexer.lexerState
 
         private var stopOnDo = false
         private var typeDeclarationCount = 0
-        private val defVars = ArrayDeque<HashSet<String>>().apply { push(HashSet()) }
+        private val scopes = ScopeHandler()
         private val lastLHSVarNames = SmartHashSet<String>()
         private var callArgsNest = 0
         private var stopOnYield = 0
@@ -127,12 +173,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private inline fun <T> PsiBuilder.inDef(body: PsiBuilder.() -> T): T {
             defNest++
-            pushDef()
             try {
                 return body()
             }
             finally {
-                popDef()
                 defNest--
             }
         }
@@ -175,22 +219,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             finally {
                 inMacroExpression = false
             }
-        }
-
-        private fun pushDef(names: Set<String> = emptySet()) {
-            defVars.push(HashSet(names))
-        }
-
-        private fun popDef() {
-            defVars.pop()
-        }
-
-        private fun pushVarName(name: String) {
-            defVars.peek() += name
-        }
-
-        private fun pushVarNames(names: Set<String>) {
-            names.forEach { pushVarName(it) }
         }
 
         private fun tempArgName() = "__arg${tempArgNameCount++}"
@@ -760,37 +788,37 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                             else -> false
                         }
 
-                        if (needsNewScope) pushDef()
-                        val rhsParsed = when {
-                            at(CR_UNINITIALIZED) -> {
-                                pushVarNames(lastLHSVarNames)
+                        val rhsParsed = scopes.withIsolatedVarScope(needsNewScope) {
+                            when {
+                                at(CR_UNINITIALIZED) -> {
+                                    scopes.pushVarNames(lastLHSVarNames)
 
-                                composite(CR_UNINITIALIZED_EXPRESSION) {
-                                    nextTokenSkipSpaces()
-                                    parseBareProcType()
+                                    composite(CR_UNINITIALIZED_EXPRESSION) {
+                                        nextTokenSkipSpaces()
+                                        parseBareProcType()
+                                    }
                                 }
-                            }
 
-                            else -> {
-                                val curLastLHSVarNames = SmartHashSet(lastLHSVarNames)
-                                val parsedRHS = doParseAssignment(allowComma = allowComma)
-                                if (parsedRHS) {
-                                    pushVarNames(curLastLHSVarNames)
+                                else -> {
+                                    val curLastLHSVarNames = SmartHashSet(lastLHSVarNames)
+                                    val parsedRHS = doParseAssignment(allowComma = allowComma)
+                                    if (parsedRHS) {
+                                        scopes.pushVarNames(curLastLHSVarNames)
+                                    }
+                                    else {
+                                        error("Expected: <expression>")
+                                    }
+                                    parsedRHS
                                 }
-                                else {
-                                    error("Expected: <expression>")
-                                }
-                                parsedRHS
                             }
                         }
-                        if (needsNewScope) popDef()
 
                         if (!rhsParsed) break
                     }
                     at(CR_ASSIGN_COMBO_OPERATORS) -> {
                         foundAssignment = true
 
-                        pushVarNames(lastLHSVarNames)
+                        scopes.pushVarNames(lastLHSVarNames)
 
                         nextTokenSkipSpacesAndNewlines()
 
@@ -1586,7 +1614,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseOut() = composite(CR_OUT_ARGUMENT) {
             nextTokenSkipSpacesAndNewlines()
 
-            if (at(CR_IDS)) pushVarName(lexer.tokenText)
+            if (at(CR_IDS)) scopes.pushVarName(lexer.tokenText)
 
             if (at(CR_IDS) || at(CR_INSTANCE_VAR) || at(CR_UNDERSCORE)) {
                 composite(CR_REFERENCE_EXPRESSION) {
@@ -1621,19 +1649,17 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.doParseBlock(parseTail: PsiBuilder.() -> Unit): Boolean {
             composite(CR_BLOCK_EXPRESSION) {
-                pushDef(defVars.peek())
-
                 lexerState.slashIsRegex = true
                 nextTokenSkipSpaces()
 
-                parseOptBlockParamList()
-                skipStatementEnd()
+                scopes.withLexicalVarScope {
+                    parseOptBlockParamList()
+                    skipStatementEnd()
 
-                parseExpressions()
+                    parseExpressions()
 
-                parseTail()
-
-                popDef()
+                    parseTail()
+                }
             }
 
             return true
@@ -1667,7 +1693,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         else -> false
                     }
 
-                    if (argName != null) pushVarName(argName)
+                    if (argName != null) scopes.pushVarName(argName)
 
                     val lastMarker = latestDoneMarker!!
                     val paramType = if (hasParam) lastMarker.tokenType else CR_SIMPLE_PARAMETER_DEFINITION
@@ -1699,7 +1725,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 while (!eof()) {
                     val hasParam = at(CR_IDS) || at(CR_UNDERSCORE)
                     if (hasParam) {
-                        pushVarName(lexer.tokenText)
+                        scopes.pushVarName(lexer.tokenText)
                         parseTokenAsParam()
                     }
                     val recovered = recoverUntil(if (hasParam) "',' or ')" else "<identifier> or '_'") {
@@ -2193,35 +2219,34 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 skipSpacesAndNewlines()
             }
 
-            pushDef(defVars.peek())
-            pushVarNames(argNames)
+            scopes.withLexicalVarScope {
+                scopes.pushVarNames(argNames)
 
-            when {
-                at(CR_DO) -> {
-                    composite(CR_BLOCK_EXPRESSION) {
-                        nextTokenSkipStatementEnd()
-                        checkNoPipeBeforeFunLiteralBody()
-                        parseExpressions()
-                        parseBlockTail()
-                    }
-                }
-
-                at(CR_LBRACE) -> {
-                    withStopOnDo {
+                when {
+                    at(CR_DO) -> {
                         composite(CR_BLOCK_EXPRESSION) {
                             nextTokenSkipStatementEnd()
                             checkNoPipeBeforeFunLiteralBody()
                             parseExpressions()
-                            recoverUntil("'}'", true) { at(CR_RBRACE) }
-                            nextTokenSkipSpaces()
+                            parseBlockTail()
                         }
                     }
+
+                    at(CR_LBRACE) -> {
+                        withStopOnDo {
+                            composite(CR_BLOCK_EXPRESSION) {
+                                nextTokenSkipStatementEnd()
+                                checkNoPipeBeforeFunLiteralBody()
+                                parseExpressions()
+                                recoverUntil("'}'", true) { at(CR_RBRACE) }
+                                nextTokenSkipSpaces()
+                            }
+                        }
+                    }
+
+                    else -> error("Expected: do or '{'")
                 }
-
-                else -> error("Expected: do or '{'")
             }
-
-            popDef()
         }
 
         private fun PsiBuilder.doParseFunPointer() {
@@ -2590,26 +2615,24 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.doParseMacro() {
             advanceToDefOrMacroName()
 
-            pushDef()
+            scopes.withIsolatedVarScope {
+                if (at(CR_CONSTANT)) {
+                    lexer.enterMacro()
+                    nextToken()
+                    error("Macro can't have a receiver")
+                }
+                else {
+                    val mName = mark() as LazyPsiBuilder.StartMarker
+                    if (at(CR_IDS) && lexer.lookAhead() == CR_ASSIGN_OP) nextToken()
+                    advanceToMacroBody(true, mName, CR_SIMPLE_NAME_ELEMENT)
+                    if (at(CR_LPAREN)) parseParamList(true)
+                }
 
-            if (at(CR_CONSTANT)) {
-                lexer.enterMacro()
-                nextToken()
-                error("Macro can't have a receiver")
+                parseMacroLiteral()
+
+                recoverUntil("'end'", true) { at(CR_END) }
+                tok(CR_END)
             }
-            else {
-                val mName = mark() as LazyPsiBuilder.StartMarker
-                if (at(CR_IDS) && lexer.lookAhead() == CR_ASSIGN_OP) nextToken()
-                advanceToMacroBody(true, mName, CR_SIMPLE_NAME_ELEMENT)
-                if (at(CR_LPAREN)) parseParamList(true)
-            }
-
-            parseMacroLiteral()
-
-            recoverUntil("'end'", true) { at(CR_END) }
-            tok(CR_END)
-
-            popDef()
         }
 
         private fun PsiBuilder.parseMacroLiteral() {
@@ -2674,84 +2697,86 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.doParseDef(isAbstract: Boolean = false) {
             this@ParserImpl.isMacroDef = false
             inDef {
-                stopOnDo = false
+                scopes.withIsolatedVarScope {
+                    stopOnDo = false
 
-                nextToken()
-                advanceToDefOrMacroName()
+                    nextToken()
+                    advanceToDefOrMacroName()
 
-                val mReceiver = mark()
+                    val mReceiver = mark()
 
-                val hasTypeReceiver = at(CR_CONSTANT)
-                if (hasTypeReceiver) {
-                    parsePathType()
-                }
-                else {
-                    consumeDefOrMacroName()
-                }
-
-                if (at(CR_DOT) && !hasTypeReceiver) {
-                    mReceiver.done(CR_REFERENCE_EXPRESSION)
-                }
-                else {
-                    mReceiver.drop()
-                }
-
-                when {
-                    at(CR_DOT) -> {
-                        advanceToDefOrMacroName()
-                        consumeDefOrMacroName()
-                    }
-                    hasTypeReceiver -> unexpected()
-                }
-
-                when {
-                    at(CR_LPAREN) -> {
-                        parseParamList(false)
-                        skipSpaces()
-                    }
-
-                    at(CR_END) -> {
-                        error("Expected: ';' or <newline>")
-                    }
-
-                    at(defTokenForParenWarn) -> {
-                        error("Parentheses are mandatory for def argument")
-                    }
-
-                    at(CR_SEMICOLON) || at(CR_NEWLINE) || at(CR_COLON) -> { }
-
-                    isAbstract && eof() -> { }
-
-                    else -> unexpected()
-                }
-
-                if (at(CR_SYMBOL_START)) error("A space is mandatory between ':' and return type")
-
-                if (at(CR_COLON)) {
-                    advanceLexer()
-                    nextTokenSkipSpaces()
-                    parseBareProcType()
-                }
-
-                skipSpaces()
-                if (at(CR_FORALL)) {
-                    nextTokenSkipSpaces()
-                    parseTypeParameterList()
-                }
-
-                if (!isAbstract) {
-                    lexerState.slashIsRegex = true
-                    skipStatementEnd()
-
-                    if (at(CR_END)) {
-                        nextTokenSkipSpaces()
+                    val hasTypeReceiver = at(CR_CONSTANT)
+                    if (hasTypeReceiver) {
+                        parsePathType()
                     }
                     else {
-                        composite(CR_BLOCK_EXPRESSION) {
-                            parseExpressions()
-                            parseExceptionHandler()
+                        consumeDefOrMacroName()
+                    }
+
+                    if (at(CR_DOT) && !hasTypeReceiver) {
+                        mReceiver.done(CR_REFERENCE_EXPRESSION)
+                    }
+                    else {
+                        mReceiver.drop()
+                    }
+
+                    when {
+                        at(CR_DOT) -> {
+                            advanceToDefOrMacroName()
+                            consumeDefOrMacroName()
                         }
-                        parseEnd()
+                        hasTypeReceiver -> unexpected()
+                    }
+
+                    when {
+                        at(CR_LPAREN) -> {
+                            parseParamList(false)
+                            skipSpaces()
+                        }
+
+                        at(CR_END) -> {
+                            error("Expected: ';' or <newline>")
+                        }
+
+                        at(defTokenForParenWarn) -> {
+                            error("Parentheses are mandatory for def argument")
+                        }
+
+                        at(CR_SEMICOLON) || at(CR_NEWLINE) || at(CR_COLON) -> { }
+
+                        isAbstract && eof() -> { }
+
+                        else -> unexpected()
+                    }
+
+                    if (at(CR_SYMBOL_START)) error("A space is mandatory between ':' and return type")
+
+                    if (at(CR_COLON)) {
+                        advanceLexer()
+                        nextTokenSkipSpaces()
+                        parseBareProcType()
+                    }
+
+                    skipSpaces()
+                    if (at(CR_FORALL)) {
+                        nextTokenSkipSpaces()
+                        parseTypeParameterList()
+                    }
+
+                    if (!isAbstract) {
+                        lexerState.slashIsRegex = true
+                        skipStatementEnd()
+
+                        if (at(CR_END)) {
+                            nextTokenSkipSpaces()
+                        }
+                        else {
+                            composite(CR_BLOCK_EXPRESSION) {
+                                parseExpressions()
+                                parseExceptionHandler()
+                            }
+                            parseEnd()
+                        }
                     }
                 }
             }
@@ -2959,7 +2984,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 }
             }
 
-            pushVarName(paramName)
+            scopes.pushVarName(paramName)
         }
 
         private val unnamedBlockParamMarkers = TokenSet.create(CR_RPAREN, CR_NEWLINE, CR_COLON, CR_COMMA)
@@ -2976,7 +3001,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 parseBareProcType()
             }
 
-            pushVarName(paramName)
+            scopes.pushVarName(paramName)
         }
 
         private fun PsiBuilder.parseParamName(allowExternalName: Boolean, inMacroDef: Boolean) {
@@ -3049,52 +3074,50 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             isTopLevel: Boolean,
             requiresBody: Boolean = false
         ) = composite(CR_FUNCTION_DEFINITION) {
-            if (requiresBody) pushDef()
-
-            nextTokenSkipSpacesAndNewlines()
-
-            val expectedNameTokens = if (isTopLevel) CR_IDS else CR_CIDS
-            if (!at(expectedNameTokens)) error("Expected: <function name>")
-            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
-
-            if (at(CR_ASSIGN_OP)) {
+            scopes.withIsolatedVarScope(requiresBody) {
                 nextTokenSkipSpacesAndNewlines()
 
-                when {
-                    at(CR_CIDS) -> composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+                val expectedNameTokens = if (isTopLevel) CR_IDS else CR_CIDS
+                if (!at(expectedNameTokens)) error("Expected: <function name>")
+                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
-                    at(CR_STRING_START) -> {
-                        composite(CR_SIMPLE_NAME_ELEMENT) { parseStringLiteral() }
-                        skipSpaces()
-                    }
+                if (at(CR_ASSIGN_OP)) {
+                    nextTokenSkipSpacesAndNewlines()
 
-                    else -> error("Expected: <external function name>")
-                }
-            }
+                    when {
+                        at(CR_CIDS) -> composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
-            if (at(CR_LPAREN)) parseFunParamList(requiresBody)
-
-            if (at(CR_COLON)) {
-                nextTokenSkipSpacesAndNewlines()
-                parseBareProcType()
-            }
-            skipStatementEnd()
-
-            if (requiresBody) {
-                inFunDef {
-                    if (at(CR_END)) {
-                        nextToken()
-                    }
-                    else {
-                        composite(CR_BLOCK_EXPRESSION) {
-                            parseExpressions()
-                            parseExceptionHandler()
+                        at(CR_STRING_START) -> {
+                            composite(CR_SIMPLE_NAME_ELEMENT) { parseStringLiteral() }
+                            skipSpaces()
                         }
-                        parseEnd()
+
+                        else -> error("Expected: <external function name>")
                     }
                 }
 
-                popDef()
+                if (at(CR_LPAREN)) parseFunParamList(requiresBody)
+
+                if (at(CR_COLON)) {
+                    nextTokenSkipSpacesAndNewlines()
+                    parseBareProcType()
+                }
+                skipStatementEnd()
+
+                if (requiresBody) {
+                    inFunDef {
+                        if (at(CR_END)) {
+                            nextToken()
+                        }
+                        else {
+                            composite(CR_BLOCK_EXPRESSION) {
+                                parseExpressions()
+                                parseExceptionHandler()
+                            }
+                            parseEnd()
+                        }
+                    }
+                }
             }
         }
 
@@ -3122,7 +3145,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
                     else error("Expected: ':'")
 
-                    if (requiresBody) pushVarName(argName)
+                    if (requiresBody) scopes.pushVarName(argName)
                 }
                 else {
                     parseUnionType()
@@ -3489,7 +3512,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             when {
                 at(CR_IDS) -> {
-                    pushVarName(lexer.tokenText)
+                    scopes.pushVarName(lexer.tokenText)
 
                     composite(CR_VARIABLE_DEFINITION) {
                         composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
@@ -4071,7 +4094,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun isVar(name: String): Boolean {
-            return inMacroExpression || name == "self" || name in defVars.peek()
+            return inMacroExpression || name == "self" || scopes.isVarInScope(name)
         }
 
         private fun PsiBuilder.parseVarOrCall(): Boolean {
@@ -4139,7 +4162,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             else {
                 if (typeDeclarationCount == 0 && at(CR_COLON)) {
                     parseVarDefinitionTail()
-                    if (callArgsNest == 0) pushVarName(name)
+                    if (callArgsNest == 0) scopes.pushVarName(name)
                     m.done(CR_VARIABLE_DEFINITION)
                 }
                 else {
@@ -4157,7 +4180,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             lexerState.wantsRegex = false
             composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
-            if (isGlobalMatchData && lexer.lookAhead() == CR_ASSIGN_OP) pushVarName(name)
+            if (isGlobalMatchData && lexer.lookAhead() == CR_ASSIGN_OP) scopes.pushVarName(name)
         }
 
         private fun PsiBuilder.parseMacroExpression(macroState: MacroState?) = composite(CR_MACRO_EXPRESSION) {

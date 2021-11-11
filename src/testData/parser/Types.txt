@@ -806,15 +806,6 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(end)('end')
 
-  CrCallExpression(CR_CALL_EXPRESSION)
-    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
-      PsiElement(typeof)('typeof')
-    CrArgumentList(CR_PARENTHESIZED_ARGUMENT_LIST)
-      PsiElement(()('(')
-      CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-        PsiElement(<integer literal>)('1')
-      PsiElement())(')')
-
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo')

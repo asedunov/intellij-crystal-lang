@@ -91,6 +91,7 @@ val CR_SYMBOL_ARRAY_EXPRESSION = CrCompositeElementType("CR_SYMBOL_ARRAY_EXPRESS
 val CR_SYMBOL_EXPRESSION = CrCompositeElementType("CR_SYMBOL_EXPRESSION", ::CrSymbolExpression)
 val CR_TUPLE_EXPRESSION = CrCompositeElementType("CR_TUPLE_EXPRESSION", ::CrTupleExpression)
 val CR_TYPE_EXPRESSION = CrCompositeElementType("CR_TYPE_EXPRESSION", ::CrTypeExpression)
+val CR_TYPEOF_EXPRESSION = CrCompositeElementType("CR_TYPEOF_EXPRESSION", ::CrTypeofExpression)
 val CR_UNARY_EXPRESSION = CrCompositeElementType("CR_UNARY_EXPRESSION", ::CrUnaryExpression)
 val CR_UNINITIALIZED_EXPRESSION = CrCompositeElementType("CR_UNINITIALIZED_EXPRESSION", ::CrUninitializedExpression)
 val CR_UNLESS_EXPRESSION = CrCompositeElementType("CR_UNLESS_EXPRESSION", ::CrUnlessExpression)

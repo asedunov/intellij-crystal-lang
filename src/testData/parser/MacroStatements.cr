@@ -76,3 +76,5 @@ macro foo;bar{% begin %}body{% end %}baz;end
 {% end %}
 
 enum Foo; {% if 1 %}2{% end %}; end
+
+{% for _, x, _ in y %}body{% end %}

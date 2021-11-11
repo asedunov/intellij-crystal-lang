@@ -4241,7 +4241,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseMacroFor(macroState: MacroState?): IElementType {
             nextTokenSkipSpaces()
             while (true) {
-                if (!at(CR_IDS)) {
+                val isValidNameToken = at(CR_IDS) || ll >= LanguageLevel.CRYSTAL_1_2 && at(CR_UNDERSCORE)
+                if (!isValidNameToken) {
                     error("Expected: <identifier>")
                     break
                 }

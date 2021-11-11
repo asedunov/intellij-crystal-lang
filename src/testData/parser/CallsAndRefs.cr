@@ -740,3 +740,6 @@ foo = 1; foo &x
 
 
 あ.い, う.え.お = 1, 2
+
+
+typeof(xyz = 1); xyz +1

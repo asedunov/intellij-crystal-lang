@@ -1,0 +1,1 @@
+typeof(xyz = 1); xyz +1

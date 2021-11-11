@@ -80,49 +80,41 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
     }
 
     private class ScopeHandler {
-        private val defVars = ArrayDeque<HashSet<String>>().apply { push(HashSet()) }
+        private val varScopes = ArrayDeque<HashSet<String>>().apply { push(HashSet()) }
 
-        private fun pushDef(names: Set<String> = emptySet()) {
-            defVars.push(HashSet(names))
-        }
-
-        private fun popDef() {
-            defVars.pop()
+        private inline fun <T> withCustomScope(
+            createScope: Boolean,
+            names: Set<String>,
+            body: () -> T
+        ): T {
+            if (!createScope) return body()
+            try {
+                varScopes.push(HashSet(names))
+                return body()
+            } finally {
+                varScopes.pop()
+            }
         }
 
         fun pushVarName(name: String) {
-            defVars.peek() += name
+            varScopes.peek() += name
         }
 
         fun pushVarNames(names: Set<String>) {
             names.forEach { pushVarName(it) }
         }
 
-        fun isVarInScope(name: String) = name in defVars.peek()
+        fun isVarInScope(name: String) = name in varScopes.peek()
 
         inline fun <T> withIsolatedVarScope(
             createScope: Boolean = true,
             body: () -> T
-        ): T {
-            if (!createScope) return body()
-            try {
-                pushDef()
-                return body()
-            }
-            finally {
-                popDef()
-            }
-        }
+        ) = withCustomScope(createScope, emptySet(), body)
 
-        inline fun <T> withLexicalVarScope(body: () -> T): T {
-            try {
-                pushDef(defVars.peek())
-                return body()
-            }
-            finally {
-                popDef()
-            }
-        }
+        inline fun <T> withLexicalVarScope(
+            createScope: Boolean = true,
+            body: () -> T
+        ) = withCustomScope(createScope, varScopes.peek(), body)
     }
 
     inner class ParserImpl(private val builder: PsiBuilder) {
@@ -4715,22 +4707,24 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 return true
             }
 
-            while (!eof()) {
-                ensureParseAssignment()
+            scopes.withLexicalVarScope(ll >= LanguageLevel.CRYSTAL_1_2) {
+                while (!eof()) {
+                    ensureParseAssignment()
 
-                if (at(CR_COMMA)) {
-                    nextTokenSkipSpacesAndNewlines()
+                    if (at(CR_COMMA)) {
+                        nextTokenSkipSpacesAndNewlines()
+                    }
+                    else {
+                        skipSpacesAndNewlines()
+                        break
+                    }
                 }
-                else {
-                    skipSpacesAndNewlines()
-                    break
-                }
-            }
 
-            if (at(CR_RPAREN)) {
-                nextTokenSkipSpaces()
+                if (at(CR_RPAREN)) {
+                    nextTokenSkipSpaces()
+                }
+                else error("Expected: ')'")
             }
-            else error("Expected: ')'")
         }
 
         private fun PsiBuilder.parseTupleType(): Boolean {

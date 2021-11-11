@@ -2056,8 +2056,14 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         break
                     }
 
+                    skipSpacesAndNewlines()
+
                     recoverUntil("':', '=>', ',' or '}'") {
                         at(CR_COLON) || at(CR_BIG_ARROW_OP) || at(CR_COMMA) || at(CR_RBRACE)
+                    }
+
+                    if (ll >= LanguageLevel.CRYSTAL_1_2 && at(CR_COLON)) {
+                        error("Can't use 'key: value' syntax in a hash literal")
                     }
 
                     if (at(CR_COLON) || at(CR_BIG_ARROW_OP)) {

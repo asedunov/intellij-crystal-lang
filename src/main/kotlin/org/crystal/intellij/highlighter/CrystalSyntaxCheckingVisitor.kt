@@ -397,6 +397,35 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitVisibilityExpression(o: CrVisibilityExpression) {
+        super.visitVisibilityExpression(o)
+
+        when (val e = o.innerExpression) {
+            is CrMethod, is CrCallExpression -> return
+            is CrClasslikeDefinition<*, *>, is CrEnum, is CrAlias, is CrLibrary -> {
+                errorIfNonPrivate(o, "types")
+                return
+            }
+            is CrMacro -> {
+                errorIfNonPrivate(o, "macros")
+                return
+            }
+            is CrAssignmentExpression -> {
+                if (e.lhs is CrPathExpression) {
+                    errorIfNonPrivate(o, "constants")
+                    return
+                }
+            }
+        }
+        error(o.keyword, "Visibility modifier is not supported here")
+    }
+
+    private fun errorIfNonPrivate(o: CrVisibilityExpression, description: String) {
+        if (o.visibility != CrVisibility.PRIVATE) {
+            error(o.keyword, "Can only use 'private' for $description")
+        }
+    }
+
     override fun visitTypeArgumentList(o: CrTypeArgumentList) {
         super.visitTypeArgumentList(o)
 

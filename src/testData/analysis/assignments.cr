@@ -3,11 +3,11 @@ A = 1
 X::A = 1
 
 def foo
-  <error descr="Constant definition is not allowed in method/function body">A</error> = 1
+  <error descr="Can't declare constant in method/function body">A</error> = 1
 end
 
 fun foo
-  <error descr="Constant definition is not allowed in method/function body">A</error> = 1
+  <error descr="Can't declare constant in method/function body">A</error> = 1
 end
 
 <error descr="Multiple assignment is not allowed for constants">A</error>, <error descr="Multiple assignment is not allowed for constants">B</error> = 1, 2

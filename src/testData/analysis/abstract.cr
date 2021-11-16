@@ -37,21 +37,21 @@ struct TestStruct
 end
 
 def testDef
-    <error descr="'abstract' is not allowed in method/function body">abstract</error> def <error descr="Method definition is not allowed in method/function body">myDef</error>
+    <error descr="Can't use 'abstract' in method/function body">abstract</error> def <error descr="Can't declare method in method/function body">myDef</error>
 
-    <error descr="'abstract' is not allowed in method/function body">abstract</error> class <error descr="Class definition is not allowed in method/function body">MyClass</error>
+    <error descr="Can't use 'abstract' in method/function body">abstract</error> class <error descr="Can't declare class in method/function body">MyClass</error>
     end
 
-    <error descr="'abstract' is not allowed in method/function body">abstract</error> struct <error descr="Struct definition is not allowed in method/function body">MyStruct</error>
+    <error descr="Can't use 'abstract' in method/function body">abstract</error> struct <error descr="Can't declare struct in method/function body">MyStruct</error>
     end
 end
 
 fun testFun
-    <error descr="'abstract' is not allowed in method/function body">abstract</error> def <error descr="Method definition is not allowed in method/function body">myDef</error>
+    <error descr="Can't use 'abstract' in method/function body">abstract</error> def <error descr="Can't declare method in method/function body">myDef</error>
 
-    <error descr="'abstract' is not allowed in method/function body">abstract</error> class <error descr="Class definition is not allowed in method/function body">MyClass</error>
+    <error descr="Can't use 'abstract' in method/function body">abstract</error> class <error descr="Can't declare class in method/function body">MyClass</error>
     end
 
-    <error descr="'abstract' is not allowed in method/function body">abstract</error> struct <error descr="Struct definition is not allowed in method/function body">MyStruct</error>
+    <error descr="Can't use 'abstract' in method/function body">abstract</error> struct <error descr="Can't declare struct in method/function body">MyStruct</error>
     end
 end

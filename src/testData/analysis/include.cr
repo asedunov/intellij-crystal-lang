@@ -13,11 +13,11 @@ struct TestStruct
 end
 
 def testDef
-    <error descr="'include' is not allowed in method/function body">include MyModule</error>
+    <error descr="Can't use 'include' in method/function body">include MyModule</error>
 end
 
 fun testFun
-    <error descr="'include' is not allowed in method/function body">include MyModule</error>
+    <error descr="Can't use 'include' in method/function body">include MyModule</error>
 end
 
 lib TestLib

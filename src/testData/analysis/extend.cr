@@ -13,9 +13,9 @@ struct TestStruct
 end
 
 def testDef
-    <error descr="'extend' is not allowed in method/function body">extend MyModule</error>
+    <error descr="Can't use 'extend' in method/function body">extend MyModule</error>
 end
 
 fun testFun
-    <error descr="'extend' is not allowed in method/function body">extend MyModule</error>
+    <error descr="Can't use 'extend' in method/function body">extend MyModule</error>
 end

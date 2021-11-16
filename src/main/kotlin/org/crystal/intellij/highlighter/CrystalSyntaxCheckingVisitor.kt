@@ -2,7 +2,6 @@ package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType
-import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.util.SmartList
@@ -21,6 +20,15 @@ class CrystalSyntaxCheckingVisitor(
 
     private var funNest = 0
     private var typeNest = 0
+    private var exprNest = 0
+
+    private val inType: (String) -> String? = { if (typeNest > 0) "Can't $it in type body" else null }
+    private val inFun: (String) -> String? = { if (funNest > 0) "Can't $it in method/function body" else null }
+    private val inExpr: (String) -> String? = { if (exprNest > 0) "Can't $it dynamically" else null }
+
+    private inline infix fun ((String) -> String?).or(crossinline op: (String) -> String?): (String) -> String? {
+        return { this(it) ?: op(it) }
+    }
 
     override fun visitElement(element: PsiElement) {
         when {
@@ -28,6 +36,9 @@ class CrystalSyntaxCheckingVisitor(
                 super.visitElement(element)
             }
             element.isTypeBody -> inType {
+                super.visitElement(element)
+            }
+            element.isNestingExpression -> inExpr {
                 super.visitElement(element)
             }
             else -> {
@@ -244,20 +255,19 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitRequireExpression(o: CrRequireExpression) {
         super.visitRequireExpression(o)
 
-        errorIfInsideDefOrFun(o, "'require'")
-        errorIfInsideType(o, "'require'")
+        errorIf(o, "use 'require'", inType or inFun or inExpr)
     }
 
     override fun visitIncludeExpression(o: CrIncludeExpression) {
         super.visitIncludeExpression(o)
 
-        errorIfInsideDefOrFun(o, "'include'")
+        errorIf(o, "use 'include'", inFun or inExpr)
     }
 
     override fun visitExtendExpression(o: CrExtendExpression) {
         super.visitExtendExpression(o)
 
-        errorIfInsideDefOrFun(o, "'extend'")
+        errorIf(o, "use 'extend'", inFun or inExpr)
     }
 
     override fun visitExceptionHandler(o: CrExceptionHandler) {
@@ -430,7 +440,9 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitDefinition(o: CrDefinition) {
         super.visitDefinition(o)
 
-        (o as? CrDefinitionWithFqName)?.abstractModifier?.let { errorIfInsideDefOrFun(it, "'abstract'") }
+        (o as? CrDefinitionWithFqName)?.abstractModifier?.let {
+            errorIf(it, "use 'abstract'", inFun)
+        }
         when (o) {
             is CrMethod,
             is CrClass,
@@ -442,9 +454,9 @@ class CrystalSyntaxCheckingVisitor(
             is CrAlias,
             is CrAnnotation,
             is CrMacro -> {
-                val kind = StringUtil.capitalize(o.presentableKind)
-                errorIfInsideDefOrFun(o.defaultAnchor, "$kind definition")
+                errorIf(o.defaultAnchor, "declare ${o.presentableKind}", inFun or inExpr)
             }
+            else -> {}
         }
     }
 
@@ -645,7 +657,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrPathExpression -> {
                 if (isCombo) error(e, "Can't reassign to constant")
                 if (e.parent is CrListExpression) error(e, "Multiple assignment is not allowed for constants")
-                errorIfInsideDefOrFun(e, "Constant definition")
+                errorIf(e, "declare constant", inFun or inExpr)
             }
 
             is CrIndexedExpression -> return
@@ -669,6 +681,38 @@ class CrystalSyntaxCheckingVisitor(
     private val PsiElement.isTypeBody
         get() = this is CrBody && parent is CrClasslikeDefinition<*, *>
 
+    private val PsiElement.isNestingExpression
+        get() = when (this) {
+            is CrLibrary,
+            is CrCStruct,
+            is CrCUnion,
+            is CrClass,
+            is CrStruct,
+            is CrModule,
+            is CrFunction,
+            is CrMethod,
+            is CrMacro,
+            is CrAlias,
+            is CrEnum,
+            is CrTypeDef,
+            is CrAnnotation,
+            is CrIncludeExpression,
+            is CrExtendExpression,
+            is CrRequireExpression,
+            is CrVisibilityExpression,
+            is CrParenthesizedExpression,
+            is CrMacroForStatement,
+            is CrMacroIfStatement,
+            is CrMacroWrapperStatement,
+            is CrMacroExpression,
+            is CrBlockExpression,
+            is CrBody,
+            is CrMacroLiteral,
+            is CrFile -> false
+            is CrAssignmentExpression -> lhs !is CrPathExpression
+            else -> true
+        }
+
     private inline fun inFun(body: () -> Unit) {
         funNest++
         body()
@@ -679,6 +723,12 @@ class CrystalSyntaxCheckingVisitor(
         typeNest++
         body()
         typeNest--
+    }
+
+    private inline fun inExpr(body: () -> Unit) {
+        exprNest++
+        body()
+        exprNest--
     }
 
     private fun <T : CrNamedElement> checkDuplicateNames(
@@ -714,16 +764,8 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    private fun errorIfInsideDefOrFun(anchor: PsiElement, message: String) {
-        if (funNest > 0) {
-            error(anchor, "$message is not allowed in method/function body")
-        }
-    }
-
-    private fun errorIfInsideType(anchor: PsiElement, message: String) {
-        if (typeNest > 0) {
-            error(anchor, "$message is not allowed in type body")
-        }
+    private inline fun errorIf(anchor: PsiElement, description: String, validator: (String) -> String?) {
+        error(anchor, validator(description) ?: return)
     }
 
     private val CrNamedElement.defaultAnchor

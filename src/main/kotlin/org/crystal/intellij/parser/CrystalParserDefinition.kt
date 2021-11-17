@@ -11,7 +11,7 @@ import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.CR_COMMENTS
 import org.crystal.intellij.lexer.CrystalLexer
-import org.crystal.intellij.lexer.CrystalTokenTypeWithFactory
+import org.crystal.intellij.lexer.CrystalTokenType
 import org.crystal.intellij.psi.CrFile
 import org.crystal.intellij.stubs.elementTypes.CrStubElementType
 import org.crystal.intellij.stubs.elementTypes.CrStubElementTypes
@@ -36,7 +36,7 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
     }
 
     override fun createLeaf(type: IElementType, text: CharSequence) = when (type) {
-        is CrystalTokenTypeWithFactory -> type.factory(type, text)
+        is CrystalTokenType -> type.createLeaf(text)
         else -> super.createLeaf(type, text)
     }
 

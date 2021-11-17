@@ -6,7 +6,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ASSIGN_OPERATORS
 
-class CrAssignmentExpression(node: ASTNode) : CrExpressionImpl(node) {
+class CrAssignmentExpression(node: ASTNode) : CrExpressionImpl(node), CrVisibilityHolder {
     override fun accept(visitor: CrVisitor) = visitor.visitAssignmentExpression(this)
 
     val lhs: CrExpression?

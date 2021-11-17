@@ -2,15 +2,15 @@ package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
 
-class CrCallExpression(node: ASTNode) : CrExpressionImpl(node), CrSimpleNameElementHolder {
+class CrCallExpression(node: ASTNode) : CrExpressionImpl(node), CrSimpleNameElementHolder, CrVisibilityHolder {
     override fun accept(visitor: CrVisitor) = visitor.visitCallExpression(this)
 
     val receiver: CrExpression?
-        get() = firstChild as? CrExpression
+        get() = childOfType<CrExpression>().takeUnless { it == lastChild }
 
     val argumentList: CrArgumentList?
         get() = childOfType()
 
     val blockArgument: CrBlockExpression?
-        get() = childOfType()
+        get() = lastChild as? CrBlockExpression
 }

@@ -11,6 +11,13 @@
       <li>Go to Class/Go to Symbol navigation</li>
     </ul>]]></description>
 
+    <change-notes><![CDATA[
+    <ul>
+      <li>Syntax changes for Crystal 1.2</li>
+      <li>More error checking</li>
+      <li>Minor fixes and improvements</li>
+    </ul>]]></change-notes>
+
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">

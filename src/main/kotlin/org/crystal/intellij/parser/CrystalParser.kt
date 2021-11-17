@@ -149,7 +149,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 return parser()
             }
             finally {
-                stopOnDo = oldValue    
+                stopOnDo = oldValue
             }
         }
 
@@ -328,7 +328,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 }
             }
         }
-        
+
         private fun PsiBuilder.nextTokenSkipSpaces() {
             nextToken()
             skipSpaces()
@@ -415,7 +415,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         ): Boolean {
             try {
                 parser()
-            } 
+            }
             finally {
                 marker.done(type)
             }
@@ -686,8 +686,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun nextComesColonSpace(): Boolean {
             return typeDeclarationCount == 0 && lexer.lookAhead {
-                skipSpaces()    
-                tok(CR_COLON) && tok(CR_WHITESPACE) 
+                skipSpaces()
+                tok(CR_COLON) && tok(CR_WHITESPACE)
             }
         }
 
@@ -1784,9 +1784,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseRespondsTo() {
             nextTokenSkipSpaces()
-            
+
             val hasParens = at(CR_LPAREN)
-            
+
             if (hasParens) nextTokenSkipSpacesAndNewlines()
 
             if (at(CR_SYMBOL_START)) {
@@ -1795,7 +1795,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             else {
                 error("Expected: <symbol>")
             }
-            
+
             if (hasParens) {
                 skipSpacesAndNewlines()
 
@@ -1919,7 +1919,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     if (last != null && last.endOffset != rawTokenTypeStart(0)) {
                         error("Space not allowed between named argument name and ':'")
                     }
-                    
+
                     if (lastType() in CR_STRING_LITERALS) {
                         parseNamedTupleTail(mEntry)
                         m.done(CR_NAMED_TUPLE_EXPRESSION)
@@ -2553,10 +2553,28 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseVisibility() = varDeclarationOrElse {
-            composite(CR_VISIBILITY_EXPRESSION) {
-                nextTokenSkipSpaces()
-                ensureParseAssignment()
+            val m = mark()
+
+            nextTokenSkipSpaces()
+            val parsed = ensureParseAssignment()
+            when (val exprType = lastType()) {
+                CR_CALL_EXPRESSION,
+                CR_ASSIGNMENT_EXPRESSION,
+                CR_METHOD_DEFINITION,
+                CR_CLASS_DEFINITION,
+                CR_STRUCT_DEFINITION,
+                CR_MODULE_DEFINITION,
+                CR_ENUM_DEFINITION,
+                CR_ALIAS_DEFINITION,
+                CR_LIBRARY_DEFINITION,
+                CR_MACRO_DEFINITION -> {
+                    dropLast()
+                    m.done(exprType)
+                }
+                else -> m.drop()
             }
+
+            parsed
         }
 
         private fun PsiBuilder.parseMacro() = varDeclarationOrElse {
@@ -4068,7 +4086,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 skipSpaces()
             }
         }
-        
+
         private fun PsiBuilder.parseRefOrVarDeclaration(): Boolean {
             lexerState.wantsRegex = false
             composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }

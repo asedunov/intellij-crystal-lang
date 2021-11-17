@@ -8,16 +8,20 @@ import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.CrystalLanguage
 import org.crystal.intellij.psi.*
 
-open class CrystalTokenType(val name: String) : IElementType(name, CrystalLanguage)
+open class CrystalTokenType(val name: String) : IElementType(name, CrystalLanguage) {
+    open fun createLeaf(text: CharSequence): LeafElement? = null
+}
 
-open class CrystalTokenTypeWithFactory(
+fun crystalToken(
     name: String,
-    val factory: (type: IElementType, text: CharSequence) -> LeafElement
-) : CrystalTokenType(name)
+    factory: (type: IElementType, text: CharSequence) -> LeafElement?
+) = object : CrystalTokenType(name) {
+    override fun createLeaf(text: CharSequence) = factory(this, text)
+}
 
-class CrystalWhitespaceToken(name: String) : CrystalTokenTypeWithFactory(name, { _, text -> PsiWhiteSpaceImpl(text) })
+fun crystalWhitespaceToken(name: String) = crystalToken(name) { _, text -> PsiWhiteSpaceImpl(text) }
 
-class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
+open class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
     companion object {
         private val tokens = ArrayList<CrystalKeywordTokenType>()
 
@@ -37,15 +41,22 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
     }
 }
 
+fun crystalKeywordToken(
+    name: String,
+    factory: (type: IElementType, text: CharSequence) -> LeafElement?
+) = object : CrystalKeywordTokenType(name) {
+    override fun createLeaf(text: CharSequence) = factory(this, text)
+}
+
 // Bad tokens
 @JvmField val CR_BAD_CHARACTER = TokenType.BAD_CHARACTER!!
-@JvmField val CR_BAD_ESCAPE = CrystalTokenTypeWithFactory("CR_BAD_ESCAPE", ::CrSimpleEscapeElement)
+@JvmField val CR_BAD_ESCAPE = crystalToken("CR_BAD_ESCAPE", ::CrSimpleEscapeElement)
 
 // Whitespaces and comments
 @JvmField val CR_LINE_COMMENT = CrystalTokenType("CR_LINE_COMMENT")
-@JvmField val CR_LINE_CONTINUATION = CrystalWhitespaceToken("CR_LINE_CONTINUATION")
-@JvmField val CR_NEWLINE = CrystalWhitespaceToken("CR_NEWLINE")
-@JvmField val CR_WHITESPACE = CrystalWhitespaceToken("CR_WHITESPACE")
+@JvmField val CR_LINE_CONTINUATION = crystalWhitespaceToken("CR_LINE_CONTINUATION")
+@JvmField val CR_NEWLINE = crystalWhitespaceToken("CR_NEWLINE")
+@JvmField val CR_WHITESPACE = crystalWhitespaceToken("CR_WHITESPACE")
 
 // Keywords
 @JvmField val CR_ABSTRACT = CrystalKeywordTokenType("abstract")
@@ -85,8 +96,8 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_OFFSETOF = CrystalKeywordTokenType("offsetof")
 @JvmField val CR_OUT = CrystalKeywordTokenType("out")
 @JvmField val CR_POINTEROF = CrystalKeywordTokenType("pointerof")
-@JvmField val CR_PRIVATE = CrystalKeywordTokenType("private")
-@JvmField val CR_PROTECTED = CrystalKeywordTokenType("protected")
+@JvmField val CR_PRIVATE = crystalKeywordToken("private", ::CrVisibilityModifier)
+@JvmField val CR_PROTECTED = crystalKeywordToken("protected", ::CrVisibilityModifier)
 @JvmField val CR_REQUIRE = CrystalKeywordTokenType("require")
 @JvmField val CR_RESCUE = CrystalKeywordTokenType("rescue")
 @JvmField val CR_RESPONDS_TO = CrystalKeywordTokenType("responds_to?")
@@ -178,14 +189,14 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_XOR_ASSIGN_OP = CrystalTokenType("^=")
 
 // Escapes
-@JvmField val CR_HEX_ESCAPE = CrystalTokenTypeWithFactory("<hex escape>", ::CrHexEscapeElement)
-@JvmField val CR_OCTAL_ESCAPE = CrystalTokenTypeWithFactory("<octal escape>", ::CrOctalEscapeElement)
-@JvmField val CR_RAW_ESCAPE = CrystalTokenTypeWithFactory("<raw escape>", ::CrRawEscapeElement)
-@JvmField val CR_SPECIAL_ESCAPE = CrystalTokenTypeWithFactory("<special escape>", ::CrSpecialEscapeElement)
-@JvmField val CR_UNICODE_ESCAPE = CrystalTokenTypeWithFactory("<unicode escape>", ::CrUnicodeEscapeElement)
+@JvmField val CR_HEX_ESCAPE = crystalToken("<hex escape>", ::CrHexEscapeElement)
+@JvmField val CR_OCTAL_ESCAPE = crystalToken("<octal escape>", ::CrOctalEscapeElement)
+@JvmField val CR_RAW_ESCAPE = crystalToken("<raw escape>", ::CrRawEscapeElement)
+@JvmField val CR_SPECIAL_ESCAPE = crystalToken("<special escape>", ::CrSpecialEscapeElement)
+@JvmField val CR_UNICODE_ESCAPE = crystalToken("<unicode escape>", ::CrUnicodeEscapeElement)
 
 // Non-escape char/string/symbol components
-@JvmField val CR_CHAR_CODE = CrystalTokenTypeWithFactory("<char code>", ::CrCharCodeElement)
+@JvmField val CR_CHAR_CODE = crystalToken("<char code>", ::CrCharCodeElement)
 @JvmField val CR_CHAR_END = CrystalTokenType("<char end>")
 @JvmField val CR_CHAR_RAW = CrystalTokenType("<char raw>")
 @JvmField val CR_CHAR_START = CrystalTokenType("<char start>")
@@ -202,7 +213,7 @@ class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
 @JvmField val CR_STRING_ARRAY_END = CrystalTokenType("<string array end>")
 @JvmField val CR_STRING_ARRAY_START = CrystalTokenType("<string array start>")
 @JvmField val CR_STRING_END = CrystalTokenType("<string end>")
-@JvmField val CR_STRING_RAW = CrystalTokenTypeWithFactory("<string raw>", ::CrStringRawElement)
+@JvmField val CR_STRING_RAW = crystalToken("<string raw>", ::CrStringRawElement)
 @JvmField val CR_STRING_START = CrystalTokenType("<string start>")
 @JvmField val CR_SYMBOL_ARRAY_END = CrystalTokenType("<symbol array end>")
 @JvmField val CR_SYMBOL_ARRAY_START = CrystalTokenType("<symbol array start>")

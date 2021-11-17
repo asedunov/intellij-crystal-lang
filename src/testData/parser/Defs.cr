@@ -283,10 +283,6 @@ def foo(x, *y : Int32); 1; end
 
 def foo(*y : *T); 1; end
 
-private def foo; end
-
-protected def foo; end
-
 def `(cmd); 1; end
 
 def foo(bar = 1

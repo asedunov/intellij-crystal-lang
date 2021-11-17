@@ -1,3 +1,7 @@
+private<EOLError descr="Expected: <expression>"></EOLError>
+
+protected<EOLError descr="Expected: <expression>"></EOLError>
+
 <error descr="Visibility modifier is not supported here">private</error> 1 + 2
 
 <error descr="Visibility modifier is not supported here">protected</error> 1 + 2

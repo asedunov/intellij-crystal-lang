@@ -8,12 +8,12 @@ import org.crystal.intellij.lexer.CR_PRIVATE
 import org.crystal.intellij.lexer.CR_PROTECTED
 import org.crystal.intellij.resolve.*
 
-sealed interface CrDefinitionWithFqName : CrDefinition {
+sealed interface CrDefinitionWithFqName : CrDefinition, CrVisibilityHolder {
     val fqName: FqName?
         get() {
             if (this is CrPathBasedDefinition && nameElement?.isGlobal == true) return localFqName
 
-            val parentFqName = when (val parent = getParentSkipModifiers()) {
+            val parentFqName = when (val parent = parentStubOrPsi()) {
                 is CrFile -> null
                 is CrBody -> (parent.parent as? CrDefinitionWithBody)?.fqName as? StableFqName
                 else -> return null
@@ -31,20 +31,14 @@ sealed interface CrDefinitionWithFqName : CrDefinition {
 
     val isLocal: Boolean
         get() {
-            val p = getParentSkipModifiers()
+            val p = parentStubOrPsi()
             return !(p is CrFile || p is CrBody)
         }
 
-    val visibility: CrVisibility?
+    override val visibility: CrVisibility?
         get() {
-            val visibility = (parent as? CrVisibilityExpression)?.visibility
+            val visibility = super.visibility
             if (visibility != null) return visibility
-            for (child in allChildren()) {
-                when (child.elementType) {
-                    CR_PRIVATE -> return CrVisibility.PRIVATE
-                    CR_PROTECTED -> return CrVisibility.PROTECTED
-                }
-            }
             return if (isLocal) null else CrVisibility.PUBLIC
         }
 

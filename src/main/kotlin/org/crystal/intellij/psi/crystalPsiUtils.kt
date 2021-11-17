@@ -1,7 +1,5 @@
 package org.crystal.intellij.psi
 
-import com.intellij.extapi.psi.StubBasedPsiElementBase
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import org.crystal.intellij.lexer.*
 
@@ -61,18 +59,3 @@ val CrExpression.isSemanticCall: Boolean
         is CrAssignmentExpression -> opSign == CR_ASSIGN_OP && lhs?.isSemanticCall == true
         else -> false
     }
-
-fun CrDefinition.getParentSkipModifiers(): PsiElement? {
-    (this as? StubBasedPsiElementBase<*>)?.greenStub?.let {
-        return it.parentStub?.psi
-    }
-
-    var e : PsiElement = this
-    while (true) {
-        val p = e.parent
-        if (p is CrVisibilityExpression || p is CrAnnotationExpression) {
-            e = p
-        }
-        else return p
-    }
-}

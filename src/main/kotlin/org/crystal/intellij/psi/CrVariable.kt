@@ -13,5 +13,5 @@ class CrVariable : CrDefinitionWithFqNameImpl<CrVariable, CrVariableStub>, CrDef
     override fun accept(visitor: CrVisitor) = visitor.visitVariable(this)
 
     override val isLocal: Boolean
-        get() = greenStub == null && getParentSkipModifiers() !is CrFile && nameElement?.innerElementType == CR_IDENTIFIER
+        get() = greenStub == null && parentStubOrPsi() !is CrFile && nameElement?.innerElementType == CR_IDENTIFIER
 }

@@ -115,6 +115,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testSymbols() = doTestSingleFileWithMultiFragments()
     fun testTypes() = doTestSingleFileWithMultiFragments()
     fun testTypeDefs() = doTestSingleFileWithMultiFragments("\n\n\n")
+    fun testVisibility() = doTestSingleFileWithMultiFragments()
 
     // Custom tests
 

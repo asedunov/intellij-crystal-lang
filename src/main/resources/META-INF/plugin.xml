@@ -65,6 +65,16 @@
         <targetElementEvaluator language="Crystal"
                                 implementationClass="org.crystal.intellij.navigation.CrystalTargetElementEvaluator"/>
 
+        <localInspection language="Crystal"
+                         shortName="CrystalResolveInspection"
+                         suppressId="CrystalResolve"
+                         bundle="messages.CrystalBundle"
+                         key="inspections.resolve.name"
+                         groupKey="inspections.group"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.crystal.intellij.inspections.CrystalResolveInspection"/>
+
         <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
     </extensions>
 </idea-plugin>

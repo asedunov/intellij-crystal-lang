@@ -72,9 +72,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitStringLiteralExpression(o: CrStringLiteralExpression) {
         super.visitStringLiteralExpression(o)
 
-        var p = o.parent
-        if (p is CrConcatenatedStringLiteralExpression) p = p.parent
-        val context = when (p) {
+        val context = when (val p = o.stringParent) {
             is CrRequireExpression -> "'require' expression"
             is CrNameElement -> when (p.parent) {
                 is CrFunction -> "function name"

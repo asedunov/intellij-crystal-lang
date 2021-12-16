@@ -69,3 +69,5 @@ fun PsiElement.lastSignificantLeaf(): PsiElement? {
     }
     return lastLeaf
 }
+
+inline fun <reified T : PsiElement> PsiElement.replaceTyped(replacement: T) = replace(replacement) as T

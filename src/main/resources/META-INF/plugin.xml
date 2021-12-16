@@ -29,6 +29,8 @@
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>
         <lang.commenter language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalCommenter"/>
         <lang.foldingBuilder language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalFoldingBuilder"/>
+        <lang.elementManipulator forClass="org.crystal.intellij.psi.CrStringLiteralExpression"
+                                 implementationClass="org.crystal.intellij.psi.CrStringLiteralManipulator"/>
 
         <typedHandler implementation="org.crystal.intellij.editor.CrystalTypedHandler"
                       order="before selectionQuoting" />
@@ -40,6 +42,7 @@
                         implementationClass="org.crystal.intellij.formatter.CrystalFormattingModelBuilder"/>
 
         <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectSettings"/>
+        <projectService serviceImplementation="org.crystal.intellij.psi.CrPsiFactory"/>
 
         <projectConfigurable id="crystal.settings"
                              groupId="language"

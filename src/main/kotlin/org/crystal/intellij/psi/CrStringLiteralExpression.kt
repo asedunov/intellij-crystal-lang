@@ -2,13 +2,15 @@ package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.TextRange
-import com.intellij.psi.ElementManipulators
+import com.intellij.psi.*
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiLanguageInjectionHost
-import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.util.CachedValueProvider
+import com.intellij.psi.util.CachedValuesManager
+import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_STRING_END
 import org.crystal.intellij.lexer.CR_STRING_START
+import org.crystal.intellij.references.CrRequireReferenceSet
 
 class CrStringLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrStringValueHolder, PsiLanguageInjectionHost {
     override fun accept(visitor: CrVisitor) = visitor.visitStringLiteralExpression(this)
@@ -39,6 +41,23 @@ class CrStringLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrStrin
                 }
             }
         }
+
+    val stringParent: PsiElement?
+        get() {
+            var p = parent
+            if (p is CrConcatenatedStringLiteralExpression) p = p.parent
+            return p
+        }
+
+    override fun getReferences(): Array<out PsiReference> {
+        if (stringParent !is CrRequireExpression || stringValue == null) return PsiReference.EMPTY_ARRAY
+        return CachedValuesManager.getCachedValue(this) {
+            CachedValueProvider.Result.create(
+                CrRequireReferenceSet(this).allReferences,
+                PsiModificationTracker.MODIFICATION_COUNT
+            )
+        }
+    }
 
     override fun isValidHost() = true
 

@@ -42,7 +42,10 @@ class CrRequireReferenceSet(
         else {
             val module = ModuleUtilCore.findModuleForPsiElement(element) ?: return super.computeDefaultContexts()
             val psiManager = element.manager
-            return module.rootManager.contentRoots.mapNotNull { psiManager.findDirectory(it) }
+            return module.rootManager.contentRoots.flatMap {
+                val dir = psiManager.findDirectory(it) ?: return@flatMap emptyList()
+                listOfNotNull(dir, dir.findSubdirectory("src"), dir.findSubdirectory("lib"))
+            }
         }
     }
 
@@ -96,19 +99,19 @@ class CrRequireReferenceSet(
         val results = ArrayList<SmartList<PsiFileSystemItem>>(refCount)
         for (root in roots) {
             val rootVFile = root.virtualFile ?: continue
-            resolveInContext(rootVFile, results)
-            if (results.isNotEmpty()) return results.map { refResults ->
-                refResults.map2Array { PsiElementResolveResult(it) }
-            }
+            if (resolveInContext(rootVFile, results)) break
         }
 
-        return emptyList()
+        if (results.isEmpty()) return emptyList()
+        return results.map { refResults ->
+            refResults.map2Array { PsiElementResolveResult(it) }
+        }
     }
 
     private fun resolveInContext(
         root: VirtualFile,
         results: MutableList<SmartList<PsiFileSystemItem>>
-    ) {
+    ): Boolean {
         val builder = ResolvedPathBuilder(root, results)
         val refCount = allReferences.size
         val name = lastReference!!.text
@@ -118,7 +121,7 @@ class CrRequireReferenceSet(
             builder.extendPath(refCount - 1)
             val rootFile = builder.file.takeIf { builder.valid }
             builder.finishPath()
-            if (rootFile == null) return
+            if (rootFile == null) return false
             val currentFile = element.containingFile
             val currentVFile = currentFile.virtualFile
             val targetList = SmartList<PsiFileSystemItem>()
@@ -143,6 +146,7 @@ class CrRequireReferenceSet(
                 }
             })
             results += targetList
+            return true
         }
         else {
             // Prefer direct path to .cr file
@@ -197,7 +201,7 @@ class CrRequireReferenceSet(
                     .extendPath(crName)
                     .finishPath()
 
-                return
+                return builder.resolved
             }
 
             // "foo/bar/baz" -> "foo/bar/baz/baz.cr" (std, nested)
@@ -214,6 +218,8 @@ class CrRequireReferenceSet(
                 .extendContext("src")
                 .extendPath(crName)
                 .finishPath()
+
+            return builder.resolved
         }
     }
 
@@ -226,11 +232,14 @@ class CrRequireReferenceSet(
         private val totalSize = allReferences.size
         private val path = ArrayList<PsiFileSystemItem>(totalSize)
         val psiManager: PsiManagerEx = element.manager
-        private var resolved = false
+        var resolved = false
+            private set
         var valid = true
             private set
 
         fun extendPath(refCount: Int): ResolvedPathBuilder {
+            if (refCount < 0) return invalidate()
+
             val from = path.size
             val to = from + refCount
             if (to > totalSize) return invalidate()
@@ -268,7 +277,7 @@ class CrRequireReferenceSet(
         }
 
         fun finishPath() {
-            if (path.size == totalSize && !resolved) {
+            if (valid && path.size == totalSize && !resolved) {
                 resolved = true
                 results.forEach { it.clear() }
             }
@@ -276,6 +285,7 @@ class CrRequireReferenceSet(
             if (path.size == totalSize || !resolved) {
                 for (i in path.indices) {
                     val target = path[i]
+                    if (target.isDirectory && i == totalSize) continue
                     if (i == results.size) {
                         results.add(SmartList())
                     }

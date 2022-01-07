@@ -78,3 +78,10 @@ macro foo;bar{% begin %}body{% end %}baz;end
 enum Foo; {% if 1 %}2{% end %}; end
 
 {% for _, x, _ in y %}body{% end %}
+
+macro foo
+  macro finished
+    \{% unless true %}
+    \{% end %}
+  end
+end

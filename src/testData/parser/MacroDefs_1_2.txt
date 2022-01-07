@@ -10,3 +10,48 @@ FILE
       PsiElement(<macro fragment>)('end')
     PsiErrorElement:Expected: 'end'
       <empty list>
+
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiElement(;)(';')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)('bar(')
+    PsiElement(end)('end')
+  PsiErrorElement:Unexpected :
+    <empty list>
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('1')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement())(')')
+  PsiElement(;)(';')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(end)('end')
+
+  CrMethod(CR_METHOD_DEFINITION)
+    PsiElement(def)('def')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiElement(;)(';')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      CrCallExpression(CR_CALL_EXPRESSION)
+        CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+          PsiElement(<identifier>)('bar')
+        CrArgumentList(CR_PARENTHESIZED_ARGUMENT_LIST)
+          PsiElement(()('(')
+          CrNamedArgument(CR_NAMED_ARGUMENT)
+            CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+              PsiElement(end)('end')
+            PsiElement(:)(':')
+            PsiWhiteSpace(' ')
+            CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+              PsiElement(<integer literal>)('1')
+          PsiElement())(')')
+      PsiElement(;)(';')
+    PsiElement(end)('end')

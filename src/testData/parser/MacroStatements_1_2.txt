@@ -1,0 +1,17 @@
+FILE
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiWhiteSpace('\n')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)('  macro finished\n    ')
+      PsiElement(<macro fragment>)('\{% ')
+      PsiElement(<macro fragment>)('unless true %}\n    ')
+      PsiElement(<macro fragment>)('\{% end')
+      PsiElement(<macro fragment>)(' %}\n  ')
+    PsiElement(end)('end')
+  PsiWhiteSpace('\n')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(end)('end')

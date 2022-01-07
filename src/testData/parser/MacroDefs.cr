@@ -135,3 +135,11 @@ end
 macro foo(@var); end
 
 macro foo(@@var); end
+
+macro foo; bar classx; end
+
+macro foo; bar class0; end
+
+macro foo; bar class?; end
+
+macro foo; bar class!; end

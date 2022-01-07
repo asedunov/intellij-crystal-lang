@@ -417,6 +417,7 @@ OP = "+" | "-" | "**" | "*" | "//" | "/" | "===" | "==" | "=~" | "!=" | "!~" | "
 ID_START = [a-zA-Z_\u009F-\uFFFF]
 ID_PART = {ID_START} | [0-9]
 ID_PART_OR_END = {ID_PART} | [\?\!]
+MACRO_KWD_NEXT_CHAR = [^a-zA-Z_\u009F-\uFFFF0_9\?\!]
 ID_BODY = {ID_START} {ID_PART}*
 GLOBAL_MATCH_DATA = \$ [\~\?]
 GLOBAL_MATCH_DATA_INDEX = \$ {DEC_DIGIT}+ "?"?
@@ -1359,11 +1360,11 @@ MACRO_START_KEYWORD2 =
 <MACRO_CHECK_HEREDOC_END> <<EOF>> { return popAndHandle(CR_MACRO_FRAGMENT); }
 
 <MACRO_CHECK_KEYWORD> {
-  {MACRO_START_KEYWORD1} / !{ID_PART_OR_END}      {
+  {MACRO_START_KEYWORD1} / {MACRO_KWD_NEXT_CHAR}      {
     processMacroStartKeyword(true);
   }
 
-  "abstract" {WHITE_SPACE} "def" !{ID_PART_OR_END}    {
+  "abstract" {WHITE_SPACE} "def" / {MACRO_KWD_NEXT_CHAR}    {
     processMacroStartKeyword(false);
   }
 
@@ -1375,7 +1376,7 @@ MACRO_START_KEYWORD2 =
 <MACRO_CHECK_KEYWORD> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
 
 <MACRO_CHECK_KEYWORD2> {
-  {MACRO_START_KEYWORD2} / !{ID_PART_OR_END}               {
+  {MACRO_START_KEYWORD2} / {MACRO_KWD_NEXT_CHAR}               {
     processMacroStartKeyword(true);
   }
 

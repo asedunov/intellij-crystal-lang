@@ -1,0 +1,1 @@
+macro foo; bar class: 1; end

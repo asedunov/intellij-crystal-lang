@@ -145,3 +145,5 @@ macro foo; bar class?; end
 macro foo; bar class!; end
 
 macro foo; bar class: 1; end
+
+macro foo;bar(end: 1);end

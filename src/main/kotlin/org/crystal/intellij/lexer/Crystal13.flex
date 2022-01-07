@@ -1048,6 +1048,7 @@ MACRO_START_KEYWORD2 =
   "end"                          { yybegin(MACRO_END_CONTROL_KEYWORD); }
   "for"                          { yybegin(MACRO_START_CONTROL_KEYWORD); }
   "if"                           { yybegin(MACRO_START_CONTROL_KEYWORD); }
+  "unless"                       { yybegin(MACRO_START_CONTROL_KEYWORD); }
   ""                             { return popAndHandle(CR_MACRO_FRAGMENT); }
 }
 

@@ -1166,7 +1166,7 @@ MACRO_START_KEYWORD2 =
 <MACRO_NO_DELIMITER> <<EOF>>     { return popAndHandle(CR_MACRO_FRAGMENT); }
 
 <MACRO_END_KEYWORD> {
-  {ID_PART_OR_END}               {
+  {ID_PART_OR_END} | [:]          {
     yypushbackAll();
     yybegin(MACRO_MAIN);
   }

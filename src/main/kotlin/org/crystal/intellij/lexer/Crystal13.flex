@@ -1,6 +1,5 @@
 package org.crystal.intellij.lexer;
 
-import com.intellij.lexer.FlexLexer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.text.CharArrayUtil;
 import com.intellij.psi.tree.IElementType;
@@ -37,8 +36,6 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     }
   }
 
-  private LanguageLevel ll = LanguageLevel.LATEST_STABLE;
-
   private final LexerState lexerState = new LexerState();
 
   private final IntStack states = new IntArrayList();
@@ -55,15 +52,16 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   private final Deque<DelimiterState> delimiterStates = new ArrayDeque<>();
   private MacroState macroState;
 
-  public _CrystalLexer(@NotNull LanguageLevel languageLevel) {
+  public _CrystalLexer13() {
     this((java.io.Reader)null);
-    this.ll = languageLevel;
   }
 
+  @Override
   public LexerState getLexerState() {
     return lexerState;
   }
 
+  @Override
   public void enterLookAhead() {
     if (zzStartReadOld != -1) throw new AssertionError("Already in look-ahead mode");
     zzStartReadOld = zzStartRead;
@@ -72,6 +70,7 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     yybegin(LOOKAHEAD);
   }
 
+  @Override
   public void leaveLookAhead() {
     yybegin(zzLexicalStateOld);
     boolean nonEmpty = zzMarkedPos != zzMarkedPosOld;
@@ -82,6 +81,7 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   }
 
   @Nullable
+  @Override
   public IElementType lookAhead() throws java.io.IOException {
     enterLookAhead();
     IElementType tokenType = advance();
@@ -89,18 +89,21 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     return tokenType;
   }
 
+  @Override
   public void enterMacro(@NotNull MacroState macroState, boolean skipWhitespace) {
     this.macroState = macroState.copy();
     yypushbegin(skipWhitespace ? MACRO_SKIP_WHITESPACES : MACRO_START);
   }
 
+  @Override
   public void enterMacro(@NotNull MacroState macroState) {
     this.macroState = macroState.copy();
     yypushbegin(MACRO_WHITESPACE_ESCAPE);
   }
 
   @NotNull
-  public MacroState currentMacroState() {
+  @Override
+  public MacroState getCurrentMacroState() {
       return macroState.copy();
   }
 
@@ -366,8 +369,8 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
   }
 %}
 
-%class _CrystalLexer
-%implements FlexLexer
+%class _CrystalLexer13
+%extends CrystalLexerBase
 %unicode
 %public
 
@@ -417,7 +420,7 @@ OP = "+" | "-" | "**" | "*" | "//" | "/" | "===" | "==" | "=~" | "!=" | "!~" | "
 ID_START = [a-zA-Z_\u009F-\uFFFF]
 ID_PART = {ID_START} | [0-9]
 ID_PART_OR_END = {ID_PART} | [\?\!]
-MACRO_KWD_NEXT_CHAR = [^a-zA-Z_\u009F-\uFFFF0_9\?\!]
+MACRO_KWD_NEXT_CHAR = [^a-zA-Z_\u009F-\uFFFF0_9\?\!\:]
 ID_BODY = {ID_START} {ID_PART}*
 GLOBAL_MATCH_DATA = \$ [\~\?]
 GLOBAL_MATCH_DATA_INDEX = \$ {DEC_DIGIT}+ "?"?
@@ -1222,12 +1225,7 @@ MACRO_START_KEYWORD2 =
     macroState.whitespace = false;
     if (macroState.delimiterState != null) {
       char lastChar = yylastchar();
-      if (ll.isOrGreater(CRYSTAL_1_1)) {
-        if (lastChar == '\\' || lastChar == macroState.delimiterState.getEndChar()) break;
-      }
-      else {
-        if (lastChar == '"') break;
-      }
+      if (lastChar == '\\' || lastChar == macroState.delimiterState.getEndChar()) break;
     }
     yypushback(1);
   }

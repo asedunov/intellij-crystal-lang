@@ -1,0 +1,12 @@
+FILE
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiElement(;)(';')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)(' bar class: 1; ')
+      PsiElement(<macro fragment>)('end')
+    PsiErrorElement:Expected: 'end'
+      <empty list>

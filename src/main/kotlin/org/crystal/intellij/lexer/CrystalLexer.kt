@@ -4,14 +4,14 @@ import com.intellij.lexer.FlexAdapter
 import com.intellij.psi.tree.IElementType
 import org.crystal.intellij.config.LanguageLevel
 
-class CrystalLexer(languageLevel: LanguageLevel) : FlexAdapter(_CrystalLexer(languageLevel)) {
+class CrystalLexer(languageLevel: LanguageLevel) : FlexAdapter(languageLevel.newUnderlyingLexer()) {
     interface LookAhead {
         val tokenType: IElementType?
 
         fun advance()
     }
 
-    private val delegate: _CrystalLexer get() = flex as _CrystalLexer
+    private val delegate: CrystalLexerBase get() = flex as CrystalLexerBase
 
     val lexerState: LexerState get() = delegate.lexerState
 
@@ -53,9 +53,20 @@ class CrystalLexer(languageLevel: LanguageLevel) : FlexAdapter(_CrystalLexer(lan
     fun lookAhead(): IElementType? = delegate.lookAhead()
 
     val macroState: MacroState
-        get() = delegate.currentMacroState()
+        get() = delegate.currentMacroState
 
     fun enterMacro(macroState: MacroState = MacroState()) = delegate.enterMacro(macroState)
 
     fun enterMacro(macroState: MacroState, skipWhitespaces: Boolean) = delegate.enterMacro(macroState, skipWhitespaces)
+}
+
+private fun LanguageLevel.newUnderlyingLexer(): CrystalLexerBase = when(this) {
+    LanguageLevel.CRYSTAL_1_0 ->
+        _CrystalLexer10()
+    LanguageLevel.CRYSTAL_1_1,
+    LanguageLevel.CRYSTAL_1_2 ->
+        _CrystalLexer11()
+    LanguageLevel.CRYSTAL_1_3,
+    LanguageLevel.CRYSTAL_PREVIEW ->
+        _CrystalLexer13()
 }

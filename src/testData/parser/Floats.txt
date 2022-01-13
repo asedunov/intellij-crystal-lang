@@ -45,6 +45,27 @@ FILE
     PsiElement(<float literal>)('1.2e+23')
 
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1e23f64')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1.2e+23f64')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0e40')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('2e01')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('2e2')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1E40')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1E-23')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
     PsiElement(<float literal>)('0f32')
 
   CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)

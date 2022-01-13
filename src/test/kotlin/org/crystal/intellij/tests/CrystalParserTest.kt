@@ -117,6 +117,9 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testPseudoMethods() = doTestSingleFileWithMultiFragments()
     fun testSplatsInCollectionLiterals() = doTestSingleFileWithMultiFragments()
     fun testSimpleLiterals() = doTestSingleFileWithMultiFragments()
+    fun testSimpleLiterals_1_2() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_2) {
+        doTestSingleFileWithMultiFragments()
+    }
     fun testStringLiterals() = doTestSingleFileWithMultiFragments("\n\n\n")
     fun testSymbols() = doTestSingleFileWithMultiFragments()
     fun testTypes() = doTestSingleFileWithMultiFragments()
@@ -164,13 +167,13 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
                 yield("10_0_00_0")
 
                 yield("0b1010")
-                yield("0b_101_0")
+                yield("0b101_0")
                 yield("+0b1010")
                 yield("-0b1010")
 
                 yield("0xFFFF")
                 yield("0xabcdef")
-                yield("0x_abc_def")
+                yield("0xabc_def")
                 yield("+0xFFFF")
                 yield("-0xFFFF")
                 yield("0x80000001")
@@ -214,6 +217,13 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
                 yield("1e-23")
                 yield("1e+23")
                 yield("1.2e+23")
+                yield("1e23f64")
+                yield("1.2e+23f64")
+                yield("0e40")
+                yield("2e01")
+                yield("2e2")
+                yield("1E40")
+                yield("1E-23")
 
                 for (length in intArrayOf(32, 64)) {
                     val suffix = "f$length"

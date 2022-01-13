@@ -77,36 +77,22 @@ FILE
     PsiElement(<char start>)(''')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-    PsiElement(<integer literal>)('1')
-  PsiErrorElement:Expected: <end of expression>
-    PsiElement(<identifier>)('__1')
+    PsiElement(<integer literal>)('1__1')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')
-    PsiElement(<integer literal>)('3')
-  PsiErrorElement:Unexpected _
-    <empty list>
-  PsiErrorElement:Expected: <end of expression>
-    PsiElement(_)('_')
+    PsiElement(<integer literal>)('3_')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-    PsiElement(<integer literal>)('0')
-  PsiErrorElement:Expected: <end of expression>
-    PsiElement(<identifier>)('b_10')
+    PsiElement(<integer literal>)('0b_10')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('10')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<identifier>)('e_10')
 
-  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-    PsiElement(<integer literal>)('1')
-  PsiErrorElement:Unexpected _
-    <empty list>
-  PsiErrorElement:Expected: <end of expression>
-    PsiElement(_)('_')
-    PsiElement(.)('.')
-    PsiElement(<integer literal>)('1')
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1_.1')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(-)('-')

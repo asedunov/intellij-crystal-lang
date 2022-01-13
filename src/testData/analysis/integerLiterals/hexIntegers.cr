@@ -54,7 +54,15 @@
 
 <error descr="The value is out of UInt64 range">0x11111111111111111_u64</error>
 
+<error descr="The value is out of UInt64 range">-0x0_u64</error>
+
+<error descr="The value is out of UInt64 range">-0x0u64</error>
+
 <error descr="The value is out of UInt64 range">-0x1_u64</error>
+
+<error descr="The value is out of UInt64 range">0x10000_0000_0000_0000_u64</error>
+
+<error descr="The value is out of UInt64 range">0xfffffffffffffffff_u64</error>
 
 0x7FFFFFFFFFFFFFFF_i128
 

@@ -46,7 +46,7 @@ FILE
     PsiElement(<integer literal>)('0b1010')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-    PsiElement(<integer literal>)('0b_101_0')
+    PsiElement(<integer literal>)('0b101_0')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')
@@ -63,7 +63,7 @@ FILE
     PsiElement(<integer literal>)('0xabcdef')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
-    PsiElement(<integer literal>)('0x_abc_def')
+    PsiElement(<integer literal>)('0xabc_def')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(+)('+')

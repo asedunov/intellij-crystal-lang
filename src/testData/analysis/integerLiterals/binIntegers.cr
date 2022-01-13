@@ -52,6 +52,10 @@
 
 <error descr="The value is out of UInt64 range">0b10000000000000000000000000000000000000000000000000000000000000000_u64</error>
 
+<error descr="The value is out of UInt64 range">-0b0_u64</error>
+
+<error descr="The value is out of UInt64 range">-0b0u64</error>
+
 <error descr="The value is out of UInt64 range">-0b1_u64</error>
 
 0b111111111111111111111111111111111111111111111111111111111111111_i128

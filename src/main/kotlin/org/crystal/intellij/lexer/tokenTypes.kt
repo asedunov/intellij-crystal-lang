@@ -227,7 +227,7 @@ fun crystalKeywordToken(
 @JvmField val CR_IDENTIFIER = CrystalTokenType("<identifier>")
 @JvmField val CR_GLOBAL_VAR = CrystalTokenType("<global variable>")
 @JvmField val CR_GLOBAL_MATCH_DATA = CrystalTokenType("<global match data>")
-@JvmField val CR_GLOBAL_MATCH_DATA_INDEX = CrystalTokenType("<global match data index>")
+@JvmField val CR_GLOBAL_MATCH_DATA_INDEX = crystalToken("<global match data index>", ::CrGlobalMatchIndexElement)
 @JvmField val CR_INSTANCE_VAR = CrystalTokenType("<instance variable>")
 @JvmField val CR_MACRO_VAR = CrystalTokenType("<macro variable>")
 @JvmField val CR_UNDERSCORE = CrystalTokenType("_")

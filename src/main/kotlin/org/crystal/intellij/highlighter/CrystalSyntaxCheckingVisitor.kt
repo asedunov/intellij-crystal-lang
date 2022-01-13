@@ -140,8 +140,16 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 
-        if (o.nameElement?.innerElementType == CR_GLOBAL_VAR) {
+        if (ll >= LanguageLevel.CRYSTAL_1_3 && o.nameElement?.innerElementType == CR_GLOBAL_VAR) {
             error(o, "Global variables are not supported, use class variables instead")
+        }
+    }
+
+    override fun visitGlobalMatchDataIndex(o: CrGlobalMatchIndexElement) {
+        super.visitGlobalMatchDataIndex(o)
+
+        if (o.index == null) {
+            error(o, "Index doesn't fit in an Int32")
         }
     }
 

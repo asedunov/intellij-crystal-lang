@@ -3,6 +3,8 @@ package org.crystal.intellij.psi
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.languageLevel
 import org.crystal.intellij.lexer.CR_INTEGER_LITERAL
 import org.crystal.intellij.lexer.CR_MINUS_OP
 import kotlin.math.max
@@ -11,7 +13,7 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitIntegerLiteralExpression(this)
 
     val value: Any?
-        get() = kind.parser(valueAsString(true), radix)
+        get() = kind.parser(valueAsString(true), radix, languageLevel)
 
     val kind: CrIntegerKind
         get() {
@@ -79,7 +81,17 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
         val valueString = valueAsString(false)
         val negated = isNegated
 
-        val u64Value = valueString.toULongOrNull(radix) ?: return CrIntegerKind.U64
+        val u64Value = valueString.toULongOrNull(radix)
+
+        if (u64Value == null) {
+            if (languageLevel < LanguageLevel.CRYSTAL_1_3) return CrIntegerKind.U64
+
+            val kind = if (negated) CrIntegerKind.I64 else CrIntegerKind.U64
+            if (valueString.length > 128) return kind
+            val value = (if (negated) "-$valueString" else valueString).toBigInteger(radix)
+            if (value !in INT128_RANGE && value in UINT128_RANGE) return CrIntegerKind.U64
+            return kind
+        }
 
         var u64Max = Long.MAX_VALUE.toULong()
         if (negated) u64Max++

@@ -60,14 +60,34 @@
 
 9223372036854775807_i128
 
-<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">9223372036854775808_i128</error>
+9223372036854775808_i128
 
 -9223372036854775808_i128
 
-<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">-9333333333333333333_i128</error>
+-9333333333333333333_i128
 
 18446744073709551615_u128
 
-<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">18446744073709551616_u128</error>
+18446744073709551616_u128
 
-<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">-1_u128</error>
+<error descr="The value is out of UInt128 range">-1_u128</error>
+
+<error descr="The value is out of UInt64 range">340282366920938463463374607431768211456</error>
+
+<error descr="The value is out of Int64 range">-170141183460469231731687303715884105729</error>
+
+<error descr="The value is out of Int64 range">-999999999999999999999999999999999999999</error>
+
+9223372036854775808_i128
+
+-9223372036854775809_i128
+
+118446744073709551616_u128
+
+18446744073709551616_u128
+
+170141183460469231731687303715884105727_i128
+
+170141183460469231731687303715884105728_u128
+
+340282366920938463463374607431768211455_u128

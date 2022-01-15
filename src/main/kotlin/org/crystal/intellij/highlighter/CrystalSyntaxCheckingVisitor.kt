@@ -61,6 +61,8 @@ class CrystalSyntaxCheckingVisitor(
 
     private val CrIntegerKind.outOfValueError: String
         get() {
+            if (ll >= LanguageLevel.CRYSTAL_1_3) return "The value is out of $typeName range"
+
             val literalKind = when(this) {
                 CrIntegerKind.I128 -> CrIntegerKind.I64
                 CrIntegerKind.U128 -> CrIntegerKind.U64

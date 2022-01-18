@@ -11,13 +11,7 @@
       <li>Go to Class/Go to Symbol navigation</li>
     </ul>]]></description>
 
-    <change-notes><![CDATA[
-    Support of <code>require</code> expressions
-    <ul>
-      <li>File reference resolve and completion</li>
-      <li>Highlighting of unresolved files/directories</li>
-      <li>Find usages/rename of files/directories in <code>require</code></li>
-    </ul>]]></change-notes>
+    <change-notes><![CDATA[Support of Crystal 1.3]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 

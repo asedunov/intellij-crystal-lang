@@ -11,6 +11,14 @@
       <li>Go to Class/Go to Symbol navigation</li>
     </ul>]]></description>
 
+    <change-notes><![CDATA[
+    Standard library support:
+    <ul>
+      <li>Project configuration</li>
+      <li>Auto-detection of language version</li>
+      <li>Resolution of library files in <code>require</code> expressions</li>
+    </ul>]]></change-notes>
+
     <depends>com.intellij.modules.platform</depends>
 
     <extensionPoints>

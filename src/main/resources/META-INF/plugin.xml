@@ -9,7 +9,15 @@
       <li>Initial formatting support</li>
       <li>File structure view</li>
       <li>Go to Class/Go to Symbol navigation</li>
+      <li>Run configurations</li>
     </ul>]]></description>
+
+    <change-notes><![CDATA[
+    <ul>
+      <li>Run configuration for Crystal files</li>
+      <li>"New Crystal File" action</li>
+      <li>Fixes and improvements in parser</li>
+    </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 

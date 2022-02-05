@@ -3,7 +3,6 @@ package org.crystal.intellij.config
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.annotations.Attribute
@@ -14,10 +13,6 @@ import org.jetbrains.annotations.TestOnly
 class CrystalProjectSettings @JvmOverloads constructor(
     private val project: Project? = null
 ) : PersistentStateComponent<CrystalProjectSettings> {
-    companion object {
-        val log = Logger.getInstance(CrystalProjectSettings::class.java)
-    }
-
     private class VersionConverter : Converter<LanguageVersion>() {
         override fun toString(value: LanguageVersion) = when (value) {
             is LanguageVersion.Specific -> value.level.shortName
@@ -26,12 +21,7 @@ class CrystalProjectSettings @JvmOverloads constructor(
 
         override fun fromString(value: String): LanguageVersion {
             if (value.equals("latest-stable", true)) return LanguageVersion.LatestStable
-            return try {
-                enumValueOf<LanguageLevel>(value).asSpecificVersion()
-            } catch (e : Exception) {
-                log.warn(e)
-                LanguageVersion.LatestStable
-            }
+            return findVersionOrLatest(value)
         }
     }
 

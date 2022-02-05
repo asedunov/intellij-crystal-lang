@@ -39,3 +39,8 @@ sealed class LanguageVersion {
 }
 
 fun LanguageLevel.asSpecificVersion() = LanguageVersion.Specific.of(this)
+
+fun findVersionOrLatest(version: String): LanguageVersion {
+    return LanguageVersion.Specific.instances.firstOrNull { it.level.shortName == version }
+        ?: LanguageVersion.LatestStable
+}

@@ -1,27 +1,144 @@
 package org.crystal.intellij.config
 
+import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.options.BoundConfigurable
+import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.ui.JBColor
 import com.intellij.ui.layout.listCellRenderer
 import com.intellij.ui.layout.panel
 import org.crystal.intellij.CrystalBundle
+import org.crystal.intellij.config.ui.CrystalExePathComboBox
+import org.crystal.intellij.sdk.CrystalSdkFlavor
+import org.crystal.intellij.util.toPathOrNull
 import javax.swing.DefaultComboBoxModel
+import javax.swing.JLabel
 
 class CrystalSettingsConfigurable(private val project: Project) : BoundConfigurable(
-    CrystalBundle.message("crystal.settings.title")
+    CrystalBundle.message("settings.title")
 ) {
-    override fun createPanel() = panel {
-        val settings = project.crystalSettings
-
-        row {
-            cell {
-                label(CrystalBundle.message("language.level.label"))
-                comboBox(
-                    DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
-                    settings::languageVersion,
-                    listCellRenderer { value, _, _ -> setText(value.description) }
-                )
+    companion object {
+        private val STDLIB_FILE_CHOOSER_DESCRIPTOR = object : FileChooserDescriptor(
+            false,
+            true,
+            false,
+            false,
+            false,
+            false
+        ) {
+            @Throws(Exception::class)
+            override fun validateSelectedFiles(files: Array<VirtualFile>) {
+                if (files.isEmpty()) return
+                val file = files.first()
+                if (!CrystalSdkFlavor.isValidStdlibPath(file.toNioPath())) {
+                    throw Exception(CrystalBundle.message("settings.sdk.invalid.stdlib.path.0", file.name))
+                }
             }
         }
+    }
+
+    private val settings = project.crystalSettings.state
+    private val workspaceSettings = project.crystalWorkspaceSettings.state
+
+    private lateinit var languageVersionComboBox: ComboBox<LanguageVersion>
+    private lateinit var crystalExeComboBox: CrystalExePathComboBox
+    private lateinit var stdlibEditor: TextFieldWithBrowseButton
+    private lateinit var sdkVersionLabel: JLabel
+
+    override fun createPanel() = panel {
+        row(CrystalBundle.message("settings.language.level")) {
+            languageVersionComboBox = comboBox(
+                DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
+                settings::languageVersion,
+                listCellRenderer { value, _, _ -> setText(value.description) }
+            ).component
+        }
+
+        row(CrystalBundle.message("settings.crystal.exe.path")) {
+            crystalExeComboBox = CrystalExePathComboBox()().component
+            crystalExeComboBox.addTextChangeListener {
+                onExePathUpdate()
+            }
+            crystalExeComboBox.addSelectPathListener {
+                onPathSelection()
+            }
+        }
+
+        row(CrystalBundle.message("settings.sdk.version")) {
+            sdkVersionLabel = JLabel()().component
+        }
+
+        row(CrystalBundle.message("settings.crystal.stdlib.path")) {
+            stdlibEditor = textFieldWithBrowseButton(
+                workspaceSettings::stdlibPath,
+                CrystalBundle.message("settings.sdk.select.stdlib.path"),
+                null,
+                STDLIB_FILE_CHOOSER_DESCRIPTOR
+            ) { file -> file.presentableUrl }.component
+        }
+
+        crystalExeComboBox.addToolchainsAsync {
+            CrystalSdkFlavor.applicableFlavors.flatMap { it.suggestCrystalExePaths() }.distinct()
+        }
+    }
+
+    override fun isModified(): Boolean {
+        return super.isModified() ||
+                workspaceSettings.crystalExePath != (crystalExeComboBox.selectedPath?.toString() ?: "")
+    }
+
+    override fun reset() {
+        crystalExeComboBox.selectedPath = workspaceSettings.crystalExePath.toPathOrNull()
+        super.reset()
+    }
+
+    override fun apply() {
+        validateSettings()
+        super.apply()
+        workspaceSettings.crystalExePath = crystalExeComboBox.selectedPath?.toString() ?: ""
+        project.crystalWorkspaceSettings.state = workspaceSettings
+    }
+
+    private fun onExePathUpdate() {
+        val crystalExePath = crystalExeComboBox.selectedPath
+        val version = crystalExePath?.let { CrystalSdkFlavor.requestVersion(it) }
+        if (version != null) {
+            sdkVersionLabel.text = version.parsedVersion
+            sdkVersionLabel.foreground = JBColor.foreground()
+            languageVersionComboBox.selectedItem = findVersionOrLatest("${version.major}.${version.minor}")
+        }
+        else {
+            sdkVersionLabel.text = "N/A"
+            sdkVersionLabel.foreground = JBColor.RED
+            languageVersionComboBox.selectedItem = LanguageVersion.LatestStable
+        }
+    }
+
+    private fun onPathSelection() {
+        val crystalExePath = crystalExeComboBox.selectedPath
+        val stdlibPath = crystalExePath?.let { CrystalSdkFlavor.suggestStdlibPath(crystalExePath) }
+        stdlibEditor.text = stdlibPath?.toString() ?: ""
+    }
+
+    private fun validateSettings() {
+        val errorMessage = sequence {
+            if (crystalExeComboBox.selectedPathAsText.isNotEmpty()) {
+                val crystalExePath = crystalExeComboBox.selectedPath
+                if (crystalExePath == null || !CrystalSdkFlavor.isValidCrystalExePath(crystalExePath)) {
+                    yield(CrystalBundle.message("settings.sdk.invalid.interpreter.path"))
+                }
+            }
+
+            if (stdlibEditor.text.isNotEmpty()) {
+                val stdlibPath = stdlibEditor.text.toPathOrNull()
+                if (stdlibPath == null || !CrystalSdkFlavor.isValidStdlibPath(stdlibPath)) {
+                    yield(CrystalBundle.message("settings.sdk.invalid.stdlib.path"))
+                }
+            }
+        }.joinToString(separator = "\n")
+        if (errorMessage.isNotEmpty()) throw ConfigurationException(errorMessage)
     }
 }

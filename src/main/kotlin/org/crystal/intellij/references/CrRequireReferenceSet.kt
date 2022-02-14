@@ -15,6 +15,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.SmartList
 import com.intellij.util.containers.addIfNotNull
 import com.intellij.util.containers.map2Array
+import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.psi.CrStringLiteralExpression
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
@@ -40,12 +41,15 @@ class CrRequireReferenceSet(
             return super.computeDefaultContexts()
         }
         else {
+            val contexts = ArrayList<PsiFileSystemItem>()
             val module = ModuleUtilCore.findModuleForPsiElement(element) ?: return super.computeDefaultContexts()
             val psiManager = element.manager
-            return module.rootManager.contentRoots.flatMap {
-                val dir = psiManager.findDirectory(it) ?: return@flatMap emptyList()
+            module.rootManager.contentRoots.flatMapTo(contexts) {
+                val dir = psiManager.findDirectory(it) ?: return@flatMapTo emptyList()
                 listOfNotNull(dir, dir.findSubdirectory("src"), dir.findSubdirectory("lib"))
             }
+            contexts.addIfNotNull(module.project.crystalWorkspaceSettings.stdlibRootDirectory?.toPsi(psiManager))
+            return contexts
         }
     }
 

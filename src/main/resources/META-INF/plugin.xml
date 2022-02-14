@@ -66,6 +66,8 @@
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalFunctionShortNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalVariableShortNameIndex"/>
 
+        <additionalLibraryRootsProvider implementation="org.crystal.intellij.sdk.CrystalSdkLibraryRootProvider"/>
+
         <gotoClassContributor implementation="org.crystal.intellij.navigation.CrystalGotoClassContributor"/>
         <gotoSymbolContributor implementation="org.crystal.intellij.navigation.CrystalGotoSymbolContributor"/>
 

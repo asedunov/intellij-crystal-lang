@@ -7,6 +7,8 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.components.StoragePathMacros
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.StandardFileSystems
+import com.intellij.openapi.vfs.VirtualFile
 import org.jdom.Element
 
 private const val serviceName = "CrystalWorkspaceSettings"
@@ -39,6 +41,12 @@ class CrystalProjectWorkspaceSettings(
             updateProjectRoots(project)
         }
     }
+
+    private val stdlibPath: String
+        get() = _state.stdlibPath
+
+    val stdlibRootDirectory: VirtualFile?
+        get() = if (stdlibPath.isNotEmpty()) StandardFileSystems.local().findFileByPath(stdlibPath) else null
 
     override fun getState(): Element {
         return Element(serviceName).apply { serializeObjectInto(_state, this) }

@@ -16,7 +16,7 @@ class CrystalWslSdkFlavor : CrystalSdkFlavor() {
         WslDistributionManager.getInstance()
             .installedDistributions
             .asSequence()
-            .mapNotNull { it.getWindowsPath("/usr/bin/crystal").toPathOrNull() }
+            .mapNotNull { it.getWindowsPath("/usr/bin/crystal")?.toPathOrNull() }
 
     override fun crystalCommandLine(crystalExePath: Path, parameters: List<String>): GeneralCommandLine? {
         val wslPath = WslPath.parseWindowsUncPath(crystalExePath.toString()) ?: return null

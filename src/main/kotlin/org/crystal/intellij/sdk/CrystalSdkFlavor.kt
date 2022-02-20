@@ -1,5 +1,6 @@
 package org.crystal.intellij.sdk
 
+import com.intellij.execution.ExecutionException
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.CapturingProcessHandler
 import com.intellij.openapi.diagnostic.Logger
@@ -59,11 +60,17 @@ abstract class CrystalSdkFlavor {
         }
 
         fun requestVersion(crystalExePath: Path): SemVer? {
+            if (crystalExePath.parent == null) return null
             val parameters = listOf("--version")
             val commandLine = applicableFlavors.firstNotNullOfOrNull {
                 it.crystalCommandLine(crystalExePath, parameters)
             } ?: return null
-            val processHandler = CapturingProcessHandler(commandLine)
+            val processHandler = try {
+                CapturingProcessHandler(commandLine)
+            }
+            catch (e : ExecutionException) {
+                return null
+            }
             val output = if (SwingUtilities.isEventDispatchThread()) {
                 ProgressManager.getInstance().runProcessWithProgressSynchronously(
                     ThrowableComputable { processHandler.runProcess(10000) },

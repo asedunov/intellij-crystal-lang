@@ -1,9 +1,12 @@
 package org.crystal.intellij.config
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.StandardFileSystems
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.ex.temp.TempFileSystem
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.annotations.Attribute
 import org.crystal.intellij.psi.CrFile
@@ -51,7 +54,17 @@ class CrystalProjectSettings(
         get() = protectedState.languageVersion
 
     val mainFile: CrFile?
-        get() = StandardFileSystems.local().findFileByPath(protectedState.mainFilePath)?.toPsi(project) as? CrFile
+        get() {
+            val path = protectedState.mainFilePath
+            var vFile: VirtualFile? = null
+            if (ApplicationManager.getApplication().isUnitTestMode) {
+                vFile = TempFileSystem.getInstance().findFileByPath(path)
+            }
+            if (vFile == null) {
+                vFile = StandardFileSystems.local().findFileByPath(path)
+            }
+            return vFile?.toPsi(project) as? CrFile
+        }
 
     @TestOnly
     fun setLanguageLevelSilently(version: LanguageVersion) {

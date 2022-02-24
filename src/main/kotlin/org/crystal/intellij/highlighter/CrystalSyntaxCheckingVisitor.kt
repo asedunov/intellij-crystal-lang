@@ -411,7 +411,7 @@ class CrystalSyntaxCheckingVisitor(
         val holder = o.holder
         when (holder) {
             is CrMethod, is CrCallExpression -> return
-            is CrClasslikeDefinition<*, *>, is CrEnum, is CrAlias, is CrLibrary -> {
+            is CrModuleLikeDefinition<*, *>, is CrAlias, is CrLibrary -> {
                 errorIfNonPrivate(o, "types")
                 return
             }
@@ -452,7 +452,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitTypeParameterList(o: CrTypeParameterList) {
         super.visitTypeParameterList(o)
 
-        if (o.parent !is CrClasslikeDefinition<*, *>) return
+        if (o.parent !is CrModuleLikeDefinition<*, *>) return
 
         checkDuplicateNames(o.elements)
 
@@ -719,7 +719,7 @@ class CrystalSyntaxCheckingVisitor(
         get() = this is CrBlockExpression && parent is CrFunctionLikeDefinition
 
     private val PsiElement.isTypeBody
-        get() = this is CrBody && parent is CrClasslikeDefinition<*, *>
+        get() = this is CrBody && parent is CrModuleLikeDefinition<*, *>
 
     private val PsiElement.isNestingExpression
         get() = when (this) {
@@ -748,8 +748,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrBody,
             is CrMacroLiteral,
             is CrCallExpression,
-            is CrFileFragment,
-            is CrFile -> false
+            is CrTopLevelHolder -> false
             is CrAssignmentExpression -> lhs !is CrPathExpression
             else -> true
         }

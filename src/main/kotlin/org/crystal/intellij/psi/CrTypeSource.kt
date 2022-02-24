@@ -1,3 +1,10 @@
 package org.crystal.intellij.psi
 
-sealed interface CrTypeSource : CrElement
+import org.crystal.intellij.resolve.FqName
+import org.crystal.intellij.resolve.symbols.CrSym
+
+sealed interface CrTypeSource : CrSymbolOrdinalHolder {
+    val fqName: FqName?
+
+    fun resolveSymbol(): CrSym<*>?
+}

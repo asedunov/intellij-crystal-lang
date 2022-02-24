@@ -28,7 +28,7 @@ sealed interface CrDefinitionWithFqName : CrDefinition, CrVisibilityHolder {
     val isLocal: Boolean
         get() {
             val p = parentStubOrPsi()
-            return !(p is CrFile || p is CrFileFragment || p is CrBody)
+            return !(p is CrTopLevelHolder || p is CrBody)
         }
 
     override val visibility: CrVisibility?

@@ -7,7 +7,7 @@ import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.CrystalFileType
 import org.crystal.intellij.CrystalLanguage
 
-class CrFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CrystalLanguage), CrElement {
+class CrFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CrystalLanguage), CrTopLevelHolder {
     override fun getFileType() = CrystalFileType
 
     override fun accept(visitor: PsiElementVisitor) {
@@ -15,7 +15,4 @@ class CrFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Crystal
     }
 
     override fun accept(visitor: CrVisitor) = visitor.visitCrFile(this)
-
-    val expressions: JBIterable<CrExpression>
-        get() = childrenOfType()
 }

@@ -19,5 +19,5 @@ class CrPsiFactory(private val project: Project) {
         true
     ) as CrFile
 
-    inline fun <reified T : CrExpression> createExpression(text: String) = createFile(text).expressions.first() as T
+    inline fun <reified T : CrExpression> createExpression(text: String) = createFile(text).firstChild as T
 }

@@ -3,7 +3,6 @@ package org.crystal.intellij.presentation
 import com.intellij.ide.IconProvider
 import com.intellij.openapi.util.Iconable
 import com.intellij.psi.PsiElement
-import com.intellij.ui.RowIcon
 import org.crystal.intellij.CrystalIcons
 import org.crystal.intellij.psi.*
 import javax.swing.Icon
@@ -37,16 +36,7 @@ class CrystalIconProvider : IconProvider() {
             else -> return null
         }
         if (element is CrDefinitionWithFqName && flags and Iconable.ICON_FLAG_VISIBILITY > 0) {
-            val visibilityIcon = when (element.visibility) {
-                CrVisibility.PRIVATE -> CrystalIcons.PRIVATE
-                CrVisibility.PROTECTED -> CrystalIcons.PROTECTED
-                CrVisibility.PUBLIC -> CrystalIcons.PUBLIC
-                else -> null
-            }
-            return RowIcon(2).apply {
-                setIcon(baseIcon, 0)
-                setIcon(visibilityIcon, 1)
-            }
+            return baseIcon.withVisibility(element.visibility)
         }
         return baseIcon
     }

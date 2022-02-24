@@ -1,6 +1,7 @@
 package org.crystal.intellij.resolve
 
 import com.intellij.openapi.module.Module
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.rootManager
 import com.intellij.psi.PsiFileSystemItem
 import com.intellij.psi.PsiManager
@@ -17,4 +18,9 @@ fun Module.crystalPathRoots(): List<PsiFileSystemItem> {
     }
     contexts.addIfNotNull(project.crystalWorkspaceSettings.stdlibRootDirectory?.toPsi(psiManager))
     return contexts
+}
+
+fun Project.crystalPathRoots(): List<PsiFileSystemItem> {
+    val psiManager = PsiManager.getInstance(this)
+    return listOfNotNull(crystalWorkspaceSettings.stdlibRootDirectory?.toPsi(psiManager))
 }

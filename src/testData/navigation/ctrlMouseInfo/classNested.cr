@@ -1,4 +1,4 @@
-# TOOLTIP: class "Bar" [classNested.cr]
+# TOOLTIP: Class "Bar"
 class Foo
   class <caret>Bar
   end

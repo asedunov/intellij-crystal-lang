@@ -17,7 +17,7 @@ object CrRequireElementType : CrStubElementType<CrRequireExpression, CrRequireSt
     override fun shouldCreateStub(node: ASTNode) = true
 
     override fun createStub(psi: CrRequireExpression, parentStub: StubElement<out PsiElement>?): CrRequireStub {
-        return CrRequireStubImpl(parentStub, psi.path?.stringValue)
+        return CrRequireStubImpl(parentStub, psi.pathLiteral?.stringValue)
     }
 
     override fun serialize(stub: CrRequireStub, dataStream: StubOutputStream) {

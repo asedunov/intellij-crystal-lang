@@ -1,10 +1,25 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.util.isAncestor
 import org.crystal.intellij.parser.CR_PATH_NAME_ELEMENT
+import org.crystal.intellij.references.CrPathReference
+import org.crystal.intellij.resolve.FqName
+import org.crystal.intellij.resolve.cache.newResolveSlice
+import org.crystal.intellij.resolve.cache.resolveCache
+import org.crystal.intellij.resolve.resolveFacade
+import org.crystal.intellij.resolve.scopes.CrScope
+import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
+import org.crystal.intellij.resolve.symbols.CrSym
+import org.crystal.intellij.resolve.symbols.CrSymbolOrdinal
 import org.crystal.intellij.stubs.api.CrPathStub
 
+@Suppress("UnstableApiUsage")
 class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTypeSource {
+    companion object {
+        private val PATH_TARGET = newResolveSlice<CrPathNameElement, CrSym<*>>("PATH_TARGET")
+    }
+
     constructor(stub: CrPathStub) : super(stub, CR_PATH_NAME_ELEMENT)
 
     constructor(node: ASTNode) : super(node)
@@ -20,11 +35,61 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTyp
     val qualifier: CrPathNameElement?
         get() = stubChildOfType()
 
-    private val item: CrConstantName?
+    val item: CrConstantName?
         get() = childOfType()
 
     override fun getName() = greenStub?.name ?: item?.name ?: ""
 
     override val sourceName: String
         get() = name
+
+    val fqName: FqName?
+        get() = when (val p = parent) {
+            is CrPathNameElement -> p.fqName?.parent
+            is CrTypeDefinition -> p.fqName
+            else -> null
+        }
+
+    override fun ordinal(): CrSymbolOrdinal? {
+        var p = parent
+        if (p is CrPathType) p = p.parent
+        if (p is CrInstantiatedType) p = p.parent
+        return (p as? CrSymbolOrdinalHolder)?.ordinal()
+    }
+
+    private val pathResolveScope: CrScope?
+        get() {
+            val qualifier = qualifier
+            if (qualifier != null) return (qualifier.resolveSymbol() as? CrModuleLikeSym)?.memberScope
+
+            val include = parentStubOrPsiOfType<CrIncludeLikeExpression>()
+            if (include != null) return include.pathResolveScope
+
+            var containingType = parentStubOrPsiOfType<CrModuleLikeDefinition<*, *>>()
+            if (containingType?.nameElement?.isAncestor(this, false) == true ||
+                (containingType as? CrSuperTypeAware)?.superTypeClause?.isAncestor(this, false) == true
+            ) {
+                containingType = containingType.parentStubOrPsiOfType()
+            }
+            val scopeOwner =
+                if (containingType != null) containingType.resolveSymbol() else project.resolveFacade.program
+            return (scopeOwner as? CrModuleLikeSym)?.memberScope
+        }
+
+    override fun resolveSymbol(): CrSym<*>? {
+        if (isGlobal) return project.resolveFacade.program
+        return project.resolveCache.getOrCompute(PATH_TARGET, this) {
+            val type = pathResolveScope?.getType(name, qualifier == null) ?: return@getOrCompute null
+            if (parentStubOrPsiOfType<CrSupertypeClause>() != null
+                || parentStubOrPsiOfType<CrIncludeLikeExpression>() != null) {
+                val targetOrdinal = type.ordinal ?: return@getOrCompute null
+                val currentOrdinal =
+                    parentStubOrPsiOfType<CrSymbolOrdinalHolder>()?.ordinal() ?: return@getOrCompute null
+                if (targetOrdinal >= currentOrdinal) return@getOrCompute null
+            }
+            type
+        }
+    }
+
+    override fun getOwnReferences() = listOf(CrPathReference(this))
 }

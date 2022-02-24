@@ -1,3 +1,7 @@
 package org.crystal.intellij.psi
 
-sealed interface CrTypeDefinition : CrDefinitionWithFqName, CrPathNameElementHolder, CrTypeSource
+import org.crystal.intellij.resolve.symbols.CrSym
+
+sealed interface CrTypeDefinition : CrDefinitionWithFqName, CrPathNameElementHolder, CrTypeSource {
+    fun resolveSymbol(): CrSym<*>? = nameElement?.resolveSymbol()
+}

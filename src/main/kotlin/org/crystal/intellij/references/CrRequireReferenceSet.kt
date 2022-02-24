@@ -1,50 +1,47 @@
 package org.crystal.intellij.references
 
 import com.intellij.openapi.util.TextRange
-import com.intellij.openapi.vfs.VfsUtil
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.VirtualFileVisitor
-import com.intellij.psi.PsiElementResolveResult
-import com.intellij.psi.PsiFileSystemItem
 import com.intellij.psi.ResolveResult
-import com.intellij.psi.impl.PsiManagerEx
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet
+import com.intellij.refactoring.suggested.startOffset
 import com.intellij.util.SmartList
-import com.intellij.util.containers.addIfNotNull
-import com.intellij.util.containers.map2Array
-import org.crystal.intellij.psi.CrStringLiteralExpression
-import org.crystal.intellij.psi.module
-import org.crystal.intellij.resolve.crystalPathRoots
-import org.crystal.intellij.util.get
-import org.crystal.intellij.util.toPsi
+import org.crystal.intellij.psi.CrRequireExpression
+import org.crystal.intellij.resolve.CrRequiredPathInfo
 
-class CrRequireReferenceSet(
-    path: CrStringLiteralExpression
+class CrRequireReferenceSet private constructor(
+    text: String,
+    require: CrRequireExpression,
+    startInElement: Int,
+    private val pathInfo: CrRequiredPathInfo
 ) : FileReferenceSet(
-    path.valueRangeInElement.substring(path.text),
-    path,
-    path.valueRangeInElement.startOffset,
+    text,
+    require,
+    startInElement,
     null,
     true
 ) {
-    override fun getElement() = super.getElement() as CrStringLiteralExpression
+    companion object {
+        fun of(require: CrRequireExpression): CrRequireReferenceSet? {
+            val pathLiteral = require.pathLiteral ?: return null
+            val pathInfo = require.pathInfo ?: return null
+            val text = pathLiteral.valueRangeInElement.substring(pathLiteral.text)
+            val startInElement = pathLiteral.startOffset + pathLiteral.valueRangeInElement.startOffset
+            return CrRequireReferenceSet(text, require, startInElement, pathInfo)
+        }
+    }
+
+    override fun getElement() = super.getElement() as CrRequireExpression
 
     override fun createFileReference(range: TextRange, index: Int, text: String): FileReference {
         return CrRequireReference(this, range, index, text)
     }
 
-    override fun computeDefaultContexts(): Collection<PsiFileSystemItem> {
-        val pathString = pathString
-        return if (pathString.startsWith('.')) {
-            super.computeDefaultContexts()
-        } else {
-            element.module()?.crystalPathRoots() ?: emptyList()
-        }
-    }
+    override fun getDefaultContexts() = pathInfo.defaultContexts
 
-    override fun reparse(str: String?, startInElement: Int): MutableList<FileReference> {
-        val literal = element
+    override fun reparse(str: String?, startInElement: Int): List<FileReference> {
+        val literal = element.pathLiteral ?: return emptyList()
+        val delta = literal.startOffset - element.startOffset
         val escaper = literal.createLiteralTextEscaper()
         val valueRange = literal.valueRangeInElement
         val references = SmartList<FileReference>()
@@ -61,8 +58,8 @@ class CrRequireReferenceSet(
             if (refEnd > refStart) {
                 val refText = sb.substring(refStart, refEnd)
                 val refRange = TextRange(
-                    escaper.getOffsetInHost(refStart, valueRange),
-                    escaper.getOffsetInHost(refEnd, valueRange)
+                    escaper.getOffsetInHost(refStart, valueRange) + delta,
+                    escaper.getOffsetInHost(refEnd, valueRange) + delta
                 )
                 references += createFileReference(refRange, refIndex++, refText)
             }
@@ -72,227 +69,12 @@ class CrRequireReferenceSet(
         return references
     }
 
-    val resolveResults: List<Array<ResolveResult>> by lazy {
-        computeResolveResults()
-    }
+    val resolveResults: List<Array<ResolveResult>>
+        get() = pathInfo.targets
 
     override fun equals(other: Any?): Boolean {
         return other === this || other is CrRequireReferenceSet && element == other.element
     }
 
     override fun hashCode() = element.hashCode()
-
-    private fun computeResolveResults(): List<Array<ResolveResult>> {
-        val references = allReferences
-        val refCount = references.size
-        if (refCount == 0) return emptyList()
-
-        val roots = defaultContexts
-        if (roots.isEmpty()) return emptyList()
-
-        val results = ArrayList<SmartList<PsiFileSystemItem>>(refCount)
-        for (root in roots) {
-            val rootVFile = root.virtualFile ?: continue
-            if (resolveInContext(rootVFile, results)) break
-        }
-
-        if (results.isEmpty()) return emptyList()
-        return results.map { refResults ->
-            refResults.map2Array { PsiElementResolveResult(it) }
-        }
-    }
-
-    private fun resolveInContext(
-        root: VirtualFile,
-        results: MutableList<SmartList<PsiFileSystemItem>>
-    ): Boolean {
-        val builder = ResolvedPathBuilder(root, results)
-        val refCount = allReferences.size
-        val name = lastReference!!.text
-        val isWildCard = name == "*"
-        val isRecursiveWildCard = name == "**"
-        if (isWildCard || isRecursiveWildCard) {
-            builder.extendPath(refCount - 1)
-            val rootFile = builder.file.takeIf { builder.valid }
-            builder.finishPath()
-            if (rootFile == null) return false
-            val currentFile = element.containingFile
-            val currentVFile = currentFile.virtualFile
-            val targetList = SmartList<PsiFileSystemItem>()
-            VfsUtil.visitChildrenRecursively(rootFile, object : VirtualFileVisitor<Unit>() {
-                override fun getChildrenIterable(file: VirtualFile): List<VirtualFile> {
-                    return if (isRecursiveWildCard || file == rootFile) {
-                        file.children.sortedWith { f1, f2 ->
-                            when {
-                                f1.isDirectory && !f2.isDirectory -> 1
-                                !f1.isDirectory && f2.isDirectory -> -1
-                                else -> f1.path.compareTo(f2.path)
-                            }
-                        }
-                    } else emptyList()
-                }
-
-                override fun visitFileEx(file: VirtualFile): Result {
-                    if (file != currentVFile && file.extension == "cr") {
-                        targetList.addIfNotNull(file.toPsi(builder.psiManager))
-                    }
-                    return CONTINUE
-                }
-            })
-            results += targetList
-            return true
-        }
-        else {
-            // Prefer direct path to .cr file
-            val lastName = if (name.endsWith(".cr")) name else "$name.cr"
-            builder
-                .extendPath(refCount - 1)
-                .extendPath(lastName)
-                .finishPath()
-
-            val shardName = allReferences.first().text
-            val isRelative = shardName == "."
-            val crName = "$name.cr"
-            if (!(isRelative || shardName.isBlank())) {
-                // "foo/bar/baz" -> "foo/src/bar/baz.cr" (shard, non-namespaced)
-                builder
-                    .extendPath(1)
-                    .extendContext("src")
-                    .extendPath(refCount - 2)
-                    .extendPath(crName)
-                    .finishPath()
-
-                // "foo/bar/baz" -> "foo/src/foo/bar/baz.cr" (shard, namespaced)
-                builder
-                    .extendContext(shardName)
-                    .extendContext("src")
-                    .extendPath(refCount - 1)
-                    .extendPath(crName)
-                    .finishPath()
-
-                // "foo/bar/baz" -> "foo/bar/baz/baz.cr" (std, nested)
-                builder
-                    .extendPath(refCount - 1)
-                    .extendContext(name)
-                    .extendPath(crName)
-                    .finishPath()
-
-                // "foo/bar/baz" -> "foo/src/bar/baz/baz.cr" (shard, non-namespaced, nested)
-                builder
-                    .extendPath(1)
-                    .extendContext("src")
-                    .extendPath(refCount - 2)
-                    .extendContext(name)
-                    .extendPath(crName)
-                    .finishPath()
-
-                // "foo/bar/baz" -> "foo/src/foo/bar/baz/baz.cr" (shard, namespaced, nested)
-                builder
-                    .extendContext(shardName)
-                    .extendContext("src")
-                    .extendPath(refCount - 1)
-                    .extendContext(name)
-                    .extendPath(crName)
-                    .finishPath()
-
-                return builder.resolved
-            }
-
-            // "foo/bar/baz" -> "foo/bar/baz/baz.cr" (std, nested)
-            builder
-                .extendPath(refCount - 1)
-                .extendContext(name)
-                .extendPath(crName)
-                .finishPath()
-
-            // "foo/bar/baz" -> "foo/bar/baz/src/baz.cr" exists (shard)
-            builder
-                .extendPath(refCount - 1)
-                .extendContext(name)
-                .extendContext("src")
-                .extendPath(crName)
-                .finishPath()
-
-            return builder.resolved
-        }
-    }
-
-    private inner class ResolvedPathBuilder(
-        private val rootFile: VirtualFile,
-        private val results: MutableList<SmartList<PsiFileSystemItem>>
-    ) {
-        var file = rootFile
-            private set
-        private val totalSize = allReferences.size
-        private val path = ArrayList<PsiFileSystemItem>(totalSize)
-        val psiManager: PsiManagerEx = element.manager
-        var resolved = false
-            private set
-        var valid = true
-            private set
-
-        fun extendPath(refCount: Int): ResolvedPathBuilder {
-            if (refCount < 0) return invalidate()
-
-            val from = path.size
-            val to = from + refCount
-            if (to > totalSize) return invalidate()
-            for (i in from until to) {
-                val name = allReferences[i].text
-                extendContext(name)
-                if (valid) {
-                    val psi = file.toPsi(psiManager) ?: return invalidate()
-                    path += psi
-                }
-                else break
-            }
-            return this
-        }
-
-        fun extendPath(name: String): ResolvedPathBuilder {
-            if (path.size >= totalSize) return invalidate()
-            extendContext(name)
-            if (valid) {
-                val psi = file.toPsi(psiManager) ?: return invalidate()
-                path += psi
-            }
-            return this
-        }
-
-        fun extendContext(name: String): ResolvedPathBuilder {
-            val nextFile = file[name] ?: return invalidate()
-            file = nextFile
-            return this
-        }
-
-        private fun invalidate() : ResolvedPathBuilder {
-            valid = false
-            return this
-        }
-
-        fun finishPath() {
-            if (valid && path.size == totalSize && !resolved) {
-                resolved = true
-                results.forEach { it.clear() }
-            }
-
-            if (path.size == totalSize || !resolved) {
-                for (i in path.indices) {
-                    val target = path[i]
-                    if (target.isDirectory && i == totalSize) continue
-                    if (i == results.size) {
-                        results.add(SmartList())
-                    }
-                    val targets = results[i]
-                    if (target !in targets) {
-                        targets.add(target)
-                    }
-                }
-            }
-
-            file = rootFile
-            path.clear()
-            valid = true
-        }
-    }
 }

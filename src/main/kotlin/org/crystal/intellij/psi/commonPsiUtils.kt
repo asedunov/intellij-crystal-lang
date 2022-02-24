@@ -1,11 +1,17 @@
 package org.crystal.intellij.psi
 
+import com.intellij.extapi.psi.StubBasedPsiElementBase
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.psi.*
+import com.intellij.psi.impl.source.PsiFileImpl
+import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.refactoring.suggested.createSmartPointer
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.util.firstInstanceOrNull
+import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 fun PsiElement.traverser() =
     SyntaxTraverser.psiTraverser(this)
@@ -13,11 +19,33 @@ fun PsiElement.traverser() =
 fun PsiElement.parents(strict: Boolean = true) =
     JBIterable.generate(if (strict) parent else this) { if (it is PsiFile) null else it.parent }
 
+val PsiElement.smartStub: StubElement<*>?
+    get() = when (this) {
+        is StubBasedPsiElementBase<*> -> greenStub
+        is StubBasedPsiElement<*> -> stub
+        is PsiFileImpl -> greenStub
+        else -> null
+    }
+
 fun PsiElement.parentStubOrPsi() =
     PsiTreeUtil.getStubOrPsiParent(this)
 
+fun PsiElement.indexOfChildStub(child: PsiElement): Int {
+    val stub = smartStub
+    val childStub = child.smartStub
+    if (stub != null && childStub != null) {
+        return stub.childrenStubs.indexOf(childStub)
+    }
+    return -1
+}
+
 inline fun <reified T : PsiElement> PsiElement.parentStubOrPsiOfType() =
     PsiTreeUtil.getStubOrPsiParentOfType(this, T::class.java)
+
+fun PsiElement.parentStubsOrPsi(strict: Boolean = true) =
+    JBIterable.generate(if (strict) PsiTreeUtil.getStubOrPsiParent(this) else this) {
+        if (it is PsiFile) null else PsiTreeUtil.getStubOrPsiParent(it)
+    }
 
 fun PsiElement.allChildren() =
     JBIterable.generate(firstChild) { it.nextSibling }
@@ -74,3 +102,9 @@ fun PsiElement.lastSignificantLeaf(): PsiElement? {
 inline fun <reified T : PsiElement> PsiElement.replaceTyped(replacement: T) = replace(replacement) as T
 
 fun PsiElement.module() = ModuleUtilCore.findModuleForPsiElement(this)
+
+fun <T : PsiElement> smartPointerProperty(element: T) = object : ReadOnlyProperty<Any, T?> {
+    private val pointer = element.createSmartPointer()
+
+    override fun getValue(thisRef: Any, property: KProperty<*>) = pointer.element
+}

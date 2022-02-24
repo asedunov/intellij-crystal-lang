@@ -9,7 +9,7 @@ sealed interface CrFunctionLikeDefinition : CrDefinitionWithFqName {
 
     val parameters: JBIterable<CrSimpleParameter>
         get() {
-            if (this is StubBasedPsiElementBase<*> && greenStub != null) {
+            if (this is StubBasedPsiElementBase<*> && stub != null) {
                 return stubChildrenOfType()
             }
             return parameterList?.elements ?: JBIterable.empty()

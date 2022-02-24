@@ -1,3 +1,3 @@
-# TOOLTIP: class "Bar" [classWithPathOnName.cr]
+# TOOLTIP: Class "Bar"
 class Foo::<caret>Bar
 end

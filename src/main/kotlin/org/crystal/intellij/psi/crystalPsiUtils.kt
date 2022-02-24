@@ -59,3 +59,10 @@ val CrExpression.isSemanticCall: Boolean
         is CrAssignmentExpression -> opSign == CR_ASSIGN_OP && lhs?.isSemanticCall == true
         else -> false
     }
+
+val CrType.typePath: CrPathNameElement?
+    get() {
+        var type = this
+        if (type is CrInstantiatedType) type = type.constructorType ?: return null
+        return (type as? CrPathType)?.path
+    }

@@ -75,10 +75,7 @@ class CrystalEnterHandler : EnterHandlerDelegateAdapter() {
             val needsEnd = when (p) {
                 is CrFunction -> p.parentOfType<CrDefinition>() !is CrLibrary
                 is CrAnnotation,
-                is CrClasslikeDefinition<*, *>,
-                is CrCUnion,
-                is CrCStruct,
-                is CrEnum,
+                is CrModuleLikeDefinition<*, *>,
                 is CrFunctionLikeDefinition,
                 is CrLibrary,
                 is CrWhileExpression,

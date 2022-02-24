@@ -1,12 +1,14 @@
 package org.crystal.intellij.tests.psiAttributes
 
 import org.crystal.intellij.psi.CrDefinitionWithFqName
+import org.junit.Test
 
 class CrystalFqNameTest : CrystalPsiAttributeTest() {
     private fun checkFqName(text: String, value: String?) {
         checkLast<CrDefinitionWithFqName>(text, { fqName?.fullName }, value)
     }
 
+    @Test
     fun testTopLevelPaths() {
         checkFqName(
             """
@@ -45,6 +47,7 @@ class CrystalFqNameTest : CrystalPsiAttributeTest() {
         )
     }
 
+    @Test
     fun testModifiers() {
         checkFqName(
             """
@@ -80,6 +83,7 @@ class CrystalFqNameTest : CrystalPsiAttributeTest() {
         )
     }
 
+    @Test
     fun testNestedPaths() {
         checkFqName(
             """
@@ -156,6 +160,7 @@ class CrystalFqNameTest : CrystalPsiAttributeTest() {
         )
     }
 
+    @Test
     fun testMembers() {
         checkFqName(
             """

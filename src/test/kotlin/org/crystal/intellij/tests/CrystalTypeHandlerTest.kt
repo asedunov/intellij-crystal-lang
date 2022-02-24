@@ -3,6 +3,7 @@ package org.crystal.intellij.tests
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.crystal.intellij.editor.brackets
 import org.crystal.intellij.editor.quotes
+import org.junit.Test
 
 class CrystalTypeHandlerTest : BasePlatformTestCase() {
     private fun doTest(before: String, ch: Char, after: String) {
@@ -13,13 +14,14 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
 
     private val percentKinds = listOf("", "q", "Q", "i", "r", "w", "x")
 
+    @Test
     fun testAutoSurroundForQuotes() {
         for (quoteBefore in quotes) {
             for (quoteAfter in quotes) {
                 if (quoteBefore == quoteAfter) continue
 
                 doTest(
-                    "<selection>${quoteBefore}foo${quoteBefore}</selection>",
+                    "<selection><caret>${quoteBefore}foo${quoteBefore}</selection>",
                     quoteAfter,
                     "${quoteAfter}<selection><caret>foo</selection>${quoteAfter}"
                 )
@@ -27,13 +29,14 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testAutoSurroundForBrackets() {
         for ((leftBefore, rightBefore) in brackets) {
             for ((leftAfter, rightAfter) in brackets) {
                 if (leftBefore == leftAfter) continue
 
                 doTest(
-                    "<selection>${leftBefore}foo${rightBefore}</selection>",
+                    "<selection><caret>${leftBefore}foo${rightBefore}</selection>",
                     leftAfter,
                     "${leftAfter}<selection><caret>foo</selection>${rightAfter}"
                 )
@@ -41,6 +44,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testPairedQuoteReplacement() {
         for (quoteBefore in quotes) {
             for (quoteAfter in quotes) {
@@ -55,6 +59,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testPairedBracketReplacement() {
         for ((leftBefore, rightBefore) in brackets) {
             for ((leftAfter, rightAfter) in brackets) {
@@ -69,6 +74,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairQuoteOutsideString() {
         for (quote in quotes - '/') {
             doTest(
@@ -79,6 +85,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairBracketOutsideString() {
         for ((left, right) in brackets) {
             doTest(
@@ -89,6 +96,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairQuoteInsideSimpleString() {
         for (quote in quotes) {
             for (stringQuote in quotes) {
@@ -101,6 +109,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairBracketInsideSimpleString() {
         for (left in brackets.keys) {
             for (stringQuote in quotes) {
@@ -113,6 +122,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairQuoteInsideQuotedSymbol() {
         for (quote in quotes) {
             doTest(
@@ -123,6 +133,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairBracketInsideQuotedSymbol() {
         for (left in brackets.keys) {
             doTest(
@@ -133,6 +144,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairQuoteInsidePercentString() {
         for (quote in quotes) {
             for (kind in percentKinds) {
@@ -149,6 +161,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testInsertPairBracketInsidePercentString() {
         for (typedLeft in brackets.keys) {
             for (kind in percentKinds) {
@@ -165,6 +178,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testNoInsertBeforeEndQuote() {
         for (quote in quotes) {
             doTest(
@@ -175,6 +189,7 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testNoInsertBeforeEndBracket() {
         for ((left, right) in brackets) {
             doTest(

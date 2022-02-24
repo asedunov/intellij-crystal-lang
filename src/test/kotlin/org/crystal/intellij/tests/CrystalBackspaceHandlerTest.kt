@@ -6,6 +6,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.crystal.intellij.editor.brackets
 import org.crystal.intellij.editor.quotes
+import org.junit.Test
 
 class CrystalBackspaceHandlerTest : BasePlatformTestCase() {
     private fun CodeInsightTestFixture.backspace() {
@@ -18,6 +19,7 @@ class CrystalBackspaceHandlerTest : BasePlatformTestCase() {
         myFixture.checkResult(after)
     }
 
+    @Test
     fun testAutoRemoveOpenQuote() {
         for (quote in quotes) {
             doTest(
@@ -27,6 +29,7 @@ class CrystalBackspaceHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testAfterClosingQuote() {
         for (quote in quotes) {
             doTest(
@@ -36,6 +39,7 @@ class CrystalBackspaceHandlerTest : BasePlatformTestCase() {
         }
     }
 
+    @Test
     fun testAutoRemoveOpenBracket() {
         for ((left, right) in brackets) {
             doTest(

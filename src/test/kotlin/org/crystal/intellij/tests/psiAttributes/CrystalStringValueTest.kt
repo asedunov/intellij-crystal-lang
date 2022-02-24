@@ -1,12 +1,14 @@
 package org.crystal.intellij.tests.psiAttributes
 
 import org.crystal.intellij.psi.CrStringValueHolder
+import org.junit.Test
 
 class CrystalStringValueTest : CrystalPsiAttributeTest() {
     private fun checkStringValue(text: String, value: String?) {
         checkFirst(text, CrStringValueHolder::stringValue, value)
     }
 
+    @Test
     fun testStringValues() {
         checkStringValue("\"abc\\\ndef\"", "abcdef")
         checkStringValue("\"abc\\\n   def\"", "abcdef")

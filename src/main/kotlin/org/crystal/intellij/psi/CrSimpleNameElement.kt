@@ -48,5 +48,5 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
         get() = name?.lastOrNull() == '?'
 
     val isExclamation: Boolean
-        get() = name?.lastOrNull() == '?'
+        get() = name?.lastOrNull() == '!'
 }

@@ -20,10 +20,10 @@ val CrNamedElement.presentableKind: String
         is CrParameter -> "parameter"
         is CrTypeDef -> "type definition"
         is CrTypeParameter -> "type parameter"
-        is CrVariable -> when (nameElement?.innerElementType) {
-            in CR_GLOBAL_IDS -> "global variable"
-            CR_INSTANCE_VAR -> "instance variable"
-            CR_CLASS_VAR -> "class variable"
+        is CrVariable -> when (nameElement?.kind) {
+            CrNameKind.GLOBAL_VARIABLE -> "global variable"
+            CrNameKind.INSTANCE_VARIABLE -> "instance variable"
+            CrNameKind.CLASS_VARIABLE -> "class variable"
             else -> "variable"
         }
         is CrMacro -> "macro"
@@ -55,7 +55,7 @@ val CrExpression.isSemanticCall: Boolean
         is CrUnaryExpression -> opSign != CR_NOT_OP
         is CrIndexedExpression -> true
         is CrCommandExpression -> true
-        is CrReferenceExpression -> receiver != null && nameElement?.innerElementType == CR_IDENTIFIER
+        is CrReferenceExpression -> receiver != null && nameElement?.kind == CrNameKind.IDENTIFIER
         is CrAssignmentExpression -> opSign == CR_ASSIGN_OP && lhs?.isSemanticCall == true
         else -> false
     }

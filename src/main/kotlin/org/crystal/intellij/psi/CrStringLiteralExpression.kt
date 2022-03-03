@@ -12,7 +12,12 @@ import org.crystal.intellij.lexer.CR_STRING_END
 import org.crystal.intellij.lexer.CR_STRING_START
 import org.crystal.intellij.references.CrRequireReferenceSet
 
-class CrStringLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrStringValueHolder, PsiLanguageInjectionHost {
+class CrStringLiteralExpression(node: ASTNode) :
+    CrExpressionImpl(node),
+    CrStringValueHolder,
+    PsiLanguageInjectionHost,
+    CrNameKindAware
+{
     override fun accept(visitor: CrVisitor) = visitor.visitStringLiteralExpression(this)
 
     val openQuote: PsiElement
@@ -41,6 +46,9 @@ class CrStringLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrStrin
                 }
             }
         }
+
+    override val kind: CrNameKind
+        get() = CrNameKind.STRING
 
     val stringParent: PsiElement?
         get() {

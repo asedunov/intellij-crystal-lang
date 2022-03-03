@@ -99,7 +99,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitFunctionPointerExpression(o: CrFunctionPointerExpression) = visitExpression(o)
 
-    open fun visitGlobalMatchDataIndex(o: CrGlobalMatchIndexElement) = visitCrElement(o)
+    open fun visitGlobalMatchDataIndexName(o: CrGlobalMatchIndexName) = visitCrElement(o)
 
     open fun visitHashEntry(o: CrHashEntry) = visitCrElement(o)
 

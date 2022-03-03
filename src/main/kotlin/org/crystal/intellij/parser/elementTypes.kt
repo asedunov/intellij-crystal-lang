@@ -7,7 +7,7 @@ import org.crystal.intellij.CrystalLanguage
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.stubs.elementTypes.CrStubElementTypes
 
-class CrCompositeElementType(
+open class CrCompositeElementType(
     debugName: String,
     val factory: (ASTNode) -> CrElement
 ) : IElementType(debugName, CrystalLanguage)

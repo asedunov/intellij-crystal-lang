@@ -1,11 +1,8 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.elementType
-import org.crystal.intellij.lexer.CR_CLASS_VAR
-import org.crystal.intellij.lexer.CR_GLOBAL_VAR
-import org.crystal.intellij.lexer.CR_INSTANCE_VAR
+import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CR_SIMPLE_NAME_ELEMENT
 import org.crystal.intellij.stubs.api.CrNameStub
 
@@ -41,12 +38,21 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
             return if (e is CrStringLiteralExpression) e.text else name
         }
 
-    val innerElementType: IElementType?
-        get() = firstChild?.elementType
+    override val kind: CrNameKind
+        get() {
+            greenStub?.let { return it.kind }
+            return (firstChild as? CrNameKindAware)?.kind ?: CrNameKind.UNKNOWN
+        }
 
     val isQuestion: Boolean
         get() = name?.lastOrNull() == '?'
 
     val isExclamation: Boolean
         get() = name?.lastOrNull() == '!'
+
+    val isSelfRef: Boolean
+        get() = firstChild?.elementType == CR_SELF
+
+    val isMetaClassRef: Boolean
+        get() = firstChild?.elementType == CR_CLASS
 }

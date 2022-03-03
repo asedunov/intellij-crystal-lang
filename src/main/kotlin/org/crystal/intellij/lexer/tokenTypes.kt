@@ -39,11 +39,13 @@ open class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
     override fun hashCode(): Int {
         return name.hashCode()
     }
+
+    override fun createLeaf(text: CharSequence): LeafElement = CrKeywordElement(this, text)
 }
 
 fun crystalKeywordToken(
     name: String,
-    factory: (type: IElementType, text: CharSequence) -> LeafElement?
+    factory: (type: IElementType, text: CharSequence) -> LeafElement
 ) = object : CrystalKeywordTokenType(name) {
     override fun createLeaf(text: CharSequence) = factory(this, text)
 }
@@ -222,15 +224,15 @@ fun crystalKeywordToken(
 @JvmField val CR_UNICODE_BLOCK_START = CrystalTokenType("<unicode block start>")
 
 // Names
-@JvmField val CR_CLASS_VAR = CrystalTokenType("<class variable>")
-@JvmField val CR_CONSTANT = CrystalTokenType("<constant>")
-@JvmField val CR_IDENTIFIER = CrystalTokenType("<identifier>")
-@JvmField val CR_GLOBAL_VAR = CrystalTokenType("<global variable>")
-@JvmField val CR_GLOBAL_MATCH_DATA = CrystalTokenType("<global match data>")
-@JvmField val CR_GLOBAL_MATCH_DATA_INDEX = crystalToken("<global match data index>", ::CrGlobalMatchIndexElement)
-@JvmField val CR_INSTANCE_VAR = CrystalTokenType("<instance variable>")
+@JvmField val CR_CLASS_VAR = crystalToken("<class variable>", ::CrClassVariableName)
+@JvmField val CR_CONSTANT = crystalToken("<constant>", ::CrConstantName)
+@JvmField val CR_IDENTIFIER = crystalToken("<identifier>", ::CrIdentifierName)
+@JvmField val CR_GLOBAL_VAR = crystalToken("<global variable>", ::CrGlobalVariableName)
+@JvmField val CR_GLOBAL_MATCH_DATA = crystalToken("<global match data>", ::CrGlobalMatchDataName)
+@JvmField val CR_GLOBAL_MATCH_DATA_INDEX = crystalToken("<global match data index>", ::CrGlobalMatchIndexName)
+@JvmField val CR_INSTANCE_VAR = crystalToken("<instance variable>", ::CrInstanceVariableName)
 @JvmField val CR_MACRO_VAR = CrystalTokenType("<macro variable>")
-@JvmField val CR_UNDERSCORE = CrystalTokenType("_")
+@JvmField val CR_UNDERSCORE = crystalToken("_", ::CrUnderscoreName)
 
 // Numbers
 @JvmField val CR_FLOAT_LITERAL = CrystalTokenType("<float literal>")

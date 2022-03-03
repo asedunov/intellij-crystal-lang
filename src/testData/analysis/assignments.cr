@@ -36,9 +36,9 @@ a, b <error descr="Combined multiple assignments are not allowed">+=</error> 1, 
 
 <error descr="Assignment is now allowed for ?/! method calls">a.foo?</error> += 1
 
-a.foo! = 1
+<error descr="Assignment is now allowed for ?/! method calls">a.foo!</error> = 1
 
-a.foo! += 1
+<error descr="Assignment is now allowed for ?/! method calls">a.foo!</error> += 1
 
 <error descr="Can't change the value of self">self</error> = 1
 

@@ -16,6 +16,9 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement {
 
     override fun accept(visitor: CrVisitor) = visitor.visitPathNameElement(this)
 
+    override val kind: CrNameKind
+        get() = CrNameKind.PATH
+
     val isGlobal: Boolean
         get() {
             greenStub?.let { return it.isGlobal }

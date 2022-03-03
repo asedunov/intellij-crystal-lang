@@ -2,66 +2,66 @@ CrFileStubImpl
   CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[E])
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
   CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PRIVATE)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[E])
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
   CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[E])
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
   CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X, Y, E])
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
   CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[X, Y, E])
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
   CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[M])
     CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
       CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[E])
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
     CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
       CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X, Y, E])
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
     CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
       CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[X, Y, E])
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=A)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=A)
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=B)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
       CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
-        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(name=C)
+        CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)

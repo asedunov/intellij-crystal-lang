@@ -3,9 +3,6 @@ package org.crystal.intellij.psi
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ABSTRACT
-import org.crystal.intellij.lexer.CR_CONSTANT
-import org.crystal.intellij.lexer.CR_PRIVATE
-import org.crystal.intellij.lexer.CR_PROTECTED
 import org.crystal.intellij.resolve.*
 
 sealed interface CrDefinitionWithFqName : CrDefinition, CrVisibilityHolder {
@@ -22,7 +19,7 @@ sealed interface CrDefinitionWithFqName : CrDefinition, CrVisibilityHolder {
             return when (nameElement) {
                 is CrPathNameElement -> nameElement.getLocalFqName(parentFqName)
                 is CrSimpleNameElement -> {
-                    val isConstant = nameElement.innerElementType == CR_CONSTANT
+                    val isConstant = nameElement.kind == CrNameKind.CONSTANT
                     val name = name ?: NO_NAME
                     return if (isConstant) StableFqName(name, parentFqName) else MemberFqName(name, parentFqName)
                 }

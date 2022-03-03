@@ -142,13 +142,13 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 
-        if (ll >= LanguageLevel.CRYSTAL_1_3 && o.nameElement?.innerElementType == CR_GLOBAL_VAR) {
+        if (ll >= LanguageLevel.CRYSTAL_1_3 && o.nameElement?.kind == CrNameKind.GLOBAL_VARIABLE) {
             error(o, "Global variables are not supported, use class variables instead")
         }
     }
 
-    override fun visitGlobalMatchDataIndex(o: CrGlobalMatchIndexElement) {
-        super.visitGlobalMatchDataIndex(o)
+    override fun visitGlobalMatchDataIndexName(o: CrGlobalMatchIndexName) {
+        super.visitGlobalMatchDataIndexName(o)
 
         if (o.index == null) {
             error(o, "Index doesn't fit in an Int32")
@@ -234,7 +234,7 @@ class CrystalSyntaxCheckingVisitor(
         fun processParameterName(parameter: CrSimpleParameter) {
             errorIfInvalidName(parameter)
 
-            if (parameter.nameElement?.innerElementType == CR_IDENTIFIER) {
+            if (parameter.nameElement?.kind == CrNameKind.IDENTIFIER) {
                 paramsByName.putValue(parameter.name, parameter)
             }
         }
@@ -354,7 +354,7 @@ class CrystalSyntaxCheckingVisitor(
                 }
                 else {
                     if (expression is CrReferenceExpression &&
-                        expression.nameElement?.innerElementType == CR_UNDERSCORE) {
+                        expression.nameElement?.kind == CrNameKind.UNDERSCORE) {
                         val message = if (isExhaustive)
                             "'when _' is not supported"
                         else
@@ -391,7 +391,7 @@ class CrystalSyntaxCheckingVisitor(
         super.visitPointerExpression(o)
 
         val argument = o.argument
-        if (argument is CrReferenceExpression && argument.nameElement?.innerElementType == CR_SELF) {
+        if (argument is CrReferenceExpression && argument.nameElement?.isSelfRef == true) {
             error(o, "Can't take address of self")
         }
     }
@@ -471,7 +471,7 @@ class CrystalSyntaxCheckingVisitor(
 
         if ((o.parent as? CrBody)?.parent is CrLibrary) {
             val nameElement = o.nameElement ?: return
-            if (nameElement.innerElementType == CR_GLOBAL_VAR && nameElement.name?.firstOrNull()?.isUpperCase() == true) {
+            if (nameElement.kind == CrNameKind.GLOBAL_VARIABLE && nameElement.name?.firstOrNull()?.isUpperCase() == true) {
                 error(nameElement, "External variables must start with lowercase")
             }
         }
@@ -663,9 +663,9 @@ class CrystalSyntaxCheckingVisitor(
             is CrTypeExpression -> return true
             is CrReferenceExpression -> {
                 val nameElement = nameElement ?: return false
-                if (nameElement.innerElementType == CR_UNDERSCORE) return true
+                if (nameElement.kind == CrNameKind.UNDERSCORE) return true
                 val receiver = receiver
-                if (nameElement.innerElementType == CR_CLASS &&
+                if (nameElement.isMetaClassRef &&
                     receiver is CrPathExpression || receiver is CrTypeExpression) return true
                 if (hasImplicitReceiver && nameElement.isQuestion) return true
             }
@@ -685,7 +685,7 @@ class CrystalSyntaxCheckingVisitor(
 
             is CrReferenceExpression -> {
                 e.nameElement?.let { nameElement ->
-                    if (nameElement.innerElementType == CR_SELF) {
+                    if (nameElement.isSelfRef) {
                         error(e, "Can't change the value of self")
                     }
                     if (nameElement.isQuestion || nameElement.isExclamation) {
@@ -788,8 +788,7 @@ class CrystalSyntaxCheckingVisitor(
 
     private fun errorIfInvalidName(element: CrNamedElement) {
         val nameElement = element.nameElement as? CrSimpleNameElement ?: return
-        val tokenType = nameElement.innerElementType
-        if (tokenType == CR_IDENTIFIER || tokenType is CrystalKeywordTokenType) {
+        if (nameElement.kind == CrNameKind.IDENTIFIER) {
             val name = nameElement.name
             if (name in invalidInternalNames) {
                 error(nameElement, "Cannot use '$name' as a ${element.presentableKind} name")

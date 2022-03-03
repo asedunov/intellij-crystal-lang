@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
-import org.crystal.intellij.parser.CR_STRING_LITERAL_EXPRESSION
+import org.crystal.intellij.psi.CrNameKind
 import org.crystal.intellij.psi.CrSimpleNameElement
 import org.crystal.intellij.stubs.api.CrNameStub
 import org.crystal.intellij.stubs.impl.CrFullNameStubImpl
@@ -16,10 +16,10 @@ object CrSimpleNameStubElementType : CrStubElementType<CrSimpleNameElement, CrNa
     ::CrSimpleNameElement
 ) {
     override fun createStub(psi: CrSimpleNameElement, parentStub: StubElement<out PsiElement>?): CrNameStub<CrSimpleNameElement> {
-        return if (psi.innerElementType == CR_STRING_LITERAL_EXPRESSION)
+        return if (psi.kind == CrNameKind.STRING)
             CrFullNameStubImpl(parentStub, this, psi.name, psi.sourceName)
         else
-            CrSingleNameStubImpl(parentStub, this, psi.name)
+            CrSingleNameStubImpl(parentStub, this, psi.kind, psi.name)
     }
 
     override fun serialize(stub: CrNameStub<CrSimpleNameElement>, dataStream: StubOutputStream) {
@@ -30,6 +30,7 @@ object CrSimpleNameStubElementType : CrStubElementType<CrSimpleNameElement, CrNa
         }
         else {
             dataStream.writeBoolean(false)
+            dataStream.writeVarInt(stub.kind.ordinal)
             dataStream.writeName(stub.actualName)
         }
     }
@@ -41,8 +42,9 @@ object CrSimpleNameStubElementType : CrStubElementType<CrSimpleNameElement, CrNa
             val sourceName = dataStream.readNameString()
             CrFullNameStubImpl(parentStub, this, actualName, sourceName)
         } else {
+            val kind = CrNameKind.of(dataStream.readVarInt())
             val name = dataStream.readNameString()
-            CrSingleNameStubImpl(parentStub, this, name)
+            CrSingleNameStubImpl(parentStub, this, kind, name)
         }
     }
 }

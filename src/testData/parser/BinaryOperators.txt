@@ -140,7 +140,5 @@ FILE
       PsiElement(()('(')
       CrPathType(CR_PATH_TYPE)
         CrPathNameElement(CR_PATH_NAME_ELEMENT)
-          CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-            CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
-              PsiElement(<constant>)('Int32')
+          PsiElement(<constant>)('Int32')
       PsiElement())(')')

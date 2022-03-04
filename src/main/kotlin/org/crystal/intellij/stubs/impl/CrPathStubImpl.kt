@@ -8,8 +8,7 @@ import org.crystal.intellij.stubs.api.CrPathStub
 class CrPathStubImpl(
     parent: StubElement<*>?,
     elementType: IStubElementType<out StubElement<*>, *>,
-    override val isGlobal: Boolean,
-    override val items: List<String>,
+    override val name: String,
 ) : CrStubElementImpl<CrPathNameElement>(parent, elementType), CrPathStub {
-    override fun toString() = "CrPathStubImpl(isGlobal=$isGlobal, items=$items)"
+    override fun toString() = "CrPathStubImpl(name=$name)"
 }

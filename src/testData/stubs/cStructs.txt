@@ -6,18 +6,18 @@ CrFileStubImpl
       CR_C_FIELD_DEFINITION:CrCFieldStubImpl
         CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
       CR_C_FIELD_DEFINITION:CrCFieldStubImpl
         CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=bar)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
     CR_C_UNION_DEFINITION:CrCUnionStubImpl
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=U)
       CR_C_FIELD_DEFINITION:CrCFieldStubImpl
         CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
       CR_C_FIELD_DEFINITION:CrCFieldStubImpl
         CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=bar)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)

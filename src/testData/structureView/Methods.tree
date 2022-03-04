@@ -2,6 +2,8 @@
  [foo1]
  foo10("x" y : Int)
  foo11(x : Int = ...)
+ foo14 : A::B::C
+ foo15 : ::A::B::C
  foo2 : Int
  foo3()
  foo4() : Int

@@ -22,4 +22,8 @@ lib MyLib
     fun foo11(...)
 
     fun foo12(x : Int, ...)
+
+    fun foo13 : A::B::C
+
+    fun foo14 : ::A::B::C
 end

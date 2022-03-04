@@ -9,42 +9,47 @@ CrFileStubImpl
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
-        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[X])
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=X)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
-        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[A, B, X])
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=X)
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=B)
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
-        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=true, items=[A, B, X])
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=X)
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=B)
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
+              CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_SPLAT_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_DOUBLE_SPLAT_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_TUPLE_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[String])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
@@ -53,27 +58,27 @@ CrFileStubImpl
         CR_LABELED_TYPE:CrTypeStubImpl
           CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=n)
           CR_PATH_TYPE:CrTypeStubImpl
-            CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
         CR_LABELED_TYPE:CrTypeStubImpl
           CR_SIMPLE_NAME_ELEMENT:CrFullNameStubImpl(actualName=s, sourceName="s")
           CR_PATH_TYPE:CrTypeStubImpl
-            CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[String])
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_UNION_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[String])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_INSTANTIATED_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Foo])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
         CR_TYPE_ARGUMENT_LIST:CrTypeArgumentListStubImpl
           CR_UNDERSCORE_TYPE:CrTypeStubImpl
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
@@ -82,28 +87,28 @@ CrFileStubImpl
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_POINTER_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_METACLASS_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_STATIC_ARRAY_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_NILABLE_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
@@ -115,7 +120,7 @@ CrFileStubImpl
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PARENTHESIZED_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
@@ -124,9 +129,9 @@ CrFileStubImpl
         CR_PROC_TYPE:CrTypeStubImpl
           CR_TYPE_ARGUMENT_LIST:CrTypeArgumentListStubImpl
             CR_PATH_TYPE:CrTypeStubImpl
-              CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+              CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
           CR_PATH_TYPE:CrTypeStubImpl
-            CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[String])
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
@@ -134,18 +139,18 @@ CrFileStubImpl
       CR_PROC_TYPE:CrTypeStubImpl
         CR_TYPE_ARGUMENT_LIST:CrTypeArgumentListStubImpl
           CR_PATH_TYPE:CrTypeStubImpl
-            CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
           CR_PATH_TYPE:CrTypeStubImpl
-            CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Boolean])
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Boolean)
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[String])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PROC_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
-          CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[String])
+          CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
@@ -153,4 +158,4 @@ CrFileStubImpl
       CR_PROC_TYPE:CrTypeStubImpl
         CR_TYPE_ARGUMENT_LIST:CrTypeArgumentListStubImpl
           CR_PATH_TYPE:CrTypeStubImpl
-            CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+            CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)

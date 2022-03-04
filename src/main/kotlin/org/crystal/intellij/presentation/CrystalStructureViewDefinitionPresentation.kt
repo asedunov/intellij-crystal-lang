@@ -5,12 +5,9 @@ import org.crystal.intellij.psi.CrPathBasedDefinition
 
 class CrystalStructureViewDefinitionPresentation(definition: CrDefinition) : CrystalDefinitionPresentationBase(definition) {
     override fun getLocationString(): String? {
-        val pathBasedDefinition = definition as? CrPathBasedDefinition ?: return null
-        val qualifiedName = pathBasedDefinition.localFqName?.parent?.fullName ?: return null
+        val path = (definition as? CrPathBasedDefinition)?.nameElement?.qualifier ?: return null
         return buildString {
-            append("in ")
-            if (definition.nameElement?.isGlobal == true) append("::")
-            append(qualifiedName)
+            append("in ").appendPath(path)
         }
     }
 }

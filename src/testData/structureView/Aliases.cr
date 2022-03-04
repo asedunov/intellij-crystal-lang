@@ -1,5 +1,9 @@
 alias Foo = Bar
 
+alias Foo2 = A::B::C
+
+alias Foo3 = ::A::B::C
+
 alias Mod1::Foo = Mod2::Bar
 
 module MyModule

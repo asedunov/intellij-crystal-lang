@@ -1,6 +1,8 @@
 -Aliases.cr
  [Foo = Bar]
  Foo = Mod2::Bar
+ Foo2 = A::B::C
+ Foo3 = ::A::B::C
  -MyClass
   Foo = Bar
   Foo = Mod2::Bar

@@ -2,3 +2,4 @@
  -[MyLib]
   Foo1 = Bar
   Foo2 = Mod1::Bar
+  Foo3 = ::Mod1::Bar

@@ -3,10 +3,7 @@ package org.crystal.intellij.presentation
 import com.intellij.navigation.ColoredItemPresentation
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.Iconable
-import com.intellij.psi.util.elementType
 import com.intellij.util.containers.JBIterable
-import org.crystal.intellij.lexer.CR_PATH_OP
-import org.crystal.intellij.parser.CR_REFERENCE_EXPRESSION
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.util.append
 import org.crystal.intellij.util.appendSpaced
@@ -88,12 +85,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
             type.innerType?.let { appendType(it) }
             append(")")
         }
-        is CrPathType -> type.path?.let { path ->
-            append(path.allChildren().filter {
-                val et = it.elementType
-                et == CR_PATH_OP || et == CR_REFERENCE_EXPRESSION
-            }, "") { append(it.text) }
-        } ?: append("???")
+        is CrPathType -> appendPath(type.path)
         is CrPointerType -> appendType(type.innerType).append("*")
         is CrProcType -> {
             append(type.inputList.elements) { appendType(it) }
@@ -108,6 +100,17 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         is CrUnderscoreType -> append("_")
         is CrUnionType -> append(type.componentTypes, " | ") { appendType(it) }
         null -> append("???")
+    }
+
+    protected fun StringBuilder.appendPath(path: CrPathNameElement?): StringBuilder = when {
+        path != null -> {
+            path.qualifier?.let {
+                appendPath(it).append("::")
+            }
+            append(path.name)
+        }
+
+        else -> this
     }
 
     override fun getIcon(unused: Boolean): Icon {

@@ -3,6 +3,8 @@
  foo10 = "bar.baz"(s : String)
  foo11(...)
  foo12(x : Int, ...)
+ foo13 : A::B::C
+ foo14 : ::A::B::C
  foo2 : Int
  foo3()
  foo4() : Int

@@ -14,23 +14,15 @@ object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathSt
     ::CrPathNameElement
 ) {
     override fun createStub(psi: CrPathNameElement, parentStub: StubElement<out PsiElement>?): CrPathStub {
-        return CrPathStubImpl(parentStub, this, psi.isGlobal, psi.items.map { it.name ?: "" }.toList())
+        return CrPathStubImpl(parentStub, this, psi.name)
     }
 
     override fun serialize(stub: CrPathStub, dataStream: StubOutputStream) {
-        dataStream.writeBoolean(stub.isGlobal)
-        val items = stub.items
-        dataStream.writeInt(items.size)
-        items.forEach { dataStream.writeName(it) }
+        dataStream.writeName(stub.name)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrPathStub {
-        val isGlobal = dataStream.readBoolean()
-        val itemCount = dataStream.readInt()
-        val items = Array(itemCount) { "" }
-        for (i in 0 until itemCount) {
-            items[i] = dataStream.readNameString() ?: ""
-        }
-        return CrPathStubImpl(parentStub, this, isGlobal, items.asList())
+        val name = dataStream.readNameString() ?: ""
+        return CrPathStubImpl(parentStub, this, name)
     }
 }

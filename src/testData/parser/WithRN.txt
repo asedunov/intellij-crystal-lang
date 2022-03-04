@@ -3,9 +3,7 @@ FILE
     PsiElement(class)('class')
     PsiWhiteSpace(' ')
     CrPathNameElement(CR_PATH_NAME_ELEMENT)
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-        CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
-          PsiElement(<constant>)('Foo')
+      PsiElement(<constant>)('Foo')
     PsiWhiteSpace('\r\n')
     CrBody(CR_BODY)
       <empty list>

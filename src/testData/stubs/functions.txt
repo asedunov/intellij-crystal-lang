@@ -6,7 +6,7 @@ CrFileStubImpl
     CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
-        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_FUNCTION_DEFINITION:CrFunctionStubImpl(isVariadic=false)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
   CR_FUNCTION_DEFINITION:CrFunctionStubImpl(isVariadic=false)

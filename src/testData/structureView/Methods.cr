@@ -37,6 +37,12 @@ end
 def self.foo13
 end
 
+def foo14 : A::B::C
+end
+
+def foo15 : ::A::B::C
+end
+
 module MyModule
   def foo
   end

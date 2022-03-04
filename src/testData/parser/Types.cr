@@ -44,6 +44,11 @@ def foo(a, &block : self -> self); end
 
 def foo(a, &block : Foo); end
 
+x : ::A::B = 1
+
+class ::A::B
+end
+
 x : Foo(A, *B, C)
 
 x : *T -> R

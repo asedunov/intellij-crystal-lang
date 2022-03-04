@@ -2,16 +2,12 @@ package org.crystal.intellij.resolve
 
 import org.crystal.intellij.psi.CrPathNameElement
 
-fun CrPathNameElement.getLocalFqName(parent: StableFqName? = null): StableFqName? {
-    var fqName = if (isGlobal) null else parent
-
-    val stub = greenStub
-    if (stub != null) {
-        stub.items.forEach { fqName = StableFqName(it, fqName) }
+fun CrPathNameElement.getFqName(root: () -> StableFqName? = { null }): StableFqName? {
+    val qualifier = qualifier
+    val parent = when {
+        qualifier != null -> qualifier.getFqName(root)
+        isGlobal -> return null
+        else -> root()
     }
-    else {
-        items.forEach { fqName = StableFqName(it.name ?: NO_NAME, fqName) }
-    }
-
-    return fqName
+    return StableFqName(name, parent)
 }

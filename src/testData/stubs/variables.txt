@@ -2,16 +2,16 @@ CrFileStubImpl
   CR_VARIABLE_DECLARATION:CrVariableStubImpl(hasDefaultValue=true)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
     CR_PATH_TYPE:CrTypeStubImpl
-      CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_CLASS_DEFINITION:CrClassStubImpl(isAbstract=false, visibility=PUBLIC)
-    CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[C])
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=C)
     CR_VARIABLE_DECLARATION:CrVariableStubImpl(hasDefaultValue=true)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=INSTANCE_VARIABLE, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
-        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
     CR_VARIABLE_DECLARATION:CrVariableStubImpl(hasDefaultValue=true)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CLASS_VARIABLE, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
-        CR_PATH_NAME_ELEMENT:CrPathStubImpl(isGlobal=false, items=[Int32])
+        CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)

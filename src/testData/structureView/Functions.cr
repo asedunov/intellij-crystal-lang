@@ -34,6 +34,12 @@ end
 fun foo12(x : Int, ...)
 end
 
+fun foo13 : A::B::C
+end
+
+fun foo14 : ::A::B::C
+end
+
 module MyModule
   fun foo
   end

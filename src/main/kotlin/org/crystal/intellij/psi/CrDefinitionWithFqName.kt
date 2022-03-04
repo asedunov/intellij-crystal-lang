@@ -8,23 +8,21 @@ import org.crystal.intellij.resolve.*
 sealed interface CrDefinitionWithFqName : CrDefinition, CrVisibilityHolder {
     val fqName: FqName?
         get() {
-            if (this is CrPathBasedDefinition && nameElement?.isGlobal == true) return localFqName
-
-            val parentFqName = when (val parent = parentStubOrPsi()) {
-                is CrFile -> null
-                is CrBody -> (parent.parent as? CrDefinitionWithBody)?.fqName as? StableFqName
-                else -> return null
-            }
-            val nameElement = nameElement ?: return null
-            return when (nameElement) {
-                is CrPathNameElement -> nameElement.getLocalFqName(parentFqName)
+            return when (val nameElement = nameElement) {
+                is CrPathNameElement -> nameElement.getFqName(::parentFqName)
                 is CrSimpleNameElement -> {
                     val isConstant = nameElement.kind == CrNameKind.CONSTANT
                     val name = name ?: NO_NAME
-                    return if (isConstant) StableFqName(name, parentFqName) else MemberFqName(name, parentFqName)
+                    return if (isConstant) StableFqName(name, parentFqName()) else MemberFqName(name, parentFqName())
                 }
+                else -> null
             }
         }
+
+    private fun parentFqName() = when (val parent = parentStubOrPsi()) {
+        is CrBody -> (parent.parent as? CrDefinitionWithBody)?.fqName as? StableFqName
+        else -> null
+    }
 
     val isLocal: Boolean
         get() {

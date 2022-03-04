@@ -467,6 +467,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseProgram() {
+            setDebugMode(true)
             if (eof()) error("Expected: <expression>")
             skipStatementEnd()
             parseExpressions()
@@ -2117,26 +2118,34 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseGenericOrCustomLiteral(): Boolean {
-            parseGeneric(true)
+        private fun PsiBuilder.parseGenericOrCustomLiteral(pathStarted: Boolean = false): Boolean {
+            parseGeneric(true, pathStarted)
             parseCustomLiteralTail()
             return true
         }
 
         private fun PsiBuilder.parseGenericOrGlobalCall(): Boolean {
-            val m = mark()
+            val mPathRoot = mark()
+            val mOuter = mPathRoot.precede()
+            mPathRoot.done(CR_PATH_NAME_ELEMENT)
+
             nextTokenSkipSpacesAndNewlines()
 
             when {
-                at(CR_IDS) -> parseVarOrCall()
-                at(CR_CONSTANT) -> parseGenericOrCustomLiteral()
+                at(CR_IDS) -> {
+                    mPathRoot.drop()
+                    parseVarOrCall()
+                    mergeLatestDoneMarker(mOuter)
+                }
+                at(CR_CONSTANT) -> {
+                    mOuter.drop()
+                    parseGenericOrCustomLiteral(true)
+                }
                 else -> {
-                    m.error("Expected: <identifier> or <type name>")
-                    return true
+                    mOuter.drop()
+                    error("Expected: <identifier> or <type name>")
                 }
             }
-
-            mergeLatestDoneMarker(m)
 
             return true
         }
@@ -4772,8 +4781,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.parseGeneric(isExpression: Boolean = false): Boolean {
-            parsePath()
+        private fun PsiBuilder.parseGeneric(isExpression: Boolean = false, pathStarted: Boolean = false): Boolean {
+            parsePath(pathStarted)
 
             if (at(CR_LPAREN)) {
                 compositeSuffix(CR_PATH_TYPE) {}
@@ -4925,28 +4934,37 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             parsePath()
         }
 
-        private fun PsiBuilder.parsePath() = composite(CR_PATH_NAME_ELEMENT) {
-            if (at(CR_PATH_OP)) nextTokenSkipSpacesAndNewlines()
+        private fun PsiBuilder.parsePath(pathStarted: Boolean = false): Boolean {
+            var foundGlobalPrefix = pathStarted
+            if (!foundGlobalPrefix && at(CR_PATH_OP)) {
+                foundGlobalPrefix = true
+                mark().done(CR_PATH_NAME_ELEMENT)
+                nextTokenSkipSpacesAndNewlines()
+            }
 
-            ensureParseRefType()
+            finishComposite(
+                CR_PATH_NAME_ELEMENT,
+                if (foundGlobalPrefix) markBeforeLast() else mark()
+            ) {
+                parsePathElement()
+            }
+
             while (at(CR_PATH_OP)) {
                 nextTokenSkipSpacesAndNewlines()
-                ensureParseRefType()
+                compositeSuffix(CR_PATH_NAME_ELEMENT) { parsePathElement() }
             }
 
             skipSpaces()
+
+            return true
         }
 
-        private fun PsiBuilder.parseRefType(): Boolean {
-            if (!at(CR_CONSTANT)) return false
-            return composite(CR_REFERENCE_EXPRESSION) {
+        private fun PsiBuilder.parsePathElement() {
+            if (at(CR_CONSTANT)) {
                 lexerState.wantsRegex = false
-                composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                nextTokenSkipSpaces()
             }
-        }
-
-        private fun PsiBuilder.ensureParseRefType() {
-            if (!parseRefType()) error("Expected: <module/type name>")
+            else error("Expected: <constant name>")
         }
 
         // Entry point

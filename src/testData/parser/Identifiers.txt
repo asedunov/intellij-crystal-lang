@@ -9,9 +9,7 @@ FILE
 
   CrPathExpression(CR_PATH_EXPRESSION)
     CrPathNameElement(CR_PATH_NAME_ELEMENT)
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-        CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
-          PsiElement(<constant>)('Test')
+      PsiElement(<constant>)('Test')
 
   CrReferenceExpression(CR_REFERENCE_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)

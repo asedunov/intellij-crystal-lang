@@ -1,16 +1,13 @@
 package org.crystal.intellij.references
 
 import com.intellij.analysis.AnalysisBundle
-import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
 import com.intellij.psi.ResolveResult
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileInfoManager
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference
-import com.intellij.util.containers.map2Array
 import com.intellij.util.indexing.IndexingBundle
 import org.crystal.intellij.psi.CrFile
 import org.jetbrains.annotations.Nls

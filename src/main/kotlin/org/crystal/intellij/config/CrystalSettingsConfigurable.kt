@@ -13,6 +13,7 @@ import com.intellij.ui.layout.panel
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.config.ui.CrystalExePathComboBox
 import org.crystal.intellij.sdk.CrystalSdkFlavor
+import org.crystal.intellij.sdk.requestVersion
 import org.crystal.intellij.util.toPathOrNull
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JLabel
@@ -81,7 +82,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         }
 
         crystalExeComboBox.addToolchainsAsync {
-            CrystalSdkFlavor.applicableFlavors.flatMap { it.suggestCrystalExePaths() }.distinct()
+            CrystalSdkFlavor.INSTANCE?.suggestCrystalExePaths()?.toList() ?: emptyList()
         }
     }
 
@@ -103,8 +104,8 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
     }
 
     private fun onExePathUpdate() {
-        val crystalExePath = crystalExeComboBox.selectedPath
-        val version = crystalExePath?.let { CrystalSdkFlavor.requestVersion(it) }
+        val crystalExePath = crystalExeComboBox.selectedPath?.toString()
+        val version = crystalExePath?.let { CrystalSdkFlavor.INSTANCE?.createCrystalExe(it)?.requestVersion() }
         if (version != null) {
             sdkVersionLabel.text = version.parsedVersion
             sdkVersionLabel.foreground = JBColor.foreground()

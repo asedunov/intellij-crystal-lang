@@ -1,7 +1,5 @@
 package org.crystal.intellij.references
 
-import com.intellij.openapi.module.ModuleUtilCore
-import com.intellij.openapi.project.rootManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
@@ -15,8 +13,9 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.SmartList
 import com.intellij.util.containers.addIfNotNull
 import com.intellij.util.containers.map2Array
-import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.psi.CrStringLiteralExpression
+import org.crystal.intellij.psi.module
+import org.crystal.intellij.resolve.crystalPathRoots
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
 
@@ -37,19 +36,10 @@ class CrRequireReferenceSet(
 
     override fun computeDefaultContexts(): Collection<PsiFileSystemItem> {
         val pathString = pathString
-        if (pathString.startsWith('.')) {
-            return super.computeDefaultContexts()
-        }
-        else {
-            val contexts = ArrayList<PsiFileSystemItem>()
-            val module = ModuleUtilCore.findModuleForPsiElement(element) ?: return super.computeDefaultContexts()
-            val psiManager = element.manager
-            module.rootManager.contentRoots.flatMapTo(contexts) {
-                val dir = psiManager.findDirectory(it) ?: return@flatMapTo emptyList()
-                listOfNotNull(dir, dir.findSubdirectory("src"), dir.findSubdirectory("lib"))
-            }
-            contexts.addIfNotNull(module.project.crystalWorkspaceSettings.stdlibRootDirectory?.toPsi(psiManager))
-            return contexts
+        return if (pathString.startsWith('.')) {
+            super.computeDefaultContexts()
+        } else {
+            element.module()?.crystalPathRoots() ?: emptyList()
         }
     }
 

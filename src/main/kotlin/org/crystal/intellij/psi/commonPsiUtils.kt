@@ -1,5 +1,6 @@
 package org.crystal.intellij.psi
 
+import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.psi.*
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.containers.JBIterable
@@ -71,3 +72,5 @@ fun PsiElement.lastSignificantLeaf(): PsiElement? {
 }
 
 inline fun <reified T : PsiElement> PsiElement.replaceTyped(replacement: T) = replace(replacement) as T
+
+fun PsiElement.module() = ModuleUtilCore.findModuleForPsiElement(this)

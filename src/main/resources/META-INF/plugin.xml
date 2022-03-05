@@ -85,6 +85,10 @@
                          implementationClass="org.crystal.intellij.inspections.CrystalResolveInspection"/>
 
         <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
+
+        <configurationType implementation="org.crystal.intellij.run.CrystalFileRunConfigurationType"/>
+
+        <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileRunConfigurationProducer"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.crystal">

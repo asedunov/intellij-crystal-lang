@@ -633,7 +633,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                 if (isConditional && parsed) {
                     skipSpacesAndNewlines()
-                    parsed = parsed && tok(CR_COLON)
+                    parsed = tok(CR_COLON)
                     if (parsed) {
                         nextTokenSkipSpacesAndNewlines()
                     }

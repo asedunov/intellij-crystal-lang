@@ -7,8 +7,11 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.components.StoragePathMacros
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.ClearableLazyValue
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
+import org.crystal.intellij.sdk.CrystalExe
+import org.crystal.intellij.sdk.CrystalSdkFlavor
 import org.jdom.Element
 
 private const val serviceName = "CrystalWorkspaceSettings"
@@ -37,6 +40,9 @@ class CrystalProjectWorkspaceSettings(
         }
 
     private fun onStateChange(oldState: State, newState: State) {
+        if (oldState.crystalExePath != newState.crystalExePath) {
+            _crystalExe.drop()
+        }
         if (oldState.stdlibPath != newState.stdlibPath) {
             updateProjectRoots(project)
         }
@@ -47,6 +53,13 @@ class CrystalProjectWorkspaceSettings(
 
     val stdlibRootDirectory: VirtualFile?
         get() = if (stdlibPath.isNotEmpty()) StandardFileSystems.local().findFileByPath(stdlibPath) else null
+
+    private val _crystalExe = ClearableLazyValue.createAtomic {
+        CrystalSdkFlavor.INSTANCE?.createCrystalExe(_state.crystalExePath) ?: CrystalExe.EMPTY
+    }
+
+    val crystalExe: CrystalExe
+        get() = _crystalExe.value
 
     override fun getState(): Element {
         return Element(serviceName).apply { serializeObjectInto(_state, this) }

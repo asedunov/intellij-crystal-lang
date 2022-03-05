@@ -20,7 +20,7 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement {
     val qualifier: CrPathNameElement?
         get() = stubChildOfType()
 
-    val item: CrConstantName?
+    private val item: CrConstantName?
         get() = childOfType()
 
     override fun getName() = greenStub?.name ?: item?.name ?: ""

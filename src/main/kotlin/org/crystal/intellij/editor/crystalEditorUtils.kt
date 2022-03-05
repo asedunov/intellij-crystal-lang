@@ -14,7 +14,7 @@ val delimiters = ImmutableBiMap.builder<Char, Char>()
         for (quote in quotes) put(quote, quote)
         for ((lBracket, rBracket) in brackets) put(lBracket, rBracket)
     }
-    .build()!!
+    .build()
 
 val Char.isQuote
     get() = this in quotes

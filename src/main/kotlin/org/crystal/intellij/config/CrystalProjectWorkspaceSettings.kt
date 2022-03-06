@@ -42,7 +42,7 @@ class CrystalProjectWorkspaceSettings(
         }
     }
 
-    private val stdlibPath: String
+    val stdlibPath: String
         get() = _state.stdlibPath
 
     val stdlibRootDirectory: VirtualFile?

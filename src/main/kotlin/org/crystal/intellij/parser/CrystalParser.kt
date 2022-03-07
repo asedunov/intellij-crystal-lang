@@ -467,7 +467,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseProgram() {
-            setDebugMode(true)
             if (eof()) error("Expected: <expression>")
             skipStatementEnd()
             parseExpressions()
@@ -2118,31 +2117,28 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseGenericOrCustomLiteral(pathStarted: Boolean = false): Boolean {
-            parseGeneric(true, pathStarted)
+        private fun PsiBuilder.parseGenericOrCustomLiteral(): Boolean {
+            parseGeneric(true)
             parseCustomLiteralTail()
             return true
         }
 
         private fun PsiBuilder.parseGenericOrGlobalCall(): Boolean {
-            val mPathRoot = mark()
-            val mOuter = mPathRoot.precede()
-            mPathRoot.done(CR_PATH_NAME_ELEMENT)
+            val nextToken = lexer.lookAhead {
+                skipSpacesAndNewlines()
+                tokenType
+            }
 
-            nextTokenSkipSpacesAndNewlines()
-
-            when {
-                at(CR_IDS) -> {
-                    mPathRoot.drop()
+            when(nextToken) {
+                in CR_IDS -> {
+                    val m = mark()
+                    nextTokenSkipSpacesAndNewlines()
                     parseVarOrCall()
-                    mergeLatestDoneMarker(mOuter)
+                    mergeLatestDoneMarker(m)
                 }
-                at(CR_CONSTANT) -> {
-                    mOuter.drop()
-                    parseGenericOrCustomLiteral(true)
-                }
+                CR_CONSTANT -> parseGenericOrCustomLiteral()
                 else -> {
-                    mOuter.drop()
+                    nextTokenSkipSpacesAndNewlines()
                     error("Expected: <identifier> or <type name>")
                 }
             }
@@ -4781,8 +4777,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.parseGeneric(isExpression: Boolean = false, pathStarted: Boolean = false): Boolean {
-            parsePath(pathStarted)
+        private fun PsiBuilder.parseGeneric(isExpression: Boolean = false): Boolean {
+            parsePath()
 
             if (at(CR_LPAREN)) {
                 compositeSuffix(CR_PATH_TYPE) {}
@@ -4934,17 +4930,17 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             parsePath()
         }
 
-        private fun PsiBuilder.parsePath(pathStarted: Boolean = false): Boolean {
-            var foundGlobalPrefix = pathStarted
-            if (!foundGlobalPrefix && at(CR_PATH_OP)) {
-                foundGlobalPrefix = true
-                mark().done(CR_PATH_NAME_ELEMENT)
+        private fun PsiBuilder.parsePath(): Boolean {
+            var foundPathOpPrefix = false
+            if (at(CR_PATH_OP)) {
+                foundPathOpPrefix = true
+                composite(CR_PATH_NAME_ELEMENT) {}
                 nextTokenSkipSpacesAndNewlines()
             }
 
             finishComposite(
                 CR_PATH_NAME_ELEMENT,
-                if (foundGlobalPrefix) markBeforeLast() else mark()
+                if (foundPathOpPrefix) markBeforeLast() else mark()
             ) {
                 parsePathElement()
             }

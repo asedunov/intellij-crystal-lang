@@ -467,7 +467,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseProgram() {
-            if (eof()) error("Expected: <expression>")
             skipStatementEnd()
             parseExpressions()
             recoverUntil("<EOF>") { false }

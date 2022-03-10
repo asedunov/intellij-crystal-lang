@@ -19,7 +19,7 @@ class CrFileElementType : IStubFileElementType<CrFileStub>(NAME, CrystalLanguage
         private const val NAME = "FILE"
     }
 
-    override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode {
+    override fun doParseContents(chameleon: ASTNode, psi: PsiElement): ASTNode? {
         val project = psi.project
         val parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(CrystalLanguage)
         val lexer = parserDefinition.createLexer(project)

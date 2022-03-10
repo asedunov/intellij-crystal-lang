@@ -1,6 +1,4 @@
 FILE
-  PsiErrorElement:Expected: <expression>
-    <empty list>
 
   PsiWhiteSpace(' ')
 

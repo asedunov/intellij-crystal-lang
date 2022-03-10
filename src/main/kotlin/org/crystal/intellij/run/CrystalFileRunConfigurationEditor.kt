@@ -1,6 +1,6 @@
 package org.crystal.intellij.run
 
-import com.intellij.execution.configuration.EnvironmentVariablesComponent
+import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
@@ -20,7 +20,7 @@ import kotlin.io.path.name
 class CrystalFileRunConfigurationEditor : SettingsEditor<CrystalFileRunConfiguration>() {
     private lateinit var fileEditor: TextFieldWithBrowseButton
     private lateinit var showProgressEditor: JBCheckBox
-    private lateinit var envEditor: EnvironmentVariablesComponent
+    private lateinit var envEditor: EnvironmentVariablesTextFieldWithBrowseButton
     private lateinit var compilerArgumentsEditor: RawCommandLineEditor
     private lateinit var programArgumentsEditor: RawCommandLineEditor
 
@@ -38,9 +38,8 @@ class CrystalFileRunConfigurationEditor : SettingsEditor<CrystalFileRunConfigura
             row("Program arguments: ") {
                 programArgumentsEditor = RawCommandLineEditor()(growX).component
             }
-            envEditor = EnvironmentVariablesComponent()
-            row(envEditor.label) {
-                envEditor = EnvironmentVariablesComponent()(growX).component
+            row("Environment variables: ") {
+                envEditor = EnvironmentVariablesTextFieldWithBrowseButton()(growX).component
             }
         }
     }
@@ -70,7 +69,7 @@ class CrystalFileRunConfigurationEditor : SettingsEditor<CrystalFileRunConfigura
     override fun resetEditorFrom(configuration: CrystalFileRunConfiguration) {
         fileEditor.text = configuration.filePath ?: ""
         showProgressEditor.isSelected = configuration.showProgress
-        envEditor.envData = configuration.env
+        envEditor.data = configuration.env
         compilerArgumentsEditor.text = configuration.compilerArguments
         programArgumentsEditor.text = configuration.programArguments
     }
@@ -78,7 +77,7 @@ class CrystalFileRunConfigurationEditor : SettingsEditor<CrystalFileRunConfigura
     override fun applyEditorTo(configuration: CrystalFileRunConfiguration) {
         configuration.filePath = fileEditor.text
         configuration.showProgress = showProgressEditor.isSelected
-        configuration.env = envEditor.envData
+        configuration.env = envEditor.data
         configuration.compilerArguments = compilerArgumentsEditor.text
         configuration.programArguments = programArgumentsEditor.text
     }

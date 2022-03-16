@@ -1,18 +1,24 @@
 package org.crystal.intellij.config
 
-import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.project.Project
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.annotations.Attribute
-import com.intellij.util.xmlb.annotations.Transient
 import org.jetbrains.annotations.TestOnly
 
-@State(name = "CrystalSettings", storages = [Storage("crystal.xml")])
+private const val SERVICE_NAME = "CrystalSettings"
+
+@State(name = SERVICE_NAME, storages = [Storage("crystal.xml")])
 class CrystalProjectSettings @JvmOverloads constructor(
     private val project: Project? = null
-) : PersistentStateComponent<CrystalProjectSettings> {
+) : PersistentConfigBase<CrystalProjectSettings.State>(SERVICE_NAME) {
+    data class State(
+        @Attribute("languageLevel", converter = VersionConverter::class)
+        var languageVersion: LanguageVersion = LanguageVersion.LatestStable,
+        var mainFilePath: String = ""
+    )
+
     private class VersionConverter : Converter<LanguageVersion>() {
         override fun toString(value: LanguageVersion) = when (value) {
             is LanguageVersion.Specific -> value.level.shortName
@@ -25,28 +31,22 @@ class CrystalProjectSettings @JvmOverloads constructor(
         }
     }
 
-    @Attribute("languageLevel", converter = VersionConverter::class)
-    private var _languageVersion: LanguageVersion = LanguageVersion.LatestStable
+    override fun newState() = State()
 
-    @get:Transient
-    var languageVersion: LanguageVersion
-        get() = _languageVersion
-        set(value) {
-            if (value != _languageVersion) {
-                _languageVersion = value
-                if (project != null) CrystalLanguageLevelPusher.pushLanguageLevel(project)
-            }
+    override fun State.copyState() = copy()
+
+    override fun onStateChange(oldState: State, newState: State) {
+        if (oldState.languageVersion != newState.languageVersion && project != null) {
+            CrystalLanguageLevelPusher.pushLanguageLevel(project)
         }
+    }
+
+    val languageVersion: LanguageVersion
+        get() = protectedState.languageVersion
 
     @TestOnly
     fun setLanguageLevelSilently(version: LanguageVersion) {
-        _languageVersion = version
-    }
-
-    override fun getState() = this
-
-    override fun loadState(state: CrystalProjectSettings) {
-        languageVersion = state.languageVersion
+        protectedState.languageVersion = version
     }
 }
 

@@ -57,6 +57,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitCrElement(o: CrElement) = visitElement(o)
 
+    open fun visitCrFile(o: CrFile) = visitFile(o)
+
     open fun visitCField(o: CrCField) = visitDefinition(o)
 
     open fun visitCFieldGroup(o: CrCFieldGroup) = visitCrElement(o)

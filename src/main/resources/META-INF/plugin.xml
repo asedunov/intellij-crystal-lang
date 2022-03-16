@@ -86,6 +86,16 @@
                          level="ERROR"
                          implementationClass="org.crystal.intellij.inspections.CrystalResolveInspection"/>
 
+        <localInspection language="Crystal"
+                         shortName="CrystalMissingMainFileInspection"
+                         suppressId="CrystalMissingMainFile"
+                         bundle="messages.CrystalBundle"
+                         key="inspections.missing.main"
+                         groupKey="inspections.group"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="org.crystal.intellij.inspections.CrystalMissingMainFileInspection"/>
+
         <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
 
         <configurationType implementation="org.crystal.intellij.run.CrystalFileRunConfigurationType"/>

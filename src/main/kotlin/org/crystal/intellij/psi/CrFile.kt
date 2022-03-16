@@ -14,6 +14,8 @@ class CrFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Crystal
         if (visitor is CrVisitor) accept(visitor) else super<PsiFileBase>.accept(visitor)
     }
 
+    override fun accept(visitor: CrVisitor) = visitor.visitCrFile(this)
+
     val expressions: JBIterable<CrExpression>
         get() = childrenOfType()
 }

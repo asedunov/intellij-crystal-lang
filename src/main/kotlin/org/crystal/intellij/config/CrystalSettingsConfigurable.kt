@@ -4,6 +4,8 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.guessProjectDir
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.VirtualFile
@@ -41,8 +43,35 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         }
     }
 
-    private val settings = project.crystalSettings.state
-    private val workspaceSettings = project.crystalWorkspaceSettings.state
+    private val mainFileChooserDescriptor = object : FileChooserDescriptor(
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+    ) {
+        init {
+            project.guessProjectDir()?.let { withRoots(it) }
+        }
+
+        val fileIndex = ProjectRootManager.getInstance(project).fileIndex
+
+        @Throws(Exception::class)
+        override fun validateSelectedFiles(files: Array<VirtualFile>) {
+            if (files.isEmpty()) return
+            val file = files.first()
+            if (file.extension != "cr") {
+                throw Exception(CrystalBundle.message("settings.invalid.main.path.0", file.name))
+            }
+            if (!fileIndex.isInContent(file)) {
+                throw Exception(CrystalBundle.message("settings.main.path.not.in.content.root.0", file.name))
+            }
+        }
+    }
+
+    private val settings = project.crystalSettings.currentState
+    private val workspaceSettings = project.crystalWorkspaceSettings.currentState
 
     private lateinit var languageVersionComboBox: ComboBox<LanguageVersion>
     private lateinit var crystalExeComboBox: CrystalExePathComboBox
@@ -76,8 +105,17 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
             stdlibEditor = textFieldWithBrowseButton(
                 workspaceSettings::stdlibPath,
                 CrystalBundle.message("settings.sdk.select.stdlib.path"),
-                null,
+                project,
                 STDLIB_FILE_CHOOSER_DESCRIPTOR
+            ) { file -> file.presentableUrl }.component
+        }
+
+        row(CrystalBundle.message("settings.main.file.path")) {
+            stdlibEditor = textFieldWithBrowseButton(
+                settings::mainFilePath,
+                CrystalBundle.message("settings.select.main.path"),
+                project,
+                mainFileChooserDescriptor
             ) { file -> file.presentableUrl }.component
         }
 
@@ -100,7 +138,8 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         validateSettings()
         super.apply()
         workspaceSettings.crystalExePath = crystalExeComboBox.selectedPath?.toString() ?: ""
-        project.crystalWorkspaceSettings.state = workspaceSettings
+        project.crystalWorkspaceSettings.currentState = workspaceSettings
+        project.crystalSettings.currentState = settings
     }
 
     private fun onExePathUpdate() {

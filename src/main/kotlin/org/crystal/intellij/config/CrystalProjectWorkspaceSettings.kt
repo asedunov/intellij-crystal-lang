@@ -1,8 +1,5 @@
 package org.crystal.intellij.config
 
-import com.intellij.configurationStore.deserializeInto
-import com.intellij.configurationStore.serializeObjectInto
-import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.components.StoragePathMacros
@@ -12,34 +9,26 @@ import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
 import org.crystal.intellij.sdk.CrystalExe
 import org.crystal.intellij.sdk.CrystalSdkFlavor
-import org.jdom.Element
 
-private const val serviceName = "CrystalWorkspaceSettings"
+private const val SERVICE_NAME = "CrystalWorkspaceSettings"
 
 @State(
-    name = serviceName,
+    name = SERVICE_NAME,
     storages = [Storage(StoragePathMacros.WORKSPACE_FILE)]
 )
 class CrystalProjectWorkspaceSettings(
     private val project: Project
-) : PersistentStateComponent<Element> {
+) : PersistentConfigBase<CrystalProjectWorkspaceSettings.State>(SERVICE_NAME) {
     data class State(
         var crystalExePath: String = "",
         var stdlibPath: String = ""
     )
 
-    @Volatile
-    private var _state = State()
+    override fun newState() = State()
 
-    var state: State
-        get() = _state.copy()
-        set(newState) {
-            val oldState = _state
-            _state = newState.copy()
-            onStateChange(oldState, newState)
-        }
+    override fun State.copyState() = copy()
 
-    private fun onStateChange(oldState: State, newState: State) {
+    override fun onStateChange(oldState: State, newState: State) {
         if (oldState.crystalExePath != newState.crystalExePath) {
             _crystalExe.drop()
         }
@@ -49,25 +38,17 @@ class CrystalProjectWorkspaceSettings(
     }
 
     val stdlibPath: String
-        get() = _state.stdlibPath
+        get() = protectedState.stdlibPath
 
     val stdlibRootDirectory: VirtualFile?
         get() = if (stdlibPath.isNotEmpty()) StandardFileSystems.local().findFileByPath(stdlibPath) else null
 
     private val _crystalExe = ClearableLazyValue.createAtomic {
-        CrystalSdkFlavor.INSTANCE?.createCrystalExe(_state.crystalExePath) ?: CrystalExe.EMPTY
+        CrystalSdkFlavor.INSTANCE?.createCrystalExe(protectedState.crystalExePath) ?: CrystalExe.EMPTY
     }
 
     val crystalExe: CrystalExe
         get() = _crystalExe.value
-
-    override fun getState(): Element {
-        return Element(serviceName).apply { serializeObjectInto(_state, this) }
-    }
-
-    override fun loadState(element: Element) {
-        element.deserializeInto(_state)
-    }
 }
 
 val Project.crystalWorkspaceSettings: CrystalProjectWorkspaceSettings

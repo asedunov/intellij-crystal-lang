@@ -20,6 +20,12 @@ abstract class PersistentConfigBase<S : Any>(
             onStateChange(oldState, newState)
         }
 
+    fun update(action: S.() -> Unit) {
+        val state = currentState
+        state.action()
+        currentState = state
+    }
+
     protected abstract fun newState(): S
     protected abstract fun S.copyState(): S
     protected abstract fun onStateChange(oldState: S, newState: S)

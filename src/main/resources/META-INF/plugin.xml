@@ -28,6 +28,8 @@
         <lang.parserDefinition language="Crystal"
                                implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
 
+        <internalFileTemplate name="Crystal File"/>
+
         <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxHighlightingPass$Factory"/>
         <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxCheckingPass$Factory"/>
 
@@ -95,4 +97,11 @@
         <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalUnixSdkFlavor"/>
         <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalWslSdkFlavor"/>
     </extensions>
+
+    <actions>
+        <action id="Crystal.NewCrystalFile"
+                class="org.crystal.intellij.actions.CrCreateFileAction">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
+    </actions>
 </idea-plugin>

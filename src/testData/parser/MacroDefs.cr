@@ -147,3 +147,23 @@ macro foo; bar class!; end
 macro foo; bar class: 1; end
 
 macro foo;bar(end: 1);end
+
+macro foo
+  #
+end
+
+macro foo
+  # aaa end
+end
+
+macro foo
+  # aaa end bbb
+end
+
+macro foo
+  #{
+end
+
+macro foo
+  #{aaa
+end

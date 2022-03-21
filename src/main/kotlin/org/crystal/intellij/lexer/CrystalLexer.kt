@@ -55,9 +55,10 @@ class CrystalLexer(languageLevel: LanguageLevel) : FlexAdapter(languageLevel.new
     val macroState: MacroState
         get() = delegate.currentMacroState
 
-    fun enterMacro(macroState: MacroState = MacroState()) = delegate.enterMacro(macroState)
-
-    fun enterMacro(macroState: MacroState, skipWhitespaces: Boolean) = delegate.enterMacro(macroState, skipWhitespaces)
+    fun enterMacro(
+        macroState: MacroState = MacroState(),
+        skipWhitespaces: Boolean = true
+    ) = delegate.enterMacro(macroState, skipWhitespaces)
 }
 
 private fun LanguageLevel.newUnderlyingLexer(): CrystalLexerBase = when(this) {

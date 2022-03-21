@@ -2621,7 +2621,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 preAdvance = la == CR_SEMICOLON || la == CR_NEWLINE
             }
             if (preAdvance) nextAndDoneIfNeeded(currentMarker, currentNodeType)
-            if (enterMacro) lexer.enterMacro()
+            if (enterMacro) {
+                lexer.lexerState.slashIsRegex = true
+                lexer.enterMacro()
+            }
             nextAndDoneIfNeeded(currentMarker, currentNodeType)
             if (errorMessage != null) error(errorMessage)
         }

@@ -489,8 +489,7 @@ MACRO_START_KEYWORD1 =
   "module"                          |
   "select"                          |
   "struct"                          |
-  "union"                           |
-  "yield"
+  "union"
 
 MACRO_START_KEYWORD2 =
   "if"     |
@@ -1328,6 +1327,10 @@ MACRO_START_KEYWORD2 =
 <MACRO_CHECK_KEYWORD> {
   {MACRO_START_KEYWORD1} / {MACRO_KWD_NEXT_CHAR}      {
     processMacroStartKeyword(true);
+  }
+
+  "yield" / {MACRO_KWD_NEXT_CHAR}                     {
+    processMacroStartKeyword(false);
   }
 
   "abstract" {WHITE_SPACE} "def" / {MACRO_KWD_NEXT_CHAR}    {

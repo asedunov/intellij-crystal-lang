@@ -233,11 +233,15 @@ import static org.crystal.intellij.lexer.TokenTypesKt.*;
     return handle(block.endType);
   }
 
-  private void incBlock() {
+  private void incBlock(int k) {
     char ch = yylastchar();
     BlockKind kind = blockKindByStartChar(ch);
     Block block = blocks.peek();
-    if (block != null && block.kind == kind) block.balance++;
+    if (block != null && block.kind == kind) block.balance += k;
+  }
+
+  private void incBlock() {
+    incBlock(1);
   }
 
   private void decBlock() {
@@ -661,6 +665,7 @@ MACRO_START_KEYWORD2 =
   {NEWLINE}                      { return CR_NEWLINE; }
 
   "{"                            { incBlock(); return handle(CR_LBRACE); }
+  "{{"                           { incBlock(2); return handle(CR_MACRO_EXPRESSION_LBRACE); }
   "}"                            { decBlock(); return isBlockFinished() ? exitBlock() : handle(CR_RBRACE); }
 }
 

@@ -167,3 +167,7 @@ end
 macro foo
   #{aaa
 end
+
+macro foo
+  yield
+end

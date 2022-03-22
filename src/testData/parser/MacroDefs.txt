@@ -897,3 +897,13 @@ FILE
       PsiElement(<macro fragment>)('{aaa')
       PsiElement(<macro fragment>)('\n')
     PsiElement(end)('end')
+
+  CrMacro(CR_MACRO_DEFINITION)
+    PsiElement(macro)('macro')
+    PsiWhiteSpace(' ')
+    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+      PsiElement(<identifier>)('foo')
+    PsiWhiteSpace('\n')
+    CrMacroLiteral(CR_MACRO_LITERAL)
+      PsiElement(<macro fragment>)('  yield\n')
+    PsiElement(end)('end')

@@ -61,3 +61,5 @@ macro !;end
 {{ foo.nil?(foo) }}
 
 {{ nil?(foo) }}
+
+"#{{{1}}}"

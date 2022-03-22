@@ -4400,3 +4400,35 @@ FILE
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(+)('+')
         PsiElement(<integer literal>)('1')
+
+  CrConditionalExpression(CR_CONDITIONAL_EXPRESSION)
+    CrPathExpression(CR_PATH_EXPRESSION)
+      CrPathNameElement(CR_PATH_NAME_ELEMENT)
+        PsiElement(<constant>)('A')
+    PsiWhiteSpace(' ')
+    PsiElement(?)('?')
+    PsiWhiteSpace(' ')
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
+    PsiWhiteSpace(' ')
+    PsiElement(:)(':')
+    PsiWhiteSpace(' ')
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('0')
+
+  CrNilableExpression(CR_NILABLE_EXPRESSION)
+    CrPathExpression(CR_PATH_EXPRESSION)
+      CrPathNameElement(CR_PATH_NAME_ELEMENT)
+        PsiElement(<constant>)('A')
+    PsiElement(?)('?')
+  PsiErrorElement:Unexpected <integer literal>
+    <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<integer literal>)('1')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('0')

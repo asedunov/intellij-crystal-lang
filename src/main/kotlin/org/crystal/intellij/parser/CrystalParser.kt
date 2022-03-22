@@ -4780,7 +4780,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseGeneric(isExpression: Boolean = false): Boolean {
-            parsePath()
+            parsePath(skipTrailingSpaces = false)
 
             if (at(CR_LPAREN)) {
                 compositeSuffix(CR_PATH_TYPE) {}
@@ -4932,7 +4932,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             parsePath()
         }
 
-        private fun PsiBuilder.parsePath(): Boolean {
+        private fun PsiBuilder.parsePath(skipTrailingSpaces: Boolean = true): Boolean {
             var foundPathOpPrefix = false
             if (at(CR_PATH_OP)) {
                 foundPathOpPrefix = true
@@ -4952,7 +4952,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 compositeSuffix(CR_PATH_NAME_ELEMENT) { parsePathElement() }
             }
 
-            skipSpaces()
+            if (skipTrailingSpaces) {
+                skipSpaces()
+            }
 
             return true
         }
@@ -4960,7 +4962,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parsePathElement() {
             if (at(CR_CONSTANT)) {
                 lexerState.wantsRegex = false
-                nextTokenSkipSpaces()
+                nextToken()
             }
             else error("Expected: <constant name>")
         }

@@ -743,3 +743,9 @@ foo = 1; foo &x
 
 
 typeof(xyz = 1); xyz +1
+
+
+A ? 1 : 0
+
+
+A? 1 : 0

@@ -1986,9 +1986,11 @@ FILE
       <empty list>
     PsiWhiteSpace(' ')
     CrBlockExpression(CR_BLOCK_EXPRESSION)
-      PsiErrorElement:Expected: <end of expression>
+      CrSplatArgument(CR_SPLAT_ARGUMENT)
         PsiElement(*)('*')
-        PsiElement(<identifier>)('y')
+        CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+          CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+            PsiElement(<identifier>)('y')
       PsiElement(;)(';')
       PsiWhiteSpace(' ')
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)

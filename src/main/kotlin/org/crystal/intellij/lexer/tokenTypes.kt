@@ -269,6 +269,11 @@ val CR_WHITESPACES: TokenSet = TokenSet.create(
     CR_LINE_CONTINUATION
 )
 
+val CR_WHITESPACES_AND_NEWLINES_NO_CONT: TokenSet = TokenSet.create(
+    CR_WHITESPACE,
+    CR_NEWLINE
+)
+
 val CR_WHITESPACES_AND_NEWLINES: TokenSet = TokenSet.create(
     CR_WHITESPACE,
     CR_NEWLINE,

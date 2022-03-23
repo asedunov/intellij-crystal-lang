@@ -375,10 +375,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private inline fun PsiBuilder.oneOrMore(parser: PsiBuilder.() -> Boolean): Boolean {
-            return parser() && zeroOrMore(parser)
-        }
-
         private fun PsiBuilder.unexpected() {
             error(unexpectedMessage(tokenType))
         }

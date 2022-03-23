@@ -540,6 +540,7 @@ MACRO_START_KEYWORD2 =
 %state MACRO_GENERAL_LITERAL
 
 %state BLOCK_END
+%state REGEX_BLOCK_END
 
 %state PERCENT
 
@@ -710,9 +711,11 @@ MACRO_START_KEYWORD2 =
 
 <STRING_BLOCK, SIMPLE_STRING_BLOCK, REGEX_BLOCK, STRING_ARRAY_BLOCK> {
   {BLOCK_END}                    {
-    if (!(yystate() == REGEX_BLOCK && zzStartRead > 0 && yycharat(-1) == '\\')) decBlock();
+    boolean isRegex = yystate() == REGEX_BLOCK;
+    if (!(isRegex && zzStartRead > 0 && yycharat(-1) == '\\')) decBlock();
     if (isBlockFinished()) {
-      IElementType type = closePrecedingBlockToken(BLOCK_END, CR_STRING_RAW);
+      int nextState = isRegex ? REGEX_BLOCK_END : BLOCK_END;
+      IElementType type = closePrecedingBlockToken(nextState, CR_STRING_RAW);
       if (type != null) return type;
     }
     else {
@@ -786,6 +789,10 @@ MACRO_START_KEYWORD2 =
 
 <BLOCK_END> {
   {BLOCK_END}                    { return exitBlock(); }
+}
+
+<REGEX_BLOCK_END> {
+  {BLOCK_END}[imx]*              { return exitBlock(); }
 }
 
 <YYINITIAL> {

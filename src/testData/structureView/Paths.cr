@@ -11,6 +11,3 @@ class D::
       E::
       F
 end
-
-class X :: Y :: Z
-end

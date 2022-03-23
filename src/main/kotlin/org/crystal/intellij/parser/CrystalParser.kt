@@ -1327,7 +1327,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
 
                     at(CR_PLUS_OP) || at(CR_MINUS_OP) -> {
-                        if (checkPlusMinus && lexer.lookAhead() == CR_WHITESPACE) return false
+                        if (checkPlusMinus && lexer.lookAhead() in CR_WHITESPACES_AND_NEWLINES_NO_CONT) return false
                     }
 
                     at(CR_INCL_RANGE_OP) || at(CR_EXCL_RANGE_OP) -> {

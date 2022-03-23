@@ -273,3 +273,8 @@ FILE
     PsiElement(<string start>)('"')
     PsiElement(<string raw>)('a#{1}b')
     PsiElement(<string end>)('"')
+
+  CrSymbolExpression(CR_SYMBOL_EXPRESSION)
+    PsiElement(<symbol start>)(':')
+    PsiElement(<string start>)('"')
+    PsiElement(<string end>)('"')

@@ -3953,3 +3953,103 @@ FILE
     PsiElement(<raw escape>)('\#')
     PsiElement(<string raw>)('{1}')
     PsiElement(<regex end>)('|')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r(')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(')i')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r[')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(']i')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r{')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('}i')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r<')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('>i')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r|')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('|i')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r(')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(')m')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r[')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(']m')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r{')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('}m')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r<')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('>m')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r|')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('|m')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r(')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(')x')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r[')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(']x')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r{')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('}x')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r<')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('>x')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r|')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('|x')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r(')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(')imx')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r[')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)(']imx')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r{')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('}imx')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r<')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('>imx')
+
+  CrRegexExpression(CR_REGEX_EXPRESSION)
+    PsiElement(<regex start>)('%r|')
+    PsiElement(<string raw>)('1')
+    PsiElement(<regex end>)('|imx')

@@ -494,7 +494,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                 while (!eof()) {
                     parseTopLevelExpression()
+
+                    lexerState.slashIsRegex = true
                     skipStatementEnd()
+
                     if (atEndToken()) break
                 }
             }

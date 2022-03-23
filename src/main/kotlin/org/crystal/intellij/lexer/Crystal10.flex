@@ -640,6 +640,12 @@ MACRO_START_KEYWORD2 =
   }
 }
 
+<REGEX_LITERAL_BODY, REGEX_BLOCK> {
+  \\\#                           {
+    return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_RAW_ESCAPE);
+  }
+}
+
 <REGEX_LITERAL_BODY> {
   \\\/                           |
   {LINE_CONTINUATION}            { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_RAW_ESCAPE); }

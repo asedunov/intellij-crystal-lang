@@ -586,7 +586,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 val opInfo = OpTable.getOp(opType) ?: break
                 if (opInfo.precedence < minPrecedence) break
 
-                if (opType == CR_COMMA) recordLastParsedRefName()
+                val isComma = opType == CR_COMMA
+                if (isComma) recordLastParsedRefName()
 
                 val isConditional = opType == CR_QUESTION
 
@@ -623,10 +624,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     skipSpacesAndNewlines()
                 }
 
-                var parsed: Boolean = parsePrimaryExpression()
+                var parsed: Boolean = parsePrimaryExpression(isComma)
                 if (parsed) parseHigherPrecedence(opInfo)
 
-                if (opType == CR_COMMA && parsed) recordLastParsedRefName()
+                if (isComma && parsed) recordLastParsedRefName()
 
                 if (isConditional && parsed) {
                     skipSpacesAndNewlines()
@@ -896,13 +897,13 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parsePrimaryExpression(): Boolean {
-            return parseUnaryRange() || parsePrefixOperand()
+        private fun PsiBuilder.parsePrimaryExpression(commaOperand: Boolean = false): Boolean {
+            return parseUnaryRange() || parsePrefixOperand(commaOperand)
         }
 
-        private fun PsiBuilder.parsePrefixOperand(): Boolean {
-            return parsePrefixExpression() ||
-                    parseAtomicWithSuffix()
+        private fun PsiBuilder.parsePrefixOperand(commaOperand: Boolean = false): Boolean {
+            return parsePrefixExpression(commaOperand) ||
+                    parseAtomicWithSuffix(commaOperand)
         }
 
         private val emptyRangeNextTokens = TokenSet.create(CR_RPAREN, CR_COMMA, CR_SEMICOLON, CR_BIG_ARROW_OP)
@@ -923,7 +924,14 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private val plusMinus = TokenSet.create(CR_PLUS_OP, CR_MINUS_OP)
 
-        private fun PsiBuilder.parsePrefixExpression(): Boolean {
+        private fun PsiBuilder.parsePrefixExpression(commaOperand: Boolean = false): Boolean {
+            if (at(CR_MUL_OP)) {
+                return composite(CR_SPLAT_ARGUMENT) {
+                    nextTokenSkipSpaces()
+                    ensureParseAssignment()
+                }
+            }
+
             if (!at(prefixOps)) return false
 
             val isPlusMinus = at(plusMinus)
@@ -931,7 +939,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             val m = mark()
             var nodeType: IElementType = CR_UNARY_EXPRESSION
             nextTokenSkipSpaces()
-            if (parsePrefixOperand()) {
+            if (parsePrefixOperand(commaOperand)) {
                 val lastType = lastType()
                 if (isPlusMinus &&
                     lastType == CR_INTEGER_LITERAL_EXPRESSION || lastType == CR_FLOAT_LITERAL_EXPRESSION) {
@@ -947,9 +955,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.parseAtomicWithSuffix(): Boolean {
+        private fun PsiBuilder.parseAtomicWithSuffix(commaOperand: Boolean = false): Boolean {
             if (!parseAtomic()) return false
-            parseAtomicMethodSuffix()
+            parseAtomicMethodSuffix(commaOperand)
             return true
         }
 
@@ -1041,7 +1049,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             CR_METHOD_DEFINITION
         )
 
-        private fun PsiBuilder.parseAtomicMethodSuffix() {
+        private fun PsiBuilder.parseAtomicMethodSuffix(commaOperand: Boolean = false) {
             while (!eof()) {
                 when {
                     at(CR_WHITESPACES) -> nextToken()
@@ -1111,39 +1119,27 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                                 when {
                                     at(CR_ASSIGN_OP) -> {
-                                        if (lexer.lookAhead { tok(CR_LPAREN) && at(CR_MUL_OP) }) {
-                                            val mAssign = m.precede()
-                                            m.done(CR_REFERENCE_EXPRESSION)
-
-                                            nextTokenSkipSpaces()
-
-                                            composite(CR_PARENTHESIZED_EXPRESSION) {
-                                                tok(CR_LPAREN)
-                                                parseSingleArg()
-                                                recoverUntil("')'", true) { at(CR_RPAREN) }
-                                                tok(CR_RPAREN)
-                                            }
-
-                                            mAssign.done(CR_ASSIGNMENT_EXPRESSION)
-                                            continue
-                                        }
-                                        else if (lexer.lookAhead {
-                                            skipSpaces()
-                                            at(CR_MUL_OP)
-                                        }) {
-                                            nextTokenSkipSpaces()
-                                            parseSingleArg()
-                                            m.done(CR_ASSIGNMENT_EXPRESSION)
-                                            continue
-                                        }
-                                        else {
+                                        if (commaOperand) {
                                             m.done(CR_REFERENCE_EXPRESSION)
                                             break
                                         }
+
+                                        val mAssign = m.precede()
+
+                                        m.done(CR_REFERENCE_EXPRESSION)
+                                        nextTokenSkipSpacesAndNewlines()
+                                        ensureParseAssignment()
+
+                                        mAssign.done(CR_ASSIGNMENT_EXPRESSION)
+                                        continue
                                     }
 
                                     at(CR_ASSIGN_COMBO_OPERATORS) -> {
+                                        val mAssign = m.precede()
                                         m.done(CR_REFERENCE_EXPRESSION)
+                                        nextTokenSkipSpacesAndNewlines()
+                                        ensureParseAssignment()
+                                        mAssign.done(CR_ASSIGNMENT_EXPRESSION)
                                         break
                                     }
 
@@ -1183,16 +1179,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseAtomicMethodSuffixSpecial() {
             if (at(atomicSuffixSpecialTokens)) parseAtomicMethodSuffix()
-        }
-
-        private fun PsiBuilder.parseSingleArg() {
-            if (at(CR_MUL_OP)) {
-                composite(CR_SPLAT_ARGUMENT) {
-                    nextTokenSkipSpaces()
-                    ensureParseAssignment()
-                }
-            }
-            else ensureParseAssignment()
         }
 
         private fun PsiBuilder.parseCallArgs(

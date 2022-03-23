@@ -211,12 +211,12 @@ FILE
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('2')
     PsiElement(,)(',')
-    PsiErrorElement:Expected: <expression>
-      <empty list>
     PsiWhiteSpace(' ')
-    PsiErrorElement:Expected: '}'
-      PsiElement(*)('*')
-      PsiElement(<integer literal>)('3')
+    CrHashEntry(CR_HASH_ENTRY)
+      CrSplatArgument(CR_SPLAT_ARGUMENT)
+        PsiElement(*)('*')
+        CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+          PsiElement(<integer literal>)('3')
     PsiElement(})('}')
 
   CrNamedTupleExpression(CR_NAMED_TUPLE_EXPRESSION)
@@ -277,11 +277,10 @@ FILE
       PsiWhiteSpace(' ')
       CrTupleExpression(CR_TUPLE_EXPRESSION)
         PsiElement({)('{')
-        PsiErrorElement:Expected: <expression>
-          <empty list>
-        PsiErrorElement:Expected: '}'
+        CrSplatArgument(CR_SPLAT_ARGUMENT)
           PsiElement(*)('*')
-          PsiElement(<integer literal>)('2')
+          CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+            PsiElement(<integer literal>)('2')
         PsiElement(})('}')
       PsiElement(;)(';')
       PsiWhiteSpace(' ')

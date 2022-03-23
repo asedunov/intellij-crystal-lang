@@ -2423,8 +2423,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 error("Expected: '\"'")
                 return@composite
             }
-            if (!oneOrMore { tok(stringLiteralTokens) || parseUnicodeBlock() }) unexpected()
-            recoverUntil("<string end>>", true) { at(CR_STRING_END) }
+            zeroOrMore { tok(stringLiteralTokens) || parseUnicodeBlock() }
+            recoverUntil("<string end>", true) { at(CR_STRING_END) }
             tok(CR_STRING_END)
         }
 

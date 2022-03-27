@@ -32,4 +32,8 @@ tasks {
         sinceBuild.set(project.properties["ideaSinceBuild"] as String)
         untilBuild.set(project.properties["ideaUntilBuild"] as String)
     }
+
+    publishPlugin {
+        token.set(System.getenv("MARKETPLACE_TOKEN"))
+    }
 }

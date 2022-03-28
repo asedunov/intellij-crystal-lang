@@ -46,6 +46,9 @@ object CrStubElementTypes {
     @JvmField val UNDERSCORE_TYPE = CrTypeElementType("CR_UNDERSCORE_TYPE", ::CrUnderscoreType, ::CrUnderscoreType)
     @JvmField val UNION_TYPE = CrTypeElementType("CR_UNION_TYPE", ::CrUnionType, ::CrUnionType)
 
+    // Expressions
+    @JvmField val REQUIRE_EXPRESSION = CrRequireElementType
+
     // Misc
     @JvmField val PATH_NAME = CrPathNameStubElementType
     @JvmField val SIMPLE_NAME = CrSimpleNameStubElementType

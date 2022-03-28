@@ -1,0 +1,2 @@
+CrFileStubImpl
+  CR_REQUIRE_EXPRESSION:CrRequireStubImpl(filePath=foo/bar/baz)

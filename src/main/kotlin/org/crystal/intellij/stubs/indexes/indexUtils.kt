@@ -6,6 +6,7 @@ import org.crystal.intellij.stubs.api.CrDefinitionWithFqNameStub
 fun indexType(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
     val name = stub.psi.name ?: return
     sink.occurrence(CrystalTypeShortNameIndex.key, name)
+    sink.occurrence(CrystalTypeByNamespaceFqNameIndex.key, stub.psi.fqName?.parent?.fullName ?: "")
 }
 
 fun indexFunction(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {

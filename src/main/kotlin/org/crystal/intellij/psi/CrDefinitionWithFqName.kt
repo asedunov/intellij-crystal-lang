@@ -20,6 +20,7 @@ sealed interface CrDefinitionWithFqName : CrDefinition, CrVisibilityHolder {
         }
 
     private fun parentFqName() = when (val parent = parentStubOrPsi()) {
+        is CrDefinitionWithBody -> parent.fqName as? StableFqName
         is CrBody -> (parent.parent as? CrDefinitionWithBody)?.fqName as? StableFqName
         else -> null
     }

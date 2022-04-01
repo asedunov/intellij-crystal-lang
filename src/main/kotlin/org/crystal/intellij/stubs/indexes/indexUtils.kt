@@ -2,8 +2,9 @@ package org.crystal.intellij.stubs.indexes
 
 import com.intellij.psi.stubs.IndexSink
 import org.crystal.intellij.stubs.api.CrDefinitionWithFqNameStub
+import org.crystal.intellij.stubs.api.CrTypeDefinitionStub
 
-fun indexType(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
+fun indexType(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
     val name = stub.psi.name ?: return
     sink.occurrence(CrystalTypeShortNameIndex.key, name)
     sink.occurrence(CrystalTypeByNamespaceFqNameIndex.key, stub.psi.fqName?.parent?.fullName ?: "")

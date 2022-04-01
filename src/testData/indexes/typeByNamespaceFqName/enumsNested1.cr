@@ -32,7 +32,7 @@ module M
     Y
   end
 
-  enum C::D
+  enum <caret>C::D
     X
     Y
   end

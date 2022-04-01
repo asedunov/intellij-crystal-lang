@@ -48,7 +48,7 @@ module M
     class ::B
     end
 
-    class C::D
+    class <caret>C::D
     end
 
     class ::E::F
@@ -66,7 +66,7 @@ module M::N
   class ::B
   end
 
-  class C::D
+  class <caret>C::D
   end
 
   class ::E::F

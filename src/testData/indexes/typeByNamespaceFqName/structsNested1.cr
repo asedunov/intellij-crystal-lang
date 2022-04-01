@@ -20,7 +20,7 @@ module M
   struct ::B
   end
 
-  struct C::D
+  struct <caret>C::D
   end
 
   struct ::E::F

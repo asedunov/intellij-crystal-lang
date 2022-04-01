@@ -1,12 +1,14 @@
 package org.crystal.intellij.stubs.elementTypes
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.stubs.IndexSink
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.stubs.api.CrPathStub
 import org.crystal.intellij.stubs.impl.CrPathStubImpl
+import org.crystal.intellij.stubs.indexes.indexImplicitTypes
 
 object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathStub>(
     "CR_PATH_NAME_ELEMENT",
@@ -25,4 +27,6 @@ object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathSt
         val name = dataStream.readNameString() ?: ""
         return CrPathStubImpl(parentStub, name)
     }
+
+    override fun indexStub(stub: CrPathStub, sink: IndexSink) = indexImplicitTypes(stub, sink)
 }

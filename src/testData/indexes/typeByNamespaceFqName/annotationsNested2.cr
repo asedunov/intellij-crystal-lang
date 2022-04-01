@@ -48,7 +48,7 @@ module M
     annotation ::B
     end
 
-    annotation C::D
+    annotation <caret>C::D
     end
 
     annotation ::E::F
@@ -66,7 +66,7 @@ module M::N
   annotation ::B
   end
 
-  annotation C::D
+  annotation <caret>C::D
   end
 
   annotation ::E::F

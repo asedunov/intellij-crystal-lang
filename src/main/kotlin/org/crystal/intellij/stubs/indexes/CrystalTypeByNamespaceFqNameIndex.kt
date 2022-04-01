@@ -5,16 +5,16 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StringStubIndexExtension
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.stubs.StubIndexKey
-import org.crystal.intellij.psi.CrTypeDefinition
+import org.crystal.intellij.psi.CrTypeSource
 
-object CrystalTypeByNamespaceFqNameIndex : StringStubIndexExtension<CrTypeDefinition>() {
-    private val KEY = StubIndexKey.createIndexKey<String, CrTypeDefinition>(
+object CrystalTypeByNamespaceFqNameIndex : StringStubIndexExtension<CrTypeSource>() {
+    private val KEY = StubIndexKey.createIndexKey<String, CrTypeSource>(
         CrystalTypeByNamespaceFqNameIndex::class.java.canonicalName
     )
 
     override fun getKey() = KEY
 
-    override fun get(s: String, project: Project, scope: GlobalSearchScope): Collection<CrTypeDefinition> {
-        return StubIndex.getElements(KEY, s, project, scope, CrTypeDefinition::class.java)
+    override fun get(s: String, project: Project, scope: GlobalSearchScope): Collection<CrTypeSource> {
+        return StubIndex.getElements(KEY, s, project, scope, CrTypeSource::class.java)
     }
 }

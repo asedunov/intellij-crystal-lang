@@ -62,7 +62,7 @@ module M
     Y
   end
 
-  <caret>enum ::M::N::G
+<caret>enum ::M::N::G
     X
     Y
   end
@@ -78,7 +78,7 @@ module M
       Y
     end
 
-    enum C::D
+    enum <caret>C::D
       X
       Y
     end
@@ -106,7 +106,7 @@ module M::N
     Y
   end
 
-  enum C::D
+  enum <caret>C::D
     X
     Y
   end

@@ -7,10 +7,10 @@ end
 <caret>module ::B
 end
 
-module C::D
+module <caret>C::D
 end
 
-module ::E::F
+module <caret>::E::F
 end
 
 <caret>module M
@@ -23,6 +23,6 @@ end
   module C::D
   end
 
-  module ::E::F
+  module <caret>::E::F
   end
 end

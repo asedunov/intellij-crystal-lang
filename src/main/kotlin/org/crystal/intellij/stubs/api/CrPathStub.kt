@@ -2,6 +2,7 @@ package org.crystal.intellij.stubs.api
 
 import org.crystal.intellij.psi.CrNameKind
 import org.crystal.intellij.psi.CrPathNameElement
+import org.crystal.intellij.resolve.StableFqName
 
 interface CrPathStub : CrNameStub<CrPathNameElement> {
     val name: String
@@ -14,4 +15,6 @@ interface CrPathStub : CrNameStub<CrPathNameElement> {
 
     override val sourceName: String
         get() = name
+
+    val fqName: StableFqName
 }

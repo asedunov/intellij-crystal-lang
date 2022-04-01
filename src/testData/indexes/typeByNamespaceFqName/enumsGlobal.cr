@@ -11,12 +11,12 @@ end
   Y
 end
 
-enum C::D
+enum <caret>C::D
   X
   Y
 end
 
-enum ::E::F
+enum <caret>::E::F
   X
   Y
 end
@@ -37,7 +37,7 @@ end
     Y
   end
 
-  enum ::E::F
+  enum <caret>::E::F
     X
     Y
   end

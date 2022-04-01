@@ -7,10 +7,10 @@ end
 <caret>annotation ::B
 end
 
-annotation C::D
+annotation <caret>C::D
 end
 
-annotation ::E::F
+annotation <caret>::E::F
 end
 
 <caret>module M
@@ -23,6 +23,6 @@ end
   annotation C::D
   end
 
-  annotation ::E::F
+  annotation <caret>::E::F
   end
 end

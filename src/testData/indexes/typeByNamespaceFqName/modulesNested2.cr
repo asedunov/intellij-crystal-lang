@@ -48,7 +48,7 @@ module M
     module ::B
     end
 
-    module C::D
+    module <caret>C::D
     end
 
     module ::E::F
@@ -66,7 +66,7 @@ module M::N
   module ::B
   end
 
-  module C::D
+  module <caret>C::D
   end
 
   module ::E::F

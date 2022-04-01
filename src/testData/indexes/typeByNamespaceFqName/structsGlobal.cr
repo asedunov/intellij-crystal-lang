@@ -7,10 +7,10 @@ end
 <caret>struct ::B
 end
 
-struct C::D
+struct <caret>C::D
 end
 
-struct ::E::F
+struct <caret>::E::F
 end
 
 <caret>module M
@@ -23,6 +23,6 @@ end
   struct C::D
   end
 
-  struct ::E::F
+  struct <caret>::E::F
   end
 end

@@ -4,7 +4,7 @@ import com.intellij.lang.ASTNode
 import org.crystal.intellij.parser.CR_PATH_NAME_ELEMENT
 import org.crystal.intellij.stubs.api.CrPathStub
 
-class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement {
+class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTypeSource {
     constructor(stub: CrPathStub) : super(stub, CR_PATH_NAME_ELEMENT)
 
     constructor(node: ASTNode) : super(node)

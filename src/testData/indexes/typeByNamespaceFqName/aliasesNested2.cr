@@ -20,7 +20,7 @@ module M
   module N
     <caret>alias A = Int32
     alias ::B = Int32
-    alias C::D = Int32
+    alias <caret>C::D = Int32
     alias ::E::F = Int32
     <caret>alias ::M::N::G = Int32
   end
@@ -29,7 +29,7 @@ end
 module M::N
   <caret>alias A = Int32
   alias ::B = Int32
-  alias C::D = Int32
+  alias <caret>C::D = Int32
   alias ::E::F = Int32
   <caret>alias ::M::N::G = Int32
 end

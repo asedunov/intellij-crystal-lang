@@ -16,7 +16,7 @@ object CrFunctionElementType : CrStubElementType<CrFunction, CrFunctionStub>(
     ::CrFunction
 ) {
     override fun createStub(psi: CrFunction, parentStub: StubElement<out PsiElement>?): CrFunctionStub {
-        return CrFunctionStubImpl(parentStub, this, psi.isVariadic)
+        return CrFunctionStubImpl(parentStub, psi.isVariadic)
     }
 
     override fun serialize(stub: CrFunctionStub, dataStream: StubOutputStream) {
@@ -25,7 +25,7 @@ object CrFunctionElementType : CrStubElementType<CrFunction, CrFunctionStub>(
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrFunctionStub {
         val isVariadic = dataStream.readBoolean()
-        return CrFunctionStubImpl(parentStub, this, isVariadic)
+        return CrFunctionStubImpl(parentStub, isVariadic)
     }
 
     override fun indexStub(stub: CrFunctionStub, sink: IndexSink) {

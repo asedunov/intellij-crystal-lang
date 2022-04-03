@@ -16,7 +16,7 @@ object CrStructElementType : CrStubElementType<CrStruct, CrStructStub>(
     ::CrStruct
 ) {
     override fun createStub(psi: CrStruct, parentStub: StubElement<out PsiElement>?): CrStructStub {
-        return CrStructStubImpl(parentStub, this, psi.isAbstract, psi.visibility)
+        return CrStructStubImpl(parentStub, psi.isAbstract, psi.visibility)
     }
 
     override fun serialize(stub: CrStructStub, dataStream: StubOutputStream) {
@@ -27,7 +27,7 @@ object CrStructElementType : CrStubElementType<CrStruct, CrStructStub>(
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrStructStub {
         val isAbstract = dataStream.readBoolean()
         val visibility = dataStream.readVisibility()
-        return CrStructStubImpl(parentStub, this, isAbstract, visibility)
+        return CrStructStubImpl(parentStub, isAbstract, visibility)
     }
 
     override fun indexStub(stub: CrStructStub, sink: IndexSink) = indexType(stub, sink)

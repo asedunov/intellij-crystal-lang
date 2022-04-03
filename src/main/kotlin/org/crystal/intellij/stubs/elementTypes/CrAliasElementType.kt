@@ -16,7 +16,7 @@ object CrAliasElementType : CrStubElementType<CrAlias, CrAliasStub>(
     ::CrAlias
 ) {
     override fun createStub(psi: CrAlias, parentStub: StubElement<out PsiElement>?): CrAliasStub {
-        return CrAliasStubImpl(parentStub, this, psi.visibility)
+        return CrAliasStubImpl(parentStub, psi.visibility)
     }
 
     override fun serialize(stub: CrAliasStub, dataStream: StubOutputStream) {
@@ -25,7 +25,7 @@ object CrAliasElementType : CrStubElementType<CrAlias, CrAliasStub>(
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrAliasStub {
         val visibility = dataStream.readVisibility()
-        return CrAliasStubImpl(parentStub, this, visibility)
+        return CrAliasStubImpl(parentStub, visibility)
     }
 
     override fun indexStub(stub: CrAliasStub, sink: IndexSink) = indexType(stub, sink)

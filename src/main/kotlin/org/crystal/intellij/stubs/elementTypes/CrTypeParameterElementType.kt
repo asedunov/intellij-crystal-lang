@@ -13,10 +13,10 @@ object CrTypeParameterElementType : CrStubElementType<CrTypeParameter, CrTypePar
     ::CrTypeParameter
 ) {
     override fun createStub(psi: CrTypeParameter, parentStub: StubElement<out PsiElement>?): CrTypeParameterStub {
-        return CrTypeParameterStubImpl(parentStub, this)
+        return CrTypeParameterStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrTypeParameterStub {
-        return CrTypeParameterStubImpl(parentStub, this)
+        return CrTypeParameterStubImpl(parentStub)
     }
 }

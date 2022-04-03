@@ -14,7 +14,7 @@ object CrSimpleParameterElementType : CrStubElementType<CrSimpleParameter, CrSim
     ::CrSimpleParameter
 ) {
     override fun createStub(psi: CrSimpleParameter, parentStub: StubElement<out PsiElement>?): CrSimpleParameterStub {
-        return CrSimpleParameterStubImpl(parentStub, this, psi.hasDefaultValue)
+        return CrSimpleParameterStubImpl(parentStub, psi.hasDefaultValue)
     }
 
     override fun serialize(stub: CrSimpleParameterStub, dataStream: StubOutputStream) {
@@ -23,6 +23,6 @@ object CrSimpleParameterElementType : CrStubElementType<CrSimpleParameter, CrSim
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrSimpleParameterStub {
         val hasDefaultValue = dataStream.readBoolean()
-        return CrSimpleParameterStubImpl(parentStub, this, hasDefaultValue)
+        return CrSimpleParameterStubImpl(parentStub, hasDefaultValue)
     }
 }

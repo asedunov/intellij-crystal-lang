@@ -15,11 +15,11 @@ object CrCFieldElementType : CrStubElementType<CrCField, CrCFieldStub>(
     ::CrCField
 ) {
     override fun createStub(psi: CrCField, parentStub: StubElement<out PsiElement>?): CrCFieldStub {
-        return CrCFieldStubImpl(parentStub, this)
+        return CrCFieldStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrCFieldStub {
-        return CrCFieldStubImpl(parentStub, this)
+        return CrCFieldStubImpl(parentStub)
     }
 
     override fun indexStub(stub: CrCFieldStub, sink: IndexSink) {

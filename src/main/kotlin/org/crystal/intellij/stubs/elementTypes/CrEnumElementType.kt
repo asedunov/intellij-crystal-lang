@@ -16,7 +16,7 @@ object CrEnumElementType : CrStubElementType<CrEnum, CrEnumStub>(
     ::CrEnum
 ) {
     override fun createStub(psi: CrEnum, parentStub: StubElement<out PsiElement>?): CrEnumStub {
-        return CrEnumStubImpl(parentStub, this, psi.visibility)
+        return CrEnumStubImpl(parentStub, psi.visibility)
     }
 
     override fun serialize(stub: CrEnumStub, dataStream: StubOutputStream) {
@@ -25,7 +25,7 @@ object CrEnumElementType : CrStubElementType<CrEnum, CrEnumStub>(
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrEnumStub {
         val visibility = dataStream.readVisibility()
-        return CrEnumStubImpl(parentStub, this, visibility)
+        return CrEnumStubImpl(parentStub, visibility)
     }
 
     override fun indexStub(stub: CrEnumStub, sink: IndexSink) = indexType(stub, sink)

@@ -17,9 +17,9 @@ object CrSimpleNameStubElementType : CrStubElementType<CrSimpleNameElement, CrNa
 ) {
     override fun createStub(psi: CrSimpleNameElement, parentStub: StubElement<out PsiElement>?): CrNameStub<CrSimpleNameElement> {
         return if (psi.kind == CrNameKind.STRING)
-            CrFullNameStubImpl(parentStub, this, psi.name, psi.sourceName)
+            CrFullNameStubImpl(parentStub, psi.name, psi.sourceName)
         else
-            CrSingleNameStubImpl(parentStub, this, psi.kind, psi.name)
+            CrSingleNameStubImpl(parentStub, psi.kind, psi.name)
     }
 
     override fun serialize(stub: CrNameStub<CrSimpleNameElement>, dataStream: StubOutputStream) {
@@ -40,11 +40,11 @@ object CrSimpleNameStubElementType : CrStubElementType<CrSimpleNameElement, CrNa
         return if (isFull) {
             val actualName = dataStream.readNameString()
             val sourceName = dataStream.readNameString()
-            CrFullNameStubImpl(parentStub, this, actualName, sourceName)
+            CrFullNameStubImpl(parentStub, actualName, sourceName)
         } else {
             val kind = CrNameKind.of(dataStream.readVarInt())
             val name = dataStream.readNameString()
-            CrSingleNameStubImpl(parentStub, this, kind, name)
+            CrSingleNameStubImpl(parentStub, kind, name)
         }
     }
 }

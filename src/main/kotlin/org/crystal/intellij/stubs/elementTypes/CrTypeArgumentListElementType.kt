@@ -13,10 +13,10 @@ object CrTypeArgumentListElementType : CrStubElementType<CrTypeArgumentList, CrT
     ::CrTypeArgumentList
 ) {
     override fun createStub(psi: CrTypeArgumentList, parentStub: StubElement<out PsiElement>?): CrTypeArgumentListStub {
-        return CrTypeArgumentListStubImpl(parentStub, this)
+        return CrTypeArgumentListStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrTypeArgumentListStub {
-        return CrTypeArgumentListStubImpl(parentStub, this)
+        return CrTypeArgumentListStubImpl(parentStub)
     }
 }

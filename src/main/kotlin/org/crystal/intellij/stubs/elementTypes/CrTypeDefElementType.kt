@@ -15,11 +15,11 @@ object CrTypeDefElementType : CrStubElementType<CrTypeDef, CrTypeDefStub>(
     ::CrTypeDef
 ) {
     override fun createStub(psi: CrTypeDef, parentStub: StubElement<out PsiElement>?): CrTypeDefStub {
-        return CrTypeDefStubImpl(parentStub, this)
+        return CrTypeDefStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrTypeDefStub {
-        return CrTypeDefStubImpl(parentStub, this)
+        return CrTypeDefStubImpl(parentStub)
     }
 
     override fun indexStub(stub: CrTypeDefStub, sink: IndexSink) = indexType(stub, sink)

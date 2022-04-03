@@ -1,17 +1,16 @@
 package org.crystal.intellij.stubs.impl
 
-import com.intellij.psi.stubs.IStubElementType
 import com.intellij.psi.stubs.StubElement
 import org.crystal.intellij.psi.CrNameElement
 import org.crystal.intellij.psi.CrNameKind
 import org.crystal.intellij.stubs.api.CrNameStub
+import org.crystal.intellij.stubs.elementTypes.CrSimpleNameStubElementType
 
 class CrFullNameStubImpl<Psi : CrNameElement>(
     parent: StubElement<*>?,
-    elementType: IStubElementType<out StubElement<*>, *>,
     override val actualName: String?,
     override val sourceName: String?
-) : CrStubElementImpl<Psi>(parent, elementType), CrNameStub<Psi> {
+) : CrStubElementImpl<Psi>(parent, CrSimpleNameStubElementType), CrNameStub<Psi> {
     override val kind: CrNameKind
         get() = CrNameKind.STRING
 

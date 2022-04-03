@@ -16,7 +16,7 @@ object CrMacroElementType : CrStubElementType<CrMacro, CrMacroStub>(
     ::CrMacro
 ) {
     override fun createStub(psi: CrMacro, parentStub: StubElement<out PsiElement>?): CrMacroStub {
-        return CrMacroStubImpl(parentStub, this, psi.visibility)
+        return CrMacroStubImpl(parentStub, psi.visibility)
     }
 
     override fun serialize(stub: CrMacroStub, dataStream: StubOutputStream) {
@@ -25,7 +25,7 @@ object CrMacroElementType : CrStubElementType<CrMacro, CrMacroStub>(
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrMacroStub {
         val visibility = dataStream.readVisibility()
-        return CrMacroStubImpl(parentStub, this, visibility)
+        return CrMacroStubImpl(parentStub, visibility)
     }
 
     override fun indexStub(stub: CrMacroStub, sink: IndexSink) {

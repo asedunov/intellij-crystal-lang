@@ -16,7 +16,7 @@ object CrLibraryElementType : CrStubElementType<CrLibrary, CrLibraryStub>(
     ::CrLibrary
 ) {
     override fun createStub(psi: CrLibrary, parentStub: StubElement<out PsiElement>?): CrLibraryStub {
-        return CrLibraryStubImpl(parentStub, this, psi.visibility)
+        return CrLibraryStubImpl(parentStub, psi.visibility)
     }
 
     override fun serialize(stub: CrLibraryStub, dataStream: StubOutputStream) {
@@ -25,7 +25,7 @@ object CrLibraryElementType : CrStubElementType<CrLibrary, CrLibraryStub>(
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrLibraryStub {
         val visibility = dataStream.readVisibility()
-        return CrLibraryStubImpl(parentStub, this, visibility)
+        return CrLibraryStubImpl(parentStub, visibility)
     }
 
     override fun indexStub(stub: CrLibraryStub, sink: IndexSink) {

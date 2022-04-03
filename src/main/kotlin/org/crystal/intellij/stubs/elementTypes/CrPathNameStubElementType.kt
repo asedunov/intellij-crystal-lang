@@ -14,7 +14,7 @@ object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathSt
     ::CrPathNameElement
 ) {
     override fun createStub(psi: CrPathNameElement, parentStub: StubElement<out PsiElement>?): CrPathStub {
-        return CrPathStubImpl(parentStub, this, psi.name)
+        return CrPathStubImpl(parentStub, psi.name)
     }
 
     override fun serialize(stub: CrPathStub, dataStream: StubOutputStream) {
@@ -23,6 +23,6 @@ object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathSt
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrPathStub {
         val name = dataStream.readNameString() ?: ""
-        return CrPathStubImpl(parentStub, this, name)
+        return CrPathStubImpl(parentStub, name)
     }
 }

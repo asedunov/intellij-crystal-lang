@@ -16,7 +16,7 @@ object CrVariableElementType : CrStubElementType<CrVariable, CrVariableStub>(
     ::CrVariable
 ) {
     override fun createStub(psi: CrVariable, parentStub: StubElement<out PsiElement>?): CrVariableStub {
-        return CrVariableStubImpl(parentStub, this, psi.hasDefaultValue)
+        return CrVariableStubImpl(parentStub, psi.hasDefaultValue)
     }
 
     override fun serialize(stub: CrVariableStub, dataStream: StubOutputStream) {
@@ -25,7 +25,7 @@ object CrVariableElementType : CrStubElementType<CrVariable, CrVariableStub>(
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrVariableStub {
         val hasDefaultValue = dataStream.readBoolean()
-        return CrVariableStubImpl(parentStub, this, hasDefaultValue)
+        return CrVariableStubImpl(parentStub, hasDefaultValue)
     }
 
     override fun indexStub(stub: CrVariableStub, sink: IndexSink) {

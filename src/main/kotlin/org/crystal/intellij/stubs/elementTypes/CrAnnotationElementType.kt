@@ -15,11 +15,11 @@ object CrAnnotationElementType : CrStubElementType<CrAnnotation, CrAnnotationStu
     ::CrAnnotation
 ) {
     override fun createStub(psi: CrAnnotation, parentStub: StubElement<out PsiElement>?): CrAnnotationStub {
-        return CrAnnotationStubImpl(parentStub, this)
+        return CrAnnotationStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrAnnotationStub {
-        return CrAnnotationStubImpl(parentStub, this)
+        return CrAnnotationStubImpl(parentStub)
     }
 
     override fun indexStub(stub: CrAnnotationStub, sink: IndexSink) = indexType(stub, sink)

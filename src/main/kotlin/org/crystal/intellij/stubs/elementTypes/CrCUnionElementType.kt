@@ -15,11 +15,11 @@ object CrCUnionElementType : CrStubElementType<CrCUnion, CrCUnionStub>(
     ::CrCUnion
 ) {
     override fun createStub(psi: CrCUnion, parentStub: StubElement<out PsiElement>?): CrCUnionStub {
-        return CrCUnionStubImpl(parentStub, this)
+        return CrCUnionStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrCUnionStub {
-        return CrCUnionStubImpl(parentStub, this)
+        return CrCUnionStubImpl(parentStub)
     }
 
     override fun indexStub(stub: CrCUnionStub, sink: IndexSink) = indexType(stub, sink)

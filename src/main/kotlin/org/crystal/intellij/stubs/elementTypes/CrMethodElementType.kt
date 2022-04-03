@@ -16,7 +16,7 @@ object CrMethodElementType : CrStubElementType<CrMethod, CrMethodStub>(
     ::CrMethod
 ) {
     override fun createStub(psi: CrMethod, parentStub: StubElement<out PsiElement>?): CrMethodStub {
-        return CrMethodStubImpl(parentStub, this, psi.isAbstract, psi.visibility)
+        return CrMethodStubImpl(parentStub, psi.isAbstract, psi.visibility)
     }
 
     override fun serialize(stub: CrMethodStub, dataStream: StubOutputStream) {
@@ -27,7 +27,7 @@ object CrMethodElementType : CrStubElementType<CrMethod, CrMethodStub>(
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrMethodStub {
         val isAbstract = dataStream.readBoolean()
         val visibility = dataStream.readVisibility()
-        return CrMethodStubImpl(parentStub, this, isAbstract, visibility)
+        return CrMethodStubImpl(parentStub, isAbstract, visibility)
     }
 
     override fun indexStub(stub: CrMethodStub, sink: IndexSink) {

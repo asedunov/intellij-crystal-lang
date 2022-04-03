@@ -15,11 +15,11 @@ object CrEnumConstantElementType : CrStubElementType<CrEnumConstant, CrEnumConst
     ::CrEnumConstant
 ) {
     override fun createStub(psi: CrEnumConstant, parentStub: StubElement<out PsiElement>?): CrEnumConstantStub {
-        return CrEnumConstantStubImpl(parentStub, this)
+        return CrEnumConstantStubImpl(parentStub)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrEnumConstantStub {
-        return CrEnumConstantStubImpl(parentStub, this)
+        return CrEnumConstantStubImpl(parentStub)
     }
 
     override fun indexStub(stub: CrEnumConstantStub, sink: IndexSink) {

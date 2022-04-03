@@ -8,7 +8,7 @@ import com.intellij.psi.stubs.StubOutputStream
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.stubs.api.CrPathStub
 import org.crystal.intellij.stubs.impl.CrPathStubImpl
-import org.crystal.intellij.stubs.indexes.indexImplicitTypes
+import org.crystal.intellij.stubs.indexes.indexPath
 
 object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathStub>(
     "CR_PATH_NAME_ELEMENT",
@@ -28,5 +28,5 @@ object CrPathNameStubElementType : CrStubElementType<CrPathNameElement, CrPathSt
         return CrPathStubImpl(parentStub, name)
     }
 
-    override fun indexStub(stub: CrPathStub, sink: IndexSink) = indexImplicitTypes(stub, sink)
+    override fun indexStub(stub: CrPathStub, sink: IndexSink) = indexPath(stub, sink)
 }

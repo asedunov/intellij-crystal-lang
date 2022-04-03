@@ -14,13 +14,12 @@ class CrPathStubImpl(
 ) : CrStubElementImpl<CrPathNameElement>(parent, CrPathNameStubElementType), CrPathStub {
     override fun toString() = "CrPathStubImpl(name=$name)"
 
-    override val fqName: StableFqName by lazy {
-        StableFqName(name, findParentFqName())
+    override val fqName: StableFqName? by lazy {
+        if (psi.isGlobal) null else StableFqName(name, findParentFqName())
     }
 
     private fun findParentFqName(): StableFqName? {
-        findChildStubByType(CrPathNameStubElementType)?.fqName?.let { return it }
-        if (psi.isGlobal) return null
+        findChildStubByType(CrPathNameStubElementType)?.let { return it.fqName }
         val typeStub = parentStubOfType<CrTypeDefinitionStub<*>>() ?: return null
         val containerTypeStub = typeStub.parentStub as? CrTypeDefinitionStub<*>? ?: return null
         return containerTypeStub.psi.fqName as? StableFqName

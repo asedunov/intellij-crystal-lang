@@ -67,7 +67,7 @@
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeShortNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalFunctionShortNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalVariableShortNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeByNamespaceFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeFqNameIndex"/>
 
         <additionalLibraryRootsProvider implementation="org.crystal.intellij.sdk.CrystalSdkLibraryRootProvider"/>
 

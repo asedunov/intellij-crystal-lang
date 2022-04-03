@@ -1,12 +1,12 @@
 package org.crystal.intellij.stubs
 
 import com.intellij.psi.stubs.StubElement
+import com.intellij.util.containers.JBIterable
+import org.crystal.intellij.util.firstInstanceOrNull
+
+fun StubElement<*>.parents(strict: Boolean = true) =
+    JBIterable.generate(if (strict) parentStub else this) { it.parentStub }
 
 inline fun <reified T : StubElement<*>> StubElement<*>.parentStubOfType(): T? {
-    var stub = this
-    while (stub != null) {
-        if (stub is T) return stub
-        stub = stub.parentStub
-    }
-    return null
+    return parents(false).firstInstanceOrNull<T>()
 }

@@ -16,5 +16,5 @@ interface CrPathStub : CrNameStub<CrPathNameElement> {
     override val sourceName: String
         get() = name
 
-    val fqName: StableFqName
+    val fqName: StableFqName?
 }

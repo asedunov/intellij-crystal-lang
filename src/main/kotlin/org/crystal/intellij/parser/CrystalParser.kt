@@ -1,6 +1,7 @@
 package org.crystal.intellij.parser
 
 import com.intellij.lang.*
+import com.intellij.lang.PsiBuilder.Marker
 import com.intellij.lang.impl.PsiBuilderAdapter
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
@@ -464,7 +465,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseProgram() {
             skipStatementEnd()
-            parseExpressions()
+            parseFileExpressions()
             recoverUntil("<EOF>") { false }
         }
 
@@ -477,24 +478,45 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             skipWhile { at(statementEndTokens) }
         }
 
-        private fun PsiBuilder.parseExpressions() {
+        private fun PsiBuilder.parseFileExpressions() {
             withStopOnDo {
-                if (atEndToken()) return
-
-                parseTopLevelExpression()
-
-                lexerState.slashIsRegex = true
-                skipStatementEnd()
-
-                if (atEndToken()) return
-
-                while (!eof()) {
+                var hasRequire = false
+                var mLastFragment: Marker? = null
+                while (!atEndToken()) {
                     parseTopLevelExpression()
-
+                    val lastType = lastType()
+                    if (lastType != null) {
+                        if (lastType == CR_REQUIRE_EXPRESSION) {
+                            hasRequire = true
+                            mLastFragment = null
+                        }
+                        else if (mLastFragment == null) {
+                            mLastFragment = markBeforeLast()
+                            mLastFragment.done(CR_FILE_FRAGMENT)
+                        }
+                        else {
+                            val m = mLastFragment.precede()
+                            if ((mLastFragment as? LighterASTNode)?.tokenType == CR_FILE_FRAGMENT) {
+                                mLastFragment.drop()
+                            }
+                            m.done(CR_FILE_FRAGMENT)
+                            mLastFragment = m
+                        }
+                    }
                     lexerState.slashIsRegex = true
                     skipStatementEnd()
+                }
+                if (!hasRequire &&
+                    (mLastFragment as? LighterASTNode)?.tokenType == CR_FILE_FRAGMENT) mLastFragment.drop()
+            }
+        }
 
-                    if (atEndToken()) break
+        private fun PsiBuilder.parseExpressions() {
+            withStopOnDo {
+                while (!atEndToken()) {
+                    parseTopLevelExpression()
+                    lexerState.slashIsRegex = true
+                    skipStatementEnd()
                 }
             }
         }

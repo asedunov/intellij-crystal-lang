@@ -146,6 +146,7 @@ val CR_C_FIELD_GROUP = CrCompositeElementType("CR_C_FIELD_GROUP", ::CrCFieldGrou
 val CR_ELSE_CLAUSE = CrCompositeElementType("CR_ELSE_CLAUSE", ::CrElseClause)
 val CR_ENSURE_CLAUSE = CrCompositeElementType("CR_ENSURE_CLAUSE", ::CrEnsureClause)
 val CR_EXCEPTION_HANDLER = CrCompositeElementType("CR_EXCEPTION_HANDLER", ::CrExceptionHandler)
+val CR_FILE_FRAGMENT = CrStubElementTypes.FILE_FRAGMENT
 val CR_HASH_ENTRY = CrCompositeElementType("CR_HASH_ENTRY", ::CrHashEntry)
 val CR_HEREDOC_LITERAL_BODY = CrCompositeElementType("CR_HEREDOC_LITERAL_BODY", ::CrHeredocLiteralBody)
 val CR_NAMED_TUPLE_ENTRY = CrCompositeElementType("CR_NAMED_TUPLE_ENTRY", ::CrNamedTupleEntry)

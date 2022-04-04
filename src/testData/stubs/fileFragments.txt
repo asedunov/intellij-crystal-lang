@@ -1,0 +1,14 @@
+CrFileStubImpl
+  CR_FILE_FRAGMENT:CrFileFragmentStubImpl
+    CR_CLASS_DEFINITION:CrClassStubImpl(isAbstract=false, visibility=PUBLIC)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
+  CR_REQUIRE_EXPRESSION:CrRequireStubImpl(filePath=foo)
+  CR_FILE_FRAGMENT:CrFileFragmentStubImpl
+    CR_CLASS_DEFINITION:CrClassStubImpl(isAbstract=false, visibility=PUBLIC)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=B)
+    CR_CLASS_DEFINITION:CrClassStubImpl(isAbstract=false, visibility=PUBLIC)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=C)
+  CR_REQUIRE_EXPRESSION:CrRequireStubImpl(filePath=bar)
+  CR_FILE_FRAGMENT:CrFileFragmentStubImpl
+    CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
+      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=a)

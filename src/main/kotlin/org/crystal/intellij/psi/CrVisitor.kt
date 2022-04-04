@@ -93,6 +93,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitExtendExpression(o: CrExtendExpression) = visitExpression(o)
 
+    open fun visitFileFragment(o: CrFileFragment) = visitCrElement(o)
+
     open fun visitFloatLiteralExpression(o: CrFloatLiteralExpression) = visitExpression(o)
 
     open fun visitFunction(o: CrFunction) = visitDefinition(o)

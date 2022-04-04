@@ -21,7 +21,7 @@ class CrystalStructureViewElement(element: CrElement) : PsiTreeElementBase<CrEle
         } ?: return emptyList()
         return container
             .traverser()
-            .expandAndSkip { it == container || it is CrCFieldGroup }
+            .expandAndSkip { it == container || it is CrCFieldGroup || it is CrFileFragment }
             .filter(CrDefinition::class.java)
             .filterNot { it is CrDefinitionWithFqName && it.isLocal }
             .map(::CrystalStructureViewElement)

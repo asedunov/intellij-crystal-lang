@@ -50,6 +50,7 @@ object CrStubElementTypes {
     @JvmField val REQUIRE_EXPRESSION = CrRequireElementType
 
     // Misc
+    @JvmField val FILE_FRAGMENT = CrFileFragmentElementType
     @JvmField val PATH_NAME = CrPathNameStubElementType
     @JvmField val SIMPLE_NAME = CrSimpleNameStubElementType
     @JvmField val TYPE_ARGUMENT_LIST = CrTypeArgumentListElementType

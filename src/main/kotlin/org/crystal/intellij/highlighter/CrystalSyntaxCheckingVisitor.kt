@@ -748,6 +748,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrBody,
             is CrMacroLiteral,
             is CrCallExpression,
+            is CrFileFragment,
             is CrFile -> false
             is CrAssignmentExpression -> lhs !is CrPathExpression
             else -> true

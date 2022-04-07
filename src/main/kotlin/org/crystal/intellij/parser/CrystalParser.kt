@@ -3201,7 +3201,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 error("Expected: <type name>")
                 return true
             }
-            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
+            composite(CR_PATH_NAME_ELEMENT) { nextTokenSkipSpacesAndNewlines() }
 
             if (!at(CR_ASSIGN_OP)) {
                 error("Expected: '='")
@@ -3220,7 +3220,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 error("Expected: <type name>")
                 return true
             }
-            composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
+            composite(CR_PATH_NAME_ELEMENT) { nextToken() }
             skipStatementEnd()
 
             composite(CR_BODY) { parseCStructOrUnionBodyExpressions() }
@@ -3410,7 +3410,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 if (at(CR_CONSTANT)) {
-                    composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
+                    composite(CR_PATH_NAME_ELEMENT) { nextToken() }
                 }
                 else {
                     error("Expected: <library name>")

@@ -6,7 +6,6 @@ import org.crystal.intellij.stubs.api.CrAnnotationStub
 
 class CrAnnotation :
     CrDefinitionWithFqNameImpl<CrAnnotation, CrAnnotationStub>,
-    CrPathBasedDefinition,
     CrTypeDefinition
 {
     constructor(stub: CrAnnotationStub) : super(stub, CR_ANNOTATION_DEFINITION)

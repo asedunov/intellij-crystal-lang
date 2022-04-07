@@ -7,7 +7,6 @@ import org.crystal.intellij.stubs.api.CrLibraryStub
 class CrLibrary :
     CrDefinitionWithFqNameImpl<CrLibrary, CrLibraryStub>,
     CrDefinitionWithBody,
-    CrSimpleNameElementHolder,
     CrTypeDefinition
 {
     constructor(stub: CrLibraryStub) : super(stub, CR_LIBRARY_DEFINITION)

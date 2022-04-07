@@ -1,8 +1,8 @@
 CrFileStubImpl
   CR_LIBRARY_DEFINITION:CrLibraryStubImpl(visibility=PUBLIC)
-    CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=L)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=L)
     CR_C_STRUCT_DEFINITION:CrCStructStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=S)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=S)
       CR_C_FIELD_DEFINITION:CrCFieldStubImpl
         CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
         CR_PATH_TYPE:CrTypeStubImpl
@@ -12,7 +12,7 @@ CrFileStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
     CR_C_UNION_DEFINITION:CrCUnionStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=U)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=U)
       CR_C_FIELD_DEFINITION:CrCFieldStubImpl
         CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
         CR_PATH_TYPE:CrTypeStubImpl

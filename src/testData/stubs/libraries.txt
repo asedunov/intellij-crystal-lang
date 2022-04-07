@@ -1,7 +1,7 @@
 CrFileStubImpl
   CR_LIBRARY_DEFINITION:CrLibraryStubImpl(visibility=PUBLIC)
-    CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=L)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=L)
   CR_LIBRARY_DEFINITION:CrLibraryStubImpl(visibility=PRIVATE)
-    CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=L)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=L)
   CR_LIBRARY_DEFINITION:CrLibraryStubImpl(visibility=PUBLIC)
-    CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=L)
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=L)

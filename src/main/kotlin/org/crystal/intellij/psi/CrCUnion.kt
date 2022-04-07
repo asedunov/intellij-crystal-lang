@@ -7,7 +7,6 @@ import org.crystal.intellij.stubs.api.CrCUnionStub
 class CrCUnion :
     CrDefinitionWithFqNameImpl<CrCUnion, CrCUnionStub>,
     CrDefinitionWithBody,
-    CrSimpleNameElementHolder,
     CrTypeDefinition
 {
     constructor(stub: CrCUnionStub) : super(stub, CR_C_UNION_DEFINITION)

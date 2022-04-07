@@ -113,7 +113,7 @@ FILE
   CrLibrary(CR_LIBRARY_DEFINITION)
     PsiElement(lib)('lib')
     PsiWhiteSpace(' ')
-    CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+    CrPathNameElement(CR_PATH_NAME_ELEMENT)
       PsiElement(<constant>)('LibC')
     PsiWhiteSpace('\n')
     CrBody(CR_BODY)

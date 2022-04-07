@@ -7,7 +7,6 @@ import org.crystal.intellij.stubs.api.CrCStructStub
 class CrCStruct :
     CrDefinitionWithFqNameImpl<CrCStruct, CrCStructStub>,
     CrDefinitionWithBody,
-    CrSimpleNameElementHolder,
     CrTypeDefinition
 {
     constructor(stub: CrCStructStub) : super(stub, CR_C_STRUCT_DEFINITION)

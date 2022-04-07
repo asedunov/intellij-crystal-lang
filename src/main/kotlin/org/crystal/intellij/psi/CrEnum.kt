@@ -6,7 +6,6 @@ import org.crystal.intellij.stubs.api.CrEnumStub
 
 class CrEnum :
     CrDefinitionWithFqNameImpl<CrEnum, CrEnumStub>,
-    CrPathBasedDefinition,
     CrDefinitionWithBody,
     CrTypeDefinition
 {

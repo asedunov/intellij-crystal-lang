@@ -88,10 +88,22 @@ class CrystalTypeHandlerTest : BasePlatformTestCase() {
     @Test
     fun testInsertPairBracketOutsideString() {
         for ((left, right) in brackets) {
+            val shouldPair = !(left == '<' || left == '|')
             doTest(
                 "x = <caret>",
                 left,
-                "x = $left<caret>$right"
+                if (shouldPair) "x = $left<caret>$right" else "x = $left<caret>"
+            )
+        }
+    }
+
+    @Test
+    fun testInsertPairBracketOutsideStringAfterPercent() {
+        for ((left, right) in brackets) {
+            doTest(
+                "x = %<caret>",
+                left,
+                "x = %$left<caret>$right"
             )
         }
     }

@@ -57,7 +57,7 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
             }
         }
 
-        if (c == c1 && c != '/' && !isInsideLiteral(file, offset)) {
+        if (c == c1 && c != '/' && !isInsideLiteral(file, offset) && shouldPair(c, chars.getOrNull(offset - 1))) {
             type(editor, project, "$c$c2")
             EditorModificationUtil.moveCaretRelatively(editor, -1)
             return Result.STOP
@@ -188,6 +188,10 @@ class CrystalTypedHandler : TypedHandlerDelegate() {
                 parent is CrSymbolArrayExpression ||
                 parent is CrStringArrayExpression ||
                 parent is CrSymbolExpression
+    }
+
+    private fun shouldPair(c: Char, cPrev: Char?): Boolean {
+        return !(c == '<' || c == '|') || cPrev == '%'
     }
 
     private fun type(editor: Editor, project: Project, text: String) {

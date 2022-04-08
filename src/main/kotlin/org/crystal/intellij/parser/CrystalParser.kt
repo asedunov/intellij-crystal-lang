@@ -389,12 +389,12 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             if (at(token)) unexpected()
         }
 
-        private fun PsiBuilder.markBeforeLast(): PsiBuilder.Marker {
-            return (latestDoneMarker as PsiBuilder.Marker).precede()
+        private fun PsiBuilder.markBeforeLast(): Marker {
+            return (latestDoneMarker as Marker).precede()
         }
 
         private fun PsiBuilder.dropLast() {
-            (latestDoneMarker as PsiBuilder.Marker).drop()
+            (latestDoneMarker as Marker).drop()
         }
 
         private inline fun <T> PsiBuilder.composite(type: IElementType, parser: PsiBuilder.() -> T): Boolean {
@@ -406,9 +406,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private inline fun <T> PsiBuilder.finishComposite(
-                type: IElementType,
-                marker: PsiBuilder.Marker,
-                parser: PsiBuilder.() -> T
+            type: IElementType,
+            marker: Marker,
+            parser: PsiBuilder.() -> T
         ): Boolean {
             try {
                 parser()
@@ -419,9 +419,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.mergeLatestDoneMarker(mOuter: PsiBuilder.Marker) {
+        private fun PsiBuilder.mergeLatestDoneMarker(mOuter: Marker) {
             val nodeType = lastType()!!
-            (latestDoneMarker as PsiBuilder.Marker).drop()
+            (latestDoneMarker as Marker).drop()
             mOuter.done(nodeType)
         }
 
@@ -564,7 +564,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseRootExpression(minPrecedence: Int = 0): Boolean {
             val parsed = parsePrimaryExpression()
             if (parsed) {
-                val lhs = latestDoneMarker as PsiBuilder.Marker
+                val lhs = latestDoneMarker as Marker
                 parseRootExpression(lhs, minPrecedence)
             }
 
@@ -573,12 +573,12 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return parsed
         }
 
-        private fun PsiBuilder.parseRootExpression(lhsCurrent: PsiBuilder.Marker, minPrecedence: Int): PsiBuilder.Marker {
+        private fun PsiBuilder.parseRootExpression(lhsCurrent: Marker, minPrecedence: Int): Marker {
             var lhs = lhsCurrent
             var token = tokenType
 
             fun parseHigherPrecedence(opInfo: OpInfo) {
-                var rhs = latestDoneMarker as PsiBuilder.Marker
+                var rhs = latestDoneMarker as Marker
                 token = tokenType
                 while (token != null) {
                     val nextOpType = token!!
@@ -1079,8 +1079,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     at(CR_NEWLINE) -> {
                         if (lastType() in unchainableNodes) break
                         if (!lexer.lookAhead {
-                            skipSpacesAndNewlines()
-                            at(CR_DOT)
+                                skipSpacesAndNewlines()
+                                at(CR_DOT)
                             }) break
                         skipSpacesAndNewlines()
                     }
@@ -1088,7 +1088,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     at(CR_DOT) -> {
                         lexerState.wantsRegex = false
 
-                        val m = (latestDoneMarker as PsiBuilder.Marker).precede()
+                        val m = (latestDoneMarker as Marker).precede()
 
                         lexerState.wantsDefOrMacroName = true
                         nextTokenSkipSpacesAndNewlines()
@@ -1400,13 +1400,13 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseCallNamedArgs(mFirstArg: PsiBuilder.Marker?, allowNewline: Boolean) {
+        private fun PsiBuilder.parseCallNamedArgs(mFirstArg: Marker?, allowNewline: Boolean) {
             doParseCallNamedArgs(mFirstArg, allowNewline)
             if (callBlockArgFollows()) parseCallBlockArg()
             if (allowNewline) recoverUntil("')'", true) { at(CR_RPAREN) }
         }
 
-        private fun PsiBuilder.doParseCallNamedArgs(mFirstArg: PsiBuilder.Marker?, allowNewline: Boolean) {
+        private fun PsiBuilder.doParseCallNamedArgs(mFirstArg: Marker?, allowNewline: Boolean) {
             var m = mFirstArg
 
             if (m != null && lastType() in CR_STRING_LITERALS) {
@@ -1491,7 +1491,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseCallBlockArgAfterDot(m: PsiBuilder.Marker) {
+        private fun PsiBuilder.parseCallBlockArgAfterDot(m: Marker) {
             when {
                 at(CR_INSTANCE_VAR) -> finishComposite(CR_REFERENCE_EXPRESSION, m) {
                     composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
@@ -1696,7 +1696,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     val lastMarker = latestDoneMarker!!
                     val paramType = if (hasParam) lastMarker.tokenType else CR_SIMPLE_PARAMETER_DEFINITION
                     if (hasParam && isSplat) {
-                        (lastMarker as PsiBuilder.Marker).drop()
+                        (lastMarker as Marker).drop()
                     }
                     if (isSplat) {
                         m.done(paramType)
@@ -1747,9 +1747,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private val methodNameTokens = TokenSet.orSet(
-                CR_KEYWORDS,
-                CR_BASE_OPERATORS,
-                TokenSet.create(CR_IDENTIFIER, CR_CONSTANT)
+            CR_KEYWORDS,
+            CR_BASE_OPERATORS,
+            TokenSet.create(CR_IDENTIFIER, CR_CONSTANT)
         )
 
         private fun PsiBuilder.parseIndexingSuffix() {
@@ -1757,10 +1757,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             withStopOnDo {
                 parseCallArgsSpaceConsumed(
-                        checkPlusMinus = false,
-                        allowCurly = true,
-                        endToken = CR_RBRACKET,
-                        allowBeginlessRange = true
+                    checkPlusMinus = false,
+                    allowCurly = true,
+                    endToken = CR_RBRACKET,
+                    allowBeginlessRange = true
                 )
             }
             skipSpacesAndNewlines()
@@ -1990,7 +1990,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpaces()
         }
 
-        private fun PsiBuilder.parseNamedTupleTail(mFirstEntry: PsiBuilder.Marker?) {
+        private fun PsiBuilder.parseNamedTupleTail(mFirstEntry: Marker?) {
             var m = mFirstEntry ?: mark()
 
             if (mFirstEntry != null && lastType() in CR_STRING_LITERALS) {
@@ -2051,7 +2051,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             tok(CR_RBRACE)
         }
 
-        private fun PsiBuilder.parseHashLiteralTail(mFirstEntry: PsiBuilder.Marker, allowOf: Boolean = true) {
+        private fun PsiBuilder.parseHashLiteralTail(mFirstEntry: Marker, allowOf: Boolean = true) {
             ensureParseAssignment()
             mFirstEntry.done(CR_HASH_ENTRY)
 

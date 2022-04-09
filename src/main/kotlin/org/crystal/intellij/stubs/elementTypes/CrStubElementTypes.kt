@@ -53,5 +53,6 @@ object CrStubElementTypes {
     @JvmField val FILE_FRAGMENT = CrFileFragmentElementType
     @JvmField val PATH_NAME = CrPathNameStubElementType
     @JvmField val SIMPLE_NAME = CrSimpleNameStubElementType
+    @JvmField val SUPERTYPE_CLAUSE = CrSupertypeClauseElementType
     @JvmField val TYPE_ARGUMENT_LIST = CrTypeArgumentListElementType
 }

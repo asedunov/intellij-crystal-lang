@@ -11,8 +11,8 @@ class CrProcType : CrType {
 
     override fun accept(visitor: CrVisitor) = visitor.visitProcType(this)
 
-    val inputList: CrTypeArgumentList
-        get() = stubChildOfType()!!
+    val inputList: CrTypeArgumentList?
+        get() = stubChildOfType()
 
     val outputType: CrType?
         get() = stubChildOfType()

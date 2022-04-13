@@ -88,7 +88,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         is CrPathType -> appendPath(type.path)
         is CrPointerType -> appendType(type.innerType).append("*")
         is CrProcType -> {
-            append(type.inputList.elements) { appendType(it) }
+            append(type.inputList?.elements) { appendType(it) }
             append(" -> ")
             type.outputType?.let { appendType(it) }
             this

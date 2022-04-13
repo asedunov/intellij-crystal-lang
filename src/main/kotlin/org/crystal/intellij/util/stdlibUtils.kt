@@ -15,12 +15,13 @@ fun StringBuilder.appendSpaced(text: String): StringBuilder {
 }
 
 fun <T, A : Appendable> A.append(
-    iterable: Iterable<T>,
+    iterable: Iterable<T>?,
     separator: CharSequence = ", ",
     prefix: CharSequence = "",
     postfix: CharSequence = "",
     appendElement: A.(T) -> Unit
 ): A {
+    if (iterable == null) return this
     append(prefix)
     for ((count, element) in iterable.withIndex()) {
         if (count + 1 > 1) append(separator)

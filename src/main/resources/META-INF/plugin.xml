@@ -17,6 +17,9 @@
         <extensionPoint qualifiedName="org.crystal.sdkFlavor"
                         interface="org.crystal.intellij.sdk.CrystalSdkFlavor"
                         dynamic="true"/>
+        <extensionPoint qualifiedName="org.crystal.classInheritorsSearch"
+                        interface="com.intellij.util.QueryExecutor"
+                        dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -84,6 +87,9 @@
         <targetElementEvaluator language="Crystal"
                                 implementationClass="org.crystal.intellij.navigation.CrystalTargetElementEvaluator"/>
 
+        <codeInsight.lineMarkerProvider language="Crystal"
+                                        implementationClass="org.crystal.intellij.lineMarkers.CrystalInheritorsLineMarkerProvider"/>
+
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"
                          suppressId="CrystalResolve"
@@ -114,6 +120,8 @@
     <extensions defaultExtensionNs="org.crystal">
         <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalUnixSdkFlavor"/>
         <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalWslSdkFlavor"/>
+
+        <classInheritorsSearch implementation="org.crystal.intellij.search.CrystalInheritorsSearcher"/>
     </extensions>
 
     <actions>

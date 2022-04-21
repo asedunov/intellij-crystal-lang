@@ -1,0 +1,5 @@
+<node text="Object">
+  <node text="Value">
+    <node text="Class" base="true"/>
+  </node>
+</node>

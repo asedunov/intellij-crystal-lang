@@ -1,0 +1,3 @@
+<node text="Object" base="true">
+  <node text="All types are derived from Object"/>
+</node>

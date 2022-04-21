@@ -90,6 +90,9 @@
         <codeInsight.lineMarkerProvider language="Crystal"
                                         implementationClass="org.crystal.intellij.lineMarkers.CrystalInheritorsLineMarkerProvider"/>
 
+        <typeHierarchyProvider language="Crystal"
+                               implementationClass="org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyProvider"/>
+
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"
                          suppressId="CrystalResolve"

@@ -1,7 +1,9 @@
 package org.crystal.intellij.search
 
 import com.intellij.openapi.application.QueryExecutorBase
-import com.intellij.psi.search.ProjectAndLibrariesScope
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.SearchScope
 import com.intellij.util.Processor
 import org.crystal.intellij.psi.CrTypeDefinition
 import org.crystal.intellij.resolve.CrStdFqNames
@@ -19,12 +21,13 @@ object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInh
         parameters: CrystalInheritorsSearch.Parameters,
         consumer: Processor<in CrModuleLikeSym>
     ) {
-        processDirectInheritors(parameters.rootSym, parameters.checkDeep, consumer, HashSet())
+        processDirectInheritors(parameters.rootSym, parameters.checkDeep, parameters.searchScope, consumer, HashSet())
     }
 
     private fun processDirectInheritors(
         baseSym: CrModuleLikeSym,
         checkDeep: Boolean,
+        searchScope: SearchScope,
         consumer: Processor<in CrModuleLikeSym>,
         processed: HashSet<CrTypeSym>
     ): Boolean {
@@ -32,17 +35,23 @@ object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInh
         val fqName = baseSym.fqName
         if (fqName in rootsToSkip) return true
         val superName = baseSym.name
+        val project = baseSym.program.project
+        val indexSearchScope = when (searchScope) {
+            is GlobalSearchScope -> searchScope
+            is LocalSearchScope -> GlobalSearchScope.filesScope(project, searchScope.virtualFiles.asList())
+            else -> return true
+        }
         val program = baseSym.program
-        val project = program.project
         predefinedSubclasses[fqName]?.forEach {
             val inheritorSym = program.memberScope.getTypeAs<CrModuleLikeSym>(it) ?: return@forEach
-            processCandidateSymbol(inheritorSym, baseSym, checkDeep, consumer, processed)
+            processCandidateSymbol(inheritorSym, baseSym, checkDeep, searchScope, consumer, processed)
         }
-        val candidates = CrystalTypeBySuperclassNameIndex.get(superName, project, ProjectAndLibrariesScope(project))
+        val candidates = CrystalTypeBySuperclassNameIndex.get(superName, project, indexSearchScope)
         for (candidate in candidates) {
+            if (searchScope is LocalSearchScope && candidate !in searchScope) continue
             val classDef = candidate as? CrTypeDefinition ?: continue
             val inheritorSym = classDef.resolveSymbol() as? CrModuleLikeSym ?: continue
-            if (!processCandidateSymbol(inheritorSym, baseSym, checkDeep, consumer, processed)) return false
+            if (!processCandidateSymbol(inheritorSym, baseSym, checkDeep, searchScope, consumer, processed)) return false
         }
         return true
     }
@@ -51,13 +60,14 @@ object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInh
         candidate: CrModuleLikeSym,
         baseSym: CrModuleLikeSym,
         checkDeep: Boolean,
+        searchScope: SearchScope,
         consumer: Processor<in CrModuleLikeSym>,
         processed: HashSet<CrTypeSym>
     ): Boolean {
         if (baseSym !in candidate.parents) return true
         if (!consumer.process(candidate)) return false
         if (checkDeep &&
-            !processDirectInheritors(candidate, true, consumer, processed)) return false
+            !processDirectInheritors(candidate, true, searchScope, consumer, processed)) return false
         return true
     }
 }

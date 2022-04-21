@@ -1,0 +1,22 @@
+<node text="Object">
+  <node text="Value">
+    <node text="Number" base="true">
+      <node text="Int">
+        <node text="Int64"/>
+        <node text="Int128"/>
+        <node text="UInt16"/>
+        <node text="UInt128"/>
+        <node text="UInt32"/>
+        <node text="Int32"/>
+        <node text="Int8"/>
+        <node text="UInt64"/>
+        <node text="UInt8"/>
+        <node text="Int16"/>
+      </node>
+      <node text="Float">
+        <node text="Float32"/>
+        <node text="Float64"/>
+      </node>
+    </node>
+  </node>
+</node>

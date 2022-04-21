@@ -43,7 +43,7 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTyp
     override val sourceName: String
         get() = name
 
-    val fqName: FqName?
+    override val fqName: FqName?
         get() = when (val p = parent) {
             is CrPathNameElement -> p.fqName?.parent
             is CrTypeDefinition -> p.fqName

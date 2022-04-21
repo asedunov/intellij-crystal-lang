@@ -50,3 +50,10 @@ fun PsiFile.findDirectives(prefix: String): List<String> {
     }
     return result
 }
+
+fun String.findDirective(prefix: String): String? {
+    for (line in lines()) {
+        if (line.startsWith(prefix)) return line.substring(prefix.length).trim()
+    }
+    return null
+}

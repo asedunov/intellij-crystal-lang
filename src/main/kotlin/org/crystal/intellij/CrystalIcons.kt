@@ -29,6 +29,8 @@ object CrystalIcons {
     val MACRO = load("macro")
     val METHOD = PlatformIcons.METHOD_ICON!!
     val MODULE = load("module")
+    val SUBCLASS = AllIcons.Gutter.OverridenMethod
+    val INCLUDER = AllIcons.Gutter.ImplementedMethod
     val PRIVATE = PlatformIcons.PRIVATE_ICON!!
     val PROTECTED = PlatformIcons.PROTECTED_ICON!!
     val PUBLIC = PlatformIcons.PUBLIC_ICON!!

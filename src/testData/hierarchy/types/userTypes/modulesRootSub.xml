@@ -1,0 +1,13 @@
+<node text="M" base="true">
+  <node text="AA">
+    <node text="BB"/>
+  </node>
+  <node text="A">
+    <node text="B"/>
+  </node>
+  <node text="N">
+    <node text="BB"/>
+    <node text="B"/>
+    <node text="P"/>
+  </node>
+</node>

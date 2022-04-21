@@ -1,0 +1,10 @@
+<node text="Object">
+  <node text="Value">
+    <node text="Number">
+      <node text="Float" base="true">
+        <node text="Float32"/>
+        <node text="Float64"/>
+      </node>
+    </node>
+  </node>
+</node>

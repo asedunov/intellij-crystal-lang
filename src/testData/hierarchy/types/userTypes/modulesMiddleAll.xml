@@ -1,0 +1,5 @@
+<node text="N" base="true">
+  <node text="BB"/>
+  <node text="P"/>
+  <node text="B"/>
+</node>

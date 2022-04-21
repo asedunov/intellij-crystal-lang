@@ -1,0 +1,7 @@
+<node text="E" base="true">
+  <node text="Enum">
+    <node text="Value">
+      <node text="Object"/>
+    </node>
+  </node>
+</node>

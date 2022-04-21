@@ -1,0 +1,5 @@
+<node text="Object">
+  <node text="Reference">
+    <node text="String" base="true"/>
+  </node>
+</node>

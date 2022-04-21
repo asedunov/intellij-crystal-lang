@@ -1,0 +1,7 @@
+<node text="A" base="true">
+  <node text="Struct">
+    <node text="Value">
+      <node text="Object"/>
+    </node>
+  </node>
+</node>

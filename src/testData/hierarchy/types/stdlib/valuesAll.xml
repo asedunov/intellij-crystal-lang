@@ -1,0 +1,5 @@
+<node text="Object">
+  <node text="Value">
+    <node text="$Foo$" base="true" />
+  </node>
+</node>

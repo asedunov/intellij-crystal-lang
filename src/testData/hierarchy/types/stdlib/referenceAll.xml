@@ -1,0 +1,5 @@
+<node text="Object">
+  <node text="Reference" base="true">
+    <node text="All classes are derived from Reference"/>
+  </node>
+</node>

@@ -1,0 +1,9 @@
+<node text="Object">
+  <node text="Reference">
+    <node text="A" base="true">
+      <node text="B">
+        <node text="C"/>
+      </node>
+    </node>
+  </node>
+</node>

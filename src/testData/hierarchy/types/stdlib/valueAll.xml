@@ -1,0 +1,5 @@
+<node text="Object">
+  <node text="Value" base="true">
+    <node text="All value types are derived from Value"/>
+  </node>
+</node>

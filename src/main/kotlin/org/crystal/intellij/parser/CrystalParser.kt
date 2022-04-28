@@ -4018,7 +4018,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpacesAndNewlines()
 
                 if (at(CR_SELF)) {
-                    composite(CR_SELF_EXPRESSION) { nextTokenSkipSpaces() }
+                    composite(CR_SELF_TYPE) { nextTokenSkipSpaces() }
                 }
                 else {
                     parseGeneric()

@@ -294,7 +294,7 @@ FILE
   CrExtendExpression(CR_EXTEND_EXPRESSION)
     PsiElement(extend)('extend')
     PsiWhiteSpace(' ')
-    CrSelfExpression(CR_SELF_EXPRESSION)
+    CrSelfType(CR_SELF_TYPE)
       PsiElement(self)('self')
 
   CrUnlessExpression(CR_UNLESS_EXPRESSION)

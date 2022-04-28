@@ -47,6 +47,7 @@ object CrStubElementTypes {
     @JvmField val UNION_TYPE = CrTypeElementType("CR_UNION_TYPE", ::CrUnionType, ::CrUnionType)
 
     // Expressions
+    @JvmField val INCLUDE_EXPRESSION = CrIncludeElementType
     @JvmField val REQUIRE_EXPRESSION = CrRequireElementType
 
     // Misc

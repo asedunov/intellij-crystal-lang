@@ -8,6 +8,7 @@ import com.intellij.psi.stubs.StubOutputStream
 import org.crystal.intellij.psi.CrModule
 import org.crystal.intellij.stubs.api.CrModuleStub
 import org.crystal.intellij.stubs.impl.CrModuleStubImpl
+import org.crystal.intellij.stubs.indexes.indexSuperclass
 import org.crystal.intellij.stubs.indexes.indexType
 
 object CrModuleElementType : CrStubElementType<CrModule, CrModuleStub>(
@@ -28,5 +29,8 @@ object CrModuleElementType : CrStubElementType<CrModule, CrModuleStub>(
         return CrModuleStubImpl(parentStub, visibility)
     }
 
-    override fun indexStub(stub: CrModuleStub, sink: IndexSink) = indexType(stub, sink)
+    override fun indexStub(stub: CrModuleStub, sink: IndexSink) {
+        indexType(stub, sink)
+        indexSuperclass(stub, sink)
+    }
 }

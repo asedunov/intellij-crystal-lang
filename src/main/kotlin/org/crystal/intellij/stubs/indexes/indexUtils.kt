@@ -4,11 +4,7 @@ import com.intellij.psi.stubs.IndexSink
 import org.crystal.intellij.parser.CR_INSTANTIATED_TYPE
 import org.crystal.intellij.parser.CR_PATH_NAME_ELEMENT
 import org.crystal.intellij.parser.CR_PATH_TYPE
-import org.crystal.intellij.stubs.api.CrDefinitionWithFqNameStub
-import org.crystal.intellij.stubs.api.CrPathStub
-import org.crystal.intellij.stubs.api.CrTypeDefinitionStub
-import org.crystal.intellij.stubs.api.CrTypeStub
-import org.crystal.intellij.stubs.elementTypes.CrSupertypeClauseElementType
+import org.crystal.intellij.stubs.api.*
 import org.crystal.intellij.stubs.parents
 
 fun indexType(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
@@ -20,15 +16,19 @@ fun indexType(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
     }
 }
 
-@Suppress("TYPE_MISMATCH_WARNING")
 fun indexSuperclass(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
-    val superType = stub
-        .findChildStubByType(CrSupertypeClauseElementType)
-        ?.childrenStubs
-        ?.firstOrNull() as? CrTypeStub ?: return
-    val superPathType = when (superType.stubType) {
-        CR_PATH_TYPE -> superType
-        CR_INSTANTIATED_TYPE -> superType.findChildStubByType(CR_PATH_TYPE)
+    for (child in stub.childrenStubs) {
+        if (child is CrSupertypeClauseStub || child is CrIncludeStub) {
+            (child.childrenStubs.firstOrNull() as? CrTypeStub)?.let { indexSuperclass(it, sink) }
+        }
+    }
+}
+
+@Suppress("TYPE_MISMATCH_WARNING")
+private fun indexSuperclass(superTypeStub: CrTypeStub, sink: IndexSink) {
+    val superPathType = when (superTypeStub.stubType) {
+        CR_PATH_TYPE -> superTypeStub
+        CR_INSTANTIATED_TYPE -> superTypeStub.findChildStubByType(CR_PATH_TYPE)
         else -> null
     } ?: return
     val superPath = superPathType.findChildStubByType(CR_PATH_NAME_ELEMENT) ?: return

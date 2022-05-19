@@ -9,6 +9,7 @@ import com.intellij.psi.ResolveResult
 import com.intellij.util.SmartList
 import com.intellij.util.containers.addIfNotNull
 import com.intellij.util.containers.map2Array
+import org.crystal.intellij.psi.CrFile
 import org.crystal.intellij.psi.CrRequireExpression
 import org.crystal.intellij.psi.module
 import org.crystal.intellij.util.get
@@ -90,15 +91,16 @@ class CrRequiredPathInfo private constructor(
         }
 
         fun finishPath() {
-            if (valid && path.size == totalSize && !resolved) {
+            val finishedPath = path.size == totalSize
+
+            if (valid && finishedPath && !resolved) {
                 resolved = true
                 results.forEach { it.clear() }
             }
 
-            if (path.size == totalSize || !resolved) {
+            if (finishedPath || !resolved) {
                 for (i in path.indices) {
                     val target = path[i]
-                    if (target.isDirectory && i == totalSize) continue
                     if (i == results.size) {
                         results.add(SmartList())
                     }
@@ -133,8 +135,14 @@ class CrRequiredPathInfo private constructor(
         }
 
         if (results.isEmpty()) return emptyList()
-        return results.map { refResults ->
-            refResults.map2Array { PsiElementResolveResult(it) }
+        return results.mapIndexed { i, refResults ->
+            if (i < refCount - 1) {
+                refResults.map2Array { PsiElementResolveResult(it) }
+            }
+            else {
+                val primaryFile = refResults.firstNotNullOfOrNull { it as? CrFile }
+                if (primaryFile != null) arrayOf(PsiElementResolveResult(primaryFile)) else ResolveResult.EMPTY_ARRAY
+            }
         }
     }
 

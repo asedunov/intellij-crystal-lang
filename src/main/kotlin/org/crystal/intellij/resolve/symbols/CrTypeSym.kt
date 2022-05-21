@@ -9,7 +9,9 @@ import org.crystal.intellij.resolve.StableFqName
 sealed class CrTypeSym(
     name: String,
     sources: List<CrTypeSource>,
-) : CrSym<CrTypeSource>(name, sources) {
+) : CrOrdinalSym<CrTypeSource>(name, sources) {
+    abstract override val namespace: CrModuleLikeSym
+
     val visibility: CrVisibility? by lazy {
         val typeDef = sources.firstOrNull { it is CrTypeDefinition } as? CrTypeDefinition
         typeDef?.visibility ?: CrVisibility.PUBLIC

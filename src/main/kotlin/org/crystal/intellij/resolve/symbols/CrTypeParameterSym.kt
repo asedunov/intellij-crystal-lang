@@ -6,8 +6,8 @@ import org.crystal.intellij.psi.CrTypeParameter
 class CrTypeParameterSym(
     name: String,
     sources: List<CrTypeParameter>,
-    override val namespace: CrModuleLikeSym
-) : CrSym<CrTypeParameter>(name, sources) {
+    override val namespace: CrSym<*>
+) : CrOrdinalSym<CrTypeParameter>(name, sources) {
     override val program: CrProgramSym
         get() = namespace.program
 

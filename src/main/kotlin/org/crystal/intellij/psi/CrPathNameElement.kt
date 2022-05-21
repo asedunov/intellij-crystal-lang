@@ -10,6 +10,7 @@ import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.scopes.CrScope
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
+import org.crystal.intellij.resolve.symbols.CrOrdinalSym
 import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.resolve.symbols.CrSymbolOrdinal
 import org.crystal.intellij.stubs.api.CrPathStub
@@ -65,6 +66,11 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTyp
             val include = parentStubOrPsiOfType<CrIncludeLikeExpression>()
             if (include != null) return include.pathResolveScope
 
+            val containingMethod = parentStubOrPsiOfType<CrMethod>()
+            if (containingMethod != null) {
+                return containingMethod.resolveSymbol()?.containedScope
+            }
+
             var containingType = parentStubOrPsiOfType<CrModuleLikeDefinition<*, *>>()
             if (containingType?.nameElement?.isAncestor(this, false) == true ||
                 (containingType as? CrSuperTypeAware)?.superTypeClause?.isAncestor(this, false) == true
@@ -79,7 +85,7 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTyp
     override fun resolveSymbol(): CrSym<*>? {
         if (isGlobal) return project.resolveFacade.program
         return project.resolveCache.getOrCompute(PATH_TARGET, this) {
-            val type = pathResolveScope?.getType(name, qualifier == null) ?: return@getOrCompute null
+            val type = pathResolveScope?.getType(name, qualifier == null) as? CrOrdinalSym<*> ?: return@getOrCompute null
             if (parentStubOrPsiOfType<CrSupertypeClause>() != null
                 || parentStubOrPsiOfType<CrIncludeLikeExpression>() != null) {
                 val targetOrdinal = type.ordinal ?: return@getOrCompute null

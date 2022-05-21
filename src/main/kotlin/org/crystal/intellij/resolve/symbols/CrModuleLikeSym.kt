@@ -8,6 +8,7 @@ import org.crystal.intellij.psi.CrTypeSource
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
+import org.crystal.intellij.resolve.scopes.CrScope
 
 sealed class CrModuleLikeSym(
     name: String,
@@ -17,6 +18,9 @@ sealed class CrModuleLikeSym(
         private val TYPE_PARAMETERS = newResolveSlice<CrModuleLikeSym, Map<String, CrTypeParameterSym>>("TYPE_PARAMETERS")
         private val PARENTS = newResolveSlice<CrModuleLikeSym, CrModuleLikeScope.ParentList>("PARENTS")
     }
+
+    override val containedScope: CrScope
+        get() = memberScope
 
     open val memberScope by lazy {
         CrModuleLikeScope(this, parents)

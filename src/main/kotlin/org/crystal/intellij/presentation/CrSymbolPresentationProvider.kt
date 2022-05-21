@@ -23,6 +23,7 @@ class CrSymbolPresentationProvider : SymbolPresentationProvider {
             is CrTypeAliasSym -> "Alias"
             is CrTypeDefSym -> "Type declaration"
             is CrTypeParameterSym -> "Type parameter"
+            is CrMethodSym -> "Method"
         }
         val icon = sym.getIcon()
         return SymbolPresentation.create(icon, name, "$kind \"$name\"")

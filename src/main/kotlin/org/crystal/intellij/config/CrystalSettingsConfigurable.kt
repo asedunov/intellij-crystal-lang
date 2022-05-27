@@ -76,6 +76,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
     private lateinit var languageVersionComboBox: ComboBox<LanguageVersion>
     private lateinit var crystalExeComboBox: CrystalExePathComboBox
     private lateinit var stdlibEditor: TextFieldWithBrowseButton
+    private lateinit var mainFileEditor: TextFieldWithBrowseButton
     private lateinit var sdkVersionLabel: JLabel
 
     override fun createPanel() = panel {
@@ -111,7 +112,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         }
 
         row(CrystalBundle.message("settings.main.file.path")) {
-            stdlibEditor = textFieldWithBrowseButton(
+            mainFileEditor = textFieldWithBrowseButton(
                 settings::mainFilePath,
                 CrystalBundle.message("settings.select.main.path"),
                 project,

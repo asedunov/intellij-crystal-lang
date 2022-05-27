@@ -6,7 +6,7 @@ import org.crystal.intellij.lexer.CR_MUL_OP
 import org.crystal.intellij.parser.CR_TYPE_PARAMETER_DEFINITION
 import org.crystal.intellij.stubs.api.CrDefinitionStub
 
-class CrTypeParameter : CrDefinitionImpl<CrDefinitionStub<*>>, CrSimpleNameElementHolder, CrSymbolOrdinalHolder {
+class CrTypeParameter : CrDefinitionImpl<CrDefinitionStub<*>>, CrPathNameElementHolder, CrSymbolOrdinalHolder {
     constructor(stub: CrDefinitionStub<*>) : super(stub, CR_TYPE_PARAMETER_DEFINITION)
 
     constructor(node: ASTNode) : super(node)

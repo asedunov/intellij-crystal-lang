@@ -2840,7 +2840,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
 
                     composite(CR_TYPE_PARAMETER_DEFINITION) {
-                        composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
+                        composite(CR_PATH_NAME_ELEMENT) { nextToken() }
                     }
 
                     if (at(CR_COMMA)) {
@@ -2895,7 +2895,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                     if (at(CR_MUL_OP)) nextToken()
                     if (at(CR_CONSTANT)) {
-                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        composite(CR_PATH_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
                         error("Expected: <type name>")

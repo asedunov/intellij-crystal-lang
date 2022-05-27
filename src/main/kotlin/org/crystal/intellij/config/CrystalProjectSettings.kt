@@ -42,6 +42,9 @@ class CrystalProjectSettings(
         if (oldState.languageVersion != newState.languageVersion) {
             CrystalLanguageLevelPusher.pushLanguageLevel(project)
         }
+        if (oldState.mainFilePath != newState.mainFilePath) {
+            updateProjectRoots(project)
+        }
     }
 
     val languageVersion: LanguageVersion

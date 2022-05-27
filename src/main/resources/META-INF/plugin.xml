@@ -8,8 +8,18 @@
       <li>Basic syntax highlighting</li>
       <li>Initial formatting support</li>
       <li>File structure view</li>
+      <li>Type hierarchy view</li>
       <li>Go to Class/Go to Symbol navigation</li>
+      <li>Run configurations</li>
     </ul>]]></description>
+
+    <change-notes><![CDATA[
+    <ul>
+      <li>Initial support of type reference resolution</li>
+      <li>Line markers for inheriting and including types</li>
+      <li>Type hierarchy view</li>
+      <li>Fixes and improvements</li>
+    </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("org.jetbrains.intellij") version "1.0"
     java
@@ -35,5 +37,11 @@ tasks {
 
     publishPlugin {
         token.set(System.getenv("MARKETPLACE_TOKEN"))
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }

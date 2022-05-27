@@ -2,6 +2,7 @@ package org.crystal.intellij.navigation
 
 import com.intellij.codeInsight.navigation.fileStatusAttributes
 import com.intellij.ide.util.PsiElementListCellRenderer
+import com.intellij.model.Pointer
 import com.intellij.navigation.NavigationTarget
 import com.intellij.navigation.TargetPresentation
 import com.intellij.openapi.vfs.newvfs.VfsPresentationUtil
@@ -9,17 +10,18 @@ import org.crystal.intellij.presentation.getIcon
 import org.crystal.intellij.presentation.locationString
 import org.crystal.intellij.psi.CrElement
 import org.crystal.intellij.resolve.symbols.CrSym
-import org.crystal.intellij.resolve.symbols.CrTypeSym
 import org.crystal.intellij.util.deparenthesize
 
 @Suppress("UnstableApiUsage", "RecursivePropertyAccessor")
 class CrTypePathNavigationTarget(
     private val symbol: CrSym<*>,
     private val psi: CrElement
-) : NavigationTarget {
-    override fun isValid() = psi.isValid
+) : NavigationTarget, Pointer<CrTypePathNavigationTarget> {
+    override fun createPointer() = this
 
-    override fun getNavigatable() = psi
+    override fun dereference() = this
+
+    override fun navigationRequest() = psi.navigationRequest()
 
     override fun getTargetPresentation(): TargetPresentation {
         val file = psi.containingFile

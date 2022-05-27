@@ -24,6 +24,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         when (definition) {
             is CrSimpleParameter -> definition.externalNameElement?.let { appendSpaced(it.presentableText).append(" ") }
             is CrMethod -> definition.receiver?.let { appendReceiver(it).append(".") }
+            else -> {}
         }
         append(definition.nameElement.presentableText)
         if (definition is CrFunction) {
@@ -64,6 +65,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         when (definition) {
             is CrDefinitionWithDefault -> if (definition.hasDefaultValue) appendSpaced("= ...")
             is CrAliasLikeDefinition -> appendSpaced("= ").appendType(definition.rhsType)
+            else -> {}
         }
     }
 

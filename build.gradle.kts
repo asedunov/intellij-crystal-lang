@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.jetbrains.intellij") version "1.0"
     java
-    kotlin("jvm") version "1.5.20"
+    kotlin("jvm") version "1.6.20"
 }
 
 group = "org.crystal.intellij"

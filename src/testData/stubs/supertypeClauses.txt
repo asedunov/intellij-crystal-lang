@@ -7,9 +7,9 @@ CrFileStubImpl
   CR_CLASS_DEFINITION:CrClassStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
     CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=T)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=T)
     CR_TYPE_PARAMETER_DEFINITION:CrTypeParameterStubImpl
-      CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=U)
+      CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=U)
     CR_SUPERTYPE_CLAUSE:CrSupertypeClauseStubImpl
       CR_INSTANTIATED_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl

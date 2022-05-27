@@ -68,6 +68,7 @@ private fun LanguageLevel.newUnderlyingLexer(): CrystalLexerBase = when(this) {
     LanguageLevel.CRYSTAL_1_2 ->
         _CrystalLexer11()
     LanguageLevel.CRYSTAL_1_3,
+    LanguageLevel.CRYSTAL_1_4,
     LanguageLevel.CRYSTAL_PREVIEW ->
         _CrystalLexer13()
 }

@@ -74,7 +74,8 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitStringLiteralExpression(o: CrStringLiteralExpression) {
         super.visitStringLiteralExpression(o)
 
-        val context = when (val p = o.stringParent) {
+        val p = o.stringParent
+        val context = when (p) {
             is CrRequireExpression -> "'require' expression"
             is CrNameElement -> when (p.parent) {
                 is CrFunction -> "function name"
@@ -89,7 +90,11 @@ class CrystalSyntaxCheckingVisitor(
             is CrAsmOptionsList -> "asm option"
             else -> return
         }
-        errorIfInterpolated(o, context)
+        if (errorIfInterpolated(o, context)) return
+
+        if (p is CrAsmOptionsList && o.stringValue !in validAsmOptions) {
+            error(o, "Unknown asm option")
+        }
     }
 
     override fun visitOctalEscapeElement(o: CrOctalEscapeElement) {
@@ -715,6 +720,12 @@ class CrystalSyntaxCheckingVisitor(
         error(o, message)
     }
 
+    private val validAsmOptions
+        get() = when {
+            ll < LanguageLevel.CRYSTAL_1_2 -> validAsmOptions10
+            else -> validAsmOptions12
+        }
+
     private val PsiElement.isFunBody
         get() = this is CrBlockExpression && parent is CrFunctionLikeDefinition
 
@@ -797,10 +808,13 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    private fun errorIfInterpolated(literal: CrStringLiteralExpression, context: String) {
-        for (interpolation in literal.childrenOfType<CrStringInterpolation>()) {
+    private fun errorIfInterpolated(literal: CrStringLiteralExpression, context: String): Boolean {
+        val interpolations = literal.childrenOfType<CrStringInterpolation>()
+        if (interpolations.isEmpty) return false
+        for (interpolation in interpolations) {
             error(interpolation, "Interpolation is not allowed in $context")
         }
+        return true
     }
 
     private inline fun errorIf(anchor: PsiElement, description: String, validator: (String) -> String?) {
@@ -842,6 +856,19 @@ class CrystalSyntaxCheckingVisitor(
             "next", "break", "lib", "fun", "alias", "pointerof", "sizeof", "offsetof",
             "instance_sizeof", "typeof", "private", "protected", "asm", "out",
             "self", "in", "end"
+        )
+
+        private val validAsmOptions10 = setOf(
+            "volatile",
+            "alignstack",
+            "intel"
+        )
+
+        private val validAsmOptions12 = setOf(
+            "volatile",
+            "alignstack",
+            "intel",
+            "unwind"
         )
     }
 }

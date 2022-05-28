@@ -1,3 +1,5 @@
+# LANGUAGE_LEVEL: 1.0
+
 0x7F_i8
 
 <error descr="The value is out of Int8 range">0x80_i8</error>
@@ -66,31 +68,31 @@
 
 0x7FFFFFFFFFFFFFFF_i128
 
-0x8000000000000000_i128
+<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">0x8000000000000000_i128</error>
 
 -0x8000000000000000_i128
 
--0xAAAAAAAAAAAAAAAA_i128
+<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">-0xAAAAAAAAAAAAAAAA_i128</error>
 
 0xFFFFFFFFFFFFFFFF_u128
 
-0x10000000000000000_u128
+<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">0x10000000000000000_u128</error>
 
-<error descr="The value is out of UInt128 range">-0x1_u128</error>
+<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">-0x1_u128</error>
 
 <error descr="The value is out of UInt64 range">0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</error>
 
-0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF_u128
+<error descr="The value is out of UInt64 range. UInt128 literals that don't fit in an UInt64 are currently not supported">0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF_u128</error>
 
--0x80000000000000000000000000000000_i128
+<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">-0x80000000000000000000000000000000_i128</error>
 
 <error descr="The value is out of UInt64 range">0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</error>
 
-<error descr="The value is out of Int64 range">-0x80000000000000000000000000000000</error>
+<error descr="The value is out of UInt64 range">-0x80000000000000000000000000000000</error>
 
-<error descr="The value is out of Int64 range">-0x80000000000000000000000000000001</error>
+<error descr="The value is out of UInt64 range">-0x80000000000000000000000000000001</error>
 
-0x10000_0000_0000_0000_i128
+<error descr="The value is out of Int64 range. Int128 literals that don't fit in an Int64 are currently not supported">0x10000_0000_0000_0000_i128</error>
 
 <error descr="The value is out of UInt64 range">0x1afafafafafafafafafafaf</error>
 

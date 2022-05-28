@@ -1,3 +1,5 @@
+# LANGUAGE_LEVEL: 1.3
+
 0o177_i8
 
 <error descr="The value is out of Int8 range">0o200_i8</error>

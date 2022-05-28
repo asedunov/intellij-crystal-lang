@@ -1,3 +1,5 @@
+# LANGUAGE_LEVEL: 1.2
+
 case {<error descr="Splat is not allowed inside case expression">*</error>1}
 when {2}; 3; end
 

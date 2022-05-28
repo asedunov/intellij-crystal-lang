@@ -1,3 +1,5 @@
+# LANGUAGE_LEVEL: 1.3
+
 lib MyLib
   $x : Int32
 end

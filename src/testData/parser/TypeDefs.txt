@@ -985,3 +985,36 @@ FILE
       PsiElement(;)(';')
     PsiWhiteSpace(' ')
     PsiElement(end)('end')
+
+  CrClass(CR_CLASS_DEFINITION)
+    PsiElement(class)('class')
+    PsiWhiteSpace(' ')
+    CrPathNameElement(CR_PATH_NAME_ELEMENT)
+      PsiElement(<constant>)('Foo')
+    CrTypeParameterList(CR_TYPE_PARAMETER_LIST)
+      PsiElement(()('(')
+      PsiErrorElement:Expected: <type name>
+        <empty list>
+      PsiElement())(')')
+    PsiElement(;)(';')
+    PsiWhiteSpace(' ')
+    CrBody(CR_BODY)
+      <empty list>
+    PsiElement(end)('end')
+
+  CrClass(CR_CLASS_DEFINITION)
+    PsiElement(class)('class')
+    PsiWhiteSpace(' ')
+    CrPathNameElement(CR_PATH_NAME_ELEMENT)
+      PsiElement(<constant>)('Foo')
+    CrTypeParameterList(CR_TYPE_PARAMETER_LIST)
+      PsiElement(()('(')
+      CrTypeParameter(CR_TYPE_PARAMETER_DEFINITION)
+        PsiErrorElement:Expected: <type name>
+          PsiElement(<identifier>)('x')
+      PsiElement())(')')
+    PsiElement(;)(';')
+    PsiWhiteSpace(' ')
+    CrBody(CR_BODY)
+      <empty list>
+    PsiElement(end)('end')

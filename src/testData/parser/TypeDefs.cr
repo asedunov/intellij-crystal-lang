@@ -166,3 +166,9 @@ require "bar"
 
 
 enum Foo; A; def bar; end; end
+
+
+class Foo(); end
+
+
+class Foo(x); end

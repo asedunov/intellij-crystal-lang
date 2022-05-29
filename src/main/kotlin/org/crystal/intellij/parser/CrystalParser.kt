@@ -2907,6 +2907,13 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseTypeVars() {
             if (at(CR_LPAREN)) composite(CR_TYPE_PARAMETER_LIST) {
                 nextTokenSkipSpacesAndNewlines()
+
+                if (at(CR_RPAREN)) {
+                    error("Expected: <type name>")
+                    nextTokenSkipSpaces()
+                    return@composite
+                }
+
                 while (!eof()) {
                     val m = mark()
                     val tokenIndex = rawTokenIndex()
@@ -2916,7 +2923,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         composite(CR_PATH_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     }
                     else {
-                        error("Expected: <type name>")
+                        recoverUntil("<type name>", true) { at(CR_COMMA) || at(CR_RPAREN) }
                     }
 
                     if (rawTokenIndex() > tokenIndex) {

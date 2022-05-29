@@ -106,6 +106,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
 
         row(CrystalBundle.message("settings.sdk.version")) {
             sdkVersionLabel = label("").component
+            button("Check") { onExePathUpdate() }
         }
 
         row(CrystalBundle.message("settings.crystal.stdlib.path")) {

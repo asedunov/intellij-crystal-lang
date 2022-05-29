@@ -2178,12 +2178,16 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private val funLiteralStartTokens = TokenSet.create(CR_LBRACE, CR_LPAREN, CR_DO)
+        private val funLiteralStartTokens = TokenSet.create(CR_LBRACE, CR_LPAREN, CR_DO, CR_COLON)
 
         private fun PsiBuilder.parseFunLiteralOrPointer(): Boolean {
             val m = mark()
 
             nextTokenSkipSpacesAndNewlines()
+
+            if (ll >= LanguageLevel.CRYSTAL_1_3 && at(CR_SYMBOL_START)) {
+                error("A space is mandatory between ':' and return type")
+            }
 
             return if (at(funLiteralStartTokens)) {
                 finishComposite(CR_FUNCTION_LITERAL_EXPRESSION, m) { doParseFunLiteral() }
@@ -2220,6 +2224,20 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
                 }
                 skipSpacesAndNewlines()
+            }
+
+            if (ll >= LanguageLevel.CRYSTAL_1_3) {
+                when {
+                    at(CR_SYMBOL_START) -> {
+                        error("A space is mandatory between ':' and return type")
+                    }
+
+                    at(CR_COLON) -> {
+                        nextTokenSkipSpacesAndNewlines()
+                        parseBareProcType()
+                        skipSpacesAndNewlines()
+                    }
+                }
             }
 
             scopes.withLexicalVarScope {

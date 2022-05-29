@@ -46,6 +46,7 @@
         <langCodeStyleSettingsProvider implementation="org.crystal.intellij.formatter.CrystalCodeStyleSettingsProvider"/>
         <lang.formatter language="Crystal"
                         implementationClass="org.crystal.intellij.formatter.CrystalFormattingModelBuilder"/>
+        <formattingService implementation="org.crystal.intellij.formatter.CrystalToolFormattingService"/>
 
         <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectSettings"/>
         <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectWorkspaceSettings"/>

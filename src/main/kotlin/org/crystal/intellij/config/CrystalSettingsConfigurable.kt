@@ -10,11 +10,8 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.JBColor
-import com.intellij.ui.dsl.builder.bindItem
-import com.intellij.ui.dsl.builder.bindText
+import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.layout.listCellRenderer
-import com.intellij.ui.dsl.builder.panel
-import com.intellij.ui.dsl.builder.toNullableProperty
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.config.ui.CrystalExePathComboBox
@@ -131,6 +128,11 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 .resizableColumn()
                 .horizontalAlign(HorizontalAlign.FILL)
                 .component
+        }
+
+        row {
+            checkBox(CrystalBundle.message("settings.format.tool.use.instead.of.builtin"))
+                .bindSelected(settings::useFormatTool)
         }
 
         crystalExeComboBox.addToolchainsAsync {

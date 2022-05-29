@@ -4835,7 +4835,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 if (isNamedTupleStart() || at(CR_STRING_START)) {
                     parseNamedTypeArgs(CR_RPAREN)
                 }
-                else {
+                else if(ll < LanguageLevel.CRYSTAL_1_4 || !at(CR_RPAREN)) {
                     val m = mark()
 
                     parseTypeSplat { parseTypeArg() }

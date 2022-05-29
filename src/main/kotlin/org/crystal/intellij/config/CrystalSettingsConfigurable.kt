@@ -10,8 +10,12 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.JBColor
+import com.intellij.ui.dsl.builder.bindItem
+import com.intellij.ui.dsl.builder.bindText
 import com.intellij.ui.layout.listCellRenderer
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.builder.toNullableProperty
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.config.ui.CrystalExePathComboBox
 import org.crystal.intellij.sdk.CrystalSdkFlavor
@@ -83,13 +87,15 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         row(CrystalBundle.message("settings.language.level")) {
             languageVersionComboBox = comboBox(
                 DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
-                settings::languageVersion,
                 listCellRenderer { value, _, _ -> setText(value.description) }
-            ).component
+            ).bindItem(settings::languageVersion.toNullableProperty()).component
         }
 
         row(CrystalBundle.message("settings.crystal.exe.path")) {
-            crystalExeComboBox = CrystalExePathComboBox()().component
+            crystalExeComboBox = cell(CrystalExePathComboBox())
+                .resizableColumn()
+                .horizontalAlign(HorizontalAlign.FILL)
+                .component
             crystalExeComboBox.addTextChangeListener {
                 onExePathUpdate()
             }
@@ -99,25 +105,31 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         }
 
         row(CrystalBundle.message("settings.sdk.version")) {
-            sdkVersionLabel = JLabel()().component
+            sdkVersionLabel = label("").component
         }
 
         row(CrystalBundle.message("settings.crystal.stdlib.path")) {
             stdlibEditor = textFieldWithBrowseButton(
-                workspaceSettings::stdlibPath,
                 CrystalBundle.message("settings.sdk.select.stdlib.path"),
                 project,
                 STDLIB_FILE_CHOOSER_DESCRIPTOR
-            ) { file -> file.presentableUrl }.component
+            ) { file -> file.presentableUrl }
+                .bindText(workspaceSettings::stdlibPath)
+                .resizableColumn()
+                .horizontalAlign(HorizontalAlign.FILL)
+                .component
         }
 
         row(CrystalBundle.message("settings.main.file.path")) {
             mainFileEditor = textFieldWithBrowseButton(
-                settings::mainFilePath,
                 CrystalBundle.message("settings.select.main.path"),
                 project,
                 mainFileChooserDescriptor
-            ) { file -> file.presentableUrl }.component
+            ) { file -> file.presentableUrl }
+                .bindText(settings::mainFilePath)
+                .resizableColumn()
+                .horizontalAlign(HorizontalAlign.FILL)
+                .component
         }
 
         crystalExeComboBox.addToolchainsAsync {

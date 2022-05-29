@@ -22,7 +22,9 @@ class CrystalProjectSettings(
     data class State(
         @Attribute("languageLevel", converter = VersionConverter::class)
         var languageVersion: LanguageVersion = LanguageVersion.LatestStable,
-        var mainFilePath: String = ""
+        var mainFilePath: String = "",
+        var useFormatTool: Boolean = false,
+        var runFormatToolOnSave: Boolean = false
     )
 
     private class VersionConverter : Converter<LanguageVersion>() {
@@ -65,6 +67,12 @@ class CrystalProjectSettings(
             }
             return vFile?.toPsi(project) as? CrFile
         }
+
+    val useFormatTool: Boolean
+        get() = protectedState.useFormatTool
+
+    val runFormatToolOnSave: Boolean
+        get() = protectedState.runFormatToolOnSave
 
     @TestOnly
     fun setLanguageLevelSilently(version: LanguageVersion) {

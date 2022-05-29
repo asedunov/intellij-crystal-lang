@@ -455,6 +455,18 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
+        private inline fun PsiBuilder.recoverUntilOrError(
+            expected: String,
+            enforce: Boolean = false,
+            stopAt: PsiBuilder.() -> Boolean = { false },
+            condition: PsiBuilder.() -> Boolean,
+        ): Boolean {
+            if (!recoverUntil(expected, enforce, stopAt, condition)) {
+                error("Expected: $expected")
+            }
+            return true
+        }
+
         // Parsing rules
 
         private fun PsiBuilder.parseRoot(root: IElementType) {
@@ -1834,16 +1846,25 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             stopOnDo = false
 
             while (!eof()) {
-                parseExpression()
+                if (!parseExpression()) {
+                    recoverUntilOrError("<expression>", true) {
+                        at(CR_NEWLINE) || at(CR_SEMICOLON) || at(CR_RPAREN)
+                    }
+                }
 
                 val foundDelimiter = at(CR_NEWLINE) || at(CR_SEMICOLON)
-                if (foundDelimiter) nextTokenSkipSpaces()
+                if (foundDelimiter) {
+                    if (ll >= LanguageLevel.CRYSTAL_1_4) nextTokenSkipSpacesAndNewlines() else nextTokenSkipSpaces()
+                }
+                if (!at(CR_RPAREN)) {
+                    if (foundDelimiter) continue
+                    recoverUntil("')'") { at(CR_RPAREN) }
+                }
                 if (at(CR_RPAREN)) {
                     lexerState.wantsRegex = false
                     nextTokenSkipSpaces()
                     break
                 }
-                if (!foundDelimiter) recoverUntil("')'") { at(CR_RPAREN) }
             }
 
             ensureNotAt(CR_LPAREN)

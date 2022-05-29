@@ -29,3 +29,6 @@ foo; 1
 
 foo = 1
 foo + nfoo; 1
+
+(a;
+b)

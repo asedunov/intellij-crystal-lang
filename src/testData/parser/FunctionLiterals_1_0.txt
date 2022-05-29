@@ -1,0 +1,140 @@
+FILE
+  CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
+    PsiElement(->)('->')
+    PsiErrorElement:Expected: do or '{'
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  CrHashExpression(CR_HASH_EXPRESSION)
+    CrPathType(CR_PATH_TYPE)
+      CrPathNameElement(CR_PATH_NAME_ELEMENT)
+        PsiElement(<constant>)('Int32')
+    PsiWhiteSpace(' ')
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(})('}')
+
+  CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
+    PsiElement(->)('->')
+    PsiErrorElement:Expected: do or '{'
+      <empty list>
+  PsiWhiteSpace('\n')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace('\n')
+  CrPathExpression(CR_PATH_EXPRESSION)
+    CrPathNameElement(CR_PATH_NAME_ELEMENT)
+      PsiElement(<constant>)('Int32')
+  PsiWhiteSpace('\n')
+  CrHashExpression(CR_HASH_EXPRESSION)
+    PsiElement({)('{')
+    CrHashEntry(CR_HASH_ENTRY)
+      PsiErrorElement:Expected: <expression>
+        <empty list>
+      PsiErrorElement:Expected: ':', '=>', ',', '}', '<newline>'
+        <empty list>
+
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(})('}')
+
+  CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
+    PsiElement(->)('->')
+    CrParameterList(CR_PARAMETER_LIST)
+      PsiElement(()('(')
+      PsiElement())(')')
+    PsiErrorElement:Expected: do or '{'
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  CrHashExpression(CR_HASH_EXPRESSION)
+    CrPathType(CR_PATH_TYPE)
+      CrPathNameElement(CR_PATH_NAME_ELEMENT)
+        PsiElement(<constant>)('Int32')
+    PsiWhiteSpace(' ')
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(})('}')
+
+  CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
+    PsiElement(->)('->')
+    CrParameterList(CR_PARAMETER_LIST)
+      PsiElement(()('(')
+      PsiElement())(')')
+    PsiErrorElement:Expected: do or '{'
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  CrPathExpression(CR_PATH_EXPRESSION)
+    CrPathNameElement(CR_PATH_NAME_ELEMENT)
+      PsiElement(<constant>)('Int32')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <EOF>
+    PsiElement(do)('do')
+    PsiWhiteSpace(' ')
+    PsiElement(end)('end')
+
+  CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
+    PsiElement(->)('->')
+    CrParameterList(CR_PARAMETER_LIST)
+      PsiElement(()('(')
+      CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
+        CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
+          PsiElement(<identifier>)('x')
+        PsiWhiteSpace(' ')
+        PsiElement(:)(':')
+        PsiWhiteSpace(' ')
+        CrPathType(CR_PATH_TYPE)
+          CrPathNameElement(CR_PATH_NAME_ELEMENT)
+            PsiElement(<constant>)('Int32')
+      PsiElement())(')')
+    PsiErrorElement:Expected: do or '{'
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  CrHashExpression(CR_HASH_EXPRESSION)
+    CrPathType(CR_PATH_TYPE)
+      CrPathNameElement(CR_PATH_NAME_ELEMENT)
+        PsiElement(<constant>)('Int32')
+    PsiWhiteSpace(' ')
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(})('}')
+
+  CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)
+    PsiElement(->)('->')
+    PsiErrorElement:Expected: <identifier>, <constant>, <instance variable> or <class variable>
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<symbol start>)(':')
+    PsiElement(<string raw>)('Int32')
+  PsiWhiteSpace(' ')
+  CrHashExpression(CR_HASH_EXPRESSION)
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(})('}')
+
+  CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
+    PsiElement(->)('->')
+    CrParameterList(CR_PARAMETER_LIST)
+      PsiElement(()('(')
+      PsiElement())(')')
+    PsiErrorElement:Expected: do or '{'
+      <empty list>
+  PsiWhiteSpace(' ')
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(<symbol start>)(':')
+    PsiElement(<string raw>)('Int32')
+  PsiWhiteSpace(' ')
+  CrHashExpression(CR_HASH_EXPRESSION)
+    PsiElement({)('{')
+    PsiWhiteSpace(' ')
+    PsiElement(})('}')

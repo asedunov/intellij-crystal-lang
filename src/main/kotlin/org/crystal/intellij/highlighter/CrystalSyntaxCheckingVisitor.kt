@@ -9,7 +9,10 @@ import com.intellij.util.containers.JBIterable
 import com.intellij.util.containers.MultiMap
 import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.crystalSettings
-import org.crystal.intellij.lexer.*
+import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
+import org.crystal.intellij.lexer.CR_ASSIGN_OP
+import org.crystal.intellij.lexer.CR_END_LINE_
+import org.crystal.intellij.lexer.CR_MUL_OP
 import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
@@ -407,6 +410,21 @@ class CrystalSyntaxCheckingVisitor(
         val offset = o.offset
         if (offset is CrIntegerLiteralExpression && offset.kind != CrIntegerKind.I32) {
             error(offset, "Integer offset must have Int32 type")
+        }
+    }
+
+    override fun visitFunctionPointerExpression(o: CrFunctionPointerExpression) {
+        super.visitFunctionPointerExpression(o)
+
+        o.globalOp?.let { globalOp ->
+            val receiver = o.receiver as? CrReferenceExpression ?: return@let
+            val kind = when (receiver.nameElement?.kind) {
+                CrNameKind.IDENTIFIER -> "local variable"
+                CrNameKind.INSTANCE_VARIABLE -> "instance variable"
+                CrNameKind.CLASS_VARIABLE -> "class variable"
+                else -> return
+            }
+            error(globalOp, "ProcPointer of $kind cannot be global")
         }
     }
 

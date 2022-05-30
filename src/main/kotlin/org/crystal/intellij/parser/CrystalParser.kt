@@ -2292,8 +2292,22 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.doParseFunPointer() {
-            when {
-                at(CR_IDS) -> {
+            val isGlobal = at(CR_PATH_OP) && ll >= LanguageLevel.CRYSTAL_1_4
+            val nextToken = if (isGlobal) {
+                lexer.lookAhead {
+                    skipSpacesAndNewlines()
+                    tokenType
+                }
+            } else {
+                tokenType
+            }
+
+            if (isGlobal && nextToken != CR_CONSTANT) {
+                nextTokenSkipSpacesAndNewlines()
+            }
+
+            when(nextToken) {
+                in CR_IDS -> {
                     var isAssign = false
                     composite(CR_SIMPLE_NAME_ELEMENT) {
                         nextToken()
@@ -2312,7 +2326,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
                 }
 
-                at(CR_CONSTANT) -> {
+                CR_CONSTANT -> {
                     parseGeneric()
                     if (at(CR_DOT)) {
                         advanceToDefOrMacroName()
@@ -2324,7 +2338,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
                 }
 
-                at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR) -> {
+                CR_INSTANCE_VAR, CR_CLASS_VAR -> {
                     composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
                     if (at(CR_DOT)) {
                         compositeSuffix(CR_REFERENCE_EXPRESSION) {}

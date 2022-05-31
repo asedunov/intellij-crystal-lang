@@ -83,7 +83,6 @@ val CR_RESPONDS_TO_EXPRESSION = CrCompositeElementType("CR_RESPONDS_TO_EXPRESSIO
 val CR_RESCUE_EXPRESSION = CrCompositeElementType("CR_RESCUE_EXPRESSION", ::CrRescueExpression)
 val CR_RETURN_EXPRESSION = CrCompositeElementType("CR_RETURN_EXPRESSION", ::CrReturnExpression)
 val CR_SELECT_EXPRESSION = CrCompositeElementType("CR_SELECT_EXPRESSION", ::CrSelectExpression)
-val CR_SELF_EXPRESSION = CrCompositeElementType("CR_SELF_EXPRESSION", ::CrSelfExpression)
 val CR_SIZE_EXPRESSION = CrCompositeElementType("CR_SIZE_EXPRESSION", ::CrSizeExpression)
 val CR_STRING_ARRAY_EXPRESSION = CrCompositeElementType("CR_STRING_ARRAY_EXPRESSION", ::CrStringArrayExpression)
 val CR_STRING_LITERAL_EXPRESSION = CrCompositeElementType("CR_STRING_LITERAL_EXPRESSION", ::CrStringLiteralExpression)

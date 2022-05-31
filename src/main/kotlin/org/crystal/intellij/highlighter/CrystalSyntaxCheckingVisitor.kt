@@ -206,6 +206,26 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitSplatArgument(o: CrSplatArgument) {
+        super.visitSplatArgument(o)
+
+        if (!isAllowedSplat(o)) {
+            error(o.splatElement, "Splat argument is not allowed here")
+        }
+    }
+
+    private fun isAllowedSplat(o: CrSplatArgument): Boolean {
+        val p = o.parent
+        if (p is CrArgumentList) return true
+        if (p is CrTupleExpression) return true
+        if (p is CrAssignmentExpression && p.rhs == o) return true
+        if (p is CrParenthesizedExpression) {
+            val pp = p.parent
+            return pp is CrAssignmentExpression && pp.rhs == p && p.prevSibling == pp.operation
+        }
+        return false
+    }
+
     override fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) {
         if (o.tokenType == CR_END_LINE_ && o.parent !is CrSimpleParameter) {
             error(o, "__END_LINE__ can only be used in default argument value")
@@ -667,7 +687,7 @@ class CrystalSyntaxCheckingVisitor(
         if (e is CrAssignmentExpression) {
             if (e.opSign != CR_ASSIGN_OP) return false
             if (e.isSemanticCall) return true
-            e = e.rhs ?: return true
+            e = e.rhs as? CrExpression ?: return true
         }
         return e.isSemanticCall
     }

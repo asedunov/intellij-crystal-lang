@@ -231,8 +231,6 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitReturnExpression(o: CrReturnExpression) = visitExpression(o)
 
-    open fun visitSelfExpression(o: CrSelfExpression) = visitExpression(o)
-
     open fun visitSelectExpression(o: CrSelectExpression) = visitExpression(o)
 
     open fun visitSelfType(o: CrSelfType) = visitType(o)

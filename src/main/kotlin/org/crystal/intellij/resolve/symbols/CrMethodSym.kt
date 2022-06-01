@@ -6,6 +6,7 @@ import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.scopes.CrMethodScope
 
+@Suppress("UnstableApiUsage")
 class CrMethodSym(
     name: String,
     override val namespace: CrModuleLikeSym,
@@ -39,4 +40,20 @@ class CrMethodSym(
 
     val visibility: CrVisibility?
         get() = source.visibility
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CrMethodSym) return false
+
+        if (namespace != other.namespace) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = namespace.hashCode()
+        result = 31 * result + name.hashCode()
+        return result
+    }
 }

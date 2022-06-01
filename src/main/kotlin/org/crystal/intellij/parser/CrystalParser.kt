@@ -960,7 +960,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parsePrefixExpression(commaOperand: Boolean = false): Boolean {
             if (at(CR_MUL_OP)) {
-                return composite(CR_SPLAT_ARGUMENT) {
+                return composite(CR_SPLAT_EXPRESSION) {
                     nextTokenSkipSpaces()
                     ensureParseAssignment()
                 }
@@ -1599,7 +1599,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             if (lexer.lookAhead() != CR_WHITESPACE) {
                 when {
                     at(CR_MUL_OP) -> {
-                        splatType = CR_SPLAT_ARGUMENT
+                        splatType = CR_SPLAT_EXPRESSION
                         nextToken()
                     }
 

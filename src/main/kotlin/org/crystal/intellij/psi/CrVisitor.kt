@@ -247,7 +247,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitSpecialEscapeElement(o: CrSpecialEscapeElement) = visitEscapeElement(o)
 
-    open fun visitSplatArgument(o: CrSplatArgument) = visitCrElement(o)
+    open fun visitSplatExpression(o: CrSplatExpression) = visitExpression(o)
 
     open fun visitSplatType(o: CrSplatType) = visitType(o)
 

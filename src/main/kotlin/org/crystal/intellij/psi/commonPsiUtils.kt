@@ -56,6 +56,9 @@ fun PsiElement.allDescendants() =
 fun PsiElement.nextSiblingsStrict() =
     JBIterable.generate(nextSibling) { it.nextSibling }
 
+fun PsiElement.prevSiblingsStrict() =
+    JBIterable.generate(prevSibling) { it.prevSibling }
+
 inline fun <reified T : PsiElement> PsiElement.childrenOfType(): JBIterable<T> =
     allChildren().filter(T::class.java)
 
@@ -73,6 +76,9 @@ inline fun <reified T : PsiElement> PsiElement.stubChildOfType(): T? =
 
 inline fun <reified T : PsiElement> PsiElement.nextSiblingOfType(): T? =
     nextSiblingsStrict().firstInstanceOrNull()
+
+inline fun <reified T : PsiElement> PsiElement.prevSiblingOfType(): T? =
+    prevSiblingsStrict().firstInstanceOrNull()
 
 fun PsiElement.skipWhitespacesAndCommentsForward(): PsiElement? =
     PsiTreeUtil.skipWhitespacesAndCommentsForward(this)

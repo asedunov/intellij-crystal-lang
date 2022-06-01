@@ -573,11 +573,14 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseRootExpression(minPrecedence: Int = 0): Boolean {
-            val parsed = parsePrimaryExpression()
+        private fun PsiBuilder.parseRootExpression(
+            minPrecedence: Int = 0,
+            commaOperand: Boolean = false
+        ): Boolean {
+            val parsed = parsePrimaryExpression(commaOperand)
             if (parsed) {
                 val lhs = latestDoneMarker as Marker
-                parseRootExpression(lhs, minPrecedence)
+                parseRootExpression(lhs, minPrecedence, commaOperand)
             }
 
             recordLastParsedRefName()
@@ -585,7 +588,11 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             return parsed
         }
 
-        private fun PsiBuilder.parseRootExpression(lhsCurrent: Marker, minPrecedence: Int): Marker {
+        private fun PsiBuilder.parseRootExpression(
+            lhsCurrent: Marker,
+            minPrecedence: Int,
+            commaOperand: Boolean = false
+        ): Marker {
             var lhs = lhsCurrent
             var token = tokenType
 
@@ -658,7 +665,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     skipSpacesAndNewlines()
                 }
 
-                var parsed: Boolean = parsePrimaryExpression(isComma)
+                var parsed: Boolean = parsePrimaryExpression(isComma || commaOperand)
                 if (parsed) parseHigherPrecedence(opInfo)
 
                 if (isComma && parsed) recordLastParsedRefName()
@@ -672,7 +679,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     else {
                         expected = "':'"
                     }
-                    parsed = parsed && parsePrimaryExpression()
+                    parsed = parsed && parsePrimaryExpression(commaOperand)
                     if (parsed) parseHigherPrecedence(opInfo)
                 }
 
@@ -962,7 +969,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             if (at(CR_MUL_OP)) {
                 return composite(CR_SPLAT_EXPRESSION) {
                     nextTokenSkipSpaces()
-                    ensureParseAssignment()
+                    if (!parseRootExpression(1, commaOperand)) {
+                        error("Expected: <expression>")
+                    }
                 }
             }
 
@@ -1162,7 +1171,18 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                                         m.done(CR_REFERENCE_EXPRESSION)
                                         nextTokenSkipSpacesAndNewlines()
-                                        ensureParseAssignment()
+
+                                        if (at(CR_LPAREN) && lexer.lookAhead { skipSpacesAndNewlines(); at(CR_MUL_OP) }) {
+                                            composite(CR_PARENTHESIZED_EXPRESSION) {
+                                                nextTokenSkipSpacesAndNewlines()
+                                                parseSingleArg()
+                                                recoverUntil("')'", true) { at(CR_RPAREN) }
+                                                tok(CR_RPAREN)
+                                            }
+                                        }
+                                        else {
+                                            parseSingleArg()
+                                        }
 
                                         mAssign.done(CR_ASSIGNMENT_EXPRESSION)
                                         continue
@@ -1207,6 +1227,16 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     else -> break
                 }
             }
+        }
+
+        private fun PsiBuilder.parseSingleArg() {
+            if (at(CR_MUL_OP)) {
+                composite(CR_SPLAT_EXPRESSION) {
+                    nextTokenSkipSpaces()
+                    ensureParseAssignment()
+                }
+            }
+            else ensureParseAssignment()
         }
 
         private val atomicSuffixSpecialTokens = TokenSet.create(CR_DOT, CR_LBRACKET, CR_INDEXED_OP)

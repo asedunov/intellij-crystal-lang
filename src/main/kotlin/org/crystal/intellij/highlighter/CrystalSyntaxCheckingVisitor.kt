@@ -9,10 +9,7 @@ import com.intellij.util.containers.JBIterable
 import com.intellij.util.containers.MultiMap
 import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.crystalSettings
-import org.crystal.intellij.lexer.CR_ASSIGN_COMBO_OPERATORS
-import org.crystal.intellij.lexer.CR_ASSIGN_OP
-import org.crystal.intellij.lexer.CR_END_LINE_
-import org.crystal.intellij.lexer.CR_MUL_OP
+import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
@@ -212,18 +209,43 @@ class CrystalSyntaxCheckingVisitor(
         if (!isAllowedSplat(o)) {
             error(o.splatElement, "Splat argument is not allowed here")
         }
+
+        if (o.parent is CrListExpression && o.prevSiblingOfType<CrSplatExpression>() != null) {
+            error(o.splatElement, "Splat assignment already specified")
+        }
     }
 
     private fun isAllowedSplat(o: CrSplatExpression): Boolean {
-        val p = o.parent
-        if (p is CrArgumentList) return true
-        if (p is CrTupleExpression) return true
-        if (p is CrAssignmentExpression && p.rhs == o && p.canHaveSplatRHS()) return true
-        if (p is CrParenthesizedExpression) {
-            val pp = p.parent
-            return pp is CrAssignmentExpression && pp.rhs == p && pp.canHaveSplatRHS() && p.prevSibling == pp.operation
+        when (val p = o.parent) {
+            is CrArgumentList,
+            is CrTupleExpression -> return true
+
+            is CrListExpression -> {
+                val pp = p.parent as? CrAssignmentExpression ?: return false
+                if (pp.rhs == p && pp.canHaveSplatRHS()) return true
+                if (ll >= LanguageLevel.CRYSTAL_1_3 && pp.lhs == p) return true
+                return false
+            }
+
+            is CrAssignmentExpression -> {
+                if (p.opSign != CR_ASSIGN_OP) return false
+                if (p.rhs == o && p.canHaveSplatRHS()) return true
+                if (ll >= LanguageLevel.CRYSTAL_1_3 && p.lhs == o) return true
+                return false
+            }
+
+            is CrParenthesizedExpression -> {
+                val pp = p.parent
+                return pp is CrAssignmentExpression
+                        && pp.opSign == CR_ASSIGN_OP
+                        && pp.rhs == p
+                        && pp.canHaveSplatRHS()
+                        && p.prevSibling == pp.operation
+                        && o.prevSibling?.elementType == CR_LPAREN
+            }
+
+            else -> return false
         }
-        return false
     }
 
     private fun CrAssignmentExpression.canHaveSplatRHS(): Boolean {
@@ -253,8 +275,11 @@ class CrystalSyntaxCheckingVisitor(
 
         val leftCount = (lhs as? CrListExpression)?.elements?.size() ?: 1
         val rightCount = (rhs as? CrListExpression)?.elements?.size() ?: 1
-        if (rightCount != 1 && leftCount != rightCount) {
-            error(o, "Multiple assignment count mismatch")
+        if (rightCount != 1) {
+            val hasSplat = lhs is CrSplatExpression
+                    || lhs is CrListExpression && lhs.elements.any { it is CrSplatExpression }
+            val isMismatch = if (hasSplat) leftCount - 1 > rightCount else leftCount != rightCount
+            if (isMismatch) error(o, "Multiple assignment count mismatch")
         }
 
         checkIsWritable(lhs, o.operation)
@@ -757,6 +782,7 @@ class CrystalSyntaxCheckingVisitor(
             }
 
             is CrIndexedExpression -> return
+            is CrSplatExpression -> e.expression?.let { checkIsWritable(it, op) }
 
             else -> error(e, "This expression is not allowed as assignment left-hand side")
         }

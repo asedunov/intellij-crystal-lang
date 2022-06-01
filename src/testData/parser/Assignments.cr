@@ -87,3 +87,21 @@ a, b = 1, 2; b +2
 a, b = 1, 2; c +2
 
 z.key < y.key ? y.left = z : y.right = z
+
+a.b=*c=d
+
+a.b = *c=d
+
+a.b = * c=d
+
+a.b =
+  * c=d
+
+a.b=(*c=d)
+
+a.b =(*c=d)
+
+a.b =
+  (*c=d)
+
+a.b=( *c=d )

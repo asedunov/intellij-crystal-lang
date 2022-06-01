@@ -8,4 +8,7 @@ class CrSplatExpression(node: ASTNode) : CrExpressionImpl(node) {
 
     val splatElement: PsiElement
         get() = firstChild
+
+    val expression: CrExpression?
+        get() = childOfType()
 }

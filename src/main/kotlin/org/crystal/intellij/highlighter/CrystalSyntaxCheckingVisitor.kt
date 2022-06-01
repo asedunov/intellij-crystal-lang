@@ -189,7 +189,7 @@ class CrystalSyntaxCheckingVisitor(
                     foundDoubleSplat = true
                 }
 
-                is CrSplatArgument -> {
+                is CrSplatExpression -> {
                     if (foundDoubleSplat) error(argument, "Splat not allowed after double splat")
                 }
 
@@ -206,15 +206,15 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    override fun visitSplatArgument(o: CrSplatArgument) {
-        super.visitSplatArgument(o)
+    override fun visitSplatExpression(o: CrSplatExpression) {
+        super.visitSplatExpression(o)
 
         if (!isAllowedSplat(o)) {
             error(o.splatElement, "Splat argument is not allowed here")
         }
     }
 
-    private fun isAllowedSplat(o: CrSplatArgument): Boolean {
+    private fun isAllowedSplat(o: CrSplatExpression): Boolean {
         val p = o.parent
         if (p is CrArgumentList) return true
         if (p is CrTupleExpression) return true
@@ -687,7 +687,7 @@ class CrystalSyntaxCheckingVisitor(
         if (e is CrAssignmentExpression) {
             if (e.opSign != CR_ASSIGN_OP) return false
             if (e.isSemanticCall) return true
-            e = e.rhs as? CrExpression ?: return true
+            e = e.rhs ?: return true
         }
         return e.isSemanticCall
     }

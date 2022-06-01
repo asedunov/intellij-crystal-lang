@@ -84,6 +84,7 @@ val CR_RESCUE_EXPRESSION = CrCompositeElementType("CR_RESCUE_EXPRESSION", ::CrRe
 val CR_RETURN_EXPRESSION = CrCompositeElementType("CR_RETURN_EXPRESSION", ::CrReturnExpression)
 val CR_SELECT_EXPRESSION = CrCompositeElementType("CR_SELECT_EXPRESSION", ::CrSelectExpression)
 val CR_SIZE_EXPRESSION = CrCompositeElementType("CR_SIZE_EXPRESSION", ::CrSizeExpression)
+val CR_SPLAT_EXPRESSION = CrCompositeElementType("CR_SPLAT_EXPRESSION", ::CrSplatExpression)
 val CR_STRING_ARRAY_EXPRESSION = CrCompositeElementType("CR_STRING_ARRAY_EXPRESSION", ::CrStringArrayExpression)
 val CR_STRING_LITERAL_EXPRESSION = CrCompositeElementType("CR_STRING_LITERAL_EXPRESSION", ::CrStringLiteralExpression)
 val CR_SYMBOL_ARRAY_EXPRESSION = CrCompositeElementType("CR_SYMBOL_ARRAY_EXPRESSION", ::CrSymbolArrayExpression)
@@ -124,7 +125,6 @@ val CR_DOUBLE_SPLAT_ARGUMENT = CrCompositeElementType("CR_DOUBLE_SPLAT_ARGUMENT"
 val CR_NAMED_ARGUMENT = CrCompositeElementType("CR_NAMED_ARGUMENT", ::CrNamedArgument)
 val CR_OUT_ARGUMENT = CrCompositeElementType("CR_OUT_ARGUMENT", ::CrOutArgument)
 val CR_SHORT_BLOCK_ARGUMENT = CrCompositeElementType("CR_SHORT_BLOCK_ARGUMENT", ::CrShortBlockArgument)
-val CR_SPLAT_ARGUMENT = CrCompositeElementType("CR_SPLAT_ARGUMENT", ::CrSplatArgument)
 
 // Macro statements
 val CR_MACRO_BLOCK_STATEMENT = CrCompositeElementType("CR_MACRO_BLOCK_STATEMENT", ::CrMacroBlockStatement)

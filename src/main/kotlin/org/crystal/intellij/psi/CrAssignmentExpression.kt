@@ -18,6 +18,6 @@ class CrAssignmentExpression(node: ASTNode) : CrExpressionImpl(node), CrVisibili
     val opSign: IElementType
         get() = operation.elementType!!
 
-    val rhs: CrCallArgument?
+    val rhs: CrExpression?
         get() = lhs?.nextSiblingOfType()
 }

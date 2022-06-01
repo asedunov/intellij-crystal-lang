@@ -1986,7 +1986,7 @@ FILE
       <empty list>
     PsiWhiteSpace(' ')
     CrBlockExpression(CR_BLOCK_EXPRESSION)
-      CrSplatArgument(CR_SPLAT_ARGUMENT)
+      CrSplatExpression(CR_SPLAT_EXPRESSION)
         PsiElement(*)('*')
         CrReferenceExpression(CR_REFERENCE_EXPRESSION)
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)

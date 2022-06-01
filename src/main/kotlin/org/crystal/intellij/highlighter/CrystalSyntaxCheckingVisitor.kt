@@ -454,7 +454,7 @@ class CrystalSyntaxCheckingVisitor(
         val holder = o.holder
         when (holder) {
             is CrMethod, is CrCallExpression -> return
-            is CrModuleLikeDefinition<*, *>, is CrAlias, is CrLibrary -> {
+            is CrModuleLikeDefinition<*, *>, is CrAlias -> {
                 errorIfNonPrivate(o, "types")
                 return
             }

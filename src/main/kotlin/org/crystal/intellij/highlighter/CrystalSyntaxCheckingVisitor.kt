@@ -218,12 +218,25 @@ class CrystalSyntaxCheckingVisitor(
         val p = o.parent
         if (p is CrArgumentList) return true
         if (p is CrTupleExpression) return true
-        if (p is CrAssignmentExpression && p.rhs == o) return true
+        if (p is CrAssignmentExpression && p.rhs == o && p.canHaveSplatRHS()) return true
         if (p is CrParenthesizedExpression) {
             val pp = p.parent
-            return pp is CrAssignmentExpression && pp.rhs == p && p.prevSibling == pp.operation
+            return pp is CrAssignmentExpression && pp.rhs == p && pp.canHaveSplatRHS() && p.prevSibling == pp.operation
         }
         return false
+    }
+
+    private fun CrAssignmentExpression.canHaveSplatRHS(): Boolean {
+        return lhs?.isSplatAssignable() == true
+    }
+
+    private fun CrExpression.isSplatAssignable(): Boolean {
+        return when (this) {
+            is CrListExpression -> elements.all { it.isSplatAssignable() }
+            is CrReferenceExpression -> receiver != null
+            is CrIndexedExpression -> true
+            else -> false
+        }
     }
 
     override fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) {

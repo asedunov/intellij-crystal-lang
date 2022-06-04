@@ -8,13 +8,13 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.rt.execution.junit.FileComparisonFailure
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.hierarchy.types.CrystalSubtypesHierarchyTreeStructure
 import org.crystal.intellij.hierarchy.types.CrystalSupertypesHierarchyTreeStructure
 import org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyTreeStructure
 import org.crystal.intellij.psi.CrTypeSource
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
+import org.crystal.intellij.tests.util.setupMainFile
 import org.jdom.Element
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -60,10 +60,9 @@ class CrystalTypeHierarchyTest(private val testFile: File) : BasePlatformTestCas
     ) {
         myFixture.configureByText("a.cr", fileText.substitute())
 
+        myFixture.setupMainFile()
+
         val file = myFixture.file
-        project.crystalSettings.update {
-            mainFilePath = file.virtualFile.path
-        }
         val expectedFile = File(testFile.parent, testFile.nameWithoutExtension + ".xml")
         val offset = myFixture.editor.caretModel.offset
         val typeSource = file.findElementAt(offset)!!.parentOfType<CrTypeSource>()!!

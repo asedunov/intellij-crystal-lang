@@ -4,9 +4,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiFile
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture
 import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.asSpecificVersion
 import org.crystal.intellij.config.crystalSettings
+import org.crystal.intellij.config.findVersionOrLatest
 import org.crystal.intellij.psi.childrenOfType
 import java.io.File
 
@@ -56,4 +58,16 @@ fun String.findDirective(prefix: String): String? {
         if (line.startsWith(prefix)) return line.substring(prefix.length).trim()
     }
     return null
+}
+
+fun CodeInsightTestFixture.setupLanguageVersion() {
+    project.crystalSettings.update {
+        languageVersion = findVersionOrLatest(file.findDirective("# LANGUAGE_LEVEL: "))
+    }
+}
+
+fun CodeInsightTestFixture.setupMainFile() {
+    project.crystalSettings.update {
+        mainFilePath = file.virtualFile.path
+    }
 }

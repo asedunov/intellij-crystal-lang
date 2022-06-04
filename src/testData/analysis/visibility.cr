@@ -10,64 +10,64 @@ private foo 1, 2
 
 protected foo 1, 2
 
-private A = 1
+private X1 = 1
 
-<error descr="Can only use 'private' for constants">protected</error> A = 1
+<error descr="Can only use 'private' for constants">protected</error> X2 = 1
 
-<error descr="Visibility modifier is not supported here">private</error> a = 1
+<error descr="Visibility modifier is not supported here">private</error> x1 = 1
 
-<error descr="Visibility modifier is not supported here">protected</error> a = 1
+<error descr="Visibility modifier is not supported here">protected</error> x2 = 1
 
-private def foo
+private def foo1
 end
 
-protected def foo
+protected def foo2
 end
 
-<error descr="Visibility modifier is not supported here">private</error> fun foo
+<error descr="Visibility modifier is not supported here">private</error> fun foo3
 end
 
-<error descr="Visibility modifier is not supported here">protected</error> fun foo
+<error descr="Visibility modifier is not supported here">protected</error> fun foo4
 end
 
-private class A
+private class C1
 end
 
-<error descr="Can only use 'private' for types">protected</error> class A
+<error descr="Can only use 'private' for types">protected</error> class C2
 end
 
-private struct A
+private struct S1
 end
 
-<error descr="Can only use 'private' for types">protected</error> struct A
+<error descr="Can only use 'private' for types">protected</error> struct S2
 end
 
-private module A
+private module M1
 end
 
-<error descr="Can only use 'private' for types">protected</error> module A
+<error descr="Can only use 'private' for types">protected</error> module M2
 end
 
-private enum A
+private enum E1
   X
 end
 
-<error descr="Can only use 'private' for types">protected</error> enum A
+<error descr="Can only use 'private' for types">protected</error> enum E2
   X
 end
 
-private alias A = Int32
+private alias A1 = Int32
 
-<error descr="Can only use 'private' for types">protected</error> alias A = Int32
+<error descr="Can only use 'private' for types">protected</error> alias A2 = Int32
 
-private lib A
+private lib L1
 end
 
-<error descr="Can only use 'private' for types">protected</error> lib A
+<error descr="Can only use 'private' for types">protected</error> lib L2
 end
 
-private macro foo
+private macro mmm1
 end
 
-<error descr="Can only use 'private' for macros">protected</error> macro foo
+<error descr="Can only use 'private' for macros">protected</error> macro mmm2
 end

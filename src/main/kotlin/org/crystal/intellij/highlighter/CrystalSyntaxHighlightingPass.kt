@@ -5,6 +5,7 @@ import com.intellij.codeHighlighting.TextEditorHighlightingPass
 import com.intellij.codeHighlighting.TextEditorHighlightingPassRegistrar
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElementVisitor
 import org.crystal.intellij.psi.CrFile
@@ -12,12 +13,12 @@ import org.crystal.intellij.psi.CrFile
 class CrystalSyntaxHighlightingPass(
     file: CrFile,
     document: Document
-) : AbstractCrystalDumbAwarePass(file, document) {
+) : AbstractCrystalHighlightingPass(file, document), DumbAware {
     override fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor {
         return CrystalSyntaxHighlightingVisitor(highlightInfos)
     }
 
-    class Factory : FactoryBase() {
+    class Factory : FactoryBase(), DumbAware {
         override fun registerHighlightingPassFactory(registrar: TextEditorHighlightingPassRegistrar, project: Project) {
             registrar.registerTextEditorHighlightingPass(
                 this,

@@ -67,3 +67,20 @@ fun CrSym<*>.getIcon(): Icon? {
         is CrTypeDefSym -> CrystalIcons.TYPEDEF
     }.withVisibility(visibility)
 }
+
+val CrSym<*>.presentableKind: String
+    get() = when (this) {
+        is CrAnnotationSym -> "annotation"
+        is CrClassSym -> "class"
+        is CrEnumSym -> "enum"
+        is CrStructSym -> "struct"
+        is CrCStructSym -> "struct"
+        is CrCUnionSym -> "union"
+        is CrLibrarySym -> "library"
+        is CrModuleSym -> "module"
+        is CrProgramSym -> "program"
+        is CrTypeAliasSym -> "alias"
+        is CrTypeDefSym -> "type declaration"
+        is CrTypeParameterSym -> "type parameter"
+        is CrMethodSym -> "method"
+    }

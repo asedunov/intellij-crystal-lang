@@ -1,7 +1,6 @@
 package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import com.intellij.util.SmartList
@@ -14,8 +13,8 @@ import org.crystal.intellij.psi.*
 
 class CrystalSyntaxCheckingVisitor(
     file: CrFile,
-    private val highlightInfos: MutableList<HighlightInfo>
-) : CrRecursiveVisitor() {
+    highlightInfos: MutableList<HighlightInfo>
+) : CrystalHighlightingVisitorBase(highlightInfos) {
     private val ll = file.project.crystalSettings.languageVersion.level
 
     private var funNest = 0
@@ -892,22 +891,6 @@ class CrystalSyntaxCheckingVisitor(
             error(interpolation, "Interpolation is not allowed in $context")
         }
         return true
-    }
-
-    private inline fun errorIf(anchor: PsiElement, description: String, validator: (String) -> String?) {
-        error(anchor, validator(description) ?: return)
-    }
-
-    private val CrNamedElement.defaultAnchor
-        get() = nameElement ?: firstChild
-
-    private fun error(anchor: PsiElement, message: String) {
-        val info = HighlightInfo
-            .newHighlightInfo(HighlightInfoType.ERROR)
-            .range(anchor)
-            .descriptionAndTooltip(message)
-            .create() ?: return
-        highlightInfos += info
     }
 
     companion object {

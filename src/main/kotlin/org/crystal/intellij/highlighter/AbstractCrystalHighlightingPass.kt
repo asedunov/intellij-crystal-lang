@@ -13,10 +13,10 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiFile
 import org.crystal.intellij.psi.CrFile
 
-abstract class AbstractCrystalDumbAwarePass(
+abstract class AbstractCrystalHighlightingPass(
     protected val file: CrFile,
     document: Document
-) : TextEditorHighlightingPass(file.project, document), DumbAware {
+) : TextEditorHighlightingPass(file.project, document) {
     private val highlightInfos: MutableList<HighlightInfo> = mutableListOf()
 
     protected abstract fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): PsiElementVisitor
@@ -32,7 +32,7 @@ abstract class AbstractCrystalDumbAwarePass(
         )
     }
 
-    abstract class FactoryBase : TextEditorHighlightingPassFactory, TextEditorHighlightingPassFactoryRegistrar, DumbAware {
+    abstract class FactoryBase : TextEditorHighlightingPassFactory, TextEditorHighlightingPassFactoryRegistrar {
         protected abstract fun createHighlightingPass(file: CrFile, document: Document): TextEditorHighlightingPass?
 
         override fun createHighlightingPass(file: PsiFile, editor: Editor): TextEditorHighlightingPass? {

@@ -1,35 +1,35 @@
 foo do
-  require "require"
+  require "r"
 
-  include Include
+  include I
 
-  extend Extend
+  extend E
 
-  Const = 1
+  X = 1
 
-  def def
+  def d
   end
 
-  class Class
+  class C
   end
 
-  struct Struct
+  struct S
   end
 
-  module Module
+  module M
   end
 
-  enum Enum
+  enum E
   end
 
-  lib Lib
+  lib L
   end
 
-  alias Alias = Type
+  alias A = Type
 
-  annotation Annotation
+  annotation Ann
   end
 
-  macro macro
+  macro mac
   end
 end

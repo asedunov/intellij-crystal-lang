@@ -10,12 +10,12 @@ import com.intellij.openapi.project.Project
 import org.crystal.intellij.psi.CrFile
 import org.crystal.intellij.psi.CrRecursiveVisitor
 
-class CrystalSyntaxCheckingPass(
+class CrystalResolveCheckingPass(
     file: CrFile,
     document: Document
 ) : AbstractCrystalHighlightingPass(file, document), DumbAware {
     override fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): CrRecursiveVisitor {
-        return CrystalSyntaxCheckingVisitor(file, highlightInfos)
+        return CrystalResolveCheckingVisitor(highlightInfos)
     }
 
     class Factory : FactoryBase(), DumbAware {
@@ -30,7 +30,7 @@ class CrystalSyntaxCheckingPass(
         }
 
         override fun createHighlightingPass(file: CrFile, document: Document): TextEditorHighlightingPass {
-            return CrystalSyntaxCheckingPass(file, document)
+            return CrystalResolveCheckingPass(file, document)
         }
     }
 }

@@ -7,11 +7,11 @@ import com.intellij.model.presentation.SymbolPresentationService
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.util.containers.ObjectIntHashMap
-import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.psi.CrVisitor
 import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
+import org.crystal.intellij.tests.util.setupMainFile
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -35,10 +35,7 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
         myFixture.testDataPath = testFile.parent
         myFixture.configureByFile(testFile.name)
 
-        val file = myFixture.file
-        project.crystalSettings.update {
-            mainFilePath = file.virtualFile.path
-        }
+        myFixture.setupMainFile()
 
         val refAnnotator = RefAnnotator()
         try {

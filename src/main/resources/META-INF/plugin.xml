@@ -35,6 +35,7 @@
 
         <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxHighlightingPass$Factory"/>
         <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxCheckingPass$Factory"/>
+        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalResolveCheckingPass$Factory"/>
 
         <lang.psiStructureViewFactory language="Crystal"
                                       implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>

@@ -580,6 +580,14 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitEnum(o: CrEnum) {
+        super.visitEnum(o)
+
+        o.body?.let {
+            checkDuplicateNames(it.childrenOfType<CrEnumConstant>())
+        }
+    }
+
     private enum class ParamListState {
         POSITIONAL,
         NAMED,

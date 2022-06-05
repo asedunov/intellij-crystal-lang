@@ -11,7 +11,7 @@ module M
 end
 
 enum E
-
+  X
 end
 
 annotation Ann

@@ -20,6 +20,7 @@ foo do
   end
 
   enum E
+    X
   end
 
   lib L

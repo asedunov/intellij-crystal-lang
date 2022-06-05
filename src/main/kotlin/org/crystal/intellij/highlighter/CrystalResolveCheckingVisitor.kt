@@ -1,6 +1,7 @@
 package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
+import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.presentation.presentableKind
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.CrStdFqNames
@@ -46,6 +47,13 @@ class CrystalResolveCheckingVisitor(
 
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrEnumSym>(sym, o)
+
+        if (sym.sources.firstOrNull() == o) {
+            val constants = o.body?.childrenOfType<CrEnumConstant>() ?: JBIterable.empty()
+            if (constants.isEmpty) {
+                error(o.defaultAnchor, "Enum must have at least one constant")
+            }
+        }
     }
 
     override fun visitAnnotation(o: CrAnnotation) {

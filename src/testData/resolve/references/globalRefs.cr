@@ -49,16 +49,16 @@ module <warning descr="#4: Module \"Y\"">Y</warning>
 end
 
 enum <warning descr="#16: Enum \"E\"">E</warning>
-
+  X
 end
 
 enum <warning descr="#2: Module \"X\"">X</warning>::<warning descr="#17: Enum \"E\"">E</warning>
-
+  X
 end
 
 module <warning descr="#4: Module \"Y\"">Y</warning>
   enum <warning descr="#18: Enum \"E\"">E</warning>
-
+    X
   end
 end
 

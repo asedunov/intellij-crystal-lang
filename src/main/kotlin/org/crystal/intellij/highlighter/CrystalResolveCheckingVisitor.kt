@@ -161,32 +161,38 @@ class CrystalResolveCheckingVisitor(
             error(superType, "Superclass mismatch: ${superSym.fqName} is expected, but ${currentSuperSym.fqName} is found")
         }
 
-        if (currentSuperSym is CrModuleLikeSym && currentSuperSym.isGeneric && superType !is CrInstantiatedType) {
+        checkTypeArguments(currentSuperSym, superType)
+    }
+
+    private fun checkTypeArguments(sym: CrSym<*>?, type: CrType) {
+        if (sym == null) return
+        if (sym is CrModuleLikeSym && sym.isGeneric && type !is CrInstantiatedType) {
             val superDesc = buildString {
-                append(currentSuperSym.name)
-                currentSuperSym.typeParameters.joinTo(this, prefix = "(", postfix = ")") { it.name }
+                append(sym.name)
+                sym.typeParameters.joinTo(this, prefix = "(", postfix = ")") { it.name }
             }
-            error(superType, "Generic type arguments must be specified when inheriting $superDesc")
+            error(type, "Generic type arguments must be specified when inheriting $superDesc")
         }
     }
 
     override fun visitIncludeExpression(o: CrIncludeExpression) {
         super.visitIncludeExpression(o)
 
-        checkTargetIsModule(o)
+        checkIncludeExtendModule(o)
     }
 
     override fun visitExtendExpression(o: CrExtendExpression) {
         super.visitExtendExpression(o)
 
-        checkTargetIsModule(o)
+        checkIncludeExtendModule(o)
     }
 
-    private fun checkTargetIsModule(o: CrIncludeLikeExpression) {
+    private fun checkIncludeExtendModule(o: CrIncludeLikeExpression) {
         val type = o.type ?: return
         val targetSym = o.targetSymbol ?: return
         if (targetSym !is CrModuleSym) {
             error(type, "'include'/'extend' target must be a module")
         }
+        checkTypeArguments(targetSym, type)
     }
 }

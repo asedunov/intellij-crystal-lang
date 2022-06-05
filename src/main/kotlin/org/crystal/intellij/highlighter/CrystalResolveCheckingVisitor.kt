@@ -146,16 +146,27 @@ class CrystalResolveCheckingVisitor(
         val superSym = sym.superClass ?: return
         val superClause = psi.superTypeClause ?: return
         val superType = superClause.type ?: return
+
         if (superSym == sym.program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.ENUM)) {
             error(superType, "A type can't inherit directly from Enum. Use 'enum' keyword instead")
             return
         }
+
         if (superSym::class != sym::class) {
             error(superType, "Can't inherit ${sym.presentableKind} from ${superSym.presentableKind}")
         }
+
         val currentSuperSym = superClause.resolveSymbol()
         if (currentSuperSym != null && currentSuperSym != superSym) {
             error(superType, "Superclass mismatch: ${superSym.fqName} is expected, but ${currentSuperSym.fqName} is found")
+        }
+
+        if (currentSuperSym is CrModuleLikeSym && currentSuperSym.isGeneric && superType !is CrInstantiatedType) {
+            val superDesc = buildString {
+                append(currentSuperSym.name)
+                currentSuperSym.typeParameters.joinTo(this, prefix = "(", postfix = ")") { it.name }
+            }
+            error(superType, "Generic type arguments must be specified when inheriting $superDesc")
         }
     }
 

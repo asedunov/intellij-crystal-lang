@@ -73,5 +73,8 @@ sealed class CrModuleLikeSym(
     val typeParameters: Collection<CrTypeParameterSym>
         get() = _typeParameters.values
 
+    val isGeneric: Boolean
+        get() = _typeParameters.isNotEmpty()
+
     fun getTypeParameter(name: String): CrTypeParameterSym? = _typeParameters[name]
 }

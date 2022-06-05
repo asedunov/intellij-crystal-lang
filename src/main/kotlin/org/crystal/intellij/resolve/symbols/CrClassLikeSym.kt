@@ -1,11 +1,13 @@
 package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrSuperTypeAware
+import org.crystal.intellij.psi.CrTypeDefinition
 import org.crystal.intellij.psi.CrTypeSource
 import org.crystal.intellij.psi.typePath
 import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
+import org.crystal.intellij.resolve.predefinedAbstractClasses
 import org.crystal.intellij.resolve.predefinedSuperClasses
 import org.crystal.intellij.resolve.scopes.getTypeAs
 import org.crystal.intellij.resolve.superlessClasses
@@ -34,4 +36,7 @@ sealed class CrClassLikeSym(
             }
             program.memberScope.getTypeAs(superName)
         }
+
+    open val isAbstract: Boolean
+        get() = fqName in predefinedAbstractClasses || (sources.firstOrNull() as? CrTypeDefinition)?.isAbstract == true
 }

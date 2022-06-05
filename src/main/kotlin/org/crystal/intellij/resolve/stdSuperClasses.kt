@@ -40,3 +40,13 @@ val predefinedSuperClasses = linkedMapOf(
 )
 
 val predefinedSubclasses = predefinedSuperClasses.entries.groupBy({ it.value }, { it.key })
+
+val predefinedAbstractClasses = setOf(
+    CrStdFqNames.OBJECT,
+    CrStdFqNames.VALUE,
+    CrStdFqNames.NUMBER,
+    CrStdFqNames.INT,
+    CrStdFqNames.FLOAT,
+    CrStdFqNames.STRUCT,
+    CrStdFqNames.ENUM
+)

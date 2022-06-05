@@ -7,4 +7,7 @@ class CrEnumSym(
     override val namespace: CrModuleLikeSym,
     sources: List<CrTypeSource>,
     override val program: CrProgramSym
-) : CrClassLikeSym(name, sources)
+) : CrClassLikeSym(name, sources) {
+    override val isAbstract: Boolean
+        get() = false
+}

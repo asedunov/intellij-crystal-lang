@@ -2,6 +2,8 @@ package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
 import org.crystal.intellij.parser.CR_SUPERTYPE_CLAUSE
+import org.crystal.intellij.resolve.symbols.CrSym
+import org.crystal.intellij.resolve.symbols.CrTypeSym
 import org.crystal.intellij.stubs.api.CrSupertypeClauseStub
 
 class CrSupertypeClause : CrStubbedElementImpl<CrSupertypeClauseStub>, CrSymbolOrdinalHolder {
@@ -13,6 +15,8 @@ class CrSupertypeClause : CrStubbedElementImpl<CrSupertypeClauseStub>, CrSymbolO
 
     val type: CrType?
         get() = stubChildOfType()
+
+    fun resolveSymbol() = type?.typePath?.resolveSymbol() as? CrTypeSym
 
     override fun ordinal() = (parent as? CrTypeDefinition)?.ordinal()
 }

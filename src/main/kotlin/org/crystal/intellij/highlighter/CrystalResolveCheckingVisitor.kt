@@ -16,7 +16,7 @@ class CrystalResolveCheckingVisitor(
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrClassSym>(sym, o)
         if (sym is CrClassSym) {
-            checkSuperKindMismatch(sym, o)
+            checkSuperclass(sym, o)
         }
     }
 
@@ -26,7 +26,7 @@ class CrystalResolveCheckingVisitor(
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrStructSym>(sym, o)
         if (sym is CrStructSym) {
-            checkSuperKindMismatch(sym, o)
+            checkSuperclass(sym, o)
             val superSym = sym.superClass
             if (superSym is CrStructSym && !superSym.isAbstract) {
                 error(o.defaultAnchor, "Can't inherit from a non-abstract struct")
@@ -106,15 +106,20 @@ class CrystalResolveCheckingVisitor(
         }
     }
 
-    private fun checkSuperKindMismatch(sym: CrModuleLikeSym, psi: CrSuperTypeAware) {
+    private fun checkSuperclass(sym: CrModuleLikeSym, psi: CrSuperTypeAware) {
         val superSym = sym.superClass ?: return
-        val superType = psi.superTypeClause?.type ?: return
+        val superClause = psi.superTypeClause ?: return
+        val superType = superClause.type ?: return
         if (superSym == sym.program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.ENUM)) {
             error(superType, "A type can't inherit directly from Enum. Use 'enum' keyword instead")
             return
         }
         if (superSym::class != sym::class) {
             error(superType, "Can't inherit ${sym.presentableKind} from ${superSym.presentableKind}")
+        }
+        val currentSuperSym = superClause.resolveSymbol()
+        if (currentSuperSym != null && currentSuperSym != superSym) {
+            error(superType, "Superclass mismatch: ${superSym.fqName} is expected, but ${currentSuperSym.fqName} is found")
         }
     }
 

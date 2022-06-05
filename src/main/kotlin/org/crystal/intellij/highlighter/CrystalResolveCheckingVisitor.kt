@@ -48,10 +48,15 @@ class CrystalResolveCheckingVisitor(
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrEnumSym>(sym, o)
 
-        if (sym.sources.firstOrNull() == o) {
+        if (sym is CrEnumSym) {
             val constants = o.body?.childrenOfType<CrEnumConstant>() ?: JBIterable.empty()
-            if (constants.isEmpty) {
-                error(o.defaultAnchor, "Enum must have at least one constant")
+            if (sym.sources.firstOrNull() == o) {
+                if (constants.isEmpty) {
+                    error(o.defaultAnchor, "Enum must have at least one constant")
+                }
+            }
+            else if (constants.isNotEmpty) {
+                error(o.defaultAnchor, "Can't add constants to enum definition")
             }
         }
     }

@@ -13,6 +13,9 @@ class CrystalResolveCheckingVisitor(
 
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrClassSym>(sym, o)
+        if (sym is CrClassSym) {
+            checkSuperKindMismatch(sym, o)
+        }
     }
 
     override fun visitStruct(o: CrStruct) {
@@ -20,6 +23,9 @@ class CrystalResolveCheckingVisitor(
 
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrStructSym>(sym, o)
+        if (sym is CrStructSym) {
+            checkSuperKindMismatch(sym, o)
+        }
     }
 
     override fun visitModule(o: CrModule) {
@@ -91,6 +97,14 @@ class CrystalResolveCheckingVisitor(
     private fun checkRedefinition(sym: CrSym<*>, psi: CrDefinition) {
         if (sym.sources.firstOrNull() != psi) {
             error(psi.defaultAnchor, "'${sym.name}' is already defined")
+        }
+    }
+
+    private fun checkSuperKindMismatch(sym: CrModuleLikeSym, psi: CrSuperTypeAware) {
+        val superSym = sym.superClass ?: return
+        val superType = psi.superTypeClause?.type ?: return
+        if (superSym::class != sym::class) {
+            error(superType, "Can't inherit ${sym.presentableKind} from ${superSym.presentableKind}")
         }
     }
 }

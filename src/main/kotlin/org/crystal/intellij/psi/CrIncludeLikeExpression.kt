@@ -7,6 +7,7 @@ import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleSym
+import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.stubs.api.CrIncludeStub
 
 sealed interface CrIncludeLikeExpression : CrExpression, CrSymbolOrdinalHolder {
@@ -32,12 +33,15 @@ sealed interface CrIncludeLikeExpression : CrExpression, CrSymbolOrdinalHolder {
             }
         }
 
-    val targetModule: CrModuleSym?
+    val targetSymbol: CrSym<*>?
         get() {
             var type = type
             if (type is CrInstantiatedType) type = type.constructorType
-            return (type as? CrPathType)?.path?.resolveSymbol() as? CrModuleSym
+            return (type as? CrPathType)?.path?.resolveSymbol()
         }
+
+    val targetModule: CrModuleSym?
+        get() = targetSymbol as? CrModuleSym
 }
 
 private val RESOLUTION_SCOPE = newResolveSlice<CrIncludeLikeExpression, CrModuleLikeScope>("RESOLUTION_SCOPE")

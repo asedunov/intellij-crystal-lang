@@ -107,4 +107,24 @@ class CrystalResolveCheckingVisitor(
             error(superType, "Can't inherit ${sym.presentableKind} from ${superSym.presentableKind}")
         }
     }
+
+    override fun visitIncludeExpression(o: CrIncludeExpression) {
+        super.visitIncludeExpression(o)
+
+        checkTargetIsModule(o)
+    }
+
+    override fun visitExtendExpression(o: CrExtendExpression) {
+        super.visitExtendExpression(o)
+
+        checkTargetIsModule(o)
+    }
+
+    private fun checkTargetIsModule(o: CrIncludeLikeExpression) {
+        val type = o.type ?: return
+        val targetSym = o.targetSymbol ?: return
+        if (targetSym !is CrModuleSym) {
+            error(type, "'include'/'extend' target must be a module")
+        }
+    }
 }

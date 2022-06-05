@@ -3,6 +3,8 @@ package org.crystal.intellij.highlighter
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import org.crystal.intellij.presentation.presentableKind
 import org.crystal.intellij.psi.*
+import org.crystal.intellij.resolve.CrStdFqNames
+import org.crystal.intellij.resolve.scopes.getTypeAs
 import org.crystal.intellij.resolve.symbols.*
 
 class CrystalResolveCheckingVisitor(
@@ -103,6 +105,10 @@ class CrystalResolveCheckingVisitor(
     private fun checkSuperKindMismatch(sym: CrModuleLikeSym, psi: CrSuperTypeAware) {
         val superSym = sym.superClass ?: return
         val superType = psi.superTypeClause?.type ?: return
+        if (superSym == sym.program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.ENUM)) {
+            error(superType, "A type can't inherit directly from Enum. Use 'enum' keyword instead")
+            return
+        }
         if (superSym::class != sym::class) {
             error(superType, "Can't inherit ${sym.presentableKind} from ${superSym.presentableKind}")
         }

@@ -4,6 +4,10 @@ class CrSymbolOrdinal(
     value: Int,
     parent: CrSymbolOrdinal?
 ) : Comparable<CrSymbolOrdinal> {
+    companion object {
+        val FALLBACK_ORDINAL = CrSymbolOrdinal(-1, null)
+    }
+
     private val values: IntArray
 
     init {

@@ -6,6 +6,6 @@ sealed class CrOrdinalSym<Source : CrSymbolOrdinalHolder>(
     name: String,
     sources: List<Source>
 ) : CrSym<Source>(name, sources) {
-    val ordinal: CrSymbolOrdinal?
+    open val ordinal: CrSymbolOrdinal?
         get() = sources.firstOrNull()?.ordinal()
 }

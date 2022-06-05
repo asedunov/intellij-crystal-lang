@@ -10,7 +10,7 @@ class CC < C
 
 end
 
-struct SS < S
+struct <error descr="Can't inherit from a non-abstract struct">SS</error> < S
 
 end
 

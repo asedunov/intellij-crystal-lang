@@ -27,6 +27,10 @@ class CrystalResolveCheckingVisitor(
         checkKindMismatch<CrStructSym>(sym, o)
         if (sym is CrStructSym) {
             checkSuperKindMismatch(sym, o)
+            val superSym = sym.superClass
+            if (superSym is CrStructSym && !superSym.isAbstract) {
+                error(o.defaultAnchor, "Can't inherit from a non-abstract struct")
+            }
         }
     }
 

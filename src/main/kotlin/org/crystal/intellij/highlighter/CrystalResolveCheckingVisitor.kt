@@ -41,6 +41,7 @@ class CrystalResolveCheckingVisitor(
         checkKindMismatch<CrClassSym>(sym, o)
         if (sym is CrClassSym) {
             checkSuperclass(sym, o)
+            checkGenericReopening(sym, o)
         }
     }
 
@@ -51,6 +52,7 @@ class CrystalResolveCheckingVisitor(
         checkKindMismatch<CrStructSym>(sym, o)
         if (sym is CrStructSym) {
             checkSuperclass(sym, o)
+            checkGenericReopening(sym, o)
             val superSym = sym.superClass
             if (superSym is CrStructSym && !superSym.isAbstract) {
                 error(o.defaultAnchor, "Can't inherit from a non-abstract struct")
@@ -63,6 +65,9 @@ class CrystalResolveCheckingVisitor(
 
         val sym = o.resolveSymbol() ?: return
         checkKindMismatch<CrModuleSym>(sym, o)
+        if (sym is CrModuleSym) {
+            checkGenericReopening(sym, o)
+        }
     }
 
     override fun visitEnum(o: CrEnum) {
@@ -162,6 +167,32 @@ class CrystalResolveCheckingVisitor(
         }
 
         checkTypeArguments(currentSuperSym, superType)
+    }
+
+    private fun checkGenericReopening(sym: CrModuleLikeSym, psi: CrTypeParameterHolder) {
+        val primaryPsi = sym.sources.firstOrNull() as? CrTypeParameterHolder ?: return
+        if (psi == primaryPsi) return
+        val primaryParams = primaryPsi.typeParameterList?.elements ?: JBIterable.empty()
+        val paramList = psi.typeParameterList
+        val params = paramList?.elements ?: return
+        if (params.isEmpty) return
+        if (primaryParams.isEmpty) {
+            error(paramList, "${sym.name} is not a generic ${sym.presentableKind}")
+            return
+        }
+        val primaryParamNames = primaryParams.mapNotNull { if (it.isSplat) "*${it.name}" else it.name }
+        val paramNames = params.mapNotNull { if (it.isSplat) "*${it.name}" else it.name }
+        if (primaryParamNames != paramNames) {
+            val message = buildString {
+                append("Type parameter")
+                if (primaryParamNames.size > 1) append("s")
+                append(" must be ")
+                primaryParamNames.joinTo(this)
+                append(", not ")
+                paramNames.joinTo(this)
+            }
+            error(paramList, message)
+        }
     }
 
     private fun checkTypeArguments(sym: CrSym<*>?, type: CrType) {

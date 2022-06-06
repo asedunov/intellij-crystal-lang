@@ -56,14 +56,12 @@ sealed class CrModuleLikeSym(
 
     private val _typeParameters: Map<String, CrTypeParameterSym>
         get() = program.project.resolveCache.getOrCompute(TYPE_PARAMETERS, this) {
+            val curTypeParameterSources = (sources.firstOrNull() as? CrTypeParameterHolder)?.typeParameterList?.elements
+                ?: return@getOrCompute null
             val typeParameterSources = LinkedHashMap<String, SmartList<CrTypeParameter>>()
-            for (source in sources) {
-                val curTypeParameterSources = (source as? CrTypeParameterHolder)?.typeParameterList?.elements
-                    ?: continue
-                for (curSource in curTypeParameterSources) {
-                    val name = curSource.name ?: continue
-                    typeParameterSources.getOrPut(name, ::SmartList).add(curSource)
-                }
+            for (curSource in curTypeParameterSources) {
+                val name = curSource.name ?: continue
+                typeParameterSources.getOrPut(name, ::SmartList).add(curSource)
             }
             typeParameterSources.mapValues { (name, sources) ->
                 CrTypeParameterSym(name, sources, this)

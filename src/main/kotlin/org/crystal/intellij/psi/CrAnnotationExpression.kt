@@ -16,6 +16,9 @@ class CrAnnotationExpression : CrStubbedElementImpl<CrAnnotationExpressionStub>,
     val path: CrPathNameElement?
         get() = childOfType()
 
+    val argumentList: CrArgumentList?
+        get() = childOfType()
+
     val targetSymbol: CrSym<*>?
         get() = path?.resolveSymbol()
 

@@ -235,6 +235,24 @@ class CrystalResolveCheckingVisitor(
         if (targetSym !is CrAnnotationSym) {
             val kind = targetSym.presentableKind
             error(path, "Annotation is expected, but $kind is found")
+            return
         }
+
+        if (targetSym.fqName == CrStdFqNames.EXTERN && !isValidExternOnNonGenericStruct(o)) {
+            error(o, "@Extern annotation on non-generic struct must have a single named parameter 'union' with boolean literal as a value")
+        }
+    }
+
+    private fun isValidExternOnNonGenericStruct(o: CrAnnotationExpression): Boolean {
+        val owner = o.owner ?: return true
+        if (owner is CrStruct && !owner.isGeneric) {
+            val arguments = o.argumentList?.elements ?: return true
+            if (arguments.isEmpty) return true
+            val arg = arguments.single()
+            return arg is CrNamedArgument
+                    && arg.name == "union"
+                    && arg.expression is CrBooleanLiteralExpression
+        }
+        return true
     }
 }

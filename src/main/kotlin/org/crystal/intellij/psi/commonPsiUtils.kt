@@ -4,6 +4,8 @@ import com.intellij.extapi.psi.StubBasedPsiElementBase
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.PsiFileImpl
+import com.intellij.psi.impl.source.PsiFileWithStubSupport
+import com.intellij.psi.stubs.ObjectStubBase
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.refactoring.suggested.createSmartPointer
@@ -58,6 +60,17 @@ fun PsiElement.nextSiblingsStrict() =
 
 fun PsiElement.prevSiblingsStrict() =
     JBIterable.generate(prevSibling) { it.prevSibling }
+
+fun PsiElement.nextStubSiblings(): JBIterable<PsiElement>? {
+    val initialStub = smartStub as? ObjectStubBase<*> ?: return null
+    val parentStub = initialStub.parentStub
+    val file = containingFile as? PsiFileWithStubSupport ?: return null
+    val spine = file.stubbedSpine
+    return JBIterable.generate(this) { psi ->
+        val stub = psi.smartStub as? ObjectStubBase<*> ?: return@generate null
+        spine.getStubPsi(stub.stubId + 1)?.takeIf { it.smartStub?.parentStub == parentStub }
+    }.skip(1)
+}
 
 inline fun <reified T : PsiElement> PsiElement.childrenOfType(): JBIterable<T> =
     allChildren().filter(T::class.java)

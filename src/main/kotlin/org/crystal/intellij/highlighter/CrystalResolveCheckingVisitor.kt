@@ -226,4 +226,15 @@ class CrystalResolveCheckingVisitor(
         }
         checkTypeArguments(targetSym, type)
     }
+
+    override fun visitAnnotationExpression(o: CrAnnotationExpression) {
+        super.visitAnnotationExpression(o)
+
+        val path = o.path ?: return
+        val targetSym = o.targetSymbol ?: return
+        if (targetSym !is CrAnnotationSym) {
+            val kind = targetSym.presentableKind
+            error(path, "Annotation is expected, but $kind is found")
+        }
+    }
 }

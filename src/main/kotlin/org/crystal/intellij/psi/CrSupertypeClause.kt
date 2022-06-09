@@ -13,7 +13,7 @@ class CrSupertypeClause : CrStubbedElementImpl<CrSupertypeClauseStub>, CrSymbolO
 
     override fun accept(visitor: CrVisitor) = visitor.visitSupertypeClause(this)
 
-    val type: CrType?
+    val type: CrType<*>?
         get() = stubChildOfType()
 
     fun resolveSymbol() = type?.typePath?.resolveSymbol() as? CrTypeSym

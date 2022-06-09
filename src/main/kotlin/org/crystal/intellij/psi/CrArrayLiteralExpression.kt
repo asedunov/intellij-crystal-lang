@@ -9,6 +9,6 @@ class CrArrayLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
     val expressions: JBIterable<CrExpression>
         get() = childrenOfType()
 
-    val type: CrType?
+    val type: CrType<*>?
         get() = childOfType()
 }

@@ -60,7 +60,7 @@ val CrExpression.isSemanticCall: Boolean
         else -> false
     }
 
-val CrType.typePath: CrPathNameElement?
+val CrType<*>.typePath: CrPathNameElement?
     get() {
         var type = this
         if (type is CrInstantiatedType) type = type.constructorType ?: return null

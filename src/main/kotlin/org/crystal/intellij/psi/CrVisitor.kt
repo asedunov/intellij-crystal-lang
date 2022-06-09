@@ -275,7 +275,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitTupleType(o: CrTupleType) = visitType(o)
 
-    open fun visitType(o: CrType) = visitCrElement(o)
+    open fun visitType(o: CrType<*>) = visitCrElement(o)
 
     open fun visitTypeArgumentList(o: CrTypeArgumentList) = visitCrElement(o)
 

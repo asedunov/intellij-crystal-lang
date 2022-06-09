@@ -5,8 +5,8 @@ import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.parser.CR_NAMED_TUPLE_TYPE
 import org.crystal.intellij.stubs.api.CrTypeStub
 
-class CrNamedTupleType : CrType {
-    constructor(stub: CrTypeStub) : super(stub, CR_NAMED_TUPLE_TYPE)
+class CrNamedTupleType : CrType<CrNamedTupleType> {
+    constructor(stub: CrTypeStub<CrNamedTupleType>) : super(stub, CR_NAMED_TUPLE_TYPE)
 
     constructor(node: ASTNode) : super(node)
 

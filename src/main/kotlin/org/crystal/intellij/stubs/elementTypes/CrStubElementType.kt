@@ -34,10 +34,10 @@ abstract class CrStubElementType<Psi : CrElement, Stub : StubElement<*>>(
                 parentDef != null && !parentDef.isLocal
             }
 
-            is CrNameElement, is CrType -> {
+            is CrNameElement, is CrType<*> -> {
                 val parent = parent
                 (parent is CrDefinition ||
-                        parent is CrType ||
+                        parent is CrType<*> ||
                         parent is CrTypeArgumentList ||
                         parent is CrPathNameElement ||
                         parent is CrSupertypeClause ||
@@ -47,7 +47,7 @@ abstract class CrStubElementType<Psi : CrElement, Stub : StubElement<*>>(
 
             is CrTypeArgumentList -> {
                 val parent = parent
-                (parent is CrDefinition || parent is CrType) && parent.shouldCreateStub()
+                (parent is CrDefinition || parent is CrType<*>) && parent.shouldCreateStub()
             }
 
             is CrSupertypeClause, is CrIncludeExpression, is CrExtendExpression -> true

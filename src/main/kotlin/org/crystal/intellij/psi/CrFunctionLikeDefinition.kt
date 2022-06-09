@@ -15,6 +15,6 @@ sealed interface CrFunctionLikeDefinition : CrDefinitionWithFqName {
             return parameterList?.elements ?: JBIterable.empty()
         }
 
-    val returnType: CrType?
+    val returnType: CrType<*>?
         get() = childOfType()
 }

@@ -24,8 +24,7 @@ fun indexSuperclass(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
     }
 }
 
-@Suppress("TYPE_MISMATCH_WARNING")
-private fun indexSuperclass(superTypeStub: CrTypeStub, sink: IndexSink) {
+private fun indexSuperclass(superTypeStub: CrTypeStub<*>, sink: IndexSink) {
     val superPathType = when (superTypeStub.stubType) {
         CR_PATH_TYPE -> superTypeStub
         CR_INSTANTIATED_TYPE -> superTypeStub.findChildStubByType(CR_PATH_TYPE)

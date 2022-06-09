@@ -49,7 +49,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
 
     private fun StringBuilder.appendReceiver(receiver: CrMethodReceiver) = when (receiver) {
         is CrReferenceExpression -> appendSpaced(receiver.nameElement.presentableText)
-        is CrType -> appendType(receiver)
+        is CrType<*> -> appendType(receiver)
     }
 
     private fun StringBuilder.appendType(definition: CrDefinition) {
@@ -69,7 +69,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         }
     }
 
-    private fun StringBuilder.appendType(type: CrType?): StringBuilder = when (type) {
+    private fun StringBuilder.appendType(type: CrType<*>?): StringBuilder = when (type) {
         is CrDoubleSplatType -> append("**").appendType(type.innerType)
         is CrExpressionType -> append("typeof(...)")
         is CrHashType -> appendType(type.leftType).append(" => ").appendType(type.rightType)

@@ -4,8 +4,8 @@ import com.intellij.lang.ASTNode
 import org.crystal.intellij.parser.CR_SELF_TYPE
 import org.crystal.intellij.stubs.api.CrTypeStub
 
-class CrSelfType : CrType {
-    constructor(stub: CrTypeStub) : super(stub, CR_SELF_TYPE)
+class CrSelfType : CrType<CrSelfType> {
+    constructor(stub: CrTypeStub<CrSelfType>) : super(stub, CR_SELF_TYPE)
 
     constructor(node: ASTNode) : super(node)
 

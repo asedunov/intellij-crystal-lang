@@ -7,6 +7,8 @@ CrFileStubImpl
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
     CR_PATH_TYPE:CrTypeStubImpl
       CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
+  CR_ANNOTATION_EXPRESSION:CrAnnotationExpressionStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
   CR_ALIAS_DEFINITION:CrAliasStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
     CR_PATH_TYPE:CrTypeStubImpl

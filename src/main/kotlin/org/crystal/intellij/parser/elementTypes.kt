@@ -34,7 +34,7 @@ val CR_TYPE_PARAMETER_DEFINITION = CrStubElementTypes.TYPE_PARAMETER
 val CR_VARIABLE_DEFINITION = CrStubElementTypes.VARIABLE
 
 // Expressions
-val CR_ANNOTATION_EXPRESSION = CrCompositeElementType("CR_ANNOTATION_EXPRESSION", ::CrAnnotationExpression)
+val CR_ANNOTATION_EXPRESSION = CrStubElementTypes.ANNOTATION_EXPRESSION
 val CR_ARRAY_LITERAL_EXPRESSION = CrCompositeElementType("CR_ARRAY_LITERAL_EXPRESSION", ::CrArrayLiteralExpression)
 val CR_AS_EXPRESSION = CrCompositeElementType("CR_AS_EXPRESSION", ::CrAsExpression)
 val CR_ASM_EXPRESSION = CrCompositeElementType("CR_ASM_EXPRESSION", ::CrAsmExpression)

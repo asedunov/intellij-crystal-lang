@@ -9,6 +9,8 @@ CrFileStubImpl
         CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_FUNCTION_DEFINITION:CrFunctionStubImpl(isVariadic=false)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
+  CR_ANNOTATION_EXPRESSION:CrAnnotationExpressionStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
   CR_FUNCTION_DEFINITION:CrFunctionStubImpl(isVariadic=false)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
   CR_LIBRARY_DEFINITION:CrLibraryStubImpl(visibility=PUBLIC)

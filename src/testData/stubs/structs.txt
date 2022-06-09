@@ -5,6 +5,8 @@ CrFileStubImpl
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_STRUCT_DEFINITION:CrStructStubImpl(isAbstract=true, visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
+  CR_ANNOTATION_EXPRESSION:CrAnnotationExpressionStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
   CR_STRUCT_DEFINITION:CrStructStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_STRUCT_DEFINITION:CrStructStubImpl(isAbstract=false, visibility=PUBLIC)

@@ -15,6 +15,8 @@ CrFileStubImpl
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=B)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=CONSTANT, name=C)
+  CR_ANNOTATION_EXPRESSION:CrAnnotationExpressionStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
   CR_ENUM_DEFINITION:CrEnumStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=E)
     CR_ENUM_CONSTANT_DEFINITION:CrEnumConstantStubImpl

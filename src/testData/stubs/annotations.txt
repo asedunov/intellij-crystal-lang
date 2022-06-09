@@ -1,6 +1,8 @@
 CrFileStubImpl
   CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
+  CR_ANNOTATION_EXPRESSION:CrAnnotationExpressionStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
   CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_ANNOTATION_DEFINITION:CrAnnotationStubImpl

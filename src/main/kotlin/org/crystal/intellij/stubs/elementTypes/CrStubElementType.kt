@@ -42,7 +42,8 @@ abstract class CrStubElementType<Psi : CrElement, Stub : StubElement<*>>(
                         parent is CrPathNameElement ||
                         parent is CrSupertypeClause ||
                         parent is CrIncludeExpression ||
-                        parent is CrExtendExpression) && parent.shouldCreateStub()
+                        parent is CrExtendExpression ||
+                        parent is CrAnnotationExpression) && parent.shouldCreateStub()
             }
 
             is CrTypeArgumentList -> {
@@ -50,7 +51,10 @@ abstract class CrStubElementType<Psi : CrElement, Stub : StubElement<*>>(
                 (parent is CrDefinition || parent is CrType<*>) && parent.shouldCreateStub()
             }
 
-            is CrSupertypeClause, is CrIncludeExpression, is CrExtendExpression -> true
+            is CrSupertypeClause,
+            is CrIncludeExpression,
+            is CrExtendExpression,
+            is CrAnnotationExpression -> true
 
             else -> false
         }

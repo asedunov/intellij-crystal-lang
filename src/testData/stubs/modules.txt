@@ -3,6 +3,8 @@ CrFileStubImpl
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PRIVATE)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
+  CR_ANNOTATION_EXPRESSION:CrAnnotationExpressionStubImpl
+    CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Foo)
   CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PUBLIC)
     CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_MODULE_DEFINITION:CrModuleStubImpl(visibility=PUBLIC)

@@ -159,6 +159,12 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitArgumentList(o: CrArgumentList) {
+        super.visitArgumentList(o)
+
+        checkDuplicateNames(o.elements.filter(CrNamedArgument::class.java))
+    }
+
     override fun visitCallExpression(o: CrCallExpression) {
         super.visitCallExpression(o)
 
@@ -175,8 +181,6 @@ class CrystalSyntaxCheckingVisitor(
                 error(blocks[i], "Multiple block arguments are not allowed")
             }
         }
-
-        checkDuplicateNames(arguments.filter(CrNamedArgument::class.java))
 
         var foundDoubleSplat = false
         for (argument in arguments) {

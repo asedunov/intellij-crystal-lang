@@ -241,6 +241,10 @@ class CrystalResolveCheckingVisitor(
         if (targetSym.fqName == CrStdFqNames.EXTERN && !isValidExternOnNonGenericStruct(o)) {
             error(o, "@Extern annotation on non-generic struct must have a single named parameter 'union' with boolean literal as a value")
         }
+
+        if (targetSym.fqName == CrStdFqNames.LINK && o.owner is CrLibrary) {
+            checkLibraryLink(o)
+        }
     }
 
     private fun isValidExternOnNonGenericStruct(o: CrAnnotationExpression): Boolean {
@@ -254,5 +258,69 @@ class CrystalResolveCheckingVisitor(
                     && arg.expression is CrBooleanLiteralExpression
         }
         return true
+    }
+
+    private fun checkLibraryLink(o: CrAnnotationExpression) {
+        val args = o.argumentList?.elements ?: JBIterable.empty()
+        if (args.isEmpty) {
+            error(o.path ?: o, "Missing link arguments")
+            return
+        }
+        var posCount = 0
+        for (arg in args) {
+            if (arg is CrNamedArgument) {
+                val value = arg.expression ?: continue
+                val name = arg.name ?: continue
+                when (name) {
+                    "lib" -> {
+                        if (posCount > 0) error(arg, "'lib' link argument is already specified")
+                        if (value !is CrStringLiteralExpression) error(value, "'lib' argument must be a String")
+                    }
+
+                    "ldflags" -> {
+                        if (posCount > 1) error(arg, "'ldflags' link argument is already specified")
+                        if (value !is CrStringLiteralExpression) error(value, "'ldflags' argument must be a String")
+                    }
+
+                    "static" -> {
+                        if (posCount > 2) error(arg, "'static' link argument is already specified")
+                        if (value !is CrBooleanLiteralExpression) error(value, "'static' argument must be a Bool")
+                        deprecated(arg, "Specifying static linking for individual libraries is deprecated")
+                    }
+
+                    "framework" -> {
+                        if (posCount > 3) error(arg, "'framework' link argument is already specified")
+                        if (value !is CrStringLiteralExpression) error(value, "'framework' argument must be a String")
+                    }
+
+                    "pkg_config" -> {
+                        if (value !is CrStringLiteralExpression) error(value, "'pkg_config' argument must be a String")
+                    }
+
+                    else -> error(arg.nameElement ?: arg, "Unknown link argument")
+                }
+            }
+            else {
+                when (posCount) {
+                    0 -> if (arg !is CrStringLiteralExpression) error(arg, "'lib' argument must be a String")
+
+                    1 -> if (arg !is CrStringLiteralExpression) error(arg, "'ldflags' link argument must be a String")
+
+                    2 -> {
+                        if (arg !is CrBooleanLiteralExpression) error(arg, "'static' link argument must be a Bool")
+                        deprecated(arg, "Specifying static linking for individual libraries is deprecated")
+                    }
+
+                    3 -> if (arg !is CrStringLiteralExpression) error(arg, "'framework' link argument must be a String")
+
+                    else -> {
+                        error(arg, "Unknown 'link' argument")
+                        continue
+                    }
+                }
+                deprecated(arg, "Using non-named arguments for Link annotations is deprecated")
+                posCount++
+            }
+        }
     }
 }

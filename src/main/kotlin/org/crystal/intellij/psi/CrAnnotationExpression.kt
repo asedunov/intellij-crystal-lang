@@ -26,7 +26,7 @@ class CrAnnotationExpression : CrStubbedElementImpl<CrAnnotationExpressionStub>,
         get() {
             val stubSiblings = nextStubSiblings()
             if (stubSiblings != null) {
-                return stubSiblings.skipWhile { it is CrAnnotationExpressionStub }.first() as? CrExpression
+                return stubSiblings.skipWhile { it is CrAnnotationExpression }.first() as? CrExpression
             }
 
             var e: CrExpression = this

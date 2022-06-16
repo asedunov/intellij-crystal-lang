@@ -1,5 +1,6 @@
 package org.crystal.intellij.psi
 
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import org.crystal.intellij.lexer.*
 
@@ -66,3 +67,6 @@ val CrType<*>.typePath: CrPathNameElement?
         if (type is CrInstantiatedType) type = type.constructorType ?: return null
         return (type as? CrPathType)?.path
     }
+
+val PsiElement.isAnnotationTransparent: Boolean
+    get() = this is CrBlockExpression || this is CrParenthesizedExpression

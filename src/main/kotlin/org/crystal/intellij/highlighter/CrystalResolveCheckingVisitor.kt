@@ -242,8 +242,9 @@ class CrystalResolveCheckingVisitor(
             error(o, "@Extern annotation on non-generic struct must have a single named parameter 'union' with boolean literal as a value")
         }
 
-        if (targetSym.fqName == CrStdFqNames.LINK && o.owner is CrLibrary) {
-            checkLibraryLink(o)
+        if (o.owner is CrLibrary) {
+            if (targetSym.fqName == CrStdFqNames.LINK) checkLibraryLink(o)
+            if (targetSym.fqName == CrStdFqNames.CALL_CONVENTION) checkLibraryCallConvention(o)
         }
     }
 
@@ -322,5 +323,29 @@ class CrystalResolveCheckingVisitor(
                 posCount++
             }
         }
+    }
+
+    private fun checkLibraryCallConvention(o: CrAnnotationExpression) {
+        val argList = o.argumentList
+        val arg = argList?.elements?.single()
+        if (arg == null || arg is CrNamedArgument) {
+            error(
+                argList ?: o.path ?: o,
+                "CallConvention must have a single positional argument"
+            )
+            return
+        }
+        if (arg !is CrStringLiteralExpression) {
+            error(arg, "CallConvention argument must be a string")
+            return
+        }
+        val value = arg.stringValue?.lowercase()
+        if (value !in CALL_CONVENTIONS) {
+            error(arg, "Invalid call convention")
+        }
+    }
+
+    companion object {
+        val CALL_CONVENTIONS = setOf("c", "fast", "cold", "webkit_js", "anyreg", "x86_stdcall", "x86_fastcall")
     }
 }

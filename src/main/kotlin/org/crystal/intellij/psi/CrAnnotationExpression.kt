@@ -1,7 +1,6 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
 import org.crystal.intellij.parser.CR_ANNOTATION_EXPRESSION
 import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.stubs.api.CrAnnotationExpressionStub
@@ -31,7 +30,7 @@ class CrAnnotationExpression : CrStubbedElementImpl<CrAnnotationExpressionStub>,
 
             var e: CrExpression = this
             while (true) {
-                if (e.isTransparent) {
+                if (e.isAnnotationTransparent) {
                     val nestedExpression = e.childOfType<CrExpression>()
                     if (nestedExpression != null) {
                         e = nestedExpression
@@ -44,16 +43,11 @@ class CrAnnotationExpression : CrStubbedElementImpl<CrAnnotationExpressionStub>,
                 var nextExpression: CrExpression? = e.nextSiblingOfType()
                 while (nextExpression == null) {
                     val p = e.parent as? CrExpression ?: return null
-                    if (!(p.isTransparent)) return null
+                    if (!p.isAnnotationTransparent) return null
                     e = p
                     nextExpression = e.nextSiblingOfType()
                 }
                 e = nextExpression
             }
         }
-
-    companion object {
-        private val PsiElement.isTransparent: Boolean
-            get() = this is CrBlockExpression || this is CrParenthesizedExpression
-    }
 }

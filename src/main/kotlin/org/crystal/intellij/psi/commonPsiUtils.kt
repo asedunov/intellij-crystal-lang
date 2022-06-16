@@ -52,6 +52,9 @@ fun PsiElement.parentStubsOrPsi(strict: Boolean = true) =
 fun PsiElement.allChildren() =
     JBIterable.generate(firstChild) { it.nextSibling }
 
+fun PsiElement.allChildrenReversed() =
+    JBIterable.generate(lastChild) { it.prevSibling }
+
 fun PsiElement.allDescendants() =
     traverser().traverse()
 
@@ -72,6 +75,19 @@ fun PsiElement.nextStubSiblings(): JBIterable<PsiElement>? {
     }.skip(1)
 }
 
+fun PsiElement.prevStubSiblings(): JBIterable<PsiElement>? {
+    val initialStub = smartStub as? ObjectStubBase<*> ?: return null
+    val parentStub = initialStub.parentStub
+    val file = containingFile as? PsiFileWithStubSupport ?: return null
+    val spine = file.stubbedSpine
+    return JBIterable.generate(this) { psi ->
+        val stub = psi.smartStub as? ObjectStubBase<*> ?: return@generate null
+        val prevId = stub.stubId - 1
+        if (prevId < 0) return@generate null
+        spine.getStubPsi(prevId)?.takeIf { it.smartStub?.parentStub == parentStub }
+    }.skip(1)
+}
+
 inline fun <reified T : PsiElement> PsiElement.childrenOfType(): JBIterable<T> =
     allChildren().filter(T::class.java)
 
@@ -83,6 +99,9 @@ fun <T : PsiElement> PsiElement.stubChildrenOfType(klass: KClass<T>): JBIterable
 
 inline fun <reified T : PsiElement> PsiElement.childOfType(): T? =
     allChildren().firstInstanceOrNull()
+
+inline fun <reified T : PsiElement> PsiElement.lastChildOfType(): T? =
+    allChildrenReversed().firstInstanceOrNull()
 
 inline fun <reified T : PsiElement> PsiElement.stubChildOfType(): T? =
     PsiTreeUtil.getStubChildOfType(this, T::class.java)

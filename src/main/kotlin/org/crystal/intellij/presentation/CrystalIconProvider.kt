@@ -25,6 +25,7 @@ class CrystalIconProvider : IconProvider() {
             is CrMacro -> CrystalIcons.MACRO
             is CrMethod -> if (element.isAbstract) CrystalIcons.ABSTRACT_METHOD else CrystalIcons.METHOD
             is CrFunction -> CrystalIcons.FUNCTION
+            is CrConstant -> CrystalIcons.CONSTANT
             is CrEnumConstant -> CrystalIcons.CONSTANT
             is CrCField -> CrystalIcons.CFIELD
             is CrVariable -> when (element.nameElement?.kind) {

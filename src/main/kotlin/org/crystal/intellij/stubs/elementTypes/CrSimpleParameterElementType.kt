@@ -14,11 +14,11 @@ object CrSimpleParameterElementType : CrStubElementType<CrSimpleParameter, CrSim
     ::CrSimpleParameter
 ) {
     override fun createStub(psi: CrSimpleParameter, parentStub: StubElement<out PsiElement>?): CrSimpleParameterStub {
-        return CrSimpleParameterStubImpl(parentStub, psi.hasDefaultValue)
+        return CrSimpleParameterStubImpl(parentStub, psi.hasInitializer)
     }
 
     override fun serialize(stub: CrSimpleParameterStub, dataStream: StubOutputStream) {
-        dataStream.writeBoolean(stub.hasDefaultValue)
+        dataStream.writeBoolean(stub.hasInitializer)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrSimpleParameterStub {

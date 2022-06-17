@@ -16,6 +16,7 @@ open class CrCompositeElementType(
 val CR_ALIAS_DEFINITION = CrStubElementTypes.ALIAS
 val CR_ANNOTATION_DEFINITION = CrStubElementTypes.ANNOTATION
 val CR_CLASS_DEFINITION = CrStubElementTypes.CLASS
+val CR_CONSTANT_DEFINITION = CrStubElementTypes.CONSTANT
 val CR_C_FIELD_DEFINITION = CrStubElementTypes.C_FIELD
 val CR_C_STRUCT_DEFINITION = CrStubElementTypes.C_STRUCT
 val CR_C_UNION_DEFINITION = CrStubElementTypes.C_UNION

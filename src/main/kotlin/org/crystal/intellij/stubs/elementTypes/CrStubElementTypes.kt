@@ -10,6 +10,7 @@ object CrStubElementTypes {
     @JvmField val ALIAS = CrAliasElementType
     @JvmField val ANNOTATION = CrAnnotationElementType
     @JvmField val CLASS = CrClassElementType
+    @JvmField val CONSTANT = CrConstantElementType
     @JvmField val C_FIELD = CrCFieldElementType
     @JvmField val C_STRUCT = CrCStructElementType
     @JvmField val C_UNION = CrCUnionElementType

@@ -795,12 +795,14 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 m.drop()
                 return false
             }
+            val lhsMarker = latestDoneMarker
             if (forceAssignForList && lastType() == CR_LIST_EXPRESSION && !at(CR_ASSIGN_OPERATORS)) {
                 m.drop()
                 error("Expected: '<assignment>'")
                 return true
             }
-            var foundAssignment = false
+            var foundSimpleAssignment = false
+            var foundComboAssignment = false
             while (!eof()) {
                 when {
                     at(CR_IDS) -> {
@@ -808,7 +810,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         break
                     }
                     at(CR_ASSIGN_OP) -> {
-                        foundAssignment = true
+                        foundSimpleAssignment = true
 
                         lexerState.slashIsRegex = true
 
@@ -848,7 +850,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         if (!rhsParsed) break
                     }
                     at(CR_ASSIGN_COMBO_OPERATORS) -> {
-                        foundAssignment = true
+                        foundComboAssignment = true
 
                         scopes.pushVarNames(lastLHSVarNames)
 
@@ -862,7 +864,21 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     else -> break
                 }
             }
-            if (foundAssignment) m.done(CR_ASSIGNMENT_EXPRESSION) else m.drop()
+            var nodeType: IElementType = CR_ASSIGNMENT_EXPRESSION
+            when {
+                foundSimpleAssignment && lhsMarker?.tokenType == CR_PATH_EXPRESSION -> {
+                    (lhsMarker as Marker).drop()
+                    m.done(CR_CONSTANT_DEFINITION)
+                }
+
+                foundSimpleAssignment || foundComboAssignment -> {
+                    m.done(CR_ASSIGNMENT_EXPRESSION)
+                }
+
+                else -> {
+                    m.drop()
+                }
+            }
             return true
         }
 
@@ -912,18 +928,18 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             clauseType: IElementType,
             expressionType: IElementType
         ) {
-            if (lastType() == CR_ASSIGNMENT_EXPRESSION) {
+            val lastType = lastType()
+            if (lastType == CR_ASSIGNMENT_EXPRESSION || lastType == CR_CONSTANT_DEFINITION) {
                 val m = markBeforeLast()
                 dropLast()
 
                 doParseReduceOrEnsureExpression(clauseType, expressionType)
 
-                m.done(CR_ASSIGNMENT_EXPRESSION)
+                m.done(lastType)
             }
             else {
                 doParseReduceOrEnsureExpression(clauseType, expressionType)
             }
-
         }
 
         private fun PsiBuilder.doParseReduceOrEnsureExpression(
@@ -2661,7 +2677,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 CR_ENUM_DEFINITION,
                 CR_ALIAS_DEFINITION,
                 CR_LIBRARY_DEFINITION,
-                CR_MACRO_DEFINITION -> {
+                CR_MACRO_DEFINITION,
+                CR_CONSTANT_DEFINITION -> {
                     dropLast()
                     m.done(exprType)
                 }
@@ -3537,11 +3554,11 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 at(CR_ENUM) -> parseEnumDef()
 
                 at(CR_CONSTANT) -> {
-                    composite(CR_PATH_EXPRESSION) { parsePath() }
+                    parsePath()
                     skipSpaces()
 
                     if (at(CR_ASSIGN_OP)) {
-                        compositeSuffix(CR_ASSIGNMENT_EXPRESSION) {
+                        compositeSuffix(CR_CONSTANT_DEFINITION) {
                             nextTokenSkipSpacesAndNewlines()
 
                             parseRootExpression(OpTable.getOp(CR_QUESTION)!!.precedence)

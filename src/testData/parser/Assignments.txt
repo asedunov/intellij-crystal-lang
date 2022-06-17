@@ -522,10 +522,9 @@ FILE
     CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('2')
 
-  CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
-    CrPathExpression(CR_PATH_EXPRESSION)
-      CrPathNameElement(CR_PATH_NAME_ELEMENT)
-        PsiElement(<constant>)('A')
+  CrConstant(CR_CONSTANT_DEFINITION)
+    CrPathNameElement(CR_PATH_NAME_ELEMENT)
+      PsiElement(<constant>)('A')
     PsiWhiteSpace(' ')
     PsiElement(=)('=')
     PsiWhiteSpace(' ')

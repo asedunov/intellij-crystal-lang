@@ -55,6 +55,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitConditionalExpression(o: CrConditionalExpression) = visitExpression(o)
 
+    open fun visitConstant(o: CrConstant) = visitDefinition(o)
+
     open fun visitCrElement(o: CrElement) = visitElement(o)
 
     open fun visitCrFile(o: CrFile) = visitFile(o)

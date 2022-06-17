@@ -12,6 +12,7 @@ val CrNamedElement.presentableKind: String
         is CrCStruct, is CrStruct -> "struct"
         is CrCUnion -> "union"
         is CrClass -> "class"
+        is CrConstant -> "constant"
         is CrEnum -> "enum"
         is CrEnumConstant -> "enum constant"
         is CrFunction -> "function"

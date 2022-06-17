@@ -5,7 +5,7 @@ import org.crystal.intellij.parser.CR_SIMPLE_NAME_ELEMENT
 import org.crystal.intellij.parser.CR_SIMPLE_PARAMETER_DEFINITION
 import org.crystal.intellij.stubs.api.CrDefinitionStub
 
-class CrSimpleParameter : CrDefinitionImpl<CrDefinitionStub<*>>, CrParameter, CrDefinitionWithDefault {
+class CrSimpleParameter : CrDefinitionImpl<CrDefinitionStub<*>>, CrParameter, CrDefinitionWithInitializer {
     constructor(stub: CrDefinitionStub<*>) : super(stub, CR_SIMPLE_PARAMETER_DEFINITION)
 
     constructor(node: ASTNode) : super(node)

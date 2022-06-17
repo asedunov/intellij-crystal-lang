@@ -7,7 +7,7 @@ import org.crystal.intellij.stubs.elementTypes.CrVariableElementType
 
 class CrVariableStubImpl(
     parent: StubElement<*>?,
-    override val hasDefaultValue: Boolean
+    override val hasInitializer: Boolean
 ) : CrStubElementImpl<CrVariable>(parent, CrVariableElementType), CrVariableStub {
-    override fun toString() = "CrVariableStubImpl(hasDefaultValue=$hasDefaultValue)"
+    override fun toString() = "CrVariableStubImpl(hasDefaultValue=$hasInitializer)"
 }

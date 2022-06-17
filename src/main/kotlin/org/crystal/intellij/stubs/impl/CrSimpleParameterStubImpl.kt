@@ -7,7 +7,7 @@ import org.crystal.intellij.stubs.elementTypes.CrSimpleParameterElementType
 
 class CrSimpleParameterStubImpl(
     parent: StubElement<*>?,
-    override val hasDefaultValue: Boolean
+    override val hasInitializer: Boolean
 ) : CrStubElementImpl<CrSimpleParameter>(parent, CrSimpleParameterElementType), CrSimpleParameterStub {
-    override fun toString() = "CrSimpleParameterStubImpl(hasDefaultValue=$hasDefaultValue)"
+    override fun toString() = "CrSimpleParameterStubImpl(hasDefaultValue=$hasInitializer)"
 }

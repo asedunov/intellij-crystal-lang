@@ -16,11 +16,11 @@ object CrVariableElementType : CrStubElementType<CrVariable, CrVariableStub>(
     ::CrVariable
 ) {
     override fun createStub(psi: CrVariable, parentStub: StubElement<out PsiElement>?): CrVariableStub {
-        return CrVariableStubImpl(parentStub, psi.hasDefaultValue)
+        return CrVariableStubImpl(parentStub, psi.hasInitializer)
     }
 
     override fun serialize(stub: CrVariableStub, dataStream: StubOutputStream) {
-        dataStream.writeBoolean(stub.hasDefaultValue)
+        dataStream.writeBoolean(stub.hasInitializer)
     }
 
     override fun deserialize(dataStream: StubInputStream, parentStub: StubElement<*>?): CrVariableStub {

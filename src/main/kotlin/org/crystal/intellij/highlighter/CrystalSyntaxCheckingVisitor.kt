@@ -503,11 +503,9 @@ class CrystalSyntaxCheckingVisitor(
                 errorIfNonPrivate(o, "macros")
                 return
             }
-            is CrAssignmentExpression -> {
-                if (holder.lhs is CrPathExpression) {
-                    errorIfNonPrivate(o, "constants")
-                    return
-                }
+            is CrConstant -> {
+                errorIfNonPrivate(o, "constants")
+                return
             }
         }
         if (holder != null || o.skipWhitespacesAndCommentsForward() is CrExpression) {
@@ -577,7 +575,8 @@ class CrystalSyntaxCheckingVisitor(
             is CrFunction,
             is CrAlias,
             is CrAnnotation,
-            is CrMacro -> {
+            is CrMacro,
+            is CrConstant -> {
                 errorIf(o.defaultAnchor, "declare ${o.presentableKind}", inFun or inExpr)
             }
             else -> {}
@@ -666,7 +665,7 @@ class CrystalSyntaxCheckingVisitor(
                         }
                     }
                     state = state.coerceAtLeast(ParamListState.NAMED)
-                    parameter.defaultValue?.let { error(it, "Splat parameter can't have a default value") }
+                    parameter.initializer?.let { error(it, "Splat parameter can't have a default value") }
                 }
 
                 CrParameterKind.DOUBLE_SPLAT -> {
@@ -680,7 +679,7 @@ class CrystalSyntaxCheckingVisitor(
                         }
                     }
                     state = state.coerceAtLeast(ParamListState.BLOCK)
-                    parameter.defaultValue?.let { error(it, "Double splat parameter can't have a default value") }
+                    parameter.initializer?.let { error(it, "Double splat parameter can't have a default value") }
                 }
 
                 CrParameterKind.BLOCK -> {
@@ -702,7 +701,7 @@ class CrystalSyntaxCheckingVisitor(
                 }
             }
 
-            if (parameter.defaultValue != null) {
+            if (parameter.initializer != null) {
                 foundDefaultValue = true
             }
             else if (foundDefaultValue && state == ParamListState.POSITIONAL && kind == CrParameterKind.ORDINARY) {
@@ -789,7 +788,6 @@ class CrystalSyntaxCheckingVisitor(
             is CrPathExpression -> {
                 if (isCombo) error(e, "Can't reassign to constant")
                 if (e.parent is CrListExpression) error(e, "Multiple assignment is not allowed for constants")
-                errorIf(e, "declare constant", inFun or inExpr)
             }
 
             is CrIndexedExpression -> return
@@ -835,6 +833,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrEnum,
             is CrTypeDef,
             is CrAnnotation,
+            is CrConstant,
             is CrIncludeExpression,
             is CrExtendExpression,
             is CrRequireExpression,
@@ -848,7 +847,6 @@ class CrystalSyntaxCheckingVisitor(
             is CrMacroLiteral,
             is CrCallExpression,
             is CrTopLevelHolder -> false
-            is CrAssignmentExpression -> lhs !is CrPathExpression
             else -> true
         }
 

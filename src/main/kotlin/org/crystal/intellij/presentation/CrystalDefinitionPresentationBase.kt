@@ -63,7 +63,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
 
     private fun StringBuilder.appendRHS(definition: CrDefinition) {
         when (definition) {
-            is CrDefinitionWithDefault -> if (definition.hasDefaultValue) appendSpaced("= ...")
+            is CrDefinitionWithInitializer -> if (definition.hasInitializer) appendSpaced("= ...")
             is CrAliasLikeDefinition -> appendSpaced("= ").appendType(definition.rhsType)
             else -> {}
         }

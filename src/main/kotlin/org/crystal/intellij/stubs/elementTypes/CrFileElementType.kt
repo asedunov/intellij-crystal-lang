@@ -35,7 +35,7 @@ class CrFileElementType : IStubFileElementType<CrFileStub>(NAME, CrystalLanguage
 
     override fun getBuilder() = CrStubBuilder()
 
-    override fun getStubVersion() = 11
+    override fun getStubVersion() = 12
 
     override fun getExternalId() = "crystal.$NAME"
 

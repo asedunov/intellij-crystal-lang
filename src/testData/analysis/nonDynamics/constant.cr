@@ -20,6 +20,6 @@ while true
   <error descr="Can't declare constant dynamically">X</error> = 1
 end
 
-class A
+class C
   X = 1
 end

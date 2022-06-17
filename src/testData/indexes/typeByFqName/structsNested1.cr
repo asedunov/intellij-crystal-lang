@@ -1,4 +1,4 @@
-# INDEX: CrystalTypeFqNameIndex
+# INDEX: CrystalConstantFqNameIndex
 # KEY: A::B
 
 struct A

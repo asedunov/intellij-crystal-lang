@@ -1,7 +1,7 @@
 package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrTypeDefinition
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.psi.CrVisibility
 import org.crystal.intellij.resolve.StableFqName
 import org.crystal.intellij.resolve.layout
@@ -9,8 +9,8 @@ import org.crystal.intellij.resolve.layout
 @Suppress("UnstableApiUsage")
 sealed class CrTypeSym(
     name: String,
-    sources: List<CrTypeSource>,
-) : CrOrdinalSym<CrTypeSource>(name, sources) {
+    sources: List<CrConstantSource>,
+) : CrOrdinalSym<CrConstantSource>(name, sources) {
     abstract override val namespace: CrModuleLikeSym
 
     val visibility: CrVisibility? by lazy {

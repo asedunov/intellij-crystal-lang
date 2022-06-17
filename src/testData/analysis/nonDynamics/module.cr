@@ -28,7 +28,7 @@ while true
   end
 end
 
-class A
+class C
   module X
   end
 end

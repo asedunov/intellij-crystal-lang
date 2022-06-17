@@ -23,7 +23,7 @@ class CrModuleLikeScope(
 
     private val typeMapSlice = newResolveSlice<Pair<String, Boolean>, CrSym<*>>("TYPE_MAP: ${symbol.fqName}")
 
-    private fun createTypeSymbol(name: String, sources: List<CrTypeSource>): CrTypeSym? {
+    private fun createTypeSymbol(name: String, sources: List<CrConstantSource>): CrSym<*>? {
         val symFactory = when (sources.first()) {
             is CrPathNameElement -> ::CrModuleSym
             is CrAlias -> ::CrTypeAliasSym
@@ -36,16 +36,17 @@ class CrModuleLikeScope(
             is CrStruct -> ::CrStructSym
             is CrEnum -> ::CrEnumSym
             is CrLibrary -> ::CrLibrarySym
+            is CrConstant -> return CrConstantSym(name, sources, symbol)
             else -> return null
         }
         return symFactory(name, symbol, sources, symbol.program)
     }
 
     private tailrec fun ParentList.findTypeInParents(name: String): CrSym<*>? {
-        return symbol.memberScope.getType(name, false) ?: prev?.findTypeInParents(name)
+        return symbol.memberScope.getConstant(name, false) ?: prev?.findTypeInParents(name)
     }
 
-    override fun getType(name: String, isRoot: Boolean): CrSym<*>? {
+    override fun getConstant(name: String, isRoot: Boolean): CrSym<*>? {
         return project.resolveCache.getOrCompute(typeMapSlice, name to isRoot) {
             symbol.getTypeParameter(name)?.let { return@getOrCompute it }
 
@@ -62,7 +63,7 @@ class CrModuleLikeScope(
                 return@getOrCompute it
             }
             if (isRoot && symbol !is CrProgramSym) {
-                return@getOrCompute symbol.namespace.memberScope.getType(name, true)
+                return@getOrCompute symbol.namespace.memberScope.getConstant(name, true)
             }
             null
         }

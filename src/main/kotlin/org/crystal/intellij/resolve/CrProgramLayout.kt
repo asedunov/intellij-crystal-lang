@@ -8,14 +8,14 @@ import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.symbols.*
-import org.crystal.intellij.stubs.indexes.CrystalTypeFqNameIndex
+import org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
 
 class CrProgramLayout(val program: CrProgramSym) {
     companion object {
         private val FILE_FRAGMENTS = newResolveSlice<Project, Map<CrTopLevelHolder, CrSymbolOrdinal>>("FILE_FRAGMENTS")
-        private val TYPE_SOURCES = newResolveSlice<StableFqName, List<CrTypeSource>>("TYPE_SOURCES")
+        private val TYPE_SOURCES = newResolveSlice<StableFqName, List<CrConstantSource>>("TYPE_SOURCES")
     }
 
     private val project: Project
@@ -143,9 +143,9 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     fun getTopLevelOrdinal(topLevelHolder: CrTopLevelHolder) = fragments[topLevelHolder]
 
-    fun getTypeSources(fqName: StableFqName): List<CrTypeSource> {
+    fun getTypeSources(fqName: StableFqName): List<CrConstantSource> {
         return project.resolveCache.getOrCompute(TYPE_SOURCES, fqName) {
-            val sources = CrystalTypeFqNameIndex.get(fqName.fullName, project, GlobalSearchScope.allScope(project))
+            val sources = CrystalConstantFqNameIndex.get(fqName.fullName, project, GlobalSearchScope.allScope(project))
             if (sources.isEmpty()) return@getOrCompute emptyList()
             if (sources.size == 1) return@getOrCompute sources.toList()
             val sourceMap = sources.associateWith { it.ordinal() }

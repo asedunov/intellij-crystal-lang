@@ -2,7 +2,7 @@ package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrSuperTypeAware
 import org.crystal.intellij.psi.CrTypeDefinition
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
@@ -13,7 +13,7 @@ import org.crystal.intellij.resolve.superlessClasses
 
 sealed class CrClassLikeSym(
     name: String,
-    sources: List<CrTypeSource>
+    sources: List<CrConstantSource>
 ) : CrModuleLikeSym(name, sources) {
     companion object {
         private val SUPER_CLASS = newResolveSlice<CrClassLikeSym, CrClassLikeSym>("SUPER_CLASS")

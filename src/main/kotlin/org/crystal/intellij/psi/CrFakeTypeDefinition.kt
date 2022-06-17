@@ -8,7 +8,7 @@ import org.crystal.intellij.resolve.symbols.CrTypeSym
 class CrFakeTypeDefinition(
     private val parent: PsiElement,
     private val sym: CrTypeSym
-) : FakePsiElement(), CrTypeSource {
+) : FakePsiElement(), CrConstantSource {
     override fun getParent() = parent
 
     override fun getName() = sym.name

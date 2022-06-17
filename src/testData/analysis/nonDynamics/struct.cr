@@ -28,7 +28,7 @@ while true
   end
 end
 
-class A
+class C
   struct X
   end
 end

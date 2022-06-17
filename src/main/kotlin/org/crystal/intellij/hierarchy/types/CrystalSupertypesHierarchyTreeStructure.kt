@@ -5,12 +5,12 @@ import com.intellij.ide.hierarchy.HierarchyTreeStructure
 import com.intellij.util.ArrayUtilRt
 import com.intellij.util.SmartList
 import org.crystal.intellij.psi.CrFakeTypeDefinition
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.scopes.asSequence
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 
 class CrystalSupertypesHierarchyTreeStructure(
-    element: CrTypeSource
+    element: CrConstantSource
 ) : HierarchyTreeStructure(element.project, CrystalTypeHierarchyNodeDescriptor(element, null, true)) {
     override fun buildChildren(descriptor: HierarchyNodeDescriptor): Array<Any> {
         return ((descriptor as CrystalTypeHierarchyNodeDescriptor).symbol as? CrModuleLikeSym)

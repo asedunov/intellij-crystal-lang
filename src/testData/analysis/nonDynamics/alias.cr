@@ -20,6 +20,6 @@ while true
   alias <error descr="Can't declare alias dynamically">X8</error> = Int32
 end
 
-class A
+class C
   alias X9 = Int32
 end

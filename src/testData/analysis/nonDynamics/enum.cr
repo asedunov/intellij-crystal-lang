@@ -36,7 +36,7 @@ while true
   end
 end
 
-class A
+class C
   enum X9
     E
   end

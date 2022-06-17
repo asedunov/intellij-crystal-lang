@@ -28,7 +28,7 @@ while true
   end
 end
 
-class A
+class C
   macro foo
   end
 end

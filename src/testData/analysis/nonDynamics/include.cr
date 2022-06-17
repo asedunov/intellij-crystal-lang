@@ -20,6 +20,6 @@ while true
   <error descr="Can't use 'include' dynamically">include X</error>
 end
 
-class A
+class C
   include X
 end

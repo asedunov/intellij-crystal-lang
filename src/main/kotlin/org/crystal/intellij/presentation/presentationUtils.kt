@@ -82,5 +82,6 @@ val CrSym<*>.presentableKind: String
         is CrTypeAliasSym -> "alias"
         is CrTypeDefSym -> "type declaration"
         is CrTypeParameterSym -> "type parameter"
+        is CrConstantSym -> "constant"
         is CrMethodSym -> "method"
     }

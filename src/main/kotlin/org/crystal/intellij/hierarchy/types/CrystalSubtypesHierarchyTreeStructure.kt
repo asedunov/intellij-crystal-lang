@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.util.ArrayUtilRt
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.psi.CrFakeTypeDefinition
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.search.CrystalInheritorsSearch
@@ -17,7 +17,7 @@ open class CrystalSubtypesHierarchyTreeStructure protected constructor(
     private val currentScopeType: String
 ) : HierarchyTreeStructure(project, parentDescriptor) {
     constructor(
-        element: CrTypeSource,
+        element: CrConstantSource,
         currentScopeType: String
     ): this(
         element.project,

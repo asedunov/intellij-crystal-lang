@@ -20,6 +20,6 @@ while true
   <error descr="Can't use 'require' dynamically">require "my.cr"</error>
 end
 
-class A
+class C
   <error descr="Can't use 'require' in type body">require "my.cr"</error>
 end

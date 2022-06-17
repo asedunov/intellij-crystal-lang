@@ -4,7 +4,7 @@ import com.intellij.util.SmartList
 import org.crystal.intellij.psi.CrModuleLikeDefinition
 import org.crystal.intellij.psi.CrTypeParameter
 import org.crystal.intellij.psi.CrTypeParameterHolder
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
@@ -12,7 +12,7 @@ import org.crystal.intellij.resolve.scopes.CrScope
 
 sealed class CrModuleLikeSym(
     name: String,
-    sources: List<CrTypeSource>
+    sources: List<CrConstantSource>
 ) : CrTypeSym(name, sources) {
     companion object {
         private val TYPE_PARAMETERS = newResolveSlice<CrModuleLikeSym, Map<String, CrTypeParameterSym>>("TYPE_PARAMETERS")

@@ -28,3 +28,5 @@ lib <error descr="'A' is already defined as class and can't be reopened as libra
 end
 
 alias <error descr="'A' is already defined">A</error> = Int32
+
+A = 1

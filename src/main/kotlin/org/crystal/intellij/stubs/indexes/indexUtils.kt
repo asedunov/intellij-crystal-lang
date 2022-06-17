@@ -12,7 +12,7 @@ fun indexType(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
         sink.occurrence(CrystalTypeShortNameIndex.key, name)
     }
     stub.psi.fqName?.let { fqName ->
-        sink.occurrence(CrystalTypeFqNameIndex.key, fqName.fullName)
+        sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
     }
 }
 
@@ -41,7 +41,7 @@ fun indexPath(stub: CrPathStub, sink: IndexSink) {
     if (stub.parentStub is CrTypeDefinitionStub<*>) return
     if (stub.parents().skipWhile { it is CrPathStub }.first() !is CrTypeDefinitionStub<*>) return
     val fqName = stub.fqName ?: return
-    sink.occurrence(CrystalTypeFqNameIndex.key, fqName.fullName)
+    sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
 }
 
 fun indexFunction(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
@@ -55,6 +55,10 @@ fun indexVariable(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
 }
 
 fun indexConstant(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
-    val name = stub.psi.name ?: return
-    sink.occurrence(CrystalConstantShortNameIndex.key, name)
+    stub.psi.name?.let { name ->
+        sink.occurrence(CrystalStrictConstantShortNameIndex.key, name)
+    }
+    stub.psi.fqName?.let { fqName ->
+        sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
+    }
 }

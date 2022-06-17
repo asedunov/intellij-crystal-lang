@@ -29,3 +29,5 @@ lib <error descr="'A' is already defined as annotation and can't be reopened as 
 end
 
 alias <error descr="'A' is already defined">A</error> = Int32
+
+A = 1

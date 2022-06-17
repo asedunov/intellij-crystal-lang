@@ -1,9 +1,9 @@
 package org.crystal.intellij.hierarchy.types
 
 import com.intellij.ide.util.treeView.NodeDescriptor
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 
-fun CrTypeSource.presentableTextForHierarchy() = buildString {
+fun CrConstantSource.presentableTextForHierarchy() = buildString {
     append(name)
     fqName?.parent?.let { append(" in ").append(it.fullName) }
 }

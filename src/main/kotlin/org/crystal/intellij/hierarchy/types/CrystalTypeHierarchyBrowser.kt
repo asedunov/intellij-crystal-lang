@@ -13,12 +13,12 @@ import com.intellij.psi.PsiElement
 import org.crystal.intellij.psi.CrModule
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.psi.CrTypeDefinition
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import java.text.MessageFormat
 import javax.swing.JPanel
 import javax.swing.JTree
 
-class CrystalTypeHierarchyBrowser(element: CrTypeSource) : TypeHierarchyBrowserBase(element.project, element) {
+class CrystalTypeHierarchyBrowser(element: CrConstantSource) : TypeHierarchyBrowserBase(element.project, element) {
     override fun isInterface(psiElement: PsiElement): Boolean {
         return psiElement is CrPathNameElement || psiElement is CrModule
     }
@@ -35,7 +35,7 @@ class CrystalTypeHierarchyBrowser(element: CrTypeSource) : TypeHierarchyBrowserB
     }
 
     override fun getContentDisplayName(typeName: String, element: PsiElement): String? {
-        val source = element as? CrTypeSource ?: return null
+        val source = element as? CrConstantSource ?: return null
         return MessageFormat.format(typeName, source.presentableTextForHierarchy())
     }
 
@@ -45,7 +45,7 @@ class CrystalTypeHierarchyBrowser(element: CrTypeSource) : TypeHierarchyBrowserB
 
     override fun createLegendPanel(): JPanel? = null
 
-    override fun isApplicableElement(element: PsiElement) = element is CrTypeSource
+    override fun isApplicableElement(element: PsiElement) = element is CrConstantSource
 
     override fun getComparator(): Comparator<NodeDescriptor<*>>? {
         val state = HierarchyBrowserManager.getInstance(myProject).state
@@ -53,7 +53,7 @@ class CrystalTypeHierarchyBrowser(element: CrTypeSource) : TypeHierarchyBrowserB
     }
 
     override fun createHierarchyTreeStructure(type: String, psiElement: PsiElement): HierarchyTreeStructure? {
-        val element = psiElement as CrTypeSource
+        val element = psiElement as CrConstantSource
         return when (type) {
             getSupertypesHierarchyType() -> CrystalSupertypesHierarchyTreeStructure(element)
             getSubtypesHierarchyType() -> CrystalSubtypesHierarchyTreeStructure(element, currentScopeType)
@@ -65,6 +65,6 @@ class CrystalTypeHierarchyBrowser(element: CrTypeSource) : TypeHierarchyBrowserB
     override fun canBeDeleted(psiElement: PsiElement?) = psiElement is CrTypeDefinition
 
     override fun getQualifiedName(psiElement: PsiElement?): String {
-        return (psiElement as? CrTypeSource)?.fqName?.fullName ?: ""
+        return (psiElement as? CrConstantSource)?.fqName?.fullName ?: ""
     }
 }

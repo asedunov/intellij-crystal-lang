@@ -26,3 +26,5 @@ end
 lib <error descr="'A' is already defined as alias and can't be reopened as library">A</error>
 
 end
+
+A = 1

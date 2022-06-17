@@ -12,4 +12,6 @@ lib L
   union <error descr="'A' is already defined">A</error>
 
   end
+
+  A = 1
 end

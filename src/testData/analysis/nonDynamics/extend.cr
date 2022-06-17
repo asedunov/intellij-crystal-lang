@@ -20,6 +20,6 @@ while true
   <error descr="Can't use 'extend' dynamically">extend X</error>
 end
 
-class A
+class C
   extend X
 end

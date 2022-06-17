@@ -6,17 +6,17 @@ import com.intellij.openapi.editor.markup.TextAttributes
 import com.intellij.openapi.roots.ui.util.CompositeAppearance
 import com.intellij.psi.PsiElement
 import org.crystal.intellij.presentation.getIcon
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.symbols.CrTypeSym
 import java.awt.Font
 
 class CrystalTypeHierarchyNodeDescriptor(
-    element: CrTypeSource,
+    element: CrConstantSource,
     parentDescriptor: NodeDescriptor<*>?,
     isBase: Boolean
 ) : HierarchyNodeDescriptor(element.project, parentDescriptor, element, isBase) {
-    val source: CrTypeSource?
-        get() = psiElement as? CrTypeSource
+    val source: CrConstantSource?
+        get() = psiElement as? CrConstantSource
 
     val symbol: CrTypeSym?
         get() = source?.resolveSymbol() as? CrTypeSym

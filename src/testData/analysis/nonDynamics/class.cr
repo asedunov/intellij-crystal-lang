@@ -28,7 +28,7 @@ while true
   end
 end
 
-class A
+class C
   class X
   end
 end

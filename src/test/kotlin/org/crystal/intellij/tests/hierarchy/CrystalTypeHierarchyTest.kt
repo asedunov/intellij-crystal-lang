@@ -11,7 +11,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.crystal.intellij.hierarchy.types.CrystalSubtypesHierarchyTreeStructure
 import org.crystal.intellij.hierarchy.types.CrystalSupertypesHierarchyTreeStructure
 import org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyTreeStructure
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.crystal.intellij.tests.util.setupMainFile
@@ -65,7 +65,7 @@ class CrystalTypeHierarchyTest(private val testFile: File) : BasePlatformTestCas
         val file = myFixture.file
         val expectedFile = File(testFile.parent, testFile.nameWithoutExtension + ".xml")
         val offset = myFixture.editor.caretModel.offset
-        val typeSource = file.findElementAt(offset)!!.parentOfType<CrTypeSource>()!!
+        val typeSource = file.findElementAt(offset)!!.parentOfType<CrConstantSource>()!!
         val treeStructure = when (val hierarchyKind = file.findDirective("# KIND:")!!) {
             "TYPES" -> CrystalTypeHierarchyTreeStructure(typeSource, HierarchyBrowserBaseEx.SCOPE_PROJECT)
             "SUBTYPES" -> CrystalSubtypesHierarchyTreeStructure(typeSource, HierarchyBrowserBaseEx.SCOPE_PROJECT)

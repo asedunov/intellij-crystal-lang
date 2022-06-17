@@ -12,7 +12,7 @@ inline fun <reified T : CrTypeSym> CrScope.getTypeAs(fqName: StableFqName): T? {
     var scope = this
     var curFqName = fqName
     while (true) {
-        val type = scope.getType(curFqName.name)
+        val type = scope.getConstant(curFqName.name)
         curFqName = curFqName.parent ?: return type as? T
         scope = (type as? CrModuleLikeSym)?.memberScope ?: return null
     }

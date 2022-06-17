@@ -16,7 +16,7 @@ import org.crystal.intellij.resolve.symbols.CrSymbolOrdinal
 import org.crystal.intellij.stubs.api.CrPathStub
 
 @Suppress("UnstableApiUsage")
-class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTypeSource {
+class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrConstantSource {
     companion object {
         private val PATH_TARGET = newResolveSlice<CrPathNameElement, CrSym<*>>("PATH_TARGET")
     }
@@ -85,7 +85,7 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrTyp
     override fun resolveSymbol(): CrSym<*>? {
         if (isGlobal) return project.resolveFacade.program
         return project.resolveCache.getOrCompute(PATH_TARGET, this) {
-            val type = pathResolveScope?.getType(name, qualifier == null) as? CrOrdinalSym<*> ?: return@getOrCompute null
+            val type = pathResolveScope?.getConstant(name, qualifier == null) as? CrOrdinalSym<*> ?: return@getOrCompute null
             if (parentStubOrPsiOfType<CrSupertypeClause>() != null
                 || parentStubOrPsiOfType<CrIncludeLikeExpression>() != null) {
                 val targetOrdinal = type.ordinal ?: return@getOrCompute null

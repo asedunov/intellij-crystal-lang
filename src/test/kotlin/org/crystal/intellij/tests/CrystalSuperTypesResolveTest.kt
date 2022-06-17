@@ -3,7 +3,7 @@ package org.crystal.intellij.tests
 import com.intellij.psi.util.parentOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.CrTypeSource
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.scopes.asSequence
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.tests.util.findDirective
@@ -41,7 +41,7 @@ class CrystalSuperTypesResolveTest(private val testFile: File) : BasePlatformTes
 
         myFixture.editor.caretModel.runForEachCaret { caret ->
             val offset = caret.offset
-            val typeSource = file.findElementAt(offset)!!.parentOfType<CrTypeSource>()!!
+            val typeSource = file.findElementAt(offset)!!.parentOfType<CrConstantSource>()!!
             val symbol = typeSource.resolveSymbol() as CrModuleLikeSym
             val superClass = symbol.superClass
             val parents = symbol.parents

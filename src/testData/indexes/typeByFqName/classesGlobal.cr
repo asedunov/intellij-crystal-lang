@@ -1,4 +1,4 @@
-# INDEX: CrystalTypeFqNameIndex
+# INDEX: CrystalConstantFqNameIndex
 # KEY: A
 
 <caret>class A

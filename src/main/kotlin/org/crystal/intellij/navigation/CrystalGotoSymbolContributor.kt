@@ -5,6 +5,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.Processor
 import com.intellij.util.indexing.FindSymbolParameters
 import com.intellij.util.indexing.IdFilter
+import org.crystal.intellij.stubs.indexes.CrystalConstantShortNameIndex
 import org.crystal.intellij.stubs.indexes.CrystalFunctionShortNameIndex
 import org.crystal.intellij.stubs.indexes.CrystalTypeShortNameIndex
 import org.crystal.intellij.stubs.indexes.CrystalVariableShortNameIndex
@@ -14,6 +15,7 @@ class CrystalGotoSymbolContributor : CrystalChooseByNameContributor() {
         CrystalTypeShortNameIndex.key.processKeys(processor, scope, filter)
         CrystalFunctionShortNameIndex.key.processKeys(processor, scope, filter)
         CrystalVariableShortNameIndex.key.processKeys(processor, scope, filter)
+        CrystalConstantShortNameIndex.key.processKeys(processor, scope, filter)
     }
 
     override fun processElementsWithName(
@@ -24,5 +26,6 @@ class CrystalGotoSymbolContributor : CrystalChooseByNameContributor() {
         CrystalTypeShortNameIndex.key.processElements(name, processor, parameters)
         CrystalFunctionShortNameIndex.key.processElements(name, processor, parameters)
         CrystalVariableShortNameIndex.key.processElements(name, processor, parameters)
+        CrystalConstantShortNameIndex.key.processElements(name, processor, parameters)
     }
 }

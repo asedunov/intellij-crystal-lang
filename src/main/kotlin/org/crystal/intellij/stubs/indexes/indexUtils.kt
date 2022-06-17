@@ -53,3 +53,8 @@ fun indexVariable(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
     val name = stub.psi.name ?: return
     sink.occurrence(CrystalVariableShortNameIndex.key, name)
 }
+
+fun indexConstant(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
+    val name = stub.psi.name ?: return
+    sink.occurrence(CrystalConstantShortNameIndex.key, name)
+}

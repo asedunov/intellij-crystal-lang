@@ -5,7 +5,6 @@ import com.intellij.codeHighlighting.TextEditorHighlightingPass
 import com.intellij.codeHighlighting.TextEditorHighlightingPassRegistrar
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.openapi.editor.Document
-import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import org.crystal.intellij.psi.CrFile
 import org.crystal.intellij.psi.CrRecursiveVisitor
@@ -13,12 +12,12 @@ import org.crystal.intellij.psi.CrRecursiveVisitor
 class CrystalResolveCheckingPass(
     file: CrFile,
     document: Document
-) : AbstractCrystalHighlightingPass(file, document), DumbAware {
+) : AbstractCrystalHighlightingPass(file, document) {
     override fun createVisitor(file: CrFile, highlightInfos: MutableList<HighlightInfo>): CrRecursiveVisitor {
         return CrystalResolveCheckingVisitor(highlightInfos)
     }
 
-    class Factory : FactoryBase(), DumbAware {
+    class Factory : FactoryBase() {
         override fun registerHighlightingPassFactory(registrar: TextEditorHighlightingPassRegistrar, project: Project) {
             registrar.registerTextEditorHighlightingPass(
                 this,

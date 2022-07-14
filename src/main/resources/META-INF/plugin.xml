@@ -95,6 +95,15 @@
         <typeHierarchyProvider language="Crystal"
                                implementationClass="org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyProvider"/>
 
+        <lang.codeReferenceSearcher implementation="org.crystal.intellij.search.CrystalCodeReferenceSearcher"/>
+
+        <searcher forClass="com.intellij.find.usages.api.UsageSearchParameters"
+                  implementationClass="org.crystal.intellij.findUsages.CrystalUsageSearcher"/>
+        <lang.symbolSearchTarget forClass="org.crystal.intellij.resolve.symbols.CrSym"
+                                 implementationClass="org.crystal.intellij.findUsages.CrystalSymbolSearchTargetFactory"/>
+        <fileStructureGroupRuleProvider implementation="org.crystal.intellij.findUsages.CrystalDeclarationGroupingRuleProvider$ByType"/>
+        <fileStructureGroupRuleProvider implementation="org.crystal.intellij.findUsages.CrystalDeclarationGroupingRuleProvider$ByFunction"/>
+
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"
                          suppressId="CrystalResolve"

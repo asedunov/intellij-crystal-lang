@@ -1,6 +1,7 @@
 package org.crystal.intellij.presentation
 
 import com.intellij.openapi.util.io.FileUtil
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.ui.RowIcon
 import com.intellij.util.PathUtil
@@ -84,4 +85,10 @@ val CrSym<*>.presentableKind: String
         is CrTypeParameterSym -> "type parameter"
         is CrConstantSym -> "constant"
         is CrMethodSym -> "method"
+    }
+
+val CrSym<*>.shortDescription: String
+    get() {
+        val kind = StringUtil.toTitleCase(presentableKind)
+        return "$kind \"$name\""
     }

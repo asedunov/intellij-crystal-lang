@@ -18,14 +18,12 @@ import org.crystal.intellij.resolve.scopes.CrScope
 sealed class CrSym<Source: CrElement>(
     val name: String,
     val sources: List<Source>
-) : Symbol, Pointer<Symbol> {
+) : Symbol {
     companion object {
         private val ANNOTATIONS = newResolveSlice<CrSym<*>, Map<StableFqName, List<CrAnnotationExpression>>>("ANNOTATIONS")
     }
 
-    override fun createPointer() = this
-
-    override fun dereference() = this
+    override fun createPointer() = Pointer.hardPointer(this)
 
     val isValid: Boolean
         get() = sources.all { it.isValid }

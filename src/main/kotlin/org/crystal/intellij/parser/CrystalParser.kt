@@ -3057,65 +3057,72 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseParam(inMacroDef: Boolean) = composite(CR_SIMPLE_PARAMETER_DEFINITION) {
-            if (at(CR_AND_OP)) {
-                nextTokenSkipSpacesAndNewlines()
-                parseBlockParam(inMacroDef)
-                skipSpacesAndNewlines()
-                return@composite
-            }
-
-            val isSplat = at(CR_MUL_OP)
-            val isDoubleSplat = at(CR_EXP_OP)
-            val isAnySplat = isSplat || isDoubleSplat
-
-
-            if (isAnySplat) nextTokenSkipSpaces()
-
-            foundSpaceInLastArg = false
-            var paramName = ""
-            if (!(isAnySplat && (at(CR_COMMA) || at(CR_RPAREN)))) {
-                parseParamName(!isAnySplat, inMacroDef)
-                lastTokenTextInProductionIf(CR_IDENTIFIER)?.let { paramName = it }
-            }
-
-            if (!inMacroDef && at(CR_COLON)) {
-                if (!foundSpaceInLastArg) error("Space required before colon in type restriction")
-                advanceLexer()
-                if (!at(CR_WHITESPACES)) error("Space required after colon in type restriction")
-                skipSpacesAndNewlines()
-
-                when {
-                    isSplat && at(CR_MUL_OP) -> composite(CR_SPLAT_TYPE) {
-                        nextToken()
-                        parseBareProcType()
-                    }
-
-                    isDoubleSplat && at(CR_EXP_OP) -> composite(CR_DOUBLE_SPLAT_TYPE) {
-                        nextToken()
-                        parseBareProcType()
-                    }
-
-                    else -> parseBareProcType()
+        private fun PsiBuilder.parseParam(inMacroDef: Boolean): Boolean {
+            if (ll >= LanguageLevel.CRYSTAL_1_5) {
+                while (at(CR_ANNO_LBRACKET)) {
+                    parseAnnotation()
+                    skipSpacesAndNewlines()
                 }
             }
-
-            if (at(CR_ASSIGN_OP)) {
-                lexerState.slashIsRegex = true
-                nextTokenSkipSpacesAndNewlines()
-
-                if (at(CR_PSEUDO_CONSTANTS)) {
-                    parsePseudoConstant()
+            return composite(CR_SIMPLE_PARAMETER_DEFINITION) {
+                if (at(CR_AND_OP)) {
+                    nextTokenSkipSpacesAndNewlines()
+                    parseBlockParam(inMacroDef)
+                    skipSpacesAndNewlines()
+                    return@composite
                 }
-                else {
-                    withTypeDeclarationCount {
-                        ensureParseAssignment()
+
+                val isSplat = at(CR_MUL_OP)
+                val isDoubleSplat = at(CR_EXP_OP)
+                val isAnySplat = isSplat || isDoubleSplat
+
+
+                if (isAnySplat) nextTokenSkipSpaces()
+
+                foundSpaceInLastArg = false
+                var paramName = ""
+                if (!(isAnySplat && (at(CR_COMMA) || at(CR_RPAREN)))) {
+                    parseParamName(!isAnySplat, inMacroDef)
+                    lastTokenTextInProductionIf(CR_IDENTIFIER)?.let { paramName = it }
+                }
+
+                if (!inMacroDef && at(CR_COLON)) {
+                    if (!foundSpaceInLastArg) error("Space required before colon in type restriction")
+                    advanceLexer()
+                    if (!at(CR_WHITESPACES)) error("Space required after colon in type restriction")
+                    skipSpacesAndNewlines()
+
+                    when {
+                        isSplat && at(CR_MUL_OP) -> composite(CR_SPLAT_TYPE) {
+                            nextToken()
+                            parseBareProcType()
+                        }
+
+                        isDoubleSplat && at(CR_EXP_OP) -> composite(CR_DOUBLE_SPLAT_TYPE) {
+                            nextToken()
+                            parseBareProcType()
+                        }
+
+                        else -> parseBareProcType()
                     }
-                    skipSpaces()
                 }
-            }
 
-            scopes.pushVarName(paramName)
+                if (at(CR_ASSIGN_OP)) {
+                    lexerState.slashIsRegex = true
+                    nextTokenSkipSpacesAndNewlines()
+
+                    if (at(CR_PSEUDO_CONSTANTS)) {
+                        parsePseudoConstant()
+                    } else {
+                        withTypeDeclarationCount {
+                            ensureParseAssignment()
+                        }
+                        skipSpaces()
+                    }
+                }
+
+                scopes.pushVarName(paramName)
+            }
         }
 
         private val unnamedBlockParamMarkers = TokenSet.create(CR_RPAREN, CR_NEWLINE, CR_COLON, CR_COMMA)

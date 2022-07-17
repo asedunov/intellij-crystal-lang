@@ -33,9 +33,3 @@ end
 
 struct S4(*T, U, <error descr="Splat type parameter already specified">*V</error>)
 end
-
-def foo1(x : T, y : U) forall T, U
-end
-
-def foo1(x : T, y : U) forall T, U, T
-end

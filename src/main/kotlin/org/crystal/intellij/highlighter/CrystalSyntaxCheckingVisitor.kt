@@ -534,7 +534,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitTypeParameterList(o: CrTypeParameterList) {
         super.visitTypeParameterList(o)
 
-        if (o.parent !is CrModuleLikeDefinition<*, *>) return
+        if (o.parent !is CrModuleLikeDefinition<*, *> && ll <= LanguageLevel.CRYSTAL_1_4) return
 
         checkDuplicateNames(o.elements)
 

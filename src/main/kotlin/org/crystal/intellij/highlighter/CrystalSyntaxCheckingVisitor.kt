@@ -620,6 +620,14 @@ class CrystalSyntaxCheckingVisitor(
         processMethodOrMacro(o)
     }
 
+    override fun visitFunction(o: CrFunction) {
+        super.visitFunction(o)
+
+        if (ll >= LanguageLevel.CRYSTAL_1_5) {
+            checkDuplicateNames(o.parameters.toList())
+        }
+    }
+
     private fun processMethodOrMacro(o: CrFunctionLikeDefinition) {
         val defName = o.name ?: ""
 

@@ -155,6 +155,12 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     @Test
     fun testOperators() = doTestSingleFileWithMultiFragments()
     @Test
+    fun testParamAnnotations() = doTestSingleFileWithMultiFragments()
+    @Test
+    fun testParamAnnotations_1_4() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_4) {
+        doTestSingleFileWithMultiFragments()
+    }
+    @Test
     fun testPseudoConstants() = doTestSingleFileWithMultiFragments()
     @Test
     fun testPseudoMethods() = doTestSingleFileWithMultiFragments()

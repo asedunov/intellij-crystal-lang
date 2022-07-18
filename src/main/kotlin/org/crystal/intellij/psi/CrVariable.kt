@@ -13,6 +13,6 @@ class CrVariable : CrDefinitionWithFqNameImpl<CrVariable, CrVariableStub>, CrDef
 
     override val isLocal: Boolean
         get() = greenStub == null &&
-                !parentStubOrPsi().let { it is CrTopLevelHolder } &&
+                !isTopLevel &&
                 nameElement?.kind == CrNameKind.IDENTIFIER
 }

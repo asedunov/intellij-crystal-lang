@@ -628,6 +628,35 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitParameter(o: CrParameter) {
+        super.visitParameter(o)
+
+        if (ll >= LanguageLevel.CRYSTAL_1_5 && o.nameElement == null) {
+            val function = (o.parent as? CrParameterList)?.parent as? CrFunction
+            if (function != null && function.isTopLevel) {
+                error(o, "Top-level function parameter must have a name")
+            }
+        }
+    }
+
+    override fun visitNameElement(o: CrNameElement) {
+        super.visitNameElement(o)
+
+        errorIfEmptyName(o)
+    }
+
+    private fun errorIfEmptyName(o: CrNameElement) {
+        if (ll >= LanguageLevel.CRYSTAL_1_5 && o.kind == CrNameKind.STRING && o.name == "") {
+            val messageHead = when (o.parent) {
+                is CrNamedTupleEntry -> "Tuple entry"
+                is CrParameter -> "Parameter external"
+                is CrNamedArgument, is CrLabeledType -> "Named argument"
+                else -> return
+            }
+            error(o, "$messageHead name may not be empty")
+        }
+    }
+
     private fun processMethodOrMacro(o: CrFunctionLikeDefinition) {
         val defName = o.name ?: ""
 

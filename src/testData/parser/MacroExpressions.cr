@@ -63,3 +63,12 @@ macro !;end
 {{ nil?(foo) }}
 
 "#{{{1}}}"
+
+macro mmm
+  macro foo(name)
+    # some comments \{{ name.id }}
+  end
+  macro bar(name)
+    # some comments \a
+  end
+end

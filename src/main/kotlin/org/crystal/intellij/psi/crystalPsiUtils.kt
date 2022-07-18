@@ -71,3 +71,6 @@ val CrType<*>.typePath: CrPathNameElement?
 
 val PsiElement.isAnnotationTransparent: Boolean
     get() = this is CrBlockExpression || this is CrParenthesizedExpression
+
+val CrExpression.isTopLevel: Boolean
+    get() = parentStubOrPsi().let { it is CrTopLevelHolder }

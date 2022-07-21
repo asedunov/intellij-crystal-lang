@@ -7,8 +7,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.ClearableLazyValue
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiManager
 import org.crystal.intellij.sdk.CrystalExe
 import org.crystal.intellij.sdk.CrystalSdkFlavor
+import org.crystal.intellij.util.toPsi
 
 private const val SERVICE_NAME = "CrystalWorkspaceSettings"
 
@@ -53,3 +56,6 @@ class CrystalProjectWorkspaceSettings(
 
 val Project.crystalWorkspaceSettings: CrystalProjectWorkspaceSettings
     get() = getService(CrystalProjectWorkspaceSettings::class.java)
+
+val Project.stdlibRootPsiDirectory: PsiDirectory?
+    get() = crystalWorkspaceSettings.stdlibRootDirectory?.toPsi(PsiManager.getInstance(this)) as? PsiDirectory

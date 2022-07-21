@@ -8,11 +8,13 @@ import com.intellij.psi.PsiFile
 import com.intellij.refactoring.RefactoringBundle
 import com.intellij.refactoring.rename.PsiElementRenameHandler
 import com.intellij.refactoring.util.CommonRefactoringUtil
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.psi.CrNameElementHolder
 
 class CrystalRenameHandler : PsiElementRenameHandler() {
     override fun isAvailableOnDataContext(dataContext: DataContext): Boolean {
-        return getElement(dataContext) is CrNameElementHolder
+        val element = getElement(dataContext)
+        return element is CrNameElementHolder && element !is CrConstantSource
     }
 
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?, dataContext: DataContext) {

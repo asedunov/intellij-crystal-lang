@@ -7,5 +7,7 @@ sealed interface CrNameElement : CrElement {
 
     abstract override fun getName(): String?
 
+    fun setName(name: String): CrNameElement
+
     val sourceName: String?
 }

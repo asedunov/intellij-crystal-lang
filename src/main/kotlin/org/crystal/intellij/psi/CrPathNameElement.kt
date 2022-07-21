@@ -41,6 +41,10 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrCon
 
     override fun getName() = greenStub?.name ?: item?.name ?: ""
 
+    override fun setName(name: String): CrNameElement {
+        return replaceTyped(CrPsiFactory.getInstance(project).createPathNameElement(name))
+    }
+
     override val sourceName: String
         get() = name
 
@@ -97,5 +101,8 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrCon
         }
     }
 
-    override fun getOwnReferences() = listOf(CrPathReference(this))
+    val ownReference: CrPathReference
+        get() = CrPathReference(this)
+
+    override fun getOwnReferences() = listOf(ownReference)
 }

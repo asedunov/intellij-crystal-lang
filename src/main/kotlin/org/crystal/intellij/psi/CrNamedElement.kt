@@ -7,6 +7,7 @@ sealed interface CrNamedElement : CrNameElementHolder, PsiNameIdentifierOwner {
     override fun getNameIdentifier() = nameElement
 
     override fun setName(name: String): PsiElement {
-        throw UnsupportedOperationException()
+        nameElement?.setName(name)
+        return this
     }
 }

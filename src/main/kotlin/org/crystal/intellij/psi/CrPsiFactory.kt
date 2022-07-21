@@ -20,4 +20,8 @@ class CrPsiFactory(private val project: Project) {
     ) as CrFile
 
     inline fun <reified T : CrExpression> createExpression(text: String) = createFile(text).firstChild as T
+
+    fun createSimpleNameElement(name: String) = createExpression<CrVariable>("$name : Foo").nameElement!!
+
+    fun createPathNameElement(name: String) = createExpression<CrConstant>("$name = 1").nameElement!!
 }

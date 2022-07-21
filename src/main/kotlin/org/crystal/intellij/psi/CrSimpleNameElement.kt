@@ -30,6 +30,10 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
         }
     }
 
+    override fun setName(name: String): CrNameElement {
+        return replaceTyped(CrPsiFactory.getInstance(project).createSimpleNameElement(name))
+    }
+
     override val sourceName: String?
         get() {
             greenStub?.let { return it.sourceName }

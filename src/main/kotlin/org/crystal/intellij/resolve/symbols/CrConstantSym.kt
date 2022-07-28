@@ -7,7 +7,7 @@ class CrConstantSym(
     name: String,
     sources: List<CrConstantSource>,
     override val namespace: CrModuleLikeSym
-) : CrOrdinalSym<CrConstantSource>(name, sources) {
+) : CrConstantLikeSym<CrConstantSource>(name, sources) {
     override val program: CrProgramSym
         get() = namespace.program
 

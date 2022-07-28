@@ -1,26 +1,14 @@
 package org.crystal.intellij.resolve.symbols
 
-import org.crystal.intellij.psi.CrTypeDefinition
 import org.crystal.intellij.psi.CrConstantSource
-import org.crystal.intellij.psi.CrVisibility
-import org.crystal.intellij.resolve.StableFqName
 import org.crystal.intellij.resolve.layout
 
 @Suppress("UnstableApiUsage")
 sealed class CrTypeSym(
     name: String,
     sources: List<CrConstantSource>,
-) : CrOrdinalSym<CrConstantSource>(name, sources) {
+) : CrConstantLikeSym<CrConstantSource>(name, sources) {
     abstract override val namespace: CrModuleLikeSym
-
-    val visibility: CrVisibility? by lazy {
-        val typeDef = sources.firstOrNull { it is CrTypeDefinition } as? CrTypeDefinition
-        typeDef?.visibility ?: CrVisibility.PUBLIC
-    }
-
-    open val fqName: StableFqName? by lazy {
-        StableFqName(name, this.namespace.fqName)
-    }
 
     override val ordinal: CrSymbolOrdinal?
         get() {

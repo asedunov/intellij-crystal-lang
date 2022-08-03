@@ -7,8 +7,7 @@ import com.intellij.find.usages.api.UsageSearcher
 import com.intellij.psi.search.SearchScope
 import com.intellij.usages.impl.rules.UsageType
 import com.intellij.util.Query
-import org.crystal.intellij.psi.CrType
-import org.crystal.intellij.psi.parents
+import org.crystal.intellij.psi.*
 import org.crystal.intellij.references.CrPathReference
 import org.crystal.intellij.search.CrystalConstantLikeSearchRenameTarget
 import org.crystal.intellij.search.CrystalUsageSearcherBase
@@ -32,8 +31,10 @@ class CrystalUsageSearcher: CrystalUsageSearcherBase<Usage, UsageSearchParameter
         return parameters.searchScope
     }
 
-    override fun toUsage(ref: CrPathReference): Usage {
-        val usageType = if (ref.element.parents().any { it is CrType<*> }) TYPE_REFERENCE else CONSTANT_REFERENCE
+    override fun toUsage(ref: CrPathReference): Usage? {
+        val path = ref.element
+        if (path.parentStubsOrPsi().skipWhile { it is CrPathNameElement }.first() is CrDefinition) return null
+        val usageType = if (path.parents().any { it is CrType<*> }) TYPE_REFERENCE else CONSTANT_REFERENCE
         return DelegatingPsiUsage(PsiUsage.Companion.textUsage(ref), usageType)
     }
 }

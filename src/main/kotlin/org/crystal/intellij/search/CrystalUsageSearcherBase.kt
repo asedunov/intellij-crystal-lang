@@ -30,7 +30,7 @@ abstract class CrystalUsageSearcherBase<U, P : SearchParameters<U>> {
 
     protected abstract fun getSearchScope(parameters: P): SearchScope
 
-    protected abstract fun toUsage(ref: CrPathReference): U
+    protected abstract fun toUsage(ref: CrPathReference): U?
 
     private fun toUsages(
         target: CrystalConstantLikeSearchRenameTarget,
@@ -46,6 +46,6 @@ abstract class CrystalUsageSearcherBase<U, P : SearchParameters<U>> {
         val ref = path.ownReference
         if (!ref.resolvesTo(symbol)) return emptyList()
 
-        return listOf(toUsage(ref))
+        return listOfNotNull(toUsage(ref))
     }
 }

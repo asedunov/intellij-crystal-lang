@@ -10,7 +10,7 @@ internal class DelegatingPsiUsage(
     private val type: UsageType
 ) : PsiUsage by delegate {
     override fun createPointer(): Pointer<out PsiUsage> {
-        return Pointer.delegatingPointer(delegate.createPointer()) { delegate: PsiUsage ->
+        return Pointer.delegatingPointer(delegate.createPointer(), Any()) { delegate: PsiUsage ->
             DelegatingPsiUsage(delegate, usageType)
         }
     }

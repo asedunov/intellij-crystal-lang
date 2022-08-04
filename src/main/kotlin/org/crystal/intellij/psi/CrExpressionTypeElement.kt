@@ -4,8 +4,8 @@ import com.intellij.lang.ASTNode
 import org.crystal.intellij.parser.CR_EXPRESSION_TYPE
 import org.crystal.intellij.stubs.api.CrTypeStub
 
-class CrExpressionType : CrType<CrExpressionType> {
-    constructor(stub: CrTypeStub<CrExpressionType>) : super(stub, CR_EXPRESSION_TYPE)
+class CrExpressionTypeElement : CrTypeElement<CrExpressionTypeElement> {
+    constructor(stub: CrTypeStub<CrExpressionTypeElement>) : super(stub, CR_EXPRESSION_TYPE)
 
     constructor(node: ASTNode) : super(node)
 

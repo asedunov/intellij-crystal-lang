@@ -34,7 +34,7 @@ class CrystalUsageSearcher: CrystalUsageSearcherBase<Usage, UsageSearchParameter
     override fun toUsage(ref: CrPathReference): Usage? {
         val path = ref.element
         if (path.parentStubsOrPsi().skipWhile { it is CrPathNameElement }.first() is CrDefinition) return null
-        val usageType = if (path.parents().any { it is CrType<*> }) TYPE_REFERENCE else CONSTANT_REFERENCE
+        val usageType = if (path.parents().any { it is CrTypeElement<*> }) TYPE_REFERENCE else CONSTANT_REFERENCE
         return DelegatingPsiUsage(PsiUsage.Companion.textUsage(ref), usageType)
     }
 }

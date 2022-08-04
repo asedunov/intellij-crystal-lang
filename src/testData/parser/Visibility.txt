@@ -209,7 +209,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(=)('=')
     PsiWhiteSpace(' ')
-    CrPathType(CR_PATH_TYPE)
+    CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Int32')
 
@@ -223,7 +223,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(=)('=')
     PsiWhiteSpace(' ')
-    CrPathType(CR_PATH_TYPE)
+    CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Int32')
 

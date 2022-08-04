@@ -49,7 +49,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
 
     private fun StringBuilder.appendReceiver(receiver: CrMethodReceiver) = when (receiver) {
         is CrReferenceExpression -> appendSpaced(receiver.nameElement.presentableText)
-        is CrType<*> -> appendType(receiver)
+        is CrTypeElement<*> -> appendType(receiver)
     }
 
     private fun StringBuilder.appendType(definition: CrDefinition) {
@@ -69,38 +69,38 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         }
     }
 
-    private fun StringBuilder.appendType(type: CrType<*>?): StringBuilder = when (type) {
-        is CrDoubleSplatType -> append("**").appendType(type.innerType)
-        is CrExpressionType -> append("typeof(...)")
-        is CrHashType -> appendType(type.leftType).append(" => ").appendType(type.rightType)
-        is CrInstantiatedType ->
+    private fun StringBuilder.appendType(type: CrTypeElement<*>?): StringBuilder = when (type) {
+        is CrDoubleSplatTypeElement -> append("**").appendType(type.innerType)
+        is CrExpressionTypeElement -> append("typeof(...)")
+        is CrHashTypeElement -> appendType(type.leftType).append(" => ").appendType(type.rightType)
+        is CrInstantiatedTypeElement ->
             appendType(type.constructorType)
                 .append("(")
                 .append(type.argumentList?.elements ?: JBIterable.empty()) { appendType(it) }
                 .append(")")
-        is CrLabeledType -> append(type.nameElement?.text ?: "???").append(": ").appendType(type.innerType)
-        is CrMetaclassType -> appendType(type.innerType).append(".class")
-        is CrNamedTupleType -> append(type.componentTypes, ", ", "{", "}") { appendType(it) }
-        is CrNilableType -> appendType(type.innerType).append("?")
-        is CrParenthesizedType -> {
+        is CrLabeledTypeElement -> append(type.nameElement?.text ?: "???").append(": ").appendType(type.innerType)
+        is CrMetaclassTypeElement -> appendType(type.innerType).append(".class")
+        is CrNamedTupleTypeElement -> append(type.componentTypes, ", ", "{", "}") { appendType(it) }
+        is CrNilableTypeElement -> appendType(type.innerType).append("?")
+        is CrParenthesizedTypeElement -> {
             append("(")
             type.innerType?.let { appendType(it) }
             append(")")
         }
-        is CrPathType -> appendPath(type.path)
-        is CrPointerType -> appendType(type.innerType).append("*")
-        is CrProcType -> {
+        is CrPathTypeElement -> appendPath(type.path)
+        is CrPointerTypeElement -> appendType(type.innerType).append("*")
+        is CrProcTypeElement -> {
             append(type.inputList?.elements) { appendType(it) }
             append(" -> ")
             type.outputType?.let { appendType(it) }
             this
         }
-        is CrSelfType -> append(type.text)
-        is CrSplatType -> append("*").appendType(type.innerType)
-        is CrStaticArrayType -> appendType(type.elementType).append("[...]")
-        is CrTupleType -> append(type.componentTypes, ", ", "{", "}") { appendType(it) }
-        is CrUnderscoreType -> append("_")
-        is CrUnionType -> append(type.componentTypes, " | ") { appendType(it) }
+        is CrSelfTypeElement -> append(type.text)
+        is CrSplatTypeElement -> append("*").appendType(type.innerType)
+        is CrStaticArrayTypeElement -> appendType(type.elementType).append("[...]")
+        is CrTupleTypeElement -> append(type.componentTypes, ", ", "{", "}") { appendType(it) }
+        is CrUnderscoreTypeElement -> append("_")
+        is CrUnionTypeElement -> append(type.componentTypes, " | ") { appendType(it) }
         null -> append("???")
     }
 

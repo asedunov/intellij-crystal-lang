@@ -11,7 +11,7 @@ class CrCField : CrDefinitionWithFqNameImpl<CrCField, CrCFieldStub>, CrTypedDefi
 
     override fun accept(visitor: CrVisitor) = visitor.visitCField(this)
 
-    override val type: CrType<*>?
+    override val type: CrTypeElement<*>?
         get() {
             val parent = parent
             return if (parent is CrCFieldGroup) parent.type else super.type

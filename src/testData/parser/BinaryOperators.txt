@@ -138,7 +138,7 @@ FILE
       PsiElement($op)('$op')
     CrTypeArgumentList(CR_TYPE_ARGUMENT_LIST)
       PsiElement(()('(')
-      CrPathType(CR_PATH_TYPE)
+      CrPathTypeElement(CR_PATH_TYPE)
         CrPathNameElement(CR_PATH_NAME_ELEMENT)
           PsiElement(<constant>)('Int32')
       PsiElement())(')')

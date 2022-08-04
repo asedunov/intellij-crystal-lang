@@ -9,6 +9,6 @@ class CrHashExpression(node: ASTNode) : CrExpressionImpl(node) {
     val entries: JBIterable<CrHashEntry>
         get() = childrenOfType()
 
-    val type: CrType<*>?
+    val type: CrTypeElement<*>?
         get() = childOfType()
 }

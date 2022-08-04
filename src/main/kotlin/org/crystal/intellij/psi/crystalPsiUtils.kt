@@ -31,7 +31,7 @@ val CrNamedElement.presentableKind: String
         is CrMacro -> "macro"
         is CrNamedTupleEntry -> "named tuple entry"
         is CrNamedArgument -> "named argument"
-        is CrLabeledType -> "named type argument"
+        is CrLabeledTypeElement -> "named type argument"
     }
 
 val CrElement.elementName: String?
@@ -62,11 +62,11 @@ val CrExpression.isSemanticCall: Boolean
         else -> false
     }
 
-val CrType<*>.typePath: CrPathNameElement?
+val CrTypeElement<*>.typePath: CrPathNameElement?
     get() {
         var type = this
-        if (type is CrInstantiatedType) type = type.constructorType ?: return null
-        return (type as? CrPathType)?.path
+        if (type is CrInstantiatedTypeElement) type = type.constructorType ?: return null
+        return (type as? CrPathTypeElement)?.path
     }
 
 val PsiElement.isAnnotationTransparent: Boolean

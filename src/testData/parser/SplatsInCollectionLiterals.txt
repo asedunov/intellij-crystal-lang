@@ -130,7 +130,7 @@ FILE
     PsiElement(])(']')
 
   CrTupleExpression(CR_TUPLE_EXPRESSION)
-    CrPathType(CR_PATH_TYPE)
+    CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Set')
     PsiWhiteSpace(' ')
@@ -356,7 +356,7 @@ FILE
     PsiElement(])(']')
 
   CrTupleExpression(CR_TUPLE_EXPRESSION)
-    CrPathType(CR_PATH_TYPE)
+    CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Set')
     PsiWhiteSpace(' ')

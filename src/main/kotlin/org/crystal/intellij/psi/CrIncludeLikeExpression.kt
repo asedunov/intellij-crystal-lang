@@ -11,7 +11,7 @@ import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.stubs.api.CrIncludeStub
 
 sealed interface CrIncludeLikeExpression : CrExpression, CrSymbolOrdinalHolder {
-    val type: CrType<*>?
+    val type: CrTypeElement<*>?
         get() = stubChildOfType()
 
     val pathResolveScope: CrModuleLikeScope?
@@ -36,8 +36,8 @@ sealed interface CrIncludeLikeExpression : CrExpression, CrSymbolOrdinalHolder {
     val targetSymbol: CrSym<*>?
         get() {
             var type = type
-            if (type is CrInstantiatedType) type = type.constructorType
-            return (type as? CrPathType)?.path?.resolveSymbol()
+            if (type is CrInstantiatedTypeElement) type = type.constructorType
+            return (type as? CrPathTypeElement)?.path?.resolveSymbol()
         }
 
     val targetModule: CrModuleSym?

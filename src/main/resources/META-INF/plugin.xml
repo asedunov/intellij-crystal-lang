@@ -9,7 +9,17 @@
       <li>Initial formatting support</li>
       <li>File structure view</li>
       <li>Go to Class/Go to Symbol navigation</li>
+      <li>Find Usages</li>
+      <li>Rename</li>
     </ul>]]></description>
+
+    <change-notes><![CDATA[
+    <ul>
+      <li>Find Usages (types and constants)</li>
+      <li>Rename refactoring (types and constants)</li>
+      <li>Support of Crystal 1.5 syntax</li>
+      <li>More error highlighting</li>
+    </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 

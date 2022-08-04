@@ -78,7 +78,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrRequireExpression -> "'require' expression"
             is CrNameElement -> when (p.parent) {
                 is CrFunction -> "function name"
-                is CrNamedArgument, is CrLabeledType -> "named argument"
+                is CrNamedArgument, is CrLabeledTypeElement -> "named argument"
                 is CrParameter -> "external name"
                 is CrNamedTupleEntry -> "named tuple name"
                 else -> return
@@ -522,13 +522,13 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitTypeArgumentList(o: CrTypeArgumentList) {
         super.visitTypeArgumentList(o)
 
-        checkDuplicateNames(o.elements.filter(CrLabeledType::class.java))
+        checkDuplicateNames(o.elements.filter(CrLabeledTypeElement::class.java))
     }
 
-    override fun visitNamedTupleType(o: CrNamedTupleType) {
+    override fun visitNamedTupleType(o: CrNamedTupleTypeElement) {
         super.visitNamedTupleType(o)
 
-        checkDuplicateNames(o.componentTypes.filter(CrLabeledType::class.java))
+        checkDuplicateNames(o.componentTypes.filter(CrLabeledTypeElement::class.java))
     }
 
     override fun visitTypeParameterList(o: CrTypeParameterList) {
@@ -650,7 +650,7 @@ class CrystalSyntaxCheckingVisitor(
             val messageHead = when (o.parent) {
                 is CrNamedTupleEntry -> "Tuple entry"
                 is CrParameter -> "Parameter external"
-                is CrNamedArgument, is CrLabeledType -> "Named argument"
+                is CrNamedArgument, is CrLabeledTypeElement -> "Named argument"
                 else -> return
             }
             error(o, "$messageHead name may not be empty")

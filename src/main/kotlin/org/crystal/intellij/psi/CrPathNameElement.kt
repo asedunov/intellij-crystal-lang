@@ -57,8 +57,8 @@ class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrCon
 
     override fun ordinal(): CrSymbolOrdinal? {
         var p = parent
-        if (p is CrPathType) p = p.parent
-        if (p is CrInstantiatedType) p = p.parent
+        if (p is CrPathTypeElement) p = p.parent
+        if (p is CrInstantiatedTypeElement) p = p.parent
         return (p as? CrSymbolOrdinalHolder)?.ordinal()
     }
 

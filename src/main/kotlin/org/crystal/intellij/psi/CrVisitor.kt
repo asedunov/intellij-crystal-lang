@@ -73,7 +73,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitDoubleSplatArgument(o: CrDoubleSplatArgument) = visitCrElement(o)
 
-    open fun visitDoubleSplatType(o: CrDoubleSplatType) = visitType(o)
+    open fun visitDoubleSplatType(o: CrDoubleSplatTypeElement) = visitType(o)
 
     open fun visitElseClause(o: CrElseClause) = visitCrElement(o)
 
@@ -91,7 +91,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitExpression(o: CrExpression) = visitCrElement(o)
 
-    open fun visitExpressionType(o: CrExpressionType) = visitType(o)
+    open fun visitExpressionType(o: CrExpressionTypeElement) = visitType(o)
 
     open fun visitExtendExpression(o: CrExtendExpression) = visitExpression(o)
 
@@ -111,7 +111,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitHashExpression(o: CrHashExpression) = visitExpression(o)
 
-    open fun visitHashType(o: CrHashType) = visitType(o)
+    open fun visitHashType(o: CrHashTypeElement) = visitType(o)
 
     open fun visitHeredocLiteralBody(o: CrHeredocLiteralBody) = visitCrElement(o)
 
@@ -127,7 +127,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitInstanceSizeExpression(o: CrInstanceSizeExpression) = visitExpression(o)
 
-    open fun visitInstantiatedType(o: CrInstantiatedType) = visitType(o)
+    open fun visitInstantiatedType(o: CrInstantiatedTypeElement) = visitType(o)
 
     open fun visitIntegerLiteralExpression(o: CrIntegerLiteralExpression) = visitExpression(o)
 
@@ -135,7 +135,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitIsNilExpression(o: CrIsNilExpression) = visitExpression(o)
 
-    open fun visitLabeledType(o: CrLabeledType) = visitType(o)
+    open fun visitLabeledType(o: CrLabeledTypeElement) = visitType(o)
 
     open fun visitLibrary(o: CrLibrary) = visitDefinition(o)
 
@@ -163,7 +163,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitMacroWrapperStatement(o: CrMacroWrapperStatement) = visitMacroStatement(o)
 
-    open fun visitMetaclassType(o: CrMetaclassType) = visitType(o)
+    open fun visitMetaclassType(o: CrMetaclassTypeElement) = visitType(o)
 
     open fun visitMethod(o: CrMethod) = visitDefinition(o)
 
@@ -179,11 +179,11 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitNamedTupleExpression(o: CrNamedTupleExpression) = visitExpression(o)
 
-    open fun visitNamedTupleType(o: CrNamedTupleType) = visitType(o)
+    open fun visitNamedTupleType(o: CrNamedTupleTypeElement) = visitType(o)
 
     open fun visitNextExpression(o: CrNextExpression) = visitExpression(o)
 
-    open fun visitNilableType(o: CrNilableType) = visitType(o)
+    open fun visitNilableType(o: CrNilableTypeElement) = visitType(o)
 
     open fun visitNilExpression(o: CrNilExpression) = visitExpression(o)
 
@@ -197,7 +197,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitParenthesizedExpression(o: CrParenthesizedExpression) = visitExpression(o)
 
-    open fun visitParenthesizedType(o: CrParenthesizedType) = visitType(o)
+    open fun visitParenthesizedType(o: CrParenthesizedTypeElement) = visitType(o)
 
     open fun visitParameter(o: CrParameter) = visitDefinition(o)
 
@@ -207,13 +207,13 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitPathExpression(o: CrPathExpression) = visitExpression(o)
 
-    open fun visitPathType(o: CrPathType) = visitType(o)
+    open fun visitPathType(o: CrPathTypeElement) = visitType(o)
 
     open fun visitPointerExpression(o: CrPointerExpression) = visitExpression(o)
 
-    open fun visitPointerType(o: CrPointerType) = visitType(o)
+    open fun visitPointerType(o: CrPointerTypeElement) = visitType(o)
 
-    open fun visitProcType(o: CrProcType) = visitType(o)
+    open fun visitProcType(o: CrProcTypeElement) = visitType(o)
 
     open fun visitPseudoConstantExpression(o: CrPseudoConstantExpression) = visitExpression(o)
 
@@ -235,7 +235,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitSelectExpression(o: CrSelectExpression) = visitExpression(o)
 
-    open fun visitSelfType(o: CrSelfType) = visitType(o)
+    open fun visitSelfType(o: CrSelfTypeElement) = visitType(o)
 
     open fun visitShortBlockArgument(o: CrShortBlockArgument) = visitCrElement(o)
 
@@ -251,9 +251,9 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitSplatExpression(o: CrSplatExpression) = visitExpression(o)
 
-    open fun visitSplatType(o: CrSplatType) = visitType(o)
+    open fun visitSplatType(o: CrSplatTypeElement) = visitType(o)
 
-    open fun visitStaticArrayType(o: CrStaticArrayType) = visitType(o)
+    open fun visitStaticArrayType(o: CrStaticArrayTypeElement) = visitType(o)
 
     open fun visitStringArrayExpression(o: CrStringArrayExpression) = visitExpression(o)
 
@@ -275,9 +275,9 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitTupleExpression(o: CrTupleExpression) = visitExpression(o)
 
-    open fun visitTupleType(o: CrTupleType) = visitType(o)
+    open fun visitTupleType(o: CrTupleTypeElement) = visitType(o)
 
-    open fun visitType(o: CrType<*>) = visitCrElement(o)
+    open fun visitType(o: CrTypeElement<*>) = visitCrElement(o)
 
     open fun visitTypeArgumentList(o: CrTypeArgumentList) = visitCrElement(o)
 
@@ -293,7 +293,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitUnaryExpression(o: CrUnaryExpression) = visitExpression(o)
 
-    open fun visitUnderscoreType(o: CrUnderscoreType) = visitType(o)
+    open fun visitUnderscoreType(o: CrUnderscoreTypeElement) = visitType(o)
 
     open fun visitUnicodeBlock(o: CrUnicodeBlock) = visitCrElement(o)
 
@@ -301,7 +301,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitUninitializedExpression(o: CrUninitializedExpression) = visitExpression(o)
 
-    open fun visitUnionType(o: CrUnionType) = visitType(o)
+    open fun visitUnionType(o: CrUnionTypeElement) = visitType(o)
 
     open fun visitUnlessExpression(o: CrUnlessExpression) = visitExpression(o)
 

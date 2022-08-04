@@ -195,9 +195,9 @@ class CrystalResolveCheckingVisitor(
         }
     }
 
-    private fun checkTypeArguments(sym: CrSym<*>?, type: CrType<*>) {
+    private fun checkTypeArguments(sym: CrSym<*>?, type: CrTypeElement<*>) {
         if (sym == null) return
-        if (sym is CrModuleLikeSym && sym.isGeneric && type !is CrInstantiatedType) {
+        if (sym is CrModuleLikeSym && sym.isGeneric && type !is CrInstantiatedTypeElement) {
             val superDesc = buildString {
                 append(sym.name)
                 sym.typeParameters.joinTo(this, prefix = "(", postfix = ")") { it.name }

@@ -19,7 +19,7 @@ class CrystalConstantLikeSearchRenameTarget(
     val symbol: CrSym<*>
 ) : SearchTarget, RenameTarget {
     override fun createPointer(): Pointer<CrystalConstantLikeSearchRenameTarget> {
-        return Pointer.delegatingPointer(symbol.createPointer()) {
+        return Pointer.delegatingPointer(symbol.createPointer(), Any()) {
             if (it is CrSym<*>) CrystalConstantLikeSearchRenameTarget(it) else null
         }
     }

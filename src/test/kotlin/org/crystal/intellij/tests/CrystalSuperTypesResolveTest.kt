@@ -36,20 +36,33 @@ class CrystalSuperTypesResolveTest(private val testFile: File) : BasePlatformTes
 
         val file = myFixture.file
 
-        val expectedSuperClass = file.findDirective("# SUPER_CLASS:")!!
+        val expectedSuperClass = file.findDirective("# SUPER_CLASS:")
+        val expectedMetaSuperClass = file.findDirective("# META_SUPER_CLASS:")
         val expectedParents = file.findDirective("# PARENTS:") ?: expectedSuperClass
+        val expectedMetaParents = file.findDirective("# META_PARENTS:") ?: expectedMetaSuperClass
 
         myFixture.editor.caretModel.runForEachCaret { caret ->
             val offset = caret.offset
             val typeSource = file.findElementAt(offset)!!.parentOfType<CrConstantSource>()!!
             val symbol = typeSource.resolveSymbol() as CrModuleLikeSym
-            val superClass = symbol.superClass
-            val parents = symbol.parents
-            TestCase.assertEquals(expectedSuperClass, superClass?.fqName?.fullName ?: "")
-            TestCase.assertEquals(
-                expectedParents,
-                parents?.asSequence()?.joinToString { it.fqName!!.fullName } ?: ""
-            )
+            if (expectedSuperClass != null) {
+                TestCase.assertEquals(expectedSuperClass, symbol.superClass?.fqName?.fullName ?: "")
+            }
+            if (expectedParents != null) {
+                TestCase.assertEquals(
+                    expectedParents,
+                    symbol.parents?.asSequence()?.joinToString { it.fqName!!.fullName } ?: ""
+                )
+            }
+            if (expectedMetaSuperClass != null) {
+                TestCase.assertEquals(expectedMetaSuperClass, symbol.metaclass.superClass?.fqName?.fullName ?: "")
+            }
+            if (expectedMetaParents != null) {
+                TestCase.assertEquals(
+                    expectedMetaParents,
+                    symbol.metaclass.parents?.asSequence()?.joinToString { it.fqName!!.fullName } ?: ""
+                )
+            }
         }
     }
 }

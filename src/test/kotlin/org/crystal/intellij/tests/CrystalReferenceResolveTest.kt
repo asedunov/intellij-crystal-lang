@@ -10,7 +10,9 @@ import com.intellij.util.containers.ObjectIntHashMap
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.psi.CrVisitor
 import org.crystal.intellij.resolve.symbols.CrSym
+import org.crystal.intellij.resolve.symbols.CrTypeSym
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
+import org.crystal.intellij.tests.util.hasDirective
 import org.crystal.intellij.tests.util.setupMainFile
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,7 +39,7 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
 
         myFixture.setupMainFile()
 
-        val refAnnotator = RefAnnotator()
+        val refAnnotator = RefAnnotator(myFixture.file.hasDirective("# WITH_METACLASS"))
         try {
             myFixture.enableInspections(refAnnotator)
             myFixture.checkHighlighting(true, false, false)
@@ -47,7 +49,9 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
     }
 
     @Suppress("UnstableApiUsage")
-    private class RefAnnotator : LocalInspectionTool() {
+    private class RefAnnotator(
+        private val withMetaclass: Boolean = false
+    ) : LocalInspectionTool() {
         override fun getDisplayName() = "Reference annotator"
 
         override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean) = object : CrVisitor() {
@@ -62,6 +66,13 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                 return id
             }
 
+            private fun StringBuilder.appendSym(sym: CrSym<*>): StringBuilder {
+                val presentation = presenter.getSymbolPresentation(sym)
+                append('#').append(getId(sym)).append(": ")
+                append(presentation.shortDescription)
+                return this
+            }
+
             private fun report(e: PsiElement, message: String) {
                 holder.registerProblem(e, message, ProblemHighlightType.WARNING)
             }
@@ -72,10 +83,11 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                 val nameElement = o.item ?: return
                 val sym = o.resolveSymbol()
                 if (sym != null) {
-                    val presentation = presenter.getSymbolPresentation(sym)
                     val message = buildString {
-                        append('#').append(getId(sym)).append(": ")
-                        append(presentation.shortDescription)
+                        appendSym(sym)
+                        if (sym is CrTypeSym<*> && withMetaclass) {
+                            append(" / ").appendSym(sym.metaclass)
+                        }
                     }
                     report(nameElement, message)
                 }

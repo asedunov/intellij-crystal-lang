@@ -17,4 +17,9 @@ sealed class CrModuleLikeDefinition<
         get() {
             return if (stub != null) stubChildrenOfType() else body?.childrenOfType() ?: JBIterable.empty()
         }
+
+    val extends: JBIterable<CrExtendExpression>
+        get() {
+            return if (stub != null) stubChildrenOfType() else body?.childrenOfType() ?: JBIterable.empty()
+        }
 }

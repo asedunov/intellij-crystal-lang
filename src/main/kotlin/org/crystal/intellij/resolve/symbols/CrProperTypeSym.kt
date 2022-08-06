@@ -7,7 +7,7 @@ import org.crystal.intellij.resolve.layout
 sealed class CrProperTypeSym(
     name: String,
     sources: List<CrConstantSource>,
-) : CrConstantLikeSym<CrConstantSource>(name, sources) {
+) : CrTypeSym<CrConstantSource>(name, sources) {
     abstract override val namespace: CrModuleLikeSym
 
     override val ordinal: CrSymbolOrdinal?

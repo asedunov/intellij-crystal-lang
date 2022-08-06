@@ -73,15 +73,21 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     private fun fallbackClass(fqName: StableFqName) = CrClassSym(fqName.name, program, emptyList(), program)
 
+    private fun fallbackMetaclass(fqName: StableFqName) = CrMetaclassSym(fallbackObjectSym, fqName.name, emptyList())
+
     private fun fallbackStruct(fqName: StableFqName) = CrStructSym(fqName.name, program, emptyList(), program)
 
     private fun fallbackModule(fqName: StableFqName) = CrModuleSym(fqName.name, program, emptyList(), program)
 
     private fun fallbackAnnotation(fqName: StableFqName) = CrAnnotationSym(fqName.name, program, emptyList(), program)
 
+    private val fallbackObjectSym by lazy {
+        fallbackClass(CrStdFqNames.OBJECT)
+    }
+
     private val fallbackTypes by lazy {
         listOf(
-            fallbackClass(CrStdFqNames.OBJECT),
+            fallbackObjectSym,
             fallbackClass(CrStdFqNames.REFERENCE),
             fallbackStruct(CrStdFqNames.VALUE),
             fallbackStruct(CrStdFqNames.NUMBER),
@@ -110,7 +116,7 @@ class CrProgramLayout(val program: CrProgramSym) {
             fallbackStruct(CrStdFqNames.NAMED_TUPLE),
             fallbackStruct(CrStdFqNames.STATIC_ARRAY),
             fallbackClass(CrStdFqNames.STRING),
-            fallbackClass(CrStdFqNames.CLASS),
+            fallbackMetaclass(CrStdFqNames.CLASS),
             fallbackStruct(CrStdFqNames.STRUCT),
             fallbackModule(CrStdFqNames.ENUMERABLE),
             fallbackModule(CrStdFqNames.INDEXABLE),

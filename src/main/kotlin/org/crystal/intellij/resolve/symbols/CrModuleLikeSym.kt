@@ -1,10 +1,10 @@
 package org.crystal.intellij.resolve.symbols
 
 import com.intellij.util.SmartList
+import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.psi.CrModuleLikeDefinition
 import org.crystal.intellij.psi.CrTypeParameter
 import org.crystal.intellij.psi.CrTypeParameterHolder
-import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
@@ -34,7 +34,7 @@ sealed class CrModuleLikeSym(
             computeIncludedModules().fold(noIncludesParents) { p, m -> CrModuleLikeScope.ParentList(m, p) }
         }
 
-    private fun computeIncludedModules(): Collection<CrModuleLikeSym> {
+    protected open fun computeIncludedModules(): Collection<CrModuleLikeSym> {
         val modules = LinkedHashSet<CrModuleSym>()
         for (source in sources) {
             if (source !is CrModuleLikeDefinition<*, *>) continue

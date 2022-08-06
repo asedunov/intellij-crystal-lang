@@ -14,6 +14,9 @@ class CrProgramSym(val project: Project) : CrModuleLikeSym("main", emptyList()) 
     override val program: CrProgramSym
         get() = this
 
+    override val metaclass: CrModuleLikeSym
+        get() = this
+
     override val memberScope by lazy {
         CrModuleLikeScope(this)
     }

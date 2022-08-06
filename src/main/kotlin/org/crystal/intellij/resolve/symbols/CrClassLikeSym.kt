@@ -23,18 +23,22 @@ sealed class CrClassLikeSym(
         get() = program.project.resolveCache.getOrCompute(SUPER_CLASS, this) {
             if (fqName in superlessClasses) return@getOrCompute null
             predefinedSuperClasses[fqName]?.let { return@getOrCompute program.memberScope.getTypeAs(it) }
-            val superClause = (sources.firstOrNull() as? CrSuperTypeAware)?.superTypeClause
-            if (superClause != null) {
-                return@getOrCompute superClause.resolveSymbol() as? CrClassLikeSym
-            }
-            val superName = when (this) {
-                is CrClassSym -> CrStdFqNames.REFERENCE
-                is CrStructSym -> CrStdFqNames.STRUCT
-                is CrEnumSym -> CrStdFqNames.ENUM
-                else -> return@getOrCompute null
-            }
-            program.memberScope.getTypeAs(superName)
+            computeSuperClass()
         }
+
+    protected open fun computeSuperClass(): CrClassLikeSym? {
+        val superClause = (sources.firstOrNull() as? CrSuperTypeAware)?.superTypeClause
+        if (superClause != null) {
+            return superClause.resolveSymbol() as? CrClassLikeSym
+        }
+        val superName = when (this) {
+            is CrClassSym -> CrStdFqNames.REFERENCE
+            is CrStructSym -> CrStdFqNames.STRUCT
+            is CrEnumSym -> CrStdFqNames.ENUM
+            else -> return null
+        }
+        return program.memberScope.getTypeAs(superName)
+    }
 
     open val isAbstract: Boolean
         get() = fqName in predefinedAbstractClasses || (sources.firstOrNull() as? CrTypeDefinition)?.isAbstract == true

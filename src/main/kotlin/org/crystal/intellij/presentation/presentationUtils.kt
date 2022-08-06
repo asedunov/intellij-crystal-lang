@@ -56,7 +56,7 @@ fun CrSym<*>.getIcon(): Icon? {
     if (this !is CrProperTypeSym) return null
     return when (this) {
         is CrAnnotationSym -> CrystalIcons.ANNOTATION
-        is CrClassSym -> CrystalIcons.CLASS
+        is CrClassSym, is CrMetaclassSym -> CrystalIcons.CLASS
         is CrEnumSym -> CrystalIcons.ENUM
         is CrStructSym -> CrystalIcons.STRUCT
         is CrCStructSym -> CrystalIcons.STRUCT
@@ -73,6 +73,7 @@ val CrSym<*>.presentableKind: String
     get() = when (this) {
         is CrAnnotationSym -> "annotation"
         is CrClassSym -> "class"
+        is CrMetaclassSym -> "metaclass"
         is CrEnumSym -> "enum"
         is CrStructSym -> "struct"
         is CrCStructSym -> "struct"

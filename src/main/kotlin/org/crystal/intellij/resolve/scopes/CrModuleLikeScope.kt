@@ -3,6 +3,7 @@ package org.crystal.intellij.resolve.scopes
 import com.intellij.openapi.project.Project
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.CrProgramLayout
+import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.StableFqName
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
@@ -23,7 +24,12 @@ class CrModuleLikeScope(
 
     private val typeMapSlice = newResolveSlice<Pair<String, Boolean>, CrSym<*>>("TYPE_MAP: ${symbol.fqName}")
 
-    private fun createTypeSymbol(name: String, sources: List<CrConstantSource>): CrSym<*>? {
+    private fun createTypeSymbol(fqName: StableFqName, sources: List<CrConstantSource>): CrSym<*>? {
+        if (fqName == CrStdFqNames.CLASS) return CrMetaclassSym(
+            symbol.program.memberScope.getTypeAs(CrStdFqNames.OBJECT)!!,
+            fqName.name,
+            sources
+        )
         val symFactory = when (sources.first()) {
             is CrPathNameElement -> ::CrModuleSym
             is CrAlias -> ::CrTypeAliasSym
@@ -36,10 +42,10 @@ class CrModuleLikeScope(
             is CrStruct -> ::CrStructSym
             is CrEnum -> ::CrEnumSym
             is CrLibrary -> ::CrLibrarySym
-            is CrConstant -> return CrConstantSym(name, sources, symbol)
+            is CrConstant -> return CrConstantSym(fqName.name, sources, symbol)
             else -> return null
         }
-        return symFactory(name, symbol, sources, symbol.program)
+        return symFactory(fqName.name, symbol, sources, symbol.program)
     }
 
     private tailrec fun ParentList.findTypeInParents(name: String): CrSym<*>? {
@@ -53,7 +59,7 @@ class CrModuleLikeScope(
             val fqName = StableFqName(name, symbol.fqName)
             val sources = layout.getTypeSources(fqName)
             if (sources.isNotEmpty()) {
-                return@getOrCompute createTypeSymbol(name, sources)
+                return@getOrCompute createTypeSymbol(fqName, sources)
             }
             layout.getFallbackType(fqName)?.let { return@getOrCompute it }
             if (isRoot && symbol !is CrProgramSym && symbol.name == name) {

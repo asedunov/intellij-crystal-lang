@@ -5,4 +5,4 @@ import org.crystal.intellij.psi.CrConstantSource
 sealed class CrTypeAliasLikeSym(
     name: String,
     sources: List<CrConstantSource>
-) : CrTypeSym(name, sources)
+) : CrProperTypeSym(name, sources)

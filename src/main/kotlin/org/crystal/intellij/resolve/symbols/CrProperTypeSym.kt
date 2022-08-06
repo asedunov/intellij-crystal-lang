@@ -4,7 +4,7 @@ import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.resolve.layout
 
 @Suppress("UnstableApiUsage")
-sealed class CrTypeSym(
+sealed class CrProperTypeSym(
     name: String,
     sources: List<CrConstantSource>,
 ) : CrConstantLikeSym<CrConstantSource>(name, sources) {
@@ -22,7 +22,7 @@ sealed class CrTypeSym(
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
         if (other::class != this::class) return false
-        return fqName == (other as CrTypeSym).fqName
+        return fqName == (other as CrProperTypeSym).fqName
     }
 
     override fun hashCode() = fqName?.hashCode() ?: 0

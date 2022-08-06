@@ -13,7 +13,7 @@ import org.crystal.intellij.resolve.scopes.CrScope
 sealed class CrModuleLikeSym(
     name: String,
     sources: List<CrConstantSource>
-) : CrTypeSym(name, sources) {
+) : CrProperTypeSym(name, sources) {
     companion object {
         private val TYPE_PARAMETERS = newResolveSlice<CrModuleLikeSym, Map<String, CrTypeParameterSym>>("TYPE_PARAMETERS")
         private val PARENTS = newResolveSlice<CrModuleLikeSym, CrModuleLikeScope.ParentList>("PARENTS")

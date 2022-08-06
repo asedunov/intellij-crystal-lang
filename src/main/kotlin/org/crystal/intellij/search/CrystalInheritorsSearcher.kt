@@ -11,7 +11,7 @@ import org.crystal.intellij.resolve.predefinedSubclasses
 import org.crystal.intellij.resolve.scopes.contains
 import org.crystal.intellij.resolve.scopes.getTypeAs
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
-import org.crystal.intellij.resolve.symbols.CrTypeSym
+import org.crystal.intellij.resolve.symbols.CrProperTypeSym
 import org.crystal.intellij.stubs.indexes.CrystalTypeBySuperclassNameIndex
 
 object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInheritorsSearch.Parameters>(true) {
@@ -29,7 +29,7 @@ object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInh
         checkDeep: Boolean,
         searchScope: SearchScope,
         consumer: Processor<in CrModuleLikeSym>,
-        processed: HashSet<CrTypeSym>
+        processed: HashSet<CrProperTypeSym>
     ): Boolean {
         if (!processed.add(baseSym)) return true
         val fqName = baseSym.fqName
@@ -62,7 +62,7 @@ object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInh
         checkDeep: Boolean,
         searchScope: SearchScope,
         consumer: Processor<in CrModuleLikeSym>,
-        processed: HashSet<CrTypeSym>
+        processed: HashSet<CrProperTypeSym>
     ): Boolean {
         if (baseSym !in candidate.parents) return true
         if (!consumer.process(candidate)) return false

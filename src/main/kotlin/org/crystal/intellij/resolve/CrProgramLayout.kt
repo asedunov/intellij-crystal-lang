@@ -158,7 +158,7 @@ class CrProgramLayout(val program: CrProgramSym) {
         } ?: emptyList()
     }
 
-    fun getFallbackType(fqName: StableFqName): CrTypeSym? {
+    fun getFallbackType(fqName: StableFqName): CrProperTypeSym? {
         return fallbackTypes[fqName]
     }
 }

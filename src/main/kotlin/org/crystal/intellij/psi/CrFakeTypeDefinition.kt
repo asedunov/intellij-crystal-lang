@@ -3,11 +3,11 @@ package org.crystal.intellij.psi
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.FakePsiElement
 import org.crystal.intellij.resolve.FqName
-import org.crystal.intellij.resolve.symbols.CrTypeSym
+import org.crystal.intellij.resolve.symbols.CrProperTypeSym
 
 class CrFakeTypeDefinition(
     private val parent: PsiElement,
-    private val sym: CrTypeSym
+    private val sym: CrProperTypeSym
 ) : FakePsiElement(), CrConstantSource {
     override fun getParent() = parent
 

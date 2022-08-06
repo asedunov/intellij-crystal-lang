@@ -7,7 +7,7 @@ import com.intellij.openapi.roots.ui.util.CompositeAppearance
 import com.intellij.psi.PsiElement
 import org.crystal.intellij.presentation.getIcon
 import org.crystal.intellij.psi.CrConstantSource
-import org.crystal.intellij.resolve.symbols.CrTypeSym
+import org.crystal.intellij.resolve.symbols.CrProperTypeSym
 import java.awt.Font
 
 class CrystalTypeHierarchyNodeDescriptor(
@@ -18,8 +18,8 @@ class CrystalTypeHierarchyNodeDescriptor(
     val source: CrConstantSource?
         get() = psiElement as? CrConstantSource
 
-    val symbol: CrTypeSym?
-        get() = source?.resolveSymbol() as? CrTypeSym
+    val symbol: CrProperTypeSym?
+        get() = source?.resolveSymbol() as? CrProperTypeSym
 
     override fun getIcon(element: PsiElement) = symbol?.getIcon()
 

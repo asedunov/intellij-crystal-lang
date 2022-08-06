@@ -7,4 +7,4 @@ class CrAnnotationSym(
     override val namespace: CrModuleLikeSym,
     sources: List<CrConstantSource>,
     override val program: CrProgramSym
-) : CrTypeSym(name, sources)
+) : CrProperTypeSym(name, sources)

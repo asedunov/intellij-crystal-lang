@@ -53,7 +53,7 @@ val CrElement.locationString: String
 
 fun CrSym<*>.getIcon(): Icon? {
     if (this is CrMethodSym) return CrystalIcons.METHOD.withVisibility(visibility)
-    if (this !is CrTypeSym) return null
+    if (this !is CrProperTypeSym) return null
     return when (this) {
         is CrAnnotationSym -> CrystalIcons.ANNOTATION
         is CrClassSym -> CrystalIcons.CLASS

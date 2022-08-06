@@ -6,9 +6,9 @@ import org.crystal.intellij.psi.stubChildOfType
 import org.crystal.intellij.resolve.StableFqName
 import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
-import org.crystal.intellij.resolve.symbols.CrTypeSym
+import org.crystal.intellij.resolve.symbols.CrProperTypeSym
 
-inline fun <reified T : CrTypeSym> CrScope.getTypeAs(fqName: StableFqName): T? {
+inline fun <reified T : CrProperTypeSym> CrScope.getTypeAs(fqName: StableFqName): T? {
     var scope = this
     var curFqName = fqName
     while (true) {

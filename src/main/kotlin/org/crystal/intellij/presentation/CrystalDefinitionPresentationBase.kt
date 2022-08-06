@@ -102,6 +102,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         is CrUnderscoreTypeElement -> append("_")
         is CrUnionTypeElement -> append(type.componentTypes, " | ") { appendType(it) }
         null -> append("???")
+        else -> append("???")
     }
 
     protected fun StringBuilder.appendPath(path: CrPathNameElement?): StringBuilder = when {

@@ -7,7 +7,7 @@ class CrTypeParameterSym(
     name: String,
     sources: List<CrTypeParameter>,
     override val namespace: CrSym<*>
-) : CrConstantLikeSym<CrTypeParameter>(name, sources) {
+) : CrTypeSym<CrTypeParameter>(name, sources) {
     override val program: CrProgramSym
         get() = namespace.program
 

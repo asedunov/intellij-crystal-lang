@@ -1,7 +1,6 @@
 package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrMethod
-import org.crystal.intellij.psi.CrVisibility
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.scopes.CrMethodScope
@@ -37,9 +36,6 @@ class CrMethodSym(
         } ?: emptyMap()
 
     fun getTypeParameter(name: String): CrTypeParameterSym? = _typeParameters[name]
-
-    val visibility: CrVisibility?
-        get() = source.visibility
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

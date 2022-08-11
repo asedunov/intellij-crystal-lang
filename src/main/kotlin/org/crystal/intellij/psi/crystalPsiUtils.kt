@@ -2,7 +2,11 @@ package org.crystal.intellij.psi
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
-import org.crystal.intellij.lexer.*
+import com.intellij.util.containers.JBIterable
+import org.crystal.intellij.lexer.CR_ANDAND_OP
+import org.crystal.intellij.lexer.CR_ASSIGN_OP
+import org.crystal.intellij.lexer.CR_NOT_OP
+import org.crystal.intellij.lexer.CR_OROR_OP
 
 val CrNamedElement.presentableKind: String
     get() = when (this) {
@@ -74,3 +78,10 @@ val PsiElement.isAnnotationTransparent: Boolean
 
 val CrExpression.isTopLevel: Boolean
     get() = parentStubOrPsi().let { it is CrTopLevelHolder }
+
+val CrElement.macros: JBIterable<CrMacro>
+    get() {
+        if (this is CrStubbedElementImpl<*> && stub != null) return stubChildrenOfType()
+        val container = (this as? CrDefinitionWithBody)?.body ?: this
+        return container.childrenOfType()
+    }

@@ -8,7 +8,7 @@ import com.intellij.psi.stubs.StubOutputStream
 import org.crystal.intellij.psi.CrMacro
 import org.crystal.intellij.stubs.api.CrMacroStub
 import org.crystal.intellij.stubs.impl.CrMacroStubImpl
-import org.crystal.intellij.stubs.indexes.indexFunction
+import org.crystal.intellij.stubs.indexes.indexMacro
 
 object CrMacroElementType : CrStubElementType<CrMacro, CrMacroStub>(
     "CR_MACRO_DEFINITION",
@@ -29,6 +29,6 @@ object CrMacroElementType : CrStubElementType<CrMacro, CrMacroStub>(
     }
 
     override fun indexStub(stub: CrMacroStub, sink: IndexSink) {
-        indexFunction(stub, sink)
+        indexMacro(stub, sink)
     }
 }

@@ -6,9 +6,7 @@ import com.intellij.model.Pointer
 import com.intellij.model.Symbol
 import com.intellij.util.SmartFMap
 import com.intellij.util.SmartList
-import org.crystal.intellij.psi.CrAnnotationExpression
-import org.crystal.intellij.psi.CrElement
-import org.crystal.intellij.psi.CrExpression
+import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.StableFqName
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
@@ -52,4 +50,9 @@ sealed class CrSym<Source: CrElement>(
             }
             map
         } ?: emptyMap()
+
+    open val visibility: CrVisibility? by lazy {
+        val typeDef = sources.firstOrNull { it is CrVisibilityHolder } as? CrVisibilityHolder
+        typeDef?.visibility ?: CrVisibility.PUBLIC
+    }
 }

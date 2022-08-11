@@ -29,7 +29,7 @@ sealed class CrModuleLikeSym(
     open val superClass: CrClassLikeSym?
         get() = null
 
-    val parents: CrModuleLikeScope.ParentList?
+    override val parents: CrModuleLikeScope.ParentList?
         get() = program.project.resolveCache.getOrCompute(PARENTS, this) {
             computeIncludedModules().fold(noIncludesParents) { p, m -> CrModuleLikeScope.ParentList(m, p) }
         }

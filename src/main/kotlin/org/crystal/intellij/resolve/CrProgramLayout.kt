@@ -9,6 +9,7 @@ import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.symbols.*
 import org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex
+import org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
 
@@ -16,6 +17,7 @@ class CrProgramLayout(val program: CrProgramSym) {
     companion object {
         private val FILE_FRAGMENTS = newResolveSlice<Project, Map<CrTopLevelHolder, CrSymbolOrdinal>>("FILE_FRAGMENTS")
         private val TYPE_SOURCES = newResolveSlice<StableFqName, List<CrConstantSource>>("TYPE_SOURCES")
+        private val MACRO_SOURCES = newResolveSlice<FqName, List<CrMacro>>("TOP_LEVEL_MACROS")
     }
 
     private val project: Project
@@ -149,18 +151,30 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     fun getTopLevelOrdinal(topLevelHolder: CrTopLevelHolder) = fragments[topLevelHolder]
 
+    private fun <T : CrSymbolOrdinalHolder> Collection<T>.sortSources(): List<T> {
+        if (isEmpty()) return emptyList()
+        if (size == 1) return toList()
+        val sourceMap = associateWith { it.ordinal() }
+        if (sourceMap.size == 1) return toList()
+        return asSequence()
+            .filter { sourceMap[it] != null }
+            .sortedBy { sourceMap[it]!! }
+            .toList()
+    }
+
     fun getTypeSources(fqName: StableFqName): List<CrConstantSource> {
         return project.resolveCache.getOrCompute(TYPE_SOURCES, fqName) {
-            val sources = CrystalConstantFqNameIndex.get(fqName.fullName, project, GlobalSearchScope.allScope(project))
-            if (sources.isEmpty()) return@getOrCompute emptyList()
-            if (sources.size == 1) return@getOrCompute sources.toList()
-            val sourceMap = sources.associateWith { it.ordinal() }
-            if (sourceMap.size == 1) return@getOrCompute sources.toList()
-            sources
-                .asSequence()
-                .filter { sourceMap[it] != null }
-                .sortedBy { sourceMap[it]!! }
-                .toList()
+            CrystalConstantFqNameIndex
+                .get(fqName.fullName, project, GlobalSearchScope.allScope(project))
+                .sortSources()
+        } ?: emptyList()
+    }
+
+    fun getMacroSources(fqName: FqName): List<CrMacro> {
+        return project.resolveCache.getOrCompute(MACRO_SOURCES, fqName) {
+            CrystalMacroFqNameIndex
+                .get(fqName.fullName, project, GlobalSearchScope.allScope(project))
+                .sortSources()
         } ?: emptyList()
     }
 

@@ -49,6 +49,15 @@ fun indexFunction(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
     sink.occurrence(CrystalFunctionShortNameIndex.key, name)
 }
 
+fun indexMacro(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
+    stub.psi.name?.let { name ->
+        sink.occurrence(CrystalFunctionShortNameIndex.key, name)
+    }
+    stub.psi.fqName?.let { fqName ->
+        sink.occurrence(CrystalMacroFqNameIndex.key, fqName.fullName)
+    }
+}
+
 fun indexVariable(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
     val name = stub.psi.name ?: return
     sink.occurrence(CrystalVariableShortNameIndex.key, name)

@@ -51,23 +51,22 @@ val CrElement.locationString: String
         append(')')
     }
 
-fun CrSym<*>.getIcon(): Icon? {
-    if (this is CrMethodSym) return CrystalIcons.METHOD.withVisibility(visibility)
-    if (this !is CrProperTypeSym) return null
-    return when (this) {
-        is CrAnnotationSym -> CrystalIcons.ANNOTATION
-        is CrClassSym, is CrMetaclassSym -> CrystalIcons.CLASS
-        is CrEnumSym -> CrystalIcons.ENUM
-        is CrStructSym -> CrystalIcons.STRUCT
-        is CrCStructSym -> CrystalIcons.STRUCT
-        is CrCUnionSym -> CrystalIcons.UNION
-        is CrLibrarySym -> CrystalIcons.LIBRARY
-        is CrModuleSym -> CrystalIcons.MODULE
-        is CrProgramSym -> CrystalIcons.MODULE
-        is CrTypeAliasSym -> CrystalIcons.ALIAS
-        is CrTypeDefSym -> CrystalIcons.TYPEDEF
-    }.withVisibility(visibility)
-}
+fun CrSym<*>.getIcon(): Icon? = when (this) {
+    is CrAnnotationSym -> CrystalIcons.ANNOTATION
+    is CrClassSym, is CrMetaclassSym -> CrystalIcons.CLASS
+    is CrEnumSym -> CrystalIcons.ENUM
+    is CrStructSym -> CrystalIcons.STRUCT
+    is CrCStructSym -> CrystalIcons.STRUCT
+    is CrCUnionSym -> CrystalIcons.UNION
+    is CrLibrarySym -> CrystalIcons.LIBRARY
+    is CrModuleSym -> CrystalIcons.MODULE
+    is CrProgramSym -> CrystalIcons.MODULE
+    is CrTypeAliasSym -> CrystalIcons.ALIAS
+    is CrTypeDefSym -> CrystalIcons.TYPEDEF
+    is CrMethodSym -> CrystalIcons.METHOD
+    is CrMacroSym -> CrystalIcons.MACRO
+    else -> null
+}?.withVisibility(visibility)
 
 val CrSym<*>.presentableKind: String
     get() = when (this) {
@@ -86,6 +85,7 @@ val CrSym<*>.presentableKind: String
         is CrTypeParameterSym -> "type parameter"
         is CrConstantSym -> "constant"
         is CrMethodSym -> "method"
+        is CrMacroSym -> "macro"
     }
 
 val CrSym<*>.shortDescription: String

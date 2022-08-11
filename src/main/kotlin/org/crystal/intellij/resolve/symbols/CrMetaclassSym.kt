@@ -6,7 +6,7 @@ import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.scopes.getTypeAs
 
 class CrMetaclassSym(
-    private val instanceSym: CrTypeSym<*>,
+    val instanceSym: CrTypeSym<*>,
     name: String = instanceSym.metaclassName,
     sources: List<CrConstantSource> = emptyList()
 ) : CrClassLikeSym(name, sources) {

@@ -2,6 +2,7 @@ package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrSymbolOrdinalHolder
 import org.crystal.intellij.resolve.CrStdFqNames
+import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
 import org.crystal.intellij.resolve.scopes.getTypeAs
 
 sealed class CrTypeSym<Source : CrSymbolOrdinalHolder>(
@@ -15,4 +16,7 @@ sealed class CrTypeSym<Source : CrSymbolOrdinalHolder>(
             program.memberScope.getTypeAs(CrStdFqNames.CLASS)!!
         }
     }
+
+    open val parents: CrModuleLikeScope.ParentList?
+        get() = null
 }

@@ -14,6 +14,9 @@ class CrMacroSym(
     val source: CrMacro
         get() = sources.single()
 
+    val signature: CrMacroSignature
+        get() = source.signature
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is CrMacroSym) return false

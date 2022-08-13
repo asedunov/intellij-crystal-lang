@@ -5,12 +5,11 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.stubs.StringStubIndexExtension
 import com.intellij.psi.stubs.StubIndex
 import com.intellij.psi.stubs.StubIndexKey
-import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.psi.CrMacro
 
-object CrystalMacroFqNameIndex : StringStubIndexExtension<CrMacro>() {
+object CrystalMacroSignatureIndex : StringStubIndexExtension<CrMacro>() {
     private val KEY = StubIndexKey.createIndexKey<String, CrMacro>(
-        CrystalMacroFqNameIndex::class.java.canonicalName
+        CrystalMacroSignatureIndex::class.java.canonicalName
     )
 
     override fun getKey() = KEY

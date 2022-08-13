@@ -27,6 +27,9 @@ class CrSimpleParameter : CrDefinitionImpl<CrSimpleParameterStub>, CrParameter, 
             return if (secondNameElement is CrSimpleNameElement) return firstNameElement else null
         }
 
+    val externalName: String?
+        get() = externalNameElement?.name ?: name
+
     override val nameElement: CrSimpleNameElement?
         get() {
             greenStub?.let {

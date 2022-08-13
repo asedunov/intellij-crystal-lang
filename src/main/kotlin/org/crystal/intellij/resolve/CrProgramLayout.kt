@@ -10,7 +10,7 @@ import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.symbols.*
 import org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex
 import org.crystal.intellij.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex
-import org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex
+import org.crystal.intellij.stubs.indexes.CrystalMacroSignatureIndex
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
 
@@ -19,7 +19,7 @@ class CrProgramLayout(val program: CrProgramSym) {
         private val FILE_FRAGMENTS = newResolveSlice<Project, Map<CrTopLevelHolder, CrSymbolOrdinal>>("FILE_FRAGMENTS")
         private val TYPE_SOURCES = newResolveSlice<StableFqName, List<CrConstantSource>>("TYPE_SOURCES")
         private val INCLUDE_LIKE_SOURCES = newResolveSlice<String, List<CrIncludeLikeExpression>>("INCLUDE_LIKE_SOURCES")
-        private val MACRO_SOURCES = newResolveSlice<FqName, List<CrMacro>>("TOP_LEVEL_MACROS")
+        private val MACRO_SOURCES = newResolveSlice<CrMacroSignature, List<CrMacro>>("MACRO_SOURCES")
     }
 
     private val project: Project
@@ -181,12 +181,16 @@ class CrProgramLayout(val program: CrProgramSym) {
         } ?: emptyList()
     }
 
-    fun getMacroSources(fqName: FqName): List<CrMacro> {
-        return project.resolveCache.getOrCompute(MACRO_SOURCES, fqName) {
-            CrystalMacroFqNameIndex
-                .get(fqName.fullName, project, GlobalSearchScope.allScope(project))
+    private fun getMacroSources(signature: CrMacroSignature): List<CrMacro> {
+        return project.resolveCache.getOrCompute(MACRO_SOURCES, signature) {
+            CrystalMacroSignatureIndex
+                .get(signature.serialize(), project, GlobalSearchScope.allScope(project))
                 .sortSources()
         } ?: emptyList()
+    }
+
+    fun getMacroSources(signature: CrMacroSignature, parentFqName: StableFqName?): List<CrMacro> {
+        return getMacroSources(signature).filter { it.parentFqName() == parentFqName }
     }
 
     fun getFallbackType(fqName: StableFqName): CrProperTypeSym? {

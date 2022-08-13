@@ -1,6 +1,7 @@
 package org.crystal.intellij.resolve.scopes
 
 import com.intellij.openapi.project.Project
+import com.intellij.util.SmartList
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.*
 import org.crystal.intellij.resolve.cache.newResolveSlice
@@ -24,8 +25,8 @@ class CrModuleLikeScope(
         get() = symbol.program.layout
 
     private val typeMapSlice = newResolveSlice<Pair<String, Boolean>, CrSym<*>>("TYPE_MAP: ${symbol.fqName}")
-    private val declaredMacrosSlice = newResolveSlice<String, Collection<CrMacroSym>>("DECLARED_MACROS: ${symbol.fqName}")
-    private val macrosSlice = newResolveSlice<String, Collection<CrMacroSym>>("MACROS: ${symbol.fqName}")
+    private val declaredMacrosSlice = newResolveSlice<CrMacroSignature, List<CrMacroSym>>("DECLARED_MACROS: ${symbol.fqName}")
+    private val macrosSlice = newResolveSlice<CrMacroSignature, List<CrMacroSym>>("MACROS: ${symbol.fqName}")
 
     private fun createTypeSymbol(fqName: StableFqName, sources: List<CrConstantSource>): CrSym<*>? {
         if (fqName == CrStdFqNames.CLASS) return CrMetaclassSym(
@@ -78,32 +79,34 @@ class CrModuleLikeScope(
         }
     }
 
-    private tailrec fun ParentList.findMacrosInParents(name: String): Collection<CrMacroSym>? {
+    private tailrec fun ParentList.findMacrosInParents(
+        signature: CrMacroSignature,
+        result: MutableList<CrMacroSym>
+    ) {
         val macroOwner = if (this@CrModuleLikeScope.symbol.isMetaclass) symbol.metaclass else symbol
-        val currentMacros = macroOwner.memberScope.getMacros(name)
-        if (currentMacros.isNotEmpty()) return currentMacros
-        return prev?.findMacrosInParents(name)
+        result += macroOwner.memberScope.getAllMacros(signature)
+        prev?.findMacrosInParents(signature, result)
     }
 
-    override fun getOwnMacros(name: String): Collection<CrMacroSym> {
+    override fun getOwnMacros(signature: CrMacroSignature): List<CrMacroSym> {
         val instanceSym = symbol.instanceSym ?: return emptyList()
-        if (name in HOOK_NAMES) return emptyList()
+        if (signature.name in HOOK_NAMES) return emptyList()
         val facade = project.resolveFacade
-        return facade.resolveCache.getOrCompute(declaredMacrosSlice, name) {
-            // TODO: macro overriding
-            val fqName = MemberFqName(name, instanceSym.fqName)
-            facade.programLayout.getMacroSources(fqName).mapNotNull { it.resolveSymbol() }
+        return facade.resolveCache.getOrCompute(declaredMacrosSlice, signature) {
+            val parentFqName = instanceSym.fqName
+            facade.programLayout.getMacroSources(signature, parentFqName).mapNotNull { it.resolveSymbol() }
         } ?: emptyList()
     }
 
-    override fun getMacros(name: String): Collection<CrMacroSym> {
-        if (name in HOOK_NAMES) return emptyList()
-        return project.resolveCache.getOrCompute(macrosSlice, name) {
+    override fun getAllMacros(signature: CrMacroSignature): List<CrMacroSym> {
+        if (signature.name in HOOK_NAMES) return emptyList()
+        return project.resolveCache.getOrCompute(macrosSlice, signature) {
+            val result = SmartList<CrMacroSym>()
             val macroOwner = if (symbol.isMetaclass) symbol else symbol.metaclass
-            val currentMacros = macroOwner.memberScope.getOwnMacros(name)
-            if (currentMacros.isNotEmpty()) return@getOrCompute currentMacros
             // TODO: check if there are methods with the same name
-            (symbol.instanceSym ?: symbol).parents?.findMacrosInParents(name) ?: emptyList()
+            (symbol.instanceSym ?: symbol).parents?.findMacrosInParents(signature, result)
+            result += macroOwner.memberScope.getOwnMacros(signature)
+            result
         } ?: emptyList()
     }
 }

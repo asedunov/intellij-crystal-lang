@@ -1,6 +1,6 @@
 package org.crystal.intellij.psi
 
-sealed interface CrNameElement : CrElement {
+sealed interface CrNameElement : CrReferenceElement {
     override fun accept(visitor: CrVisitor) = visitor.visitNameElement(this)
 
     val kind: CrNameKind

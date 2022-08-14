@@ -3,9 +3,9 @@ package org.crystal.intellij.psi
 import com.intellij.util.SmartFMap
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
+import org.crystal.intellij.resolve.currentModuleLikeSym
 import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
-import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleSym
 import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.stubs.api.CrIncludeStub
@@ -26,9 +26,7 @@ sealed interface CrIncludeLikeExpression : CrExpression, CrSymbolOrdinalHolder {
                         CrModuleLikeScope.ParentList(targetModule, prevScope.parentList)
                     )
                 } else {
-                    val typeDef = parentStubOrPsiOfType<CrTypeDefinition>()
-                    val module = if (typeDef != null) typeDef.resolveSymbol() as? CrModuleLikeSym else facade.program
-                    module?.noIncludesMemberScope as? CrModuleLikeScope
+                    currentModuleLikeSym()?.noIncludesMemberScope as? CrModuleLikeScope
                 }
             }
         }

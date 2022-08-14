@@ -86,6 +86,7 @@ val CrSym<*>.presentableKind: String
         is CrConstantSym -> "constant"
         is CrMethodSym -> "method"
         is CrMacroSym -> "macro"
+        is CrMacroParameterSym -> "parameter"
     }
 
 val CrSym<*>.shortDescription: String

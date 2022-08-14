@@ -7,7 +7,9 @@ import com.intellij.model.presentation.SymbolPresentationService
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.util.containers.ObjectIntHashMap
+import org.crystal.intellij.psi.CrNameElement
 import org.crystal.intellij.psi.CrPathNameElement
+import org.crystal.intellij.psi.CrSimpleNameElement
 import org.crystal.intellij.psi.CrVisitor
 import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.resolve.symbols.CrTypeSym
@@ -77,10 +79,13 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                 holder.registerProblem(e, message, ProblemHighlightType.WARNING)
             }
 
-            override fun visitPathNameElement(o: CrPathNameElement) {
-                super.visitPathNameElement(o)
+            override fun visitNameElement(o: CrNameElement) {
+                super.visitNameElement(o)
 
-                val nameElement = o.item ?: return
+                val nameElement = when (o) {
+                    is CrPathNameElement -> o.item ?: return
+                    is CrSimpleNameElement -> o
+                }
                 val sym = o.resolveSymbol()
                 if (sym != null) {
                     val message = buildString {
@@ -91,7 +96,7 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                     }
                     report(nameElement, message)
                 }
-                else {
+                else if (o is CrPathNameElement) {
                     report(nameElement, "unresolved")
                 }
             }

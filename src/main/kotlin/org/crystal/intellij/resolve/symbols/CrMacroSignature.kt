@@ -7,7 +7,7 @@ data class CrMacroSignature(
     val name: String,
     private val paramCount: Int = 0,
     private val splatIndex: Int = -1,
-    private val hasDoubleSplat: Boolean = false,
+    val hasDoubleSplat: Boolean = false,
     private val requiredExternalNames: List<String> = emptyList()
 ) {
     companion object {

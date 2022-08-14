@@ -10,6 +10,7 @@ import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.symbols.*
 import org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex
 import org.crystal.intellij.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex
+import org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex
 import org.crystal.intellij.stubs.indexes.CrystalMacroSignatureIndex
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
@@ -19,7 +20,8 @@ class CrProgramLayout(val program: CrProgramSym) {
         private val FILE_FRAGMENTS = newResolveSlice<Project, Map<CrTopLevelHolder, CrSymbolOrdinal>>("FILE_FRAGMENTS")
         private val TYPE_SOURCES = newResolveSlice<StableFqName, List<CrConstantSource>>("TYPE_SOURCES")
         private val INCLUDE_LIKE_SOURCES = newResolveSlice<String, List<CrIncludeLikeExpression>>("INCLUDE_LIKE_SOURCES")
-        private val MACRO_SOURCES = newResolveSlice<CrMacroSignature, List<CrMacro>>("MACRO_SOURCES")
+        private val MACRO_SOURCES_BY_SIGNATURE = newResolveSlice<CrMacroSignature, List<CrMacro>>("MACRO_SOURCES_BY_SIGNATURE")
+        private val MACRO_SOURCES_BY_FQ_NAME = newResolveSlice<MemberFqName, List<CrMacro>>("MACRO_SOURCES_BY_FQ_NAME")
     }
 
     private val project: Project
@@ -182,7 +184,7 @@ class CrProgramLayout(val program: CrProgramSym) {
     }
 
     private fun getMacroSources(signature: CrMacroSignature): List<CrMacro> {
-        return project.resolveCache.getOrCompute(MACRO_SOURCES, signature) {
+        return project.resolveCache.getOrCompute(MACRO_SOURCES_BY_SIGNATURE, signature) {
             CrystalMacroSignatureIndex
                 .get(signature.serialize(), project, GlobalSearchScope.allScope(project))
                 .sortSources()
@@ -191,6 +193,14 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     fun getMacroSources(signature: CrMacroSignature, parentFqName: StableFqName?): List<CrMacro> {
         return getMacroSources(signature).filter { it.parentFqName() == parentFqName }
+    }
+
+    fun getMacroSources(fqName: MemberFqName): List<CrMacro> {
+        return project.resolveCache.getOrCompute(MACRO_SOURCES_BY_FQ_NAME, fqName) {
+            CrystalMacroFqNameIndex
+                .get(fqName.fullName, project, GlobalSearchScope.allScope(project))
+                .sortSources()
+        } ?: emptyList()
     }
 
     fun getFallbackType(fqName: StableFqName): CrProperTypeSym? {

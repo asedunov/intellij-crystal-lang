@@ -4,8 +4,11 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CR_SIMPLE_NAME_ELEMENT
+import org.crystal.intellij.references.CrSimpleReference
+import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.stubs.api.CrNameStub
 
+@Suppress("UnstableApiUsage")
 class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
     companion object {
         val EMPTY_ARRAY = arrayOf<CrSimpleNameElement>()
@@ -59,4 +62,18 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
 
     val isMetaClassRef: Boolean
         get() = firstChild?.elementType == CR_CLASS
+
+    private val ownReference: CrSimpleReference
+        get() = CrSimpleReference(this)
+
+    override fun getOwnReferences() = when (parent) {
+        is CrMacro, is CrCallLikeExpression -> listOf(ownReference)
+        else -> emptyList()
+    }
+
+    override fun resolveSymbol(): CrSym<*>? {
+        (parent as? CrMacro)?.let { return it.resolveSymbol() }
+        (parent as? CrCallLikeExpression)?.let { return it.resolveCallee() }
+        return null
+    }
 }

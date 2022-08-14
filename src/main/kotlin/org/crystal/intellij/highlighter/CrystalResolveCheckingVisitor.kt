@@ -37,8 +37,10 @@ class CrystalResolveCheckingVisitor(
     override fun visitClass(o: CrClass) {
         super.visitClass(o)
 
-        val sym = o.resolveSymbol() ?: return
-        checkKindMismatch<CrClassSym>(sym, o)
+        val sym = o.resolveSymbol() as? CrConstantLikeSym<*> ?: return
+        if (sym.fqName != CrStdFqNames.CLASS) {
+            checkKindMismatch<CrClassSym>(sym, o)
+        }
         if (sym is CrClassSym) {
             checkSuperclass(sym, o)
             checkGenericReopening(sym, o)

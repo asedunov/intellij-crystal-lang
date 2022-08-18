@@ -1,12 +1,11 @@
 package org.crystal.intellij.resolve.symbols
 
 import com.intellij.util.SmartList
-import org.crystal.intellij.psi.CrConstantSource
-import org.crystal.intellij.psi.CrModuleLikeDefinition
-import org.crystal.intellij.psi.CrTypeParameter
-import org.crystal.intellij.psi.CrTypeParameterHolder
+import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
+import org.crystal.intellij.resolve.layout
+import org.crystal.intellij.resolve.scopes.CrEmptyScope
 import org.crystal.intellij.resolve.scopes.CrModuleLikeScope
 import org.crystal.intellij.resolve.scopes.CrScope
 
@@ -15,6 +14,9 @@ sealed class CrModuleLikeSym(
     sources: List<CrConstantSource>
 ) : CrProperTypeSym(name, sources) {
     companion object {
+        private val NO_INCLUDES_PARENTS = newResolveSlice<CrModuleLikeSym, CrModuleLikeScope.ParentList>("NO_INCLUDES_PARENTS")
+        private val NO_INCLUDES_MEMBER_SCOPE = newResolveSlice<CrModuleLikeSym, CrModuleLikeScope>("NO_INCLUDES_MEMBER_SCOPE")
+        private val MEMBER_SCOPE = newResolveSlice<CrModuleLikeSym, CrModuleLikeScope>("MEMBER_SCOPE")
         private val TYPE_PARAMETERS = newResolveSlice<CrModuleLikeSym, Map<String, CrTypeParameterSym>>("TYPE_PARAMETERS")
         private val PARENTS = newResolveSlice<CrModuleLikeSym, CrModuleLikeScope.ParentList>("PARENTS")
     }
@@ -22,9 +24,10 @@ sealed class CrModuleLikeSym(
     override val containedScope: CrScope
         get() = memberScope
 
-    open val memberScope by lazy {
-        CrModuleLikeScope(this, parents)
-    }
+    open val memberScope: CrScope
+        get() = program.project.resolveCache.getOrCompute(MEMBER_SCOPE, this) {
+            CrModuleLikeScope(this, parents)
+        } ?: CrEmptyScope
 
     open val superClass: CrClassLikeSym?
         get() = null
@@ -36,23 +39,23 @@ sealed class CrModuleLikeSym(
 
     protected open fun computeIncludedModules(): Collection<CrModuleLikeSym> {
         val modules = LinkedHashSet<CrModuleSym>()
-        for (source in sources) {
-            if (source !is CrModuleLikeDefinition<*, *>) continue
-            for (include in source.includes) {
-                val module = include.targetModule ?: continue
-                modules += module
-            }
+        for (expr in program.layout.getIncludeLikeSources(fqName)) {
+            if (expr !is CrIncludeExpression) continue
+            val module = expr.targetModule ?: continue
+            modules += module
         }
         return modules
     }
 
-    val noIncludesMemberScope by lazy {
-        CrModuleLikeScope(this, noIncludesParents)
-    }
+    val noIncludesMemberScope: CrScope
+        get() = program.project.resolveCache.getOrCompute(NO_INCLUDES_MEMBER_SCOPE, this) {
+            CrModuleLikeScope(this, noIncludesParents)
+        } ?: CrEmptyScope
 
-    private val noIncludesParents by lazy {
-        superClass?.let { CrModuleLikeScope.ParentList(it, null) }
-    }
+    private val noIncludesParents: CrModuleLikeScope.ParentList?
+        get() = program.project.resolveCache.getOrCompute(NO_INCLUDES_PARENTS, this) {
+            superClass?.let { CrModuleLikeScope.ParentList(it, null) }
+        }
 
     private val _typeParameters: Map<String, CrTypeParameterSym>
         get() = program.project.resolveCache.getOrCompute(TYPE_PARAMETERS, this) {

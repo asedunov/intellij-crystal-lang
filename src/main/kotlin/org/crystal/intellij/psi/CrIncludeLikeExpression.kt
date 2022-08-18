@@ -28,7 +28,7 @@ sealed interface CrIncludeLikeExpression : CrExpression, CrSymbolOrdinalHolder {
                 } else {
                     val typeDef = parentStubOrPsiOfType<CrTypeDefinition>()
                     val module = if (typeDef != null) typeDef.resolveSymbol() as? CrModuleLikeSym else facade.program
-                    module?.noIncludesMemberScope
+                    module?.noIncludesMemberScope as? CrModuleLikeScope
                 }
             }
         }

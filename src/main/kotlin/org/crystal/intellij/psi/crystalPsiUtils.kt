@@ -2,11 +2,11 @@ package org.crystal.intellij.psi
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
-import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.lexer.CR_ANDAND_OP
 import org.crystal.intellij.lexer.CR_ASSIGN_OP
 import org.crystal.intellij.lexer.CR_NOT_OP
 import org.crystal.intellij.lexer.CR_OROR_OP
+import org.crystal.intellij.resolve.StableFqName
 
 val CrNamedElement.presentableKind: String
     get() = when (this) {
@@ -78,3 +78,9 @@ val PsiElement.isAnnotationTransparent: Boolean
 
 val CrExpression.isTopLevel: Boolean
     get() = parentStubOrPsi().let { it is CrTopLevelHolder }
+
+fun CrElement.parentFqName(): StableFqName? = when (val parent = parentStubOrPsi()) {
+    is CrDefinitionWithBody -> parent.fqName as? StableFqName
+    is CrBody -> (parent.parent as? CrDefinitionWithBody)?.fqName as? StableFqName
+    else -> null
+}

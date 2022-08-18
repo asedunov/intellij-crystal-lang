@@ -4,6 +4,7 @@ import com.intellij.psi.stubs.IndexSink
 import org.crystal.intellij.parser.CR_INSTANTIATED_TYPE
 import org.crystal.intellij.parser.CR_PATH_NAME_ELEMENT
 import org.crystal.intellij.parser.CR_PATH_TYPE
+import org.crystal.intellij.psi.parentFqName
 import org.crystal.intellij.stubs.api.*
 import org.crystal.intellij.stubs.parents
 
@@ -70,4 +71,10 @@ fun indexConstant(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
     stub.psi.fqName?.let { fqName ->
         sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
     }
+}
+
+fun indexIncludeLike(stub: CrIncludeLikeStub<*>, sink: IndexSink) {
+    val parentFqName = stub.psi.parentFqName()
+    if (parentFqName == null && stub.parentStub !is CrFileStub) return
+    sink.occurrence(CrystalIncludeLikeByContainerFqNameIndex.key, parentFqName?.fullName ?: "")
 }

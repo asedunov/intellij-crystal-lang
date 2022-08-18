@@ -78,10 +78,3 @@ val PsiElement.isAnnotationTransparent: Boolean
 
 val CrExpression.isTopLevel: Boolean
     get() = parentStubOrPsi().let { it is CrTopLevelHolder }
-
-val CrElement.macros: JBIterable<CrMacro>
-    get() {
-        if (this is CrStubbedElementImpl<*> && stub != null) return stubChildrenOfType()
-        val container = (this as? CrDefinitionWithBody)?.body ?: this
-        return container.childrenOfType()
-    }

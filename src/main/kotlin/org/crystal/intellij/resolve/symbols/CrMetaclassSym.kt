@@ -1,8 +1,10 @@
 package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrConstantSource
-import org.crystal.intellij.psi.CrModuleLikeDefinition
+import org.crystal.intellij.psi.CrExtendExpression
+import org.crystal.intellij.psi.CrIncludeLikeExpression
 import org.crystal.intellij.resolve.CrStdFqNames
+import org.crystal.intellij.resolve.layout
 import org.crystal.intellij.resolve.scopes.getTypeAs
 
 class CrMetaclassSym(
@@ -29,12 +31,10 @@ class CrMetaclassSym(
 
     override fun computeIncludedModules(): Collection<CrModuleLikeSym> {
         val modules = LinkedHashSet<CrModuleSym>()
-        for (source in instanceSym.sources) {
-            if (source !is CrModuleLikeDefinition<*, *>) continue
-            for (include in source.extends) {
-                val module = include.targetModule ?: continue
-                modules += module
-            }
+        for (expr in program.layout.getIncludeLikeSources(instanceSym.fqName)) {
+            if (expr !is CrExtendExpression) continue
+            val module = expr.targetModule ?: continue
+            modules += module
         }
         return modules
     }

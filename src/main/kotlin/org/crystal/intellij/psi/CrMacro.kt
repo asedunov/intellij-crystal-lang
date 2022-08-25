@@ -53,7 +53,7 @@ class CrMacro : CrDefinitionWithFqNameImpl<CrMacro, CrMacroStub>,
             val namespace = if (typeDef != null) {
                 typeDef.resolveSymbol() as? CrModuleLikeSym ?: return@getOrCompute null
             } else facade.program
-            CrMacroSym(name, namespace.metaclass, this)
+            CrMacroSym.Defined(name, namespace.metaclass, this)
         }
     }
 }

@@ -2918,16 +2918,10 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             )
         )
 
-        private val defNameTokens = TokenSet.orSet(
-            CR_CIDS,
-            CR_BASE_OPERATORS,
-            TokenSet.create(CR_BACKQUOTE)
-        )
-
         private fun PsiBuilder.advanceToDefOrMacroName() {
             lexerState.wantsDefOrMacroName = true
             nextTokenSkipSpacesAndNewlines()
-            if (!at(defNameTokens)) error("Expected: <definition name>")
+            if (!at(CR_DEF_OR_MACRO_NAME_TOKENS)) error("Expected: <definition name>")
             lexerState.wantsDefOrMacroName = false
         }
 

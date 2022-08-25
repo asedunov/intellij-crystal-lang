@@ -3,10 +3,8 @@ package org.crystal.intellij.lineMarkers
 import com.intellij.codeInsight.daemon.LineMarkerInfo
 import com.intellij.codeInsight.daemon.LineMarkerProvider
 import com.intellij.codeInsight.daemon.NavigateAction
-import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.openapi.editor.markup.GutterIconRenderer
-import com.intellij.openapi.keymap.KeymapUtil
 import com.intellij.psi.PsiElement
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.CrystalIcons
@@ -43,7 +41,7 @@ class CrystalInheritorsLineMarkerProvider : LineMarkerProvider {
                 ::getTooltip,
                 CrystalClassInheritorsNavigationHandler,
                 GutterIconRenderer.Alignment.RIGHT
-            ) { CrystalBundle.message("line.markers.overridden.declaration") }
+            ) { CrystalBundle.message("line.markers.inheritors") }
             val actionKey = if (isModule) "line.markers.action.text.go.to.includers" else "line.markers.action.text.go.to.subclasses"
             NavigateAction.setNavigateAction(
                 info,
@@ -83,23 +81,12 @@ class CrystalInheritorsLineMarkerProvider : LineMarkerProvider {
                 append("</code>")
                 append("<br/>")
             }
-            getShortcutText()?.let {
+            getShortcutText(IdeActions.ACTION_GOTO_IMPLEMENTATION)?.let {
                 append("</p><p style='margin-top:8px;'><font size='2'>")
                 append(it)
                 append("</font>")
             }
             append("</body></html>")
-        }
-    }
-
-    private fun getShortcutText(): String? {
-        val shortcuts = ActionManager
-            .getInstance()
-            .getAction(IdeActions.ACTION_GOTO_IMPLEMENTATION)
-            .shortcutSet
-            .shortcuts
-        return shortcuts.firstOrNull()?.let {
-            CrystalBundle.message("line.markers.tooltip.text.or.press", KeymapUtil.getShortcutText(it))
         }
     }
 }

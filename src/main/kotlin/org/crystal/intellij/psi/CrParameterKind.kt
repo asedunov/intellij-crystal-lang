@@ -4,5 +4,11 @@ enum class CrParameterKind {
     ORDINARY,
     SPLAT,
     DOUBLE_SPLAT,
-    BLOCK
+    BLOCK;
+
+    companion object {
+        private val values = values()
+
+        fun byOrdinal(value: Int) = values[value]
+    }
 }

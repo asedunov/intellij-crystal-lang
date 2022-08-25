@@ -379,3 +379,9 @@ val CR_CIDS = TokenSet.orSet(
     CR_IDS,
     TokenSet.create(CR_CONSTANT)
 )
+
+val CR_DEF_OR_MACRO_NAME_TOKENS = TokenSet.orSet(
+    CR_CIDS,
+    CR_BASE_OPERATORS,
+    TokenSet.create(CR_BACKQUOTE)
+)

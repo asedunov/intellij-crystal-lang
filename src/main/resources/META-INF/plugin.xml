@@ -20,6 +20,9 @@
         <extensionPoint qualifiedName="org.crystal.classInheritorsSearch"
                         interface="com.intellij.util.QueryExecutor"
                         dynamic="true"/>
+        <extensionPoint qualifiedName="org.crystal.overridingMacroSearch"
+                        interface="com.intellij.util.QueryExecutor"
+                        dynamic="true"/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -93,6 +96,8 @@
 
         <codeInsight.lineMarkerProvider language="Crystal"
                                         implementationClass="org.crystal.intellij.lineMarkers.CrystalInheritorsLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="Crystal"
+                                        implementationClass="org.crystal.intellij.lineMarkers.CrystalMacroOverrideLineMarkerProvider"/>
 
         <typeHierarchyProvider language="Crystal"
                                implementationClass="org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyProvider"/>
@@ -141,6 +146,7 @@
         <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalWslSdkFlavor"/>
 
         <classInheritorsSearch implementation="org.crystal.intellij.search.CrystalInheritorsSearcher"/>
+        <overridingMacroSearch implementation="org.crystal.intellij.search.CrystalOverridingMacroSearcher"/>
     </extensions>
 
     <actions>

@@ -79,13 +79,15 @@ class CrModuleLikeScope(
         }
     }
 
-    private tailrec fun ParentList.findMacrosInParents(
+    private fun ParentList.findAllMacrosInParents(
         signature: CrMacroSignature,
         result: MutableList<CrMacroSym>
     ) {
         val macroOwner = if (this@CrModuleLikeScope.symbol.isMetaclass) symbol.metaclass else symbol
-        result += macroOwner.memberScope.getAllMacros(signature)
-        prev?.findMacrosInParents(signature, result)
+        prev?.findAllMacrosInParents(signature, result)
+        macroOwner.memberScope.getAllMacros(signature).mapTo(result) {
+            CrMacroSym.Inherited(it.origin, this@CrModuleLikeScope.symbol)
+        }
     }
 
     override fun getOwnMacros(signature: CrMacroSignature): List<CrMacroSym> {
@@ -104,7 +106,7 @@ class CrModuleLikeScope(
             val result = SmartList<CrMacroSym>()
             val macroOwner = if (symbol.isMetaclass) symbol else symbol.metaclass
             // TODO: check if there are methods with the same name
-            (symbol.instanceSym ?: symbol).parents?.findMacrosInParents(signature, result)
+            (symbol.instanceSym ?: symbol).parents?.findAllMacrosInParents(signature, result)
             result += macroOwner.memberScope.getOwnMacros(signature)
             result
         } ?: emptyList()

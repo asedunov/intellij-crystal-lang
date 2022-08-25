@@ -19,11 +19,11 @@ CrFileStubImpl
       CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=U)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=t)
       CR_PATH_TYPE:CrTypeStubImpl
         CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=T)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=u)
       CR_PATH_TYPE:CrTypeStubImpl
         CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=U)

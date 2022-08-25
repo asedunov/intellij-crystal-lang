@@ -1,18 +1,18 @@
 CrFileStubImpl
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_SELF_TYPE:CrTypeStubImpl
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
         CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=X)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
         CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=X)
@@ -20,7 +20,7 @@ CrFileStubImpl
             CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=A)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PATH_TYPE:CrTypeStubImpl
         CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=X)
@@ -29,21 +29,21 @@ CrFileStubImpl
               CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=SPLAT)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_SPLAT_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=DOUBLE_SPLAT)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_DOUBLE_SPLAT_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_TUPLE_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
@@ -52,7 +52,7 @@ CrFileStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_NAMED_TUPLE_TYPE:CrTypeStubImpl
         CR_LABELED_TYPE:CrTypeStubImpl
@@ -65,7 +65,7 @@ CrFileStubImpl
             CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_UNION_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
@@ -74,7 +74,7 @@ CrFileStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_INSTANTIATED_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
@@ -83,47 +83,47 @@ CrFileStubImpl
           CR_UNDERSCORE_TYPE:CrTypeStubImpl
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_POINTER_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_METACLASS_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_STATIC_ARRAY_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_NILABLE_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_EXPRESSION_TYPE:CrTypeStubImpl
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PARENTHESIZED_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=Int32)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PARENTHESIZED_TYPE:CrTypeStubImpl
         CR_PROC_TYPE:CrTypeStubImpl
@@ -134,7 +134,7 @@ CrFileStubImpl
             CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PROC_TYPE:CrTypeStubImpl
         CR_TYPE_ARGUMENT_LIST:CrTypeArgumentListStubImpl
@@ -146,14 +146,14 @@ CrFileStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PROC_TYPE:CrTypeStubImpl
         CR_PATH_TYPE:CrTypeStubImpl
           CR_PATH_NAME_ELEMENT:CrPathStubImpl(name=String)
   CR_METHOD_DEFINITION:CrMethodStubImpl(isAbstract=false, visibility=PUBLIC)
     CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=foo)
-    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasDefaultValue=false)
+    CR_SIMPLE_PARAMETER_DEFINITION:CrSimpleParameterStubImpl(hasInitializer=false, kind=ORDINARY)
       CR_SIMPLE_NAME_ELEMENT:CrSingleNameStubImpl(kind=IDENTIFIER, name=x)
       CR_PROC_TYPE:CrTypeStubImpl
         CR_TYPE_ARGUMENT_LIST:CrTypeArgumentListStubImpl

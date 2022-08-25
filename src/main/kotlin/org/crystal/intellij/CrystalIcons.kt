@@ -15,7 +15,6 @@ object CrystalIcons {
     val ANNOTATION = PlatformIcons.ANNOTATION_TYPE_ICON!!
     val CFIELD = AllIcons.Nodes.Field
     val CLASS = PlatformIcons.CLASS_ICON!!
-    val INSTANCE_VARIABLE = load("instanceVariable")
     val CLASS_VARIABLE = LayeredIcon(2).apply {
         setIcon(INSTANCE_VARIABLE, 0)
         setIcon(AllIcons.Nodes.StaticMark, 1)
@@ -24,17 +23,18 @@ object CrystalIcons {
     val ENUM = PlatformIcons.ENUM_ICON!!
     val FUNCTION = PlatformIcons.FUNCTION_ICON!!
     val GLOBAL_VARIABLE = AllIcons.Nodes.Gvariable
+    val INCLUDER = AllIcons.Gutter.ImplementedMethod
+    val INSTANCE_VARIABLE = load("instanceVariable")
     val LANGUAGE = load("language")
     val LIBRARY = load("library")
     val MACRO = load("macro")
     val METHOD = PlatformIcons.METHOD_ICON!!
     val MODULE = load("module")
-    val SUBCLASS = AllIcons.Gutter.OverridenMethod
-    val INCLUDER = AllIcons.Gutter.ImplementedMethod
     val PRIVATE = PlatformIcons.PRIVATE_ICON!!
     val PROTECTED = PlatformIcons.PROTECTED_ICON!!
     val PUBLIC = PlatformIcons.PUBLIC_ICON!!
     val STRUCT = load("struct")
+    val SUBCLASS = AllIcons.Gutter.OverridenMethod
     val TYPEDEF = AllIcons.Nodes.Type
     val UNION = load("union")
     val VARIABLE = PlatformIcons.VARIABLE_ICON!!

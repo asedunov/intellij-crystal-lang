@@ -98,6 +98,7 @@ fun crystalKeywordToken(
 @JvmField val CR_OFFSETOF = CrystalKeywordTokenType("offsetof")
 @JvmField val CR_OUT = CrystalKeywordTokenType("out")
 @JvmField val CR_POINTEROF = CrystalKeywordTokenType("pointerof")
+@JvmField val CR_PREVIOUS_DEF = CrystalKeywordTokenType("previous_def")
 @JvmField val CR_PRIVATE = crystalKeywordToken("private", ::CrVisibilityModifier)
 @JvmField val CR_PROTECTED = crystalKeywordToken("protected", ::CrVisibilityModifier)
 @JvmField val CR_REQUIRE = CrystalKeywordTokenType("require")

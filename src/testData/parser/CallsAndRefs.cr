@@ -753,3 +753,12 @@ A? 1 : 0
 
 a.b +
 1
+
+
+previous_def
+
+
+previous_def(1, 2, 3)
+
+
+previous_def 1, 2, 3

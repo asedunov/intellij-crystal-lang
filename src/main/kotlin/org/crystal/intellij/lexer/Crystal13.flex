@@ -962,6 +962,7 @@ MACRO_START_KEYWORD2 =
   "of"                           { return handle(CR_OF); }
   "out"                          { return handle(CR_OUT); }
   "pointerof"                    { return handle(CR_POINTEROF); }
+  "previous_def"                 { return handle(CR_PREVIOUS_DEF); }
   "private"                      { return handle(CR_PRIVATE); }
   "protected"                    { return handle(CR_PROTECTED); }
   "rescue"                       { return handle(CR_RESCUE); }

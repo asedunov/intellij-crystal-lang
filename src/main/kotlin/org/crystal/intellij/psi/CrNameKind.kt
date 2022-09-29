@@ -11,6 +11,8 @@ enum class CrNameKind {
     GLOBAL_VARIABLE,
     GLOBAL_MATCH_DATA,
     GLOBAL_MATCH_INDEX,
+    SUPER,
+    PREVIOUS_DEF,
     UNKNOWN;
 
     companion object {

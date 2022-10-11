@@ -9,6 +9,8 @@
       <li>Initial formatting support</li>
       <li>File structure view</li>
       <li>Go to Class/Go to Symbol navigation</li>
+      <li>Find Usages</li>
+      <li>Rename</li>
     </ul>]]></description>
 
     <depends>com.intellij.modules.platform</depends>

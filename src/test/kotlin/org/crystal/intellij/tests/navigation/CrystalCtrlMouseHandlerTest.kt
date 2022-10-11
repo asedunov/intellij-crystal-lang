@@ -1,7 +1,8 @@
 package org.crystal.intellij.tests.navigation
 
-import com.intellij.codeInsight.navigation.CtrlMouseHandler
-import com.intellij.openapi.util.text.StringUtil
+import com.intellij.codeInsight.navigation.CtrlMouseAction
+import com.intellij.openapi.actionSystem.ActionManager
+import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
@@ -24,14 +25,17 @@ class CrystalCtrlMouseHandlerTest(private val testFile: File) : BasePlatformTest
     fun testTooltip() {
         myFixture.testDataPath = testFile.parent
         myFixture.configureByFile(testFile.name)
-        val noInfo = myFixture.file.hasDirective("# NO_INFO")
-        val info = CtrlMouseHandler.getGoToDeclarationOrUsagesText(myFixture.editor)
+        val file = myFixture.file
+        val editor = myFixture.editor
+        val action = ActionManager.getInstance().getAction(IdeActions.ACTION_GOTO_DECLARATION) as CtrlMouseAction
+        val info = action.getCtrlMouseData(editor, file, editor.caretModel.offset)
+        val noInfo = file.hasDirective("# NO_INFO")
         if (noInfo) {
             assertNull(info)
         }
         else {
-            val expectedTooltip = myFixture.file.findDirective("# TOOLTIP: ")!!
-            val actualTooltip = StringUtil.convertLineSeparators(StringUtil.removeHtmlTags(info!!, true))
+            val expectedTooltip = file.findDirective("# TOOLTIP: ")!!
+            val actualTooltip = info!!.hintText
             assertEquals(expectedTooltip, actualTooltip)
         }
     }

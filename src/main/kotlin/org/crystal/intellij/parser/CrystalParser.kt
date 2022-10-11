@@ -864,7 +864,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     else -> break
                 }
             }
-            var nodeType: IElementType = CR_ASSIGNMENT_EXPRESSION
             when {
                 foundSimpleAssignment && lhsMarker?.tokenType == CR_PATH_EXPRESSION -> {
                     (lhsMarker as Marker).drop()

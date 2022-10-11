@@ -18,6 +18,11 @@ sourceSets {
     }
 }
 
+java {
+    sourceCompatibility = org.gradle.api.JavaVersion.VERSION_11
+    targetCompatibility = org.gradle.api.JavaVersion.VERSION_11
+}
+
 dependencies {
     implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("reflect"))

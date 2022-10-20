@@ -898,8 +898,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         error("Trailing '${lexer.tokenText}' is not supported")
                         break
                     }
-                    at(CR_RESCUE) -> parseReduceOrEnsureExpression(CR_RESCUE_CLAUSE, CR_RESCUE_EXPRESSION)
-                    at(CR_ENSURE) -> parseReduceOrEnsureExpression(CR_ENSURE_CLAUSE, CR_ENSURE_EXPRESSION)
+                    at(CR_RESCUE) -> parseRescueOrEnsureExpression(CR_RESCUE_CLAUSE, CR_RESCUE_EXPRESSION)
+                    at(CR_ENSURE) -> parseRescueOrEnsureExpression(CR_ENSURE_CLAUSE, CR_ENSURE_EXPRESSION)
                     at(CR_IDS) -> break
                     else -> {
                         if (!(eof() || at(suffixStopTokens) || atEndToken())) {
@@ -923,7 +923,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseReduceOrEnsureExpression(
+        private fun PsiBuilder.parseRescueOrEnsureExpression(
             clauseType: IElementType,
             expressionType: IElementType
         ) {

@@ -11,4 +11,7 @@ class CrRescueClause(node: ASTNode) : CrElementImpl(node) {
 
     val variable: CrVariable?
         get() = childOfType()
+
+    val type: CrTypeElement<*>?
+        get() = childOfType()
 }

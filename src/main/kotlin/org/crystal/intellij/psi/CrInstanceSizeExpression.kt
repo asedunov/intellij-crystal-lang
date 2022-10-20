@@ -4,4 +4,7 @@ import com.intellij.lang.ASTNode
 
 class CrInstanceSizeExpression(node: ASTNode) : CrExpressionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitInstanceSizeExpression(this)
+
+    val typeElement: CrTypeElement<*>?
+        get() = childOfType()
 }

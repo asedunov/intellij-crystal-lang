@@ -85,5 +85,8 @@ fun CrElement.parentFqName(): StableFqName? = when (val parent = parentStubOrPsi
     else -> null
 }
 
+val CrBlockExpression.whenBody: CrWhenClause?
+    get() = (parent as? CrThenClause)?.parent as? CrWhenClause
+
 val CrBlockExpression.isWhenBody: Boolean
-    get() = (parent as? CrThenClause)?.parent is CrWhenClause
+    get() = whenBody != null

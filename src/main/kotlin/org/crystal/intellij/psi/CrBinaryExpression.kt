@@ -9,6 +9,15 @@ import org.crystal.intellij.lexer.CR_BASE_OPERATORS
 class CrBinaryExpression(node: ASTNode) : CrExpressionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitBinaryExpression(this)
 
+    private val operator: PsiElement?
+        get() = findChildByType<PsiElement>(CR_BASE_OPERATORS)
+
     val opSign: IElementType?
-        get() = findChildByType<PsiElement>(CR_BASE_OPERATORS)?.elementType
+        get() = operator?.elementType
+
+    val leftOperand: CrExpression?
+        get() = operator?.prevSiblingOfType()
+
+    val rightOperand: CrExpression?
+        get() = operator?.nextSiblingOfType()
 }

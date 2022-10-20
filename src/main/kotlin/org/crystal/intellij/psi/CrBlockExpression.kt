@@ -7,4 +7,7 @@ class CrBlockExpression(node: ASTNode) : CrExpressionImpl(node) {
 
     val parameterList: CrBlockParameterList?
         get() = childOfType()
+
+    val exceptionHandler: CrExceptionHandler?
+        get() = childOfType()
 }

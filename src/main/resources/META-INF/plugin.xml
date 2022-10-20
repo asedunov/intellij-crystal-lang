@@ -104,6 +104,11 @@
         <fileStructureGroupRuleProvider implementation="org.crystal.intellij.findUsages.CrystalDeclarationGroupingRuleProvider$ByType"/>
         <fileStructureGroupRuleProvider implementation="org.crystal.intellij.findUsages.CrystalDeclarationGroupingRuleProvider$ByFunction"/>
 
+        <completion.contributor language="Crystal"
+                                implementationClass="org.crystal.intellij.completion.CrKeywordCompletionContributor"
+                                id="CrKeywordCompletionContributor"
+                                order="first"/>
+
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"
                          suppressId="CrystalResolve"

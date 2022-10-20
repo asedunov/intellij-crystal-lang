@@ -9,4 +9,7 @@ class CrUnaryExpression(node: ASTNode) : CrExpressionImpl(node) {
 
     val opSign: IElementType?
         get() = firstChild?.elementType
+
+    val argument: CrExpression?
+        get() = childOfType()
 }

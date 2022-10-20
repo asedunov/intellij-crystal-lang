@@ -10,4 +10,7 @@ class CrExpressionTypeElement : CrTypeElement<CrExpressionTypeElement> {
     constructor(node: ASTNode) : super(node)
 
     override fun accept(visitor: CrVisitor) = visitor.visitExpressionType(this)
+
+    val expression: CrExpression?
+        get() = childOfType()
 }

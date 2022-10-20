@@ -4064,6 +4064,9 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 skipStatementEnd()
 
                 while (true) {
+                    recoverUntil("'when', 'else' or 'end'", true) {
+                        at(CR_WHEN) || at(CR_ELSE) || at(CR_END)
+                    }
                     when {
                         at(CR_WHEN) -> {
                             composite(CR_WHEN_CLAUSE) {
@@ -4109,10 +4112,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                             break
                         }
 
-                        else -> {
-                            error("Expected: 'when', 'else' or 'end'")
-                            break
-                        }
+                        else -> break
                     }
                 }
             }

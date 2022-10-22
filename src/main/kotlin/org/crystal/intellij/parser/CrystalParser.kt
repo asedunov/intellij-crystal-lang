@@ -3926,7 +3926,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             when {
                 at(CR_THEN) -> {
-                    nextTokenSkipSpacesAndNewlines()
                     return true
                 }
 
@@ -4019,7 +4018,12 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                                 }
                             }
 
-                            composite(CR_BLOCK_EXPRESSION) { parseExpressions() }
+                            composite(CR_THEN_CLAUSE) {
+                                if (at(CR_THEN)) {
+                                    nextTokenSkipSpacesAndNewlines()
+                                }
+                                composite(CR_BLOCK_EXPRESSION) { parseExpressions() }
+                            }
                             skipSpacesAndNewlines()
                         }
 
@@ -4074,8 +4078,11 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                                 }
                                 skipStatementEnd()
 
-                                composite(CR_BLOCK_EXPRESSION) {
-                                    parseExpressions()
+                                composite(CR_THEN_CLAUSE) {
+                                    if (at(CR_THEN)) {
+                                        nextTokenSkipSpacesAndNewlines()
+                                    }
+                                    composite(CR_BLOCK_EXPRESSION) { parseExpressions() }
                                 }
                                 skipSpacesAndNewlines()
                             }

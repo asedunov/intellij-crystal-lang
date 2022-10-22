@@ -26,7 +26,7 @@ class CrystalFoldingBuilder : CustomFoldingBuilder() {
         root
             .allDescendants()
             .filter { e ->
-                (e is CrBody || e is CrThenClause || e is CrElseClause || e is CrBlockExpression) &&
+                (e is CrBody || e is CrThenClause || e is CrElseClause || e is CrBlockExpression && !e.isWhenBody) &&
                         !e.isOneLine(document)
             }
             .forEach { e -> descriptors += FoldingDescriptor(e.node, e.foldingRange) }

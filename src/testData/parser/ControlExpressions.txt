@@ -1036,8 +1036,9 @@ FILE
         PsiElement(<identifier>)('a')
       PsiElement(;)(';')
       PsiWhiteSpace(' ')
-      CrBlockExpression(CR_BLOCK_EXPRESSION)
-        <empty list>
+      CrThenClause(CR_THEN_CLAUSE)
+        CrBlockExpression(CR_BLOCK_EXPRESSION)
+          <empty list>
     PsiElement(end)('end')
 
   CrRequireExpression(CR_REQUIRE_EXPRESSION)

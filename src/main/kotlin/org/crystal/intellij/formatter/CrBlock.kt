@@ -49,6 +49,7 @@ class CrBlock(
                     psiParent.firstChild.elementType in CR_BLOCK_DELIMITERS &&
                     psi.elementType !in CR_BLOCK_DELIMITERS -> Indent.getNormalIndent(useRelativeIndent)
             psi is CrBlockExpression &&
+                    !psi.isWhenBody &&
                     psi.firstChild.elementType !in CR_BLOCK_DELIMITERS -> Indent.getNormalIndent(useRelativeIndent)
             psi is CrBody -> Indent.getNormalIndent(useRelativeIndent)
             psi is CrThenClause -> Indent.getNormalIndent(useRelativeIndent)

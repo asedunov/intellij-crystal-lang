@@ -39,7 +39,10 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         inParent<CrAssignmentExpression> { e, p, consumer ->
             when {
                 p.lhs == e -> consumer(CR_SELF)
-                p.rhs == e -> consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+                p.rhs == e -> {
+                    consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+                    consumer(CR_UNINITIALIZED)
+                }
             }
         }
         inParent<CrBinaryExpression> { e, p, consumer ->
@@ -201,6 +204,9 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
         inParent<CrUnaryExpression> { e, p, consumer ->
             if (p.argument == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+        }
+        inParent<CrUninitializedExpression> { e, p, consumer ->
+            if (p.type == e) consumer(TYPE_START_KEYWORDS)
         }
         inParent<CrUnionTypeElement>(TYPE_START_KEYWORDS)
         inParent<CrUnlessExpression>(GENERAL_EXPRESSION_START_KEYWORDS)
@@ -433,6 +439,7 @@ private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(
     CR_RESPONDS_TO,
     CR_RETURN,
     CR_STRUCT,
+    CR_UNINITIALIZED,
     CR_UNLESS,
     CR_UNTIL,
     CR_WHILE,

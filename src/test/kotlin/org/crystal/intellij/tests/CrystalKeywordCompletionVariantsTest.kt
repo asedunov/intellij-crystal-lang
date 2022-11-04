@@ -76,9 +76,9 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "<caret> = 1" expects CR_SELF
         "a <caret> = 1" expects CR_SELF
         "<caret> a = 1" expects TOP_LEVEL_EXPRESSION_START_KEYWORDS
-        "a = <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
+        "a = <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS.extend(CR_UNINITIALIZED)
         "a = 1 <caret>" expects NONE
-        "a = <caret> 1" expects GENERAL_EXPRESSION_START_KEYWORDS
+        "a = <caret> 1" expects GENERAL_EXPRESSION_START_KEYWORDS.extend(CR_UNINITIALIZED)
     }
 
     @Test
@@ -800,6 +800,13 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     fun testUnaryExpression() {
         "+ <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "+ 1 <caret>" expects NONE
+    }
+
+    @Test
+    fun testUninitialized() {
+        "a = uninitialized <caret>" expects TYPE_START_KEYWORDS
+        "a = uninitialized Int32 <caret>" expects NONE
+        "a = uninitialized <caret> Int32" expects TYPE_START_KEYWORDS
     }
 
     @Test

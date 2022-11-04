@@ -32,7 +32,14 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             if (p.rhsType == e) consumer(ALIAS_RHS_START_KEYWORDS)
         }
         inParent<CrArgumentList>(ARGUMENT_START_KEYWORDS)
-        inParent<CrArrayLiteralExpression>(GENERAL_EXPRESSION_START_KEYWORDS)
+        inParent<CrArrayLiteralExpression> { e, p, consumer ->
+            if (e == p.type) {
+                consumer(TYPE_START_KEYWORDS)
+            }
+            else {
+                consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+            }
+        }
         inParent<CrAsExpression> { e, p, consumer ->
             if (p.typeElement == e) consumer(TYPE_START_KEYWORDS)
         }
@@ -240,10 +247,19 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         afterToken(CR_ABSTRACT, AFTER_ABSTRACT_KEYWORDS)
         afterToken(CR_PRIVATE, AFTER_PRIVATE_KEYWORDS)
         afterToken(CR_PROTECTED, AFTER_PROTECTED_KEYWORDS)
+
         afterToken(CR_DOT) { e, consumer ->
             if (e.prevSibling?.supportsMetaclass == true) {
                 consumer(CR_CLASS)
             }
+        }
+
+        afterToken(CR_RBRACKET) { e, consumer ->
+            if (e.parent is CrArrayLiteralExpression) consumer(CR_OF)
+        }
+        afterToken(CR_RBRACE) { e, consumer ->
+            val p = e.parent
+            if (p is CrHashExpression && p.type == null) consumer(CR_OF)
         }
     }
 
@@ -500,6 +516,7 @@ private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(
     CR_MACRO,
     CR_MODULE,
     CR_NEXT,
+    CR_OF,
     CR_PRIVATE,
     CR_PROTECTED,
     CR_RESPONDS_TO,

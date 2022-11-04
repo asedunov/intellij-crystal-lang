@@ -25,7 +25,7 @@ private typealias ElementProcessor<P> = (e: PsiElement, p: P, consumer: KeywordC
 
 class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
     private val parentMap = HashMap<KClass<*>, ElementProcessor<PsiElement>>()
-    private val prevTokenMap = HashMap<CrystalTokenType, ElementProcessor<PsiElement>>()
+    private val prevTokenMap = HashMap<CrystalTokenType, (PsiElement, KeywordConsumer) -> Unit>()
 
     init {
         inParent<CrAlias> { e, p, consumer ->
@@ -240,6 +240,11 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         afterToken(CR_ABSTRACT, AFTER_ABSTRACT_KEYWORDS)
         afterToken(CR_PRIVATE, AFTER_PRIVATE_KEYWORDS)
         afterToken(CR_PROTECTED, AFTER_PROTECTED_KEYWORDS)
+        afterToken(CR_DOT) { e, consumer ->
+            if (e.prevSibling?.supportsMetaclass == true) {
+                consumer(CR_CLASS)
+            }
+        }
     }
 
     private val CrBlockExpression.supportsExceptionHandler: Boolean
@@ -251,6 +256,9 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
                     p is CrArgumentList ||
                     firstChild?.elementType == CR_BEGIN
         }
+
+    private val PsiElement.supportsMetaclass: Boolean
+        get() = this is CrTypeElement<*> || lastChild?.supportsMetaclass == true
 
     private fun suggestCaseBranches(e: PsiElement, consumer: KeywordConsumer) {
         if (e.siblings(forward = false).any { it is CrElseClause }) return
@@ -287,12 +295,12 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         inParent<T> { _, _, consumer -> consumer(keywords) }
     }
 
-    private fun afterToken(token: CrystalTokenType, processor: ElementProcessor<PsiElement>) {
+    private fun afterToken(token: CrystalTokenType, processor: (PsiElement, KeywordConsumer) -> Unit) {
         prevTokenMap[token] = processor
     }
 
     private fun afterToken(token: CrystalTokenType, keywords: Collection<CrystalTokenType>) {
-        afterToken(token) { _, _, consumer -> consumer(keywords) }
+        afterToken(token) { _, consumer -> consumer(keywords) }
     }
 
     private fun adjustPosition(position: PsiElement): PsiElement {
@@ -314,21 +322,27 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
-        val e = adjustPosition(parameters.position)
-        val p = e.parent
-        val processor = run {
-            val prevToken = e.leavesBackward(strict = true).firstOrNull {
-                !(it is PsiWhiteSpace || it is PsiComment || it is PsiErrorElement)
-            }?.elementType
-            prevTokenMap[prevToken]
-        } ?: parentMap[p::class] ?: return
-        processor(e, p) { keyword ->
+        fun consumeKeyword(keyword: CrystalTokenType) {
             val builder = LookupElementBuilder
                 .create(keyword.name)
                 .bold()
                 .withInsertHandler(keyword)
             result.addElement(builder)
         }
+
+        val position = parameters.position
+
+        val prevToken = position.leavesBackward(strict = true).firstOrNull {
+            !(it is PsiWhiteSpace || it is PsiComment || it is PsiErrorElement)
+        }
+        prevTokenMap[prevToken?.elementType]?.let { processor ->
+            processor(prevToken!!, ::consumeKeyword)
+            return
+        }
+
+        val e = adjustPosition(position)
+        val p = e.parent
+        parentMap[p::class]?.invoke(e, p, ::consumeKeyword)
     }
 }
 

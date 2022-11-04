@@ -4647,7 +4647,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         atDelimiterOrTypeSuffix()
                     }
 
-                    CR_CONSTANT -> atTypePathStart()
+                    CR_CONSTANT -> at(CR_DOT) || atTypePathStart()
 
                     else -> false
                 }

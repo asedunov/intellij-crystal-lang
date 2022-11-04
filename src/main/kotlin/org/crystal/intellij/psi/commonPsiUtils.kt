@@ -122,8 +122,8 @@ fun PsiElement.deepestLast() = PsiTreeUtil.getDeepestLast(this)
 
 fun PsiElement.prevLeaf() = PsiTreeUtil.prevLeaf(this)
 
-fun PsiElement.leavesBackward() =
-    generateSequence(this) { PsiTreeUtil.prevLeaf(it) }
+fun PsiElement.leavesBackward(strict: Boolean = false) =
+    generateSequence(if (strict) prevLeaf() else this) { PsiTreeUtil.prevLeaf(it) }
 
 fun PsiElement.significantLeafToTheLeft() =
     leavesBackward().dropWhile { it is PsiWhiteSpace || it is PsiComment }.firstOrNull()

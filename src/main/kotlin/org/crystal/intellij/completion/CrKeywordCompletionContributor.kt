@@ -7,8 +7,10 @@ import com.intellij.codeInsight.completion.InsertionContext
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.editor.EditorModificationUtil
 import com.intellij.openapi.project.DumbAware
+import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.siblings
@@ -22,7 +24,8 @@ private typealias KeywordConsumer = (keyword: CrystalTokenType) -> Unit
 private typealias ElementProcessor<P> = (e: PsiElement, p: P, consumer: KeywordConsumer) -> Unit
 
 class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
-    private val map = HashMap<KClass<*>, ElementProcessor<PsiElement>>()
+    private val parentMap = HashMap<KClass<*>, ElementProcessor<PsiElement>>()
+    private val prevTokenMap = HashMap<CrystalTokenType, ElementProcessor<PsiElement>>()
 
     init {
         inParent<CrAlias> { e, p, consumer ->
@@ -233,6 +236,10 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
                 p.yield == null -> consumer(CR_YIELD)
             }
         }
+
+        afterToken(CR_ABSTRACT, AFTER_ABSTRACT_KEYWORDS)
+        afterToken(CR_PRIVATE, AFTER_PRIVATE_KEYWORDS)
+        afterToken(CR_PROTECTED, AFTER_PROTECTED_KEYWORDS)
     }
 
     private val CrBlockExpression.supportsExceptionHandler: Boolean
@@ -273,21 +280,29 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
 
     private inline fun <reified T> inParent(noinline processor: ElementProcessor<T>) {
         @Suppress("UNCHECKED_CAST")
-        map[T::class] = processor as ElementProcessor<PsiElement>
+        parentMap[T::class] = processor as ElementProcessor<PsiElement>
     }
 
     private inline fun <reified T> inParent(keywords: Collection<CrystalTokenType>) {
         inParent<T> { _, _, consumer -> consumer(keywords) }
     }
 
-    private fun adjustPosition(position: PsiElement): PsiElement? {
+    private fun afterToken(token: CrystalTokenType, processor: ElementProcessor<PsiElement>) {
+        prevTokenMap[token] = processor
+    }
+
+    private fun afterToken(token: CrystalTokenType, keywords: Collection<CrystalTokenType>) {
+        afterToken(token) { _, _, consumer -> consumer(keywords) }
+    }
+
+    private fun adjustPosition(position: PsiElement): PsiElement {
         var e = position
         if (e is CrNameLeafElement) e = e.parent
         if (e is PsiErrorElement && e.errorDescription.contains("<end of expression>")) {
-            e = e.skipWhitespacesAndCommentsBackward()?.lastChild ?: return null
+            e = e.skipWhitespacesAndCommentsBackward()?.lastChild ?: return position
         }
         if (e is PsiErrorElement && e.errorDescription.contains("do")) {
-            e = e.skipWhitespacesAndCommentsBackward() ?: return null
+            e = e.skipWhitespacesAndCommentsBackward() ?: return position
         }
         if (e is CrNameElement && e.textOffset == position.textOffset) {
             val p = e.parent
@@ -299,9 +314,14 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
-        val e = adjustPosition(parameters.position) ?: return
+        val e = adjustPosition(parameters.position)
         val p = e.parent
-        val processor = map[p::class] ?: return
+        val processor = run {
+            val prevToken = e.leavesBackward(strict = true).firstOrNull {
+                !(it is PsiWhiteSpace || it is PsiComment || it is PsiErrorElement)
+            }?.elementType
+            prevTokenMap[prevToken]
+        } ?: parentMap[p::class] ?: return
         processor(e, p) { keyword ->
             val builder = LookupElementBuilder
                 .create(keyword.name)
@@ -375,6 +395,7 @@ val PARAM_VALUE_START_KEYWORDS = GENERAL_EXPRESSION_START_KEYWORDS.extend(
 )
 
 val TYPE_ITEM_START_KEYWORDS = GENERAL_EXPRESSION_START_KEYWORDS.extend(
+    CR_ABSTRACT,
     CR_ALIAS,
     CR_ANNOTATION,
     CR_CLASS,
@@ -386,6 +407,8 @@ val TYPE_ITEM_START_KEYWORDS = GENERAL_EXPRESSION_START_KEYWORDS.extend(
     CR_LIB,
     CR_MACRO,
     CR_MODULE,
+    CR_PRIVATE,
+    CR_PROTECTED,
     CR_STRUCT
 )
 
@@ -430,7 +453,28 @@ val TYPE_ARGUMENT_START_KEYWORD = TYPE_START_KEYWORDS.extend(
     CR_OFFSETOF
 )
 
+val AFTER_ABSTRACT_KEYWORDS = listOf(
+    CR_CLASS,
+    CR_DEF,
+    CR_STRUCT
+)
+
+val AFTER_PRIVATE_KEYWORDS = listOf(
+    CR_CLASS,
+    CR_DEF,
+    CR_ENUM,
+    CR_LIB,
+    CR_MACRO,
+    CR_MODULE,
+    CR_STRUCT
+)
+
+val AFTER_PROTECTED_KEYWORDS = listOf(
+    CR_DEF
+)
+
 private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(
+    CR_ABSTRACT,
     CR_ALIAS,
     CR_ANNOTATION,
     CR_AS,
@@ -442,6 +486,8 @@ private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(
     CR_MACRO,
     CR_MODULE,
     CR_NEXT,
+    CR_PRIVATE,
+    CR_PROTECTED,
     CR_RESPONDS_TO,
     CR_RETURN,
     CR_STRUCT,

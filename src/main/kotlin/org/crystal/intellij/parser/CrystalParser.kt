@@ -2668,7 +2668,6 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             val parsed = ensureParseAssignment()
             when (val exprType = lastType()) {
                 CR_CALL_EXPRESSION,
-                CR_ASSIGNMENT_EXPRESSION,
                 CR_METHOD_DEFINITION,
                 CR_CLASS_DEFINITION,
                 CR_STRUCT_DEFINITION,

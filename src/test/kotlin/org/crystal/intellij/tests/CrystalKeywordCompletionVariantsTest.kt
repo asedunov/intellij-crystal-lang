@@ -579,6 +579,30 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     }
 
     @Test
+    fun testMetaclass() {
+        "def foo(**a : **A.<caret>); end" expects CR_CLASS
+        "a : typeof(1).<caret>" expects CR_CLASS
+        "{a => b} of A => B.<caret>" expects CR_CLASS
+        "a : A(B, C).<caret>" expects CR_CLASS
+        "a : {A.<caret>}" expects CR_CLASS
+        "a : A.class.<caret>" expects CR_CLASS
+        "a : {a: A, b: B, c: C}.<caret>" expects CR_CLASS
+        "a : {a: A.<caret>}" expects CR_CLASS
+        "a : A?.<caret>" expects CR_CLASS
+        "a : (A | B | C).<caret>" expects CR_CLASS
+        "a : A.<caret>" expects CR_CLASS
+        "a : A*.<caret>" expects CR_CLASS
+        "a : A -> B.<caret>" expects CR_CLASS
+        "a : self.<caret>" expects CR_CLASS
+        "a : self?.<caret>" expects CR_CLASS
+        "foo(*a : *A.<caret>); end" expects CR_CLASS
+        "a : A[100].<caret>" expects CR_CLASS
+        "a : {A, B, C}.<caret>" expects CR_CLASS
+        "a : _.<caret>" expects CR_CLASS
+        "a : A | B | C.<caret>" expects CR_CLASS
+    }
+
+    @Test
     fun testMethod() {
         """
             def foo <caret>

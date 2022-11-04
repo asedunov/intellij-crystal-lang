@@ -655,6 +655,34 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     }
 
     @Test
+    fun testOfArray() {
+        "[1, 2, 3] <caret>" expects CR_OF
+        "[1, 2, 3] of <caret>" expects TYPE_START_KEYWORDS
+        "[1, 2, 3] of <caret> Int32" expects TYPE_START_KEYWORDS
+        "[1, 2, 3] of Int32 <caret>" expects NONE
+    }
+
+    @Test
+    fun testOfTuple() {
+        "{1, 2, 3} <caret>" expects NONE
+        "{a: 1, b: 2, c: 3} <caret>" expects NONE
+    }
+
+    @Test
+    fun testOfHash() {
+        "{a => 1, b => 2, c => 3} <caret>" expects CR_OF
+        "{a => 1, b => 2, c => 3} of <caret>" expects TYPE_START_KEYWORDS
+        "{a => 1, b => 2, c => 3} of Int32 <caret>" expects NONE
+        "{a => 1, b => 2, c => 3} of <caret> Int32" expects TYPE_START_KEYWORDS
+    }
+
+    @Test
+    fun testOfCustomLiteral() {
+        "Foo{1, 2, 3} <caret>" expects NONE
+        "Foo{a => 1, b => 2, c => 3} <caret>" expects NONE
+    }
+
+    @Test
     fun testOffset() {
         "offsetof(<caret>)" expects TYPE_START_KEYWORDS
         "offsetof(<caret> Int32)" expects TYPE_START_KEYWORDS

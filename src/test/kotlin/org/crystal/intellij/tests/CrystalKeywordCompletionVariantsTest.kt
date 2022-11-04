@@ -727,6 +727,22 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     }
 
     @Test
+    fun testSimpleParameter() {
+        """
+            def foo(a = <caret>)
+            end
+        """.trimIndent() expects PARAM_VALUE_START_KEYWORDS
+        """
+            def foo(a = 1 <caret>)
+            end
+        """.trimIndent() expects NONE
+        """
+            def foo(a = <caret> 1)
+            end
+        """.trimIndent() expects PARAM_VALUE_START_KEYWORDS
+    }
+
+    @Test
     fun testSizeOf() {
         "sizeof(<caret>)" expects TYPE_START_KEYWORDS
     }

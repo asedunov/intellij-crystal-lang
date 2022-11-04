@@ -167,6 +167,9 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             suggestSelectBranches(e, consumer)
         }
         inParent<CrShortBlockArgument>(GENERAL_EXPRESSION_START_KEYWORDS)
+        inParent<CrSimpleParameter> { e, p, consumer ->
+            if (p.initializer == e) consumer(PARAM_VALUE_START_KEYWORDS)
+        }
         inParent<CrSizeExpression>(TYPE_START_KEYWORDS)
         inParent<CrSplatExpression> { e, p, consumer ->
             if (p.expression == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
@@ -343,7 +346,6 @@ val GENERAL_EXPRESSION_START_KEYWORDS = tokenSortedSet(
     CR_BREAK,
     CR_CASE,
     CR_DIR_,
-    CR_END_LINE_,
     CR_FALSE,
     CR_FILE_,
     CR_IF,
@@ -366,6 +368,10 @@ val GENERAL_EXPRESSION_START_KEYWORDS = tokenSortedSet(
     CR_WHILE,
     CR_WITH,
     CR_YIELD
+)
+
+val PARAM_VALUE_START_KEYWORDS = GENERAL_EXPRESSION_START_KEYWORDS.extend(
+    CR_END_LINE_
 )
 
 val TYPE_ITEM_START_KEYWORDS = GENERAL_EXPRESSION_START_KEYWORDS.extend(

@@ -25,6 +25,11 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     }
 
     @Test
+    fun testAbstract() {
+        "abstract <caret>" expects AFTER_ABSTRACT_KEYWORDS
+    }
+
+    @Test
     fun testAlias() {
         "alias A = <caret>" expects ALIAS_RHS_START_KEYWORDS
         "alias <caret>" expects NONE
@@ -655,6 +660,11 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     }
 
     @Test
+    fun testPrivate() {
+        "private <caret>" expects AFTER_PRIVATE_KEYWORDS
+    }
+
+    @Test
     fun testProcType() {
         "a : <caret> -> Int32" expects TYPE_START_KEYWORDS
         "a : Int32, <caret> -> Int32" expects TYPE_START_KEYWORDS
@@ -662,6 +672,11 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a : Int32 -> <caret>" expects TYPE_START_KEYWORDS
         "a : Int32 -> Int32 <caret>" expects TOP_LEVEL_EXPRESSION_START_KEYWORDS
         "a : Int32 -> <caret> Int32" expects NONE
+    }
+
+    @Test
+    fun testProtected() {
+        "protected <caret>" expects AFTER_PROTECTED_KEYWORDS
     }
 
     @Test

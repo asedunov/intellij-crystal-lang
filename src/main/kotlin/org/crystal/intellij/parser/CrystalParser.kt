@@ -4626,13 +4626,13 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun atTypeStart(consumeNewLines: Boolean): Boolean = lexer.lookAhead {
+        private fun atTypeStart(consumeNewLines: Boolean, allowDot: Boolean = false): Boolean = lexer.lookAhead {
             if (consumeNewLines) skipSpacesAndNewlines() else skipSpaces()
 
-            atTypeStart()
+            atTypeStart(allowDot)
         }
 
-        private fun CrystalLexer.LookAhead.atTypeStart(): Boolean {
+        private fun CrystalLexer.LookAhead.atTypeStart(allowDot: Boolean = false): Boolean {
             while (at(CR_LPAREN) || at(CR_LBRACE)) nextTokenSkipSpacesAndNewlines()
 
             val token = tokenType
@@ -4647,7 +4647,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         atDelimiterOrTypeSuffix()
                     }
 
-                    CR_CONSTANT -> at(CR_DOT) || atTypePathStart()
+                    CR_CONSTANT -> (allowDot && at(CR_DOT)) || atTypePathStart()
 
                     else -> false
                 }
@@ -4725,7 +4725,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 error("Expected: '->'")
                 return
             }
-            val hasOutputType = atTypeStart(false)
+            val hasOutputType = atTypeStart(consumeNewLines = false, allowDot = true)
             nextTokenSkipSpaces()
 
             if (hasOutputType) {

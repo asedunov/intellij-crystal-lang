@@ -391,6 +391,7 @@ fun SortedSet<CrystalTokenType>.extend(vararg tokens: CrystalTokenType): SortedS
 
 val GENERAL_EXPRESSION_START_KEYWORDS = tokenSortedSet(
     CR_AS,
+    CR_AS_QUESTION,
     CR_ASM,
     CR_BEGIN,
     CR_BREAK,
@@ -508,6 +509,7 @@ private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(
     CR_ALIAS,
     CR_ANNOTATION,
     CR_AS,
+    CR_AS_QUESTION,
     CR_BREAK,
     CR_CLASS,
     CR_DEF,

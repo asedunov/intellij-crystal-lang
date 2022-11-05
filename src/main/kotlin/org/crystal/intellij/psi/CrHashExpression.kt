@@ -3,7 +3,7 @@ package org.crystal.intellij.psi
 import com.intellij.lang.ASTNode
 import com.intellij.util.containers.JBIterable
 
-class CrHashExpression(node: ASTNode) : CrExpressionImpl(node) {
+class CrHashExpression(node: ASTNode) : CrExpressionImpl(node), CrLiteralExpression {
     override fun accept(visitor: CrVisitor) = visitor.visitHashExpression(this)
 
     val entries: JBIterable<CrHashEntry>

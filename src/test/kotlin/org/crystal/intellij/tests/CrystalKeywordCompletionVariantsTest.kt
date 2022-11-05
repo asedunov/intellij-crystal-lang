@@ -3,7 +3,9 @@ package org.crystal.intellij.tests
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
 import org.crystal.intellij.completion.*
+import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.lexer.*
+import org.crystal.intellij.tests.util.withLanguageLevel
 import org.junit.Test
 
 private val NONE = emptyList<CrystalTokenType>()
@@ -84,6 +86,79 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a = <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS.extend(CR_UNINITIALIZED)
         "a = 1 <caret>" expects NONE
         "a = <caret> 1" expects GENERAL_EXPRESSION_START_KEYWORDS.extend(CR_UNINITIALIZED)
+    }
+
+    @Test
+    fun testAtomicSuffix() {
+        "1.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.5.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "false.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "true.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "'a'.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "nil.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "__DIR__.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "__END_LINE__.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "__FILE__.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "__LINE__.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        ":foo.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "`foo`.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "%x(foo).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "/foo/.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "%r(foo).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "\"foo\".<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "%(foo).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        """
+            <<-HERE.<caret>
+            foo
+            HERE
+        """.trimIndent() expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "%w(foo bar baz).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "%i(foo bar baz).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "[1, 2, 3].<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "{1, 2, 3}.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "{a: 1, b: 2, c: 3}.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "{a => 1, b => 2, c => 3}.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "->{}.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "->foo.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "asm(\"nop\" : \"a\"(1) : \"b\"(2)).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.as(Int).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.as Int.<caret>" expects CR_CLASS
+        "1.as?(Int).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.as? Int.<caret>" expects CR_CLASS
+        "1.is_a?(Int).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.is_a? Int.<caret>" expects CR_CLASS
+        "1.nil?.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.nil?().<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.responds_to? :foo.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1.responds_to?(:foo).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "foo.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "foo(1, 2).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "foo(1, 2) {}.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "foo 1, 2.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "foo[0].<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "instance_sizeof(Int32).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "sizeof(Int32).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "offsetof(Int32, @foo).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "typeof(foo).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "(1 + 2).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "A.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "A?.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "A(B).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "pointerof(x).<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        """
+            foo 1, 2 do
+            end.<caret>
+        """.trimIndent() expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        """
+            begin
+            end.<caret>
+        """.trimIndent() expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "1 + 2.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "+1.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "a!.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
+        "@[Foo].<caret>" expects NONE
+        "require \"foo\".<caret>" expects NONE
+        "a = uninitialized Int32.<caret>" expects CR_CLASS
     }
 
     @Test
@@ -547,6 +622,29 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "1.is_a? <caret>" expects TYPE_START_KEYWORDS
         "1.is_a? Int32 <caret>" expects NONE
         "1.is_a? <caret> Int32" expects TYPE_START_KEYWORDS
+    }
+
+    @Test
+    fun testIsNilMacro() {
+        "{{ 1.nil<caret> }}" expects NONE
+        "{% 1.nil<caret> %}" expects NONE
+        """
+            {% if (1.nil<caret>) %}
+            {% end %}
+        """.trimIndent() expects NONE
+        """
+            {% unless (1.nil<caret>) %}
+            {% end %}
+        """.trimIndent() expects NONE
+        """
+            macro foo
+                %var{1.nil<caret>, x} = hello
+            end
+        """.trimIndent() expects NONE
+        """
+            {% for x in 1.nil<caret> %}
+            {% end %}
+        """.trimIndent() expects NONE
     }
 
     @Test

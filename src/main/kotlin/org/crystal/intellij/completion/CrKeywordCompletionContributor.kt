@@ -14,6 +14,8 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.siblings
+import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CR_PARAMETER_LIST
 import org.crystal.intellij.psi.*
@@ -249,8 +251,12 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         afterToken(CR_PROTECTED, AFTER_PROTECTED_KEYWORDS)
 
         afterToken(CR_DOT) { e, consumer ->
-            if (e.prevSibling?.supportsMetaclass == true) {
+            val prev = e.prevSibling ?: return@afterToken
+            if (prev.supportsMetaclass) {
                 consumer(CR_CLASS)
+            }
+            if (prev.supportsAtomicMethodSuffix) {
+                consumer(ATOMIC_METHOD_SUFFIX_START_KEYWORDS)
             }
         }
 
@@ -274,7 +280,21 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
 
     private val PsiElement.supportsMetaclass: Boolean
-        get() = this is CrTypeElement<*> || lastChild?.supportsMetaclass == true
+        get() = this is CrTypeElement<*> ||
+                (this !is CrTypeExpression && lastChild?.supportsMetaclass == true)
+
+    private val PsiElement.supportsAtomicMethodSuffix: Boolean
+        get() = this is CrExpression &&
+                !(this is CrAnnotationExpression || this is CrRequireExpression || this is CrUninitializedExpression)
+
+    private fun PsiElement.inMacroExpression() = parents().any {
+        it is CrMacroWrapperStatement ||
+                it is CrMacroIfStatement ||
+                it is CrMacroUnlessStatement ||
+                it is CrMacroVariableExpression ||
+                it is CrMacroExpression ||
+                it is CrMacroForStatement
+    }
 
     private fun suggestCaseBranches(e: PsiElement, consumer: KeywordConsumer) {
         if (e.siblings(forward = false).any { it is CrElseClause }) return
@@ -338,15 +358,19 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
     }
 
     override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
+        val position = parameters.position
+        val ll = position.project.crystalSettings.languageVersion.level
+
         fun consumeKeyword(keyword: CrystalTokenType) {
+            if (keyword == CR_IS_NIL &&
+                ll >= LanguageLevel.CRYSTAL_1_1 &&
+                position.inMacroExpression()) return
             val builder = LookupElementBuilder
                 .create(keyword.name)
                 .bold()
                 .withInsertHandler(keyword)
             result.addElement(builder)
         }
-
-        val position = parameters.position
 
         val prevToken = position.leavesBackward(strict = true).firstOrNull {
             !(it is PsiWhiteSpace || it is PsiComment || it is PsiErrorElement)
@@ -502,6 +526,14 @@ val AFTER_PRIVATE_KEYWORDS = listOf(
 
 val AFTER_PROTECTED_KEYWORDS = listOf(
     CR_DEF
+)
+
+val ATOMIC_METHOD_SUFFIX_START_KEYWORDS = tokenSortedSet(
+    CR_AS,
+    CR_AS_QUESTION,
+    CR_IS_A,
+    CR_IS_NIL,
+    CR_RESPONDS_TO
 )
 
 private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(

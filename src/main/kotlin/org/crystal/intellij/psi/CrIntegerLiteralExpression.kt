@@ -9,7 +9,7 @@ import org.crystal.intellij.lexer.CR_INTEGER_LITERAL
 import org.crystal.intellij.lexer.CR_MINUS_OP
 import kotlin.math.max
 
-class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
+class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLiteralExpression {
     override fun accept(visitor: CrVisitor) = visitor.visitIntegerLiteralExpression(this)
 
     val value: Any?

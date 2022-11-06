@@ -14,6 +14,7 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.siblings
+import com.intellij.refactoring.suggested.endOffset
 import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
@@ -23,11 +24,13 @@ import java.util.*
 import kotlin.reflect.KClass
 
 private typealias KeywordConsumer = (keyword: CrystalTokenType) -> Unit
-private typealias ElementProcessor<P> = (e: PsiElement, p: P, consumer: KeywordConsumer) -> Unit
+private typealias ElementProcessor<T> = (e: T, consumer: KeywordConsumer) -> Unit
+private typealias ElementProcessorWithParent<P> = (e: PsiElement, p: P, consumer: KeywordConsumer) -> Unit
 
 class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
-    private val parentMap = HashMap<KClass<*>, ElementProcessor<PsiElement>>()
+    private val parentMap = HashMap<KClass<*>, ElementProcessorWithParent<PsiElement>>()
     private val prevTokenMap = HashMap<CrystalTokenType, (PsiElement, KeywordConsumer) -> Unit>()
+    private val prevSiblingProcessors = ArrayList<Pair<(PsiElement) -> Boolean, (PsiElement, KeywordConsumer) -> Unit>>()
 
     init {
         inParent<CrAlias> { e, p, consumer ->
@@ -267,7 +270,25 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             val p = e.parent
             if (p is CrHashExpression && p.type == null) consumer(CR_OF)
         }
+
+        afterSibling({it is CrExpression}) { e, consumer ->
+            if (e.supportsExpressionSuffix) consumer(EXPRESSION_SUFFIX_START_KEYWORDS)
+        }
     }
+
+    private val PsiElement.supportsExpressionSuffix: Boolean
+        get() {
+            if (this is CrDefinition) return false
+            if (this is CrStringLiteralExpression) {
+                val p = parent
+                return !(p is CrAsmExpression ||
+                        p is CrAsmOperand && p.label == this ||
+                        p is CrAsmClobberList ||
+                        p is CrAsmOptionsList ||
+                        p is CrRequireExpression)
+            }
+            return true
+        }
 
     private val CrBlockExpression.supportsExceptionHandler: Boolean
         get() {
@@ -322,12 +343,12 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
     }
 
-    private inline fun <reified T> inParent(noinline processor: ElementProcessor<T>) {
+    private inline fun <reified T : PsiElement> inParent(noinline processor: ElementProcessorWithParent<T>) {
         @Suppress("UNCHECKED_CAST")
-        parentMap[T::class] = processor as ElementProcessor<PsiElement>
+        parentMap[T::class] = processor as ElementProcessorWithParent<PsiElement>
     }
 
-    private inline fun <reified T> inParent(keywords: Collection<CrystalTokenType>) {
+    private inline fun <reified T : PsiElement> inParent(keywords: Collection<CrystalTokenType>) {
         inParent<T> { _, _, consumer -> consumer(keywords) }
     }
 
@@ -337,6 +358,10 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
 
     private fun afterToken(token: CrystalTokenType, keywords: Collection<CrystalTokenType>) {
         afterToken(token) { _, consumer -> consumer(keywords) }
+    }
+
+    private fun afterSibling(condition: (PsiElement) -> Boolean, processor: ElementProcessor<PsiElement>) {
+        prevSiblingProcessors += condition to processor
     }
 
     private fun adjustPosition(position: PsiElement): PsiElement {
@@ -373,11 +398,23 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
 
         val prevToken = position.leavesBackward(strict = true).firstOrNull {
-            !(it is PsiWhiteSpace || it is PsiComment || it is PsiErrorElement)
+            !(it is PsiWhiteSpace && !it.textContains('\n') || it is PsiComment || it is PsiErrorElement)
         }
-        prevTokenMap[prevToken?.elementType]?.let { processor ->
-            processor(prevToken!!, ::consumeKeyword)
-            return
+        if (prevToken != null) {
+            prevTokenMap[prevToken.elementType]?.let { processor ->
+                processor(prevToken, ::consumeKeyword)
+                return
+            }
+            val endOffset = prevToken.endOffset
+            parentLoop@
+            for (e in prevToken.parents().takeWhile { e -> e.endOffset == endOffset }) {
+                for ((condition, processor) in prevSiblingProcessors) {
+                    if (condition(e)) {
+                        processor(e, ::consumeKeyword)
+                        break@parentLoop
+                    }
+                }
+            }
         }
 
         val e = adjustPosition(position)
@@ -404,8 +441,18 @@ private fun InsertionContext.addSuffix(suffix: String, pos: Int = suffix.length)
 
 
 private val TOKEN_COMPARATOR = Comparator.comparing<CrystalTokenType, String> { it.name }
+
 private fun tokenSortedSet(vararg tokens: CrystalTokenType): SortedSet<CrystalTokenType> = sortedSetOf(TOKEN_COMPARATOR, *tokens)
+
 fun SortedSet<CrystalTokenType>.extend(vararg tokens: CrystalTokenType): SortedSet<CrystalTokenType> {
+    val result = TreeSet(this)
+    for (token in tokens) {
+        result += token
+    }
+    return result
+}
+
+fun SortedSet<CrystalTokenType>.extend(tokens: Collection<CrystalTokenType>): SortedSet<CrystalTokenType> {
     val result = TreeSet(this)
     for (token in tokens) {
         result += token
@@ -534,6 +581,13 @@ val ATOMIC_METHOD_SUFFIX_START_KEYWORDS = tokenSortedSet(
     CR_IS_A,
     CR_IS_NIL,
     CR_RESPONDS_TO
+)
+
+val EXPRESSION_SUFFIX_START_KEYWORDS = tokenSortedSet(
+    CR_IF,
+    CR_ENSURE,
+    CR_RESCUE,
+    CR_UNLESS,
 )
 
 private val SPACE_REQUIRING_KEYWORDS = TokenSet.create(

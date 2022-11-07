@@ -758,6 +758,7 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
 
     @Test
     fun testOfArray() {
+        "[] <caret>" expects CR_OF
         "[1, 2, 3] <caret>" expects CR_OF
         "[1, 2, 3] of <caret>" expects TYPE_START_KEYWORDS
         "[1, 2, 3] of <caret> Int32" expects TYPE_START_KEYWORDS

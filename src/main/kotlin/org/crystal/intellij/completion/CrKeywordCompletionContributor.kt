@@ -266,6 +266,9 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         afterToken(CR_RBRACKET) { e, consumer ->
             if (e.parent is CrArrayLiteralExpression) consumer(CR_OF)
         }
+        afterToken(CR_INDEXED_OP) { e, consumer ->
+            if (e.parent is CrArrayLiteralExpression) consumer(CR_OF)
+        }
         afterToken(CR_RBRACE) { e, consumer ->
             val p = e.parent
             if (p is CrHashExpression && p.type == null) consumer(CR_OF)

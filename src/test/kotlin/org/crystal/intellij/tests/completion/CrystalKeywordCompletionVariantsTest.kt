@@ -1,4 +1,4 @@
-package org.crystal.intellij.tests
+package org.crystal.intellij.tests.completion
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase

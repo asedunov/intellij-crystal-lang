@@ -107,6 +107,9 @@
                                 implementationClass="org.crystal.intellij.completion.CrKeywordCompletionContributor"
                                 id="CrKeywordCompletionContributor"
                                 order="first"/>
+        <completion.contributor language="Crystal"
+                                implementationClass="org.crystal.intellij.completion.CrPathReferenceCompletionContributor"
+                                id="CrPathReferenceCompletionContributor"/>
 
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"

@@ -35,6 +35,9 @@ class CrMethodSym(
             result
         } ?: emptyMap()
 
+    val typeParameters: Collection<CrTypeParameterSym>
+        get() = _typeParameters.values
+
     fun getTypeParameter(name: String): CrTypeParameterSym? = _typeParameters[name]
 
     override fun equals(other: Any?): Boolean {

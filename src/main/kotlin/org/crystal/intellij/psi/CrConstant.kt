@@ -3,7 +3,7 @@ package org.crystal.intellij.psi
 import com.intellij.lang.ASTNode
 import org.crystal.intellij.parser.CR_CONSTANT_DEFINITION
 import org.crystal.intellij.resolve.FqName
-import org.crystal.intellij.resolve.symbols.CrSym
+import org.crystal.intellij.resolve.symbols.CrConstantLikeSym
 import org.crystal.intellij.stubs.api.CrConstantStub
 
 class CrConstant : CrDefinitionWithFqNameImpl<CrConstant, CrConstantStub>,
@@ -20,5 +20,5 @@ class CrConstant : CrDefinitionWithFqNameImpl<CrConstant, CrConstantStub>,
     override val fqName: FqName?
         get() = super.fqName
 
-    override fun resolveSymbol(): CrSym<*>? = nameElement?.resolveSymbol()
+    override fun resolveSymbol(): CrConstantLikeSym<*>? = nameElement?.resolveSymbol()
 }

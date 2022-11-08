@@ -8,10 +8,7 @@ import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.symbols.*
-import org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex
-import org.crystal.intellij.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex
-import org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex
-import org.crystal.intellij.stubs.indexes.CrystalMacroSignatureIndex
+import org.crystal.intellij.stubs.indexes.*
 import org.crystal.intellij.util.get
 import org.crystal.intellij.util.toPsi
 
@@ -19,6 +16,7 @@ class CrProgramLayout(val program: CrProgramSym) {
     companion object {
         private val FILE_FRAGMENTS = newResolveSlice<Project, Map<CrTopLevelHolder, CrSymbolOrdinal>>("FILE_FRAGMENTS")
         private val TYPE_SOURCES = newResolveSlice<StableFqName, List<CrConstantSource>>("TYPE_SOURCES")
+        private val PRIMARY_TYPE_SOURCES_BY_PARENT = newResolveSlice<String, List<CrConstantSource>>("PRIMARY_TYPE_SOURCES_BY_PARENT")
         private val INCLUDE_LIKE_SOURCES = newResolveSlice<String, List<CrIncludeLikeExpression>>("INCLUDE_LIKE_SOURCES")
         private val MACRO_SOURCES_BY_SIGNATURE = newResolveSlice<CrMacroSignature, List<CrMacro>>("MACRO_SOURCES_BY_SIGNATURE")
         private val MACRO_SOURCES_BY_FQ_NAME = newResolveSlice<MemberFqName, List<CrMacro>>("MACRO_SOURCES_BY_FQ_NAME")
@@ -174,6 +172,15 @@ class CrProgramLayout(val program: CrProgramSym) {
         } ?: emptyList()
     }
 
+    fun getPrimaryTypeSourcesByParent(fqName: StableFqName?): List<CrConstantSource> {
+        val fullName = fqName?.fullName ?: ""
+        return project.resolveCache.getOrCompute(PRIMARY_TYPE_SOURCES_BY_PARENT, fullName) {
+            CrystalConstantParentFqNameIndex
+                .get(fullName, project, GlobalSearchScope.allScope(project))
+                .distinctBy { it.name }
+        } ?: emptyList()
+    }
+
     fun getIncludeLikeSources(parentFqName: StableFqName?): List<CrIncludeLikeExpression> {
         val fullName = parentFqName?.fullName ?: ""
         return project.resolveCache.getOrCompute(INCLUDE_LIKE_SOURCES, fullName) {
@@ -205,6 +212,10 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     fun getFallbackType(fqName: StableFqName): CrProperTypeSym? {
         return fallbackTypes[fqName]
+    }
+
+    fun getFallbackTypesByParent(parentFqName: StableFqName?): Collection<CrProperTypeSym> {
+        return if (parentFqName != null) emptyList() else fallbackTypes.values
     }
 }
 

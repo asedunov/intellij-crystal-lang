@@ -24,13 +24,13 @@ class CrModuleLikeScope(
     private val layout: CrProgramLayout
         get() = symbol.program.layout
 
-    private val typeMapSlice = newResolveSlice<Pair<String, Boolean>, CrSym<*>>("TYPE_MAP: ${symbol.fqName}")
+    private val typeMapSlice = newResolveSlice<Pair<String, Boolean>, CrConstantLikeSym<*>>("TYPE_MAP: ${symbol.fqName}")
     private val declaredMacrosBySignatureSlice = newResolveSlice<CrMacroSignature, List<CrMacroSym>>("DECLARED_MACROS_BY_SIGNATURE: ${symbol.fqName}")
     private val declaredMacrosForCallResolveSlice = newResolveSlice<String, List<CrMacroSym>>("DECLARED_MACROS_FOR_CALL_RESOLVE: ${symbol.fqName}")
     private val macrosByNameSlice = newResolveSlice<CrMacroSignature, List<CrMacroSym>>("MACROS_BY_NAME: ${symbol.fqName}")
     private val macroByCallSlice = newResolveSlice<CrCall, CrMacroSym>("MACRO_BY_CALL: ${symbol.fqName}")
 
-    private fun createTypeSymbol(fqName: StableFqName, sources: List<CrConstantSource>): CrSym<*>? {
+    private fun createTypeSymbol(fqName: StableFqName, sources: List<CrConstantSource>): CrConstantLikeSym<*>? {
         if (fqName == CrStdFqNames.CLASS) return CrMetaclassSym(
             symbol.program.memberScope.getTypeAs(CrStdFqNames.OBJECT)!!,
             fqName.name,
@@ -54,11 +54,29 @@ class CrModuleLikeScope(
         return symFactory(fqName.name, symbol, sources, symbol.program)
     }
 
-    private tailrec fun ParentList.findTypeInParents(name: String): CrSym<*>? {
+    private tailrec fun ParentList.findTypeInParents(name: String): CrConstantLikeSym<*>? {
         return symbol.memberScope.getConstant(name, false) ?: prev?.findTypeInParents(name)
     }
 
-    override fun getConstant(name: String, isRoot: Boolean): CrSym<*>? {
+    override fun getAllConstants(isRoot: Boolean): Sequence<CrConstantLikeSym<*>> = sequence {
+        yieldAll(symbol.typeParameters)
+        val parentFqName = symbol.fqName
+        layout.getPrimaryTypeSourcesByParent(parentFqName).forEach { source ->
+            source.resolveSymbol()?.let { yield(it) }
+        }
+        yieldAll(layout.getFallbackTypesByParent(parentFqName))
+        if (isRoot && symbol !is CrProgramSym) {
+            yield(symbol)
+        }
+        generateSequence(parentList) { it.prev }.forEach { p ->
+            yieldAll(p.symbol.memberScope.getAllConstants(false))
+        }
+        if (isRoot && symbol !is CrProgramSym) {
+            yieldAll(symbol.namespace.memberScope.getAllConstants(true))
+        }
+    }.distinctBy { it.name }
+
+    override fun getConstant(name: String, isRoot: Boolean): CrConstantLikeSym<*>? {
         return project.resolveCache.getOrCompute(typeMapSlice, name to isRoot) {
             symbol.getTypeParameter(name)?.let { return@getOrCompute it }
 

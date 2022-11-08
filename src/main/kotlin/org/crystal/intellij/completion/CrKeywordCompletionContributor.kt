@@ -394,7 +394,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
                 ll >= LanguageLevel.CRYSTAL_1_1 &&
                 position.inMacroExpression()) return
             val builder = LookupElementBuilder
-                .create(keyword.name)
+                .create(keyword)
                 .bold()
                 .withInsertHandler(keyword)
             result.addElement(builder)
@@ -436,12 +436,6 @@ private fun LookupElementBuilder.withInsertHandler(keyword: CrystalTokenType) = 
     in PAREN_REQUIRING_KEYWORDS -> withInsertHandler { ctx, _ -> ctx.addSuffix("()", 1) }
     else -> this
 }
-
-private fun InsertionContext.addSuffix(suffix: String, pos: Int = suffix.length) {
-    document.insertString(selectionEndOffset, suffix)
-    EditorModificationUtil.moveCaretRelatively(editor, pos)
-}
-
 
 private val TOKEN_COMPARATOR = Comparator.comparing<CrystalTokenType, String> { it.name }
 

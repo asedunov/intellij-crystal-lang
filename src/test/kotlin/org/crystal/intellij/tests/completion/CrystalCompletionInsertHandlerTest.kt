@@ -3,7 +3,7 @@ package org.crystal.intellij.tests.completion
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.Test
 
-class CrystalKeywordCompletionInsertHandlerTest : BasePlatformTestCase() {
+class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
     private fun doTest(beforeText: String, afterText: String) {
         myFixture.configureByText("a.cr", beforeText)
         myFixture.completeBasic()
@@ -54,5 +54,35 @@ class CrystalKeywordCompletionInsertHandlerTest : BasePlatformTestCase() {
     @Test
     fun testRequire() {
         "require<caret>" expects "require \"<caret>\""
+    }
+
+    @Test
+    fun testNonGenericTypeReference() {
+        """
+            class Foooo
+            end
+            
+            c : Foo<caret>
+        """.trimIndent() expects """
+            class Foooo
+            end
+            
+            c : Foooo<caret>
+        """.trimIndent()
+    }
+
+    @Test
+    fun testGenericTypeReference() {
+        """
+            class Foooo(A, B)
+            end
+            
+            c : Foo<caret>
+        """.trimIndent() expects """
+            class Foooo(A, B)
+            end
+            
+            c : Foooo(<caret>)
+        """.trimIndent()
     }
 }

@@ -11,7 +11,7 @@ private val NONE = emptyList<CrystalTokenType>()
 class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     private fun doTest(text: String, keywords: Collection<CrystalTokenType>) {
         myFixture.configureByText("a.cr", text)
-        val actualLookups = myFixture.completeBasic().map { it.lookupString }
+        val actualLookups = myFixture.completeBasic().filter { it.`object` is CrystalTokenType }.map { it.lookupString }
         val expectedLookups = keywords.map { it.name }
         TestCase.assertEquals(expectedLookups, actualLookups)
     }

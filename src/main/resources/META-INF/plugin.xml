@@ -71,6 +71,7 @@
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalVariableShortNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalStrictConstantShortNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalConstantParentFqNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeBySuperclassNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex"/>

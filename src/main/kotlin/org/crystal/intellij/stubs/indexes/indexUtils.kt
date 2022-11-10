@@ -5,6 +5,7 @@ import org.crystal.intellij.parser.CR_INSTANTIATED_TYPE
 import org.crystal.intellij.parser.CR_PATH_NAME_ELEMENT
 import org.crystal.intellij.parser.CR_PATH_TYPE
 import org.crystal.intellij.psi.parentFqName
+import org.crystal.intellij.resolve.FqName
 import org.crystal.intellij.stubs.api.*
 import org.crystal.intellij.stubs.parents
 
@@ -13,7 +14,7 @@ fun indexType(stub: CrTypeDefinitionStub<*>, sink: IndexSink) {
         sink.occurrence(CrystalTypeShortNameIndex.key, name)
     }
     stub.psi.fqName?.let { fqName ->
-        sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
+        indexConstantFqName(fqName, sink)
     }
 }
 
@@ -38,11 +39,16 @@ private fun indexSuperclass(superTypeStub: CrTypeStub<*>, sink: IndexSink) {
     }
 }
 
+private fun indexConstantFqName(fqName: FqName, sink: IndexSink) {
+    sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
+    sink.occurrence(CrystalConstantParentFqNameIndex.key, fqName.parent?.fullName ?: "")
+}
+
 fun indexPath(stub: CrPathStub, sink: IndexSink) {
     if (stub.parentStub is CrConstantLikeStub<*>) return
     if (stub.parents().skipWhile { it is CrPathStub }.first() !is CrConstantLikeStub<*>) return
     val fqName = stub.fqName ?: return
-    sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
+    indexConstantFqName(fqName, sink)
 }
 
 fun indexFunction(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
@@ -70,7 +76,7 @@ fun indexConstant(stub: CrDefinitionWithFqNameStub<*>, sink: IndexSink) {
         sink.occurrence(CrystalStrictConstantShortNameIndex.key, name)
     }
     stub.psi.fqName?.let { fqName ->
-        sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
+        indexConstantFqName(fqName, sink)
     }
 }
 

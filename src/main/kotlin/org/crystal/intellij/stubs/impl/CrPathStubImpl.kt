@@ -3,8 +3,8 @@ package org.crystal.intellij.stubs.impl
 import com.intellij.psi.stubs.StubElement
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.resolve.StableFqName
+import org.crystal.intellij.stubs.api.CrConstantLikeStub
 import org.crystal.intellij.stubs.api.CrPathStub
-import org.crystal.intellij.stubs.api.CrTypeDefinitionStub
 import org.crystal.intellij.stubs.elementTypes.CrPathNameStubElementType
 import org.crystal.intellij.stubs.parentStubOfType
 
@@ -20,8 +20,8 @@ class CrPathStubImpl(
 
     private fun findParentFqName(): StableFqName? {
         findChildStubByType(CrPathNameStubElementType)?.let { return it.fqName }
-        val typeStub = parentStubOfType<CrTypeDefinitionStub<*>>() ?: return null
-        val containerTypeStub = typeStub.parentStub as? CrTypeDefinitionStub<*>? ?: return null
+        val constantStub = parentStubOfType<CrConstantLikeStub<*>>() ?: return null
+        val containerTypeStub = constantStub.parentStub as? CrConstantLikeStub<*>? ?: return null
         return containerTypeStub.psi.fqName as? StableFqName
     }
 }

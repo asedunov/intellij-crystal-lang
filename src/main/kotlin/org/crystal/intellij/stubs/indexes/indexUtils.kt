@@ -39,8 +39,8 @@ private fun indexSuperclass(superTypeStub: CrTypeStub<*>, sink: IndexSink) {
 }
 
 fun indexPath(stub: CrPathStub, sink: IndexSink) {
-    if (stub.parentStub is CrTypeDefinitionStub<*>) return
-    if (stub.parents().skipWhile { it is CrPathStub }.first() !is CrTypeDefinitionStub<*>) return
+    if (stub.parentStub is CrConstantLikeStub<*>) return
+    if (stub.parents().skipWhile { it is CrPathStub }.first() !is CrConstantLikeStub<*>) return
     val fqName = stub.fqName ?: return
     sink.occurrence(CrystalConstantFqNameIndex.key, fqName.fullName)
 }

@@ -30,17 +30,16 @@ class CrystalConstantLikeSearchRenameTarget(
     override val targetName: String
         get() = symbol.name
 
-    override val presentation: TargetPresentation
-        get() {
-            val icon = symbol.getIcon()
-            val name = (symbol as? CrConstantLikeSym<*>)?.fqName?.fullName ?: symbol.name
-            val kind = symbol.presentableKind
-            val text = "$kind $name"
-            return TargetPresentation.builder(text).icon(icon).presentation()
-        }
+    override fun presentation(): TargetPresentation {
+        val icon = symbol.getIcon()
+        val name = (symbol as? CrConstantLikeSym<*>)?.fqName?.fullName ?: symbol.name
+        val kind = symbol.presentableKind
+        val text = "$kind $name"
+        return TargetPresentation.builder(text).icon(icon).presentation()
+    }
 
-    override val usageHandler: UsageHandler<*>
-        get() = UsageHandler.createEmptyUsageHandler(presentation.presentableText)
+    override val usageHandler: UsageHandler
+        get() = UsageHandler.createEmptyUsageHandler(presentation().presentableText)
 
     override val textSearchRequests: Collection<SearchRequest>
         get() {

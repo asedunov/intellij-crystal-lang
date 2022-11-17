@@ -1,9 +1,9 @@
 package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
-import com.intellij.model.presentation.SymbolPresentationService
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.presentation.presentableKind
+import org.crystal.intellij.presentation.shortDescription
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.scopes.getTypeAs
@@ -13,8 +13,6 @@ import org.crystal.intellij.resolve.symbols.*
 class CrystalResolveCheckingVisitor(
     highlightInfos: MutableList<HighlightInfo>
 ) : CrystalHighlightingVisitorBase(highlightInfos) {
-    private val presenter = SymbolPresentationService.getInstance()
-
     override fun visitPathNameElement(o: CrPathNameElement) {
         super.visitPathNameElement(o)
 
@@ -29,7 +27,7 @@ class CrystalResolveCheckingVisitor(
         val item = path.item ?: return
         val sym = path.resolveSymbol()
         if (!(sym == null || sym is CrClassSym || sym is CrStructSym || sym is CrModuleSym)) {
-            val desc = presenter.getSymbolPresentation(sym).shortDescription.lowercase()
+            val desc = sym.shortDescription.lowercase()
             error(item, "Can't declare type inside $desc")
         }
     }

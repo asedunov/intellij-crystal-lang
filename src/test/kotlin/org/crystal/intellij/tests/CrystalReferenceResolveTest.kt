@@ -3,10 +3,10 @@ package org.crystal.intellij.tests
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
-import com.intellij.model.presentation.SymbolPresentationService
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.intellij.util.containers.ObjectIntHashMap
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
+import org.crystal.intellij.presentation.shortDescription
 import org.crystal.intellij.psi.CrNameElement
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.psi.CrSimpleNameElement
@@ -58,20 +58,18 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
 
         override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean) = object : CrVisitor() {
             private var nextId = 1
-            private val ids = ObjectIntHashMap<CrSym<*>>()
-            private val presenter = SymbolPresentationService.getInstance()
+            private val ids = Object2IntOpenHashMap<CrSym<*>>()
 
             private fun getId(sym: CrSym<*>): Int {
-                if (ids.containsKey(sym)) return ids[sym]
+                if (ids.containsKey(sym)) return ids.getInt(sym)
                 val id = nextId++
                 ids.put(sym, id)
                 return id
             }
 
             private fun StringBuilder.appendSym(sym: CrSym<*>): StringBuilder {
-                val presentation = presenter.getSymbolPresentation(sym)
                 append('#').append(getId(sym)).append(": ")
-                append(presentation.shortDescription)
+                append(sym.shortDescription)
                 return this
             }
 

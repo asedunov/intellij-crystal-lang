@@ -11,7 +11,7 @@ import org.crystal.intellij.psi.CrDefinitionWithFqName
 import org.crystal.intellij.stubs.indexes.CrystalTypeShortNameIndex
 
 class CrystalGotoClassContributor : CrystalChooseByNameContributor(), GotoClassContributor {
-    override fun getQualifiedName(item: NavigationItem?): String? {
+    override fun getQualifiedName(item: NavigationItem): String? {
         val definition = item as? CrDefinition ?: return null
         return if (definition is CrDefinitionWithFqName) definition.fqName?.fullName else definition.name
     }

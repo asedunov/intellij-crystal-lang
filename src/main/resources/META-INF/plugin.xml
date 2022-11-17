@@ -58,10 +58,8 @@
         <filePropertyPusher implementation="org.crystal.intellij.config.CrystalLanguageLevelPusher"/>
 
         <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
-        <symbolPresentation forClass="org.crystal.intellij.resolve.symbols.CrSym"
-                            implementationClass="org.crystal.intellij.presentation.CrSymbolPresentationProvider"/>
         <!--suppress PluginXmlValidity -->
-        <lang.symbolDocumentation implementation="org.crystal.intellij.presentation.CrSymbolDocumentationTargetFactory"/>
+        <lang.symbolDocumentation implementation="org.crystal.intellij.presentation.CrSymbolDocumentationTargetProvider"/>
 
         <elementDescriptionProvider implementation="org.crystal.intellij.presentation.CrystalElementDescriptionProvider"/>
 

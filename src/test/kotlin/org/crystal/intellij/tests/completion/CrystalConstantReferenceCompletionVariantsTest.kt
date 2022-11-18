@@ -114,12 +114,12 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             "MyAlias",
             "MyAnnotation",
             "MyClass",
-            "MyConst",
             "MyEnum",
             "MyLib",
             "MyModule",
             "MyStruct"
         )
+        val variantsWithConsts = (variants + "MyConst").sorted()
 
         """
             $defs
@@ -131,6 +131,16 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             
             my : ::My<caret>
         """.trimIndent() expects variants
+        """
+            $defs
+            
+            a = My<caret>
+        """.trimIndent() expects variantsWithConsts
+        """
+            $defs
+            
+            a = ::My<caret>
+        """.trimIndent() expects variantsWithConsts
     }
 
     @Test
@@ -139,7 +149,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             "MyAlias",
             "MyAnnotation",
             "MyClass",
-            "MyConst",
             "MyEnum",
             "MyModule",
             "MyStruct"
@@ -148,7 +157,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             "MyOuterAlias",
             "MyOuterAnnotation",
             "MyOuterClass",
-            "MyOuterConst",
             "MyOuterLib",
             "MyOuterEnum",
             "MyOuterModule",
@@ -212,10 +220,28 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             
             class X
                 $defs
+                
+                a = My<caret>
+            end
+        """.trimIndent() expects (innerVariants + outerVariants + "MyConst" + "MyOuterConst").sorted()
+        """
+            $outerDefs
+            
+            class X
+                $defs
             end
             
             my : X::<caret>
         """.trimIndent() expects innerVariants
+        """
+            $outerDefs
+            
+            class X
+                $defs
+            end
+            
+            a = X::<caret>
+        """.trimIndent() expects (innerVariants + "MyConst").sorted()
     }
 
     @Test

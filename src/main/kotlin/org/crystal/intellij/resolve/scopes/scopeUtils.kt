@@ -1,10 +1,6 @@
 package org.crystal.intellij.resolve.scopes
 
-import org.crystal.intellij.psi.CrFile
-import org.crystal.intellij.psi.CrFileFragment
-import org.crystal.intellij.psi.stubChildOfType
 import org.crystal.intellij.resolve.StableFqName
-import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrProperTypeSym
 
@@ -28,11 +24,4 @@ fun CrModuleLikeScope.ParentList.asSequence() = sequence {
         yield(p.symbol)
         p = p.prev ?: break
     }
-}
-
-fun CrFile.isInProgram(): Boolean {
-    val layout = project.resolveFacade.programLayout
-    if (layout.getTopLevelOrdinal(this) != null) return true
-    val fragment = stubChildOfType<CrFileFragment>()
-    return fragment != null && layout.getTopLevelOrdinal(fragment) != null
 }

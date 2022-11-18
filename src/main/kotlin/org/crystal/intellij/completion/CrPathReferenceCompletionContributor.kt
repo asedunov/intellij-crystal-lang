@@ -6,6 +6,7 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
 import org.crystal.intellij.presentation.getIcon
 import org.crystal.intellij.psi.CrConstantName
+import org.crystal.intellij.psi.CrDefinition
 import org.crystal.intellij.psi.CrPathNameElement
 import org.crystal.intellij.psi.CrTypeElement
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
@@ -23,6 +24,7 @@ class CrPathReferenceCompletionContributor : CompletionContributor() {
                     result: CompletionResultSet
                 ) {
                     val path = parameters.position.parent as? CrPathNameElement ?: return
+                    if (path.parent is CrDefinition) return
                     val originalParent = parameters.originalPosition?.parent
                     val originalPath = originalParent as? CrPathNameElement
                     val pathToComplete = path.copy() as CrPathNameElement

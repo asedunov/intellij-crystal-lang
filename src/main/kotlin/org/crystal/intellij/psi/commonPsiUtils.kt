@@ -8,12 +8,9 @@ import com.intellij.psi.impl.source.PsiFileWithStubSupport
 import com.intellij.psi.stubs.ObjectStubBase
 import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.refactoring.suggested.createSmartPointer
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.util.firstInstanceOrNull
-import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 
 fun PsiElement.traverser() =
     SyntaxTraverser.psiTraverser(this)
@@ -140,9 +137,3 @@ fun PsiElement.lastSignificantLeaf(): PsiElement? {
 inline fun <reified T : PsiElement> PsiElement.replaceTyped(replacement: T) = replace(replacement) as T
 
 fun PsiElement.module() = ModuleUtilCore.findModuleForPsiElement(this)
-
-fun <T : PsiElement> smartPointerProperty(element: T) = object : ReadOnlyProperty<Any, T?> {
-    private val pointer = element.createSmartPointer()
-
-    override fun getValue(thisRef: Any, property: KProperty<*>) = pointer.element
-}

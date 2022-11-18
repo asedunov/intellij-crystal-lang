@@ -5,12 +5,13 @@
 
     <description><![CDATA[Adds support of the Crystal language:
     <ul>
-      <li>Basic syntax highlighting</li>
-      <li>Initial formatting support</li>
+      <li>Syntax highlighting</li>
+      <li>Basic formatting support</li>
       <li>File structure view</li>
       <li>Go to Class/Go to Symbol navigation</li>
       <li>Find Usages</li>
       <li>Rename</li>
+      <li>Completion</li>
     </ul>]]></description>
 
     <depends>com.intellij.modules.platform</depends>

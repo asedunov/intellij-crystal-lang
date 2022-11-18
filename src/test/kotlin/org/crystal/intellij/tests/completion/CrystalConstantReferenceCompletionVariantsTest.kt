@@ -432,4 +432,15 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             foo : Foo<caret>
         """.trimIndent() expects listOf("Foooo(A)", "Foooooo(X, Y)")
     }
+
+    @Test
+    fun testDefinitionName() {
+        """
+            class Foo
+            end
+            
+            class Fo<caret>
+            end
+        """.trimIndent() expects emptyList()
+    }
 }

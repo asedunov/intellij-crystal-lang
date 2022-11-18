@@ -7,7 +7,9 @@ import com.intellij.util.ProcessingContext
 import org.crystal.intellij.presentation.getIcon
 import org.crystal.intellij.psi.CrConstantName
 import org.crystal.intellij.psi.CrPathNameElement
+import org.crystal.intellij.psi.CrTypeElement
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
+import org.crystal.intellij.resolve.symbols.CrTypeSym
 
 class CrPathReferenceCompletionContributor : CompletionContributor() {
     init {
@@ -26,7 +28,9 @@ class CrPathReferenceCompletionContributor : CompletionContributor() {
                     val pathToComplete = path.copy() as CrPathNameElement
                     pathToComplete.putUserData(CrPathNameElement.EXPLICIT_PARENT, originalPath?.parent ?: originalParent)
                     pathToComplete.putUserData(CrPathNameElement.EXPLICIT_QUALIFIER, originalPath?.qualifier)
+                    val isTypeElement = path.parent is CrTypeElement<*>
                     pathToComplete.getCompletionCandidates().forEach { sym ->
+                        if (isTypeElement && sym !is CrTypeSym<*>) return@forEach
                         val parentFqName = sym.fqName?.parent
                         val typeParams = (sym as? CrModuleLikeSym)?.typeParameters ?: emptyList()
                         val text = buildString {

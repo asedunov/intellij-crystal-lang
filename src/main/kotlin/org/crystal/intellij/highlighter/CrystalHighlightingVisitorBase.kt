@@ -20,6 +20,10 @@ abstract class CrystalHighlightingVisitorBase(
         highlight(anchor, message, HighlightInfoType.ERROR)
     }
 
+    protected fun warning(anchor: PsiElement, message: String) {
+        highlight(anchor, message, HighlightInfoType.WARNING)
+    }
+
     protected fun deprecated(anchor: PsiElement, message: String) {
         highlight(anchor, message, HighlightInfoType.DEPRECATED)
     }

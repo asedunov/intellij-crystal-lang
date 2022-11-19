@@ -49,12 +49,22 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitIntegerLiteralExpression(o: CrIntegerLiteralExpression) {
         super.visitIntegerLiteralExpression(o)
 
-        if (o.value == null) {
+        val value = o.value
+
+        if (value == null) {
             error(o, o.kind.outOfValueError)
         }
 
         if (o.prefix == "0") {
             error(o, "Octal constants should be prefixed with 0o")
+        }
+
+        if (ll >= LanguageLevel.CRYSTAL_1_6 &&
+                o.explicitKind == null &&
+                o.kind == CrIntegerKind.U64 &&
+                value is ULong &&
+                value > Long.MAX_VALUE.toULong()) {
+            warning(o, "${o.valueString} doesn't fit in an Int64, try using the suffix u64 or i128")
         }
     }
 

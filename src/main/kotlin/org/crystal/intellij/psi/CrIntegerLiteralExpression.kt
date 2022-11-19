@@ -17,13 +17,18 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLite
 
     val kind: CrIntegerKind
         get() {
+            return explicitKind ?: deduceKind()
+        }
+
+    val explicitKind: CrIntegerKind?
+        get() {
             val text = bodyText
             val suffixPos = text.findSuffixStart()
             if (suffixPos >= 0) {
                 val suffix = text.substring(suffixPos)
                 return CrIntegerKind.valueOf(suffix.uppercase())
             }
-            return deduceKind()
+            return null
         }
 
     val radix: Int
@@ -56,6 +61,9 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLite
             }
         }
     }
+
+    val valueString: String
+        get() = valueAsString(true)
 
     val prefix: String
         get() {

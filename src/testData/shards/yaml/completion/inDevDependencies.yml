@@ -1,0 +1,4 @@
+# VARIANTS: bitbucket, bookmark, branch, commit, fossil, git, github, gitlab, hg, path, tag, version
+development_dependencies:
+  foo:
+    <caret>

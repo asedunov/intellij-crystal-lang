@@ -12,10 +12,13 @@ import org.crystal.intellij.config.findVersionOrLatest
 import org.crystal.intellij.psi.childrenOfType
 import java.io.File
 
-fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
+fun getTestFilesAsParameters(dirName: String, ext: String): List<Array<Any>> =
     FileUtil.fileTraverser(File("src/testData/$dirName"))
-        .filter { file -> file.name.endsWith(".cr") && !file.name.endsWith(".after.cr") }
+        .filter { file -> file.name.endsWith(".$ext") && !file.name.endsWith(".after.$ext") }
         .map { arrayOf(it as Any) }.toList()
+
+fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
+    getTestFilesAsParameters(dirName, "cr")
 
 fun Project.withLanguageLevel(level: CrystalLevel, body: () -> Unit) {
     val settings = crystalSettings

@@ -1,0 +1,135 @@
+{
+  "aliases": [
+    {
+      "name": "Shard",
+      "components": [
+        {
+          "name": "name",
+          "isRequired": true
+        },
+        {
+          "name": "version",
+          "isRequired": true
+        },
+        {
+          "name": "authors",
+          "isSequence": true
+        },
+        {
+          "name": "crystal"
+        },
+        {
+          "name": "dependencies",
+          "type": "Dependencies"
+        },
+        {
+          "name": "development_dependencies",
+          "type": "Dependencies"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "documentation"
+        },
+        {
+          "name": "executables",
+          "isSequence": true
+        },
+        {
+          "name": "homepage"
+        },
+        {
+          "name": "libraries",
+          "components": [
+            {
+              "name": "*"
+            }
+          ]
+        },
+        {
+          "name": "license"
+        },
+        {
+          "name": "repository"
+        },
+        {
+          "name": "scripts",
+          "components": [
+            {
+              "name": "postinstall"
+            }
+          ]
+        },
+        {
+          "name": "targets",
+          "components": [
+            {
+              "name": "*",
+              "components": [
+                {
+                  "name": "main"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ShardOverride",
+      "components": [
+        {
+          "name": "dependencies",
+          "type": "Dependencies"
+        }
+      ]
+    },
+    {
+      "name": "Dependencies",
+      "components": [
+        {
+          "name": "*",
+          "components": [
+            {
+              "name": "path"
+            },
+            {
+              "name": "git"
+            },
+            {
+              "name": "github"
+            },
+            {
+              "name": "gitlab"
+            },
+            {
+              "name": "bitbucket"
+            },
+            {
+              "name": "hg"
+            },
+            {
+              "name": "fossil"
+            },
+            {
+              "name": "version"
+            },
+            {
+              "name": "branch"
+            },
+            {
+              "name": "commit"
+            },
+            {
+              "name": "tag"
+            },
+            {
+              "name": "bookmark"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -31,6 +31,7 @@ dependencies {
 
 intellij {
     version.set(project.properties["ideaVersion"] as String)
+    plugins.set(listOf("org.jetbrains.plugins.yaml"))
 }
 
 tasks {

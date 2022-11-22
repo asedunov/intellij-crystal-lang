@@ -22,6 +22,7 @@
     </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Crystal"
@@ -120,6 +121,9 @@
         <completion.contributor language="Crystal"
                                 implementationClass="org.crystal.intellij.completion.CrPathReferenceCompletionContributor"
                                 id="CrPathReferenceCompletionContributor"/>
+        <completion.contributor language="yaml"
+                                implementationClass="org.crystal.intellij.shards.yaml.completion.ShardYamlCompletionContributor"
+                                id="CrShardsYamlKeyCompletionContributor"/>
 
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"

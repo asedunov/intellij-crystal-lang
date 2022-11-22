@@ -1,0 +1,4 @@
+# VARIANTS: authors, crystal, dependencies, description, development_dependencies, documentation, executables, homepage, libraries, license, repository, scripts, targets, version
+name: foo
+
+<caret>

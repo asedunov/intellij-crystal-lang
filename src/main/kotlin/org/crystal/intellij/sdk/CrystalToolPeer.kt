@@ -10,11 +10,11 @@ import org.crystal.intellij.util.toPathOrEmpty
 import java.io.File
 import java.nio.file.Path
 
-sealed class CrystalTool(
+sealed class CrystalToolPeer(
     protected val localPath: String
 ) {
     companion object {
-        val EMPTY = CrystalLocalTool("")
+        val EMPTY = CrystalLocalToolPeer("")
     }
 
     abstract val fullPath: Path
@@ -46,7 +46,7 @@ sealed class CrystalTool(
     }
 }
 
-class CrystalLocalTool(path: String) : CrystalTool(path) {
+class CrystalLocalToolPeer(path: String) : CrystalToolPeer(path) {
     override val fullPath: Path by lazy {
         localPath.toPathOrEmpty()
     }
@@ -54,10 +54,10 @@ class CrystalLocalTool(path: String) : CrystalTool(path) {
     override fun convertArgumentPath(path: String): String = PathUtil.toSystemDependentName(path)
 }
 
-class CrystalWslTool(
+class CrystalWslToolPeer(
     localPath: String,
     private val distribution: WSLDistribution
-): CrystalTool(localPath) {
+): CrystalToolPeer(localPath) {
     override val fullPath: Path by lazy {
         distribution.getWindowsPath(localPath).toPathOrEmpty()
     }

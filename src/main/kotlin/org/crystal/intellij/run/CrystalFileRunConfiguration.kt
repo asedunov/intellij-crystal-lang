@@ -15,7 +15,7 @@ import com.intellij.psi.PsiManager
 import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.psi.module
 import org.crystal.intellij.resolve.crystalPathRoots
-import org.crystal.intellij.sdk.CrystalLocalTool
+import org.crystal.intellij.sdk.CrystalLocalToolPeer
 import org.crystal.intellij.util.toPathOrNull
 import org.crystal.intellij.util.toPsi
 import org.jdom.Element
@@ -55,7 +55,7 @@ class CrystalFileRunConfiguration(
     }
 
     override fun checkConfiguration() {
-        val compilerTool = project.crystalWorkspaceSettings.compilerTool
+        val compilerTool = project.crystalWorkspaceSettings.compiler
         if (!compilerTool.isValid) throw RuntimeConfigurationError("Crystal is not configured")
         val file = filePath?.let(::File)
         when {
@@ -85,8 +85,8 @@ class CrystalFileRunConfiguration(
             parameters.addAll(programArgList)
         }
 
-        val compilerTool = project.crystalWorkspaceSettings.compilerTool
-        if (!compilerTool.isValid) return null
+        val compiler = project.crystalWorkspaceSettings.compiler
+        if (!compiler.isValid) return null
 
         var effectiveEnv = env
         val project = environment.project
@@ -97,16 +97,16 @@ class CrystalFileRunConfiguration(
             ?.module()
         val crystalPathRoots = module?.crystalPathRoots() ?: emptyList()
         if (crystalPathRoots.isNotEmpty()) {
-            val separator = if (compilerTool is CrystalLocalTool && SystemInfo.isWindows) ";" else ":"
+            val separator = if (compiler.peer is CrystalLocalToolPeer && SystemInfo.isWindows) ";" else ":"
             val crystalPath = crystalPathRoots.joinToString(separator) {
-                compilerTool.convertArgumentPath(it.virtualFile.path)
+                compiler.peer.convertArgumentPath(it.virtualFile.path)
             }
             val envMap = HashMap(env.envs)
             envMap["CRYSTAL_PATH"] = crystalPath
             effectiveEnv = env.with(envMap)
         }
 
-        val commandLine = compilerTool.buildCommandLine(parameters, effectiveEnv) ?: return null
+        val commandLine = compiler.peer.buildCommandLine(parameters, effectiveEnv) ?: return null
         return CrystalFileRunState(commandLine, environment)
     }
 

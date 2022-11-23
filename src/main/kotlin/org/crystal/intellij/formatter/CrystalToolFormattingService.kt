@@ -25,14 +25,14 @@ class CrystalToolFormattingService : AsyncDocumentFormattingService() {
     override fun canFormat(file: PsiFile): Boolean {
         return file is CrFile
                 && file.project.crystalSettings.useFormatTool
-                && file.project.crystalWorkspaceSettings.compilerTool.isValid
+                && file.project.crystalWorkspaceSettings.compiler.isValid
                 && isReformatAction()
     }
 
     override fun createFormattingTask(request: AsyncFormattingRequest): FormattingTask? {
         val context = request.context
         val project = context.project
-        val compilerTool = project.crystalWorkspaceSettings.compilerTool
+        val compilerTool = project.crystalWorkspaceSettings.compiler
         if (!compilerTool.isValid) return null
         return object : FormattingTask {
             private val indicator = ProgressIndicatorBase()
@@ -41,6 +41,7 @@ class CrystalToolFormattingService : AsyncDocumentFormattingService() {
 
             override fun run() {
                 compilerTool
+                    .peer
                     .buildCommandLine(listOf("tool", "format", "-"))
                     ?.execute(
                         stdIn = request.documentText.toByteArray(),

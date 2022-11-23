@@ -59,7 +59,7 @@ class CrCapturingProcessHandler private constructor(commandLine: GeneralCommandL
 }
 
 fun GeneralCommandLine.execute(
-    stdIn: ByteArray,
+    stdIn: ByteArray?,
     runner: CapturingProcessHandler.() -> ProcessOutput,
 ): CrProcessResult<ProcessOutput> {
     log.info("Executing `$commandLineString`")
@@ -70,7 +70,9 @@ fun GeneralCommandLine.execute(
             log.warn("Failed to run executable", it)
             return Result.Err(CrProcessExecutionException.Start(it))
         }
-    handler.processInput.use { it.write(stdIn) }
+    if (stdIn != null) {
+        handler.processInput.use { it.write(stdIn) }
+    }
 
     val output = handler.runner()
     return when {

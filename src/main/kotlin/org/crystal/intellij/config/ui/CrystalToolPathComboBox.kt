@@ -20,7 +20,7 @@ import com.intellij.ui.ComboboxSpeedSearch
 import com.intellij.ui.components.fields.ExtendableTextComponent
 import com.intellij.ui.components.fields.ExtendableTextField
 import org.crystal.intellij.CrystalBundle
-import org.crystal.intellij.sdk.CrystalTool
+import org.crystal.intellij.sdk.CrystalToolPeer
 import org.crystal.intellij.sdk.isValidCompilerPath
 import org.crystal.intellij.util.addTextChangeListener
 import org.crystal.intellij.util.toPathOrNull
@@ -109,10 +109,10 @@ class CrystalToolPathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<
     }
 
     @Suppress("UnstableApiUsage")
-    fun addToolchainsAsync(toolRetriever: () -> List<CrystalTool>) {
+    fun addToolchainsAsync(toolRetriever: () -> List<CrystalToolPeer>) {
         setBusy(true)
         ApplicationManager.getApplication().executeOnPooledThread {
-            var tools = emptyList<CrystalTool>()
+            var tools = emptyList<CrystalToolPeer>()
             try {
                 tools = toolRetriever()
             } finally {

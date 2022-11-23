@@ -17,11 +17,11 @@ import kotlin.io.path.exists
 import kotlin.io.path.name
 import kotlin.io.path.nameWithoutExtension
 
-private val LOG = Logger.getInstance(CrystalTool::class.java)
+private val LOG = Logger.getInstance(CrystalToolPeer::class.java)
 
 private val VERSION_PATTERN = Pattern.compile("\\w+\\s+(\\d+(.\\d+)*).*")
 
-fun CrystalTool.requestVersion(): SemVer? {
+fun CrystalToolPeer.requestVersion(): SemVer? {
     val parameters = listOf("--version")
     val commandLine = buildCommandLine(parameters) ?: return null
     val processHandler = try {

@@ -12,28 +12,28 @@ private const val STD_SHARDS_PATH = "/usr/bin/shards"
 sealed interface CrystalToolFinder {
     val isApplicable: Boolean
 
-    fun getCompilers(): Sequence<CrystalTool>
-    fun getShardsTools(): Sequence<CrystalTool>
+    fun getCompilers(): Sequence<CrystalToolPeer>
+    fun getShardsTools(): Sequence<CrystalToolPeer>
 }
 
 object CrystalUnixToolFinder : CrystalToolFinder {
     override val isApplicable: Boolean
         get() = SystemInfo.isUnix
 
-    override fun getCompilers() = sequenceOf(CrystalLocalTool(STD_COMPILER_PATH))
+    override fun getCompilers() = sequenceOf(CrystalLocalToolPeer(STD_COMPILER_PATH))
 
-    override fun getShardsTools() = sequenceOf(CrystalLocalTool(STD_SHARDS_PATH))
+    override fun getShardsTools() = sequenceOf(CrystalLocalToolPeer(STD_SHARDS_PATH))
 }
 
 object CrystalWindowsToolFinder : CrystalToolFinder {
     override val isApplicable: Boolean
         get() = SystemInfo.isWindows
 
-    private fun getTools(toolName: String): Sequence<CrystalTool> {
+    private fun getTools(toolName: String): Sequence<CrystalToolPeer> {
         val userHome = SystemProperties.getUserHome()
         val crystalRoot = File("$userHome\\scoop\\apps\\crystal")
         return crystalRoot.listFiles()?.asSequence()?.mapNotNull {
-            CrystalLocalTool(it.absolutePath + "\\$toolName.exe")
+            CrystalLocalToolPeer(it.absolutePath + "\\$toolName.exe")
         } ?: emptySequence()
     }
 
@@ -46,13 +46,13 @@ object CrystalWslToolFinder : CrystalToolFinder {
     override val isApplicable: Boolean
         get() = WSLUtil.isSystemCompatible()
 
-    private fun getWslTools(path: String): Sequence<CrystalTool> {
+    private fun getWslTools(path: String): Sequence<CrystalToolPeer> {
         return WslDistributionManager
             .getInstance()
             .installedDistributions
             .asSequence()
             .map {
-                CrystalWslTool(path, it)
+                CrystalWslToolPeer(path, it)
             }
     }
 
@@ -67,10 +67,10 @@ private val finders = listOf(
     CrystalWindowsToolFinder
 )
 
-fun getCrystalCompilers(): Sequence<CrystalTool> {
+fun getCrystalCompilers(): Sequence<CrystalToolPeer> {
     return finders.filter { it.isApplicable }.asSequence().flatMap { it.getCompilers() }
 }
 
-fun getCrystalShardsTools(): Sequence<CrystalTool> {
+fun getCrystalShardsTools(): Sequence<CrystalToolPeer> {
     return finders.filter { it.isApplicable }.asSequence().flatMap { it.getShardsTools() }
 }

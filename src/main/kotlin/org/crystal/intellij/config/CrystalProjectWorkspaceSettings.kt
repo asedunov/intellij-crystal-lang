@@ -9,7 +9,8 @@ import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
-import org.crystal.intellij.sdk.CrystalTool
+import org.crystal.intellij.sdk.CrystalCompiler
+import org.crystal.intellij.sdk.CrystalToolPeer
 import org.crystal.intellij.sdk.getCrystalTool
 import org.crystal.intellij.util.toPsi
 
@@ -34,7 +35,7 @@ class CrystalProjectWorkspaceSettings(
 
     override fun onStateChange(oldState: State, newState: State) {
         if (oldState.compilerPath != newState.compilerPath) {
-            _compilerTool.drop()
+            _compiler.drop()
         }
         if (oldState.stdlibPath != newState.stdlibPath) {
             updateProjectRoots(project)
@@ -47,12 +48,12 @@ class CrystalProjectWorkspaceSettings(
     val stdlibRootDirectory: VirtualFile?
         get() = if (stdlibPath.isNotEmpty()) StandardFileSystems.local().findFileByPath(stdlibPath) else null
 
-    private val _compilerTool = ClearableLazyValue.createAtomic {
-        getCrystalTool(protectedState.compilerPath) ?: CrystalTool.EMPTY
+    private val _compiler = ClearableLazyValue.createAtomic {
+        CrystalCompiler(getCrystalTool(protectedState.compilerPath) ?: CrystalToolPeer.EMPTY)
     }
 
-    val compilerTool: CrystalTool
-        get() = _compilerTool.value
+    val compiler: CrystalCompiler
+        get() = _compiler.value
 }
 
 val Project.crystalWorkspaceSettings: CrystalProjectWorkspaceSettings

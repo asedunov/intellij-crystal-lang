@@ -18,7 +18,7 @@ import kotlin.io.path.name
 
 private val LOG = Logger.getInstance(CrystalTool::class.java)
 
-private val VERSION_PATTERN = Pattern.compile("Crystal (\\S+).*")
+private val VERSION_PATTERN = Pattern.compile("\\w+\\s+(\\d+(.\\d+)*).*")
 
 fun CrystalTool.requestVersion(): SemVer? {
     val parameters = listOf("--version")
@@ -66,6 +66,9 @@ fun suggestStdlibPath(compilerPath: Path): Path? {
 
 val Path.isValidCompilerPath: Boolean
     get() = isValidFile && name == "crystal"
+
+val Path.isValidShardsPath: Boolean
+    get() = isValidFile && name == "shards"
 
 val Path.isValidStdlibPath: Boolean
     get() = exists() &&

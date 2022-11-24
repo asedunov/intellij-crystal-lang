@@ -24,7 +24,8 @@ class CrystalProjectWorkspaceSettings(
 ) : PersistentConfigBase<CrystalProjectWorkspaceSettings.State>(SERVICE_NAME) {
     data class State(
         var compilerPath: String = "",
-        var stdlibPath: String = ""
+        var stdlibPath: String = "",
+        var shardsPath: String = ""
     )
 
     override fun newState() = State()

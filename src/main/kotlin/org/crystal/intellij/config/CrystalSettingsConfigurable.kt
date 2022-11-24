@@ -13,6 +13,7 @@ import com.intellij.ui.JBColor
 import com.intellij.ui.dsl.builder.*
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import com.intellij.ui.layout.listCellRenderer
+import com.intellij.util.text.SemVer
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.config.ui.CrystalToolPathComboBox
 import org.crystal.intellij.sdk.*
@@ -75,9 +76,11 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
 
     private lateinit var languageVersionComboBox: ComboBox<LanguageVersion>
     private lateinit var compilerComboBox: CrystalToolPathComboBox
+    private lateinit var shardsComboBox: CrystalToolPathComboBox
     private lateinit var stdlibEditor: TextFieldWithBrowseButton
     private lateinit var mainFileEditor: TextFieldWithBrowseButton
     private lateinit var sdkVersionLabel: JLabel
+    private lateinit var shardsVersionLabel: JLabel
 
     override fun createPanel() = panel {
         row(CrystalBundle.message("settings.language.level")) {
@@ -93,16 +96,16 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 .horizontalAlign(HorizontalAlign.FILL)
                 .component
             compilerComboBox.addTextChangeListener {
-                onExePathUpdate()
+                onCompilerPathUpdate()
             }
             compilerComboBox.addSelectPathListener {
-                onPathSelection()
+                onCompilerPathSelection()
             }
         }
 
         row(CrystalBundle.message("settings.sdk.version")) {
             sdkVersionLabel = label("").component
-            button("Check") { onExePathUpdate() }
+            button("Check") { onCompilerPathUpdate() }
         }
 
         row(CrystalBundle.message("settings.crystal.stdlib.path")) {
@@ -115,6 +118,21 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 .resizableColumn()
                 .horizontalAlign(HorizontalAlign.FILL)
                 .component
+        }
+
+        row(CrystalBundle.message("settings.crystal.shards.path")) {
+            shardsComboBox = cell(CrystalToolPathComboBox())
+                .resizableColumn()
+                .horizontalAlign(HorizontalAlign.FILL)
+                .component
+            shardsComboBox.addTextChangeListener {
+                onShardsPathUpdate()
+            }
+        }
+
+        row(CrystalBundle.message("settings.shards.version")) {
+            shardsVersionLabel = label("").component
+            button("Check") { onShardsPathUpdate() }
         }
 
         row(CrystalBundle.message("settings.main.file.path")) {
@@ -137,15 +155,20 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         compilerComboBox.addToolchainsAsync {
             getCrystalCompilers().toList()
         }
+        shardsComboBox.addToolchainsAsync {
+            getCrystalShardsTools().toList()
+        }
     }
 
     override fun isModified(): Boolean {
         return super.isModified() ||
-                workspaceSettings.compilerPath != (compilerComboBox.selectedPath?.toString() ?: "")
+                workspaceSettings.compilerPath != (compilerComboBox.selectedPath?.toString() ?: "") ||
+                workspaceSettings.shardsPath != (shardsComboBox.selectedPath?.toString() ?: "")
     }
 
     override fun reset() {
         compilerComboBox.selectedPath = workspaceSettings.compilerPath.toPathOrNull()
+        shardsComboBox.selectedPath = workspaceSettings.shardsPath.toPathOrNull()
         super.reset()
     }
 
@@ -153,26 +176,38 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         validateSettings()
         super.apply()
         workspaceSettings.compilerPath = compilerComboBox.selectedPath?.toString() ?: ""
+        workspaceSettings.shardsPath = shardsComboBox.selectedPath?.toString() ?: ""
         project.crystalWorkspaceSettings.currentState = workspaceSettings
         project.crystalSettings.currentState = settings
     }
 
-    private fun onExePathUpdate() {
+    private fun onCompilerPathUpdate() {
         val compilerPath = compilerComboBox.selectedPath?.toString()
         val version = compilerPath?.let { getCrystalTool(it)?.requestVersion() }
+        updateVersionLabel(sdkVersionLabel, version)
         if (version != null) {
-            sdkVersionLabel.text = version.parsedVersion
-            sdkVersionLabel.foreground = JBColor.foreground()
             languageVersionComboBox.selectedItem = findVersionOrLatest("${version.major}.${version.minor}")
-        }
-        else {
-            sdkVersionLabel.text = "N/A"
-            sdkVersionLabel.foreground = JBColor.RED
-            languageVersionComboBox.selectedItem = LanguageVersion.LatestStable
         }
     }
 
-    private fun onPathSelection() {
+    private fun onShardsPathUpdate() {
+        val shardsPath = shardsComboBox.selectedPath?.toString()
+        val version = shardsPath?.let { getCrystalTool(it)?.requestVersion() }
+        updateVersionLabel(shardsVersionLabel, version)
+    }
+
+    private fun updateVersionLabel(label: JLabel, version: SemVer?) {
+        if (version != null) {
+            label.text = version.parsedVersion
+            label.foreground = JBColor.foreground()
+        }
+        else {
+            label.text = "N/A"
+            label.foreground = JBColor.RED
+        }
+    }
+
+    private fun onCompilerPathSelection() {
         val compilerPath = compilerComboBox.selectedPath
         val stdlibPath = compilerPath?.let { suggestStdlibPath(compilerPath) }
         stdlibEditor.text = stdlibPath?.toString() ?: ""
@@ -191,6 +226,13 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 val stdlibPath = stdlibEditor.text.toPathOrNull()
                 if (stdlibPath == null || !stdlibPath.isValidStdlibPath) {
                     yield(CrystalBundle.message("settings.sdk.invalid.stdlib.path"))
+                }
+            }
+
+            if (shardsComboBox.selectedPathAsText.isNotEmpty()) {
+                val shardsPath = shardsComboBox.selectedPath
+                if (shardsPath == null || !shardsPath.isValidShardsPath) {
+                    yield(CrystalBundle.message("settings.sdk.invalid.shards.path"))
                 }
             }
         }.joinToString(separator = "\n")

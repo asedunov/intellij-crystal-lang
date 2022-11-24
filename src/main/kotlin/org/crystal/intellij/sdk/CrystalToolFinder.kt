@@ -5,11 +5,13 @@ import com.intellij.execution.wsl.WslDistributionManager
 import com.intellij.openapi.util.SystemInfo
 
 private const val STD_COMPILER_PATH = "/usr/bin/crystal"
+private const val STD_SHARDS_PATH = "/usr/bin/shards"
 
 sealed interface CrystalToolFinder {
     val isApplicable: Boolean
 
     fun getCompilers(): Sequence<CrystalTool>
+    fun getShardsTools(): Sequence<CrystalTool>
 }
 
 object CrystalUnixToolFinder : CrystalToolFinder {
@@ -17,21 +19,27 @@ object CrystalUnixToolFinder : CrystalToolFinder {
         get() = SystemInfo.isUnix
 
     override fun getCompilers() = sequenceOf(CrystalLocalTool(STD_COMPILER_PATH))
+
+    override fun getShardsTools() = sequenceOf(CrystalLocalTool(STD_SHARDS_PATH))
 }
 
 object CrystalWslToolFinder : CrystalToolFinder {
     override val isApplicable: Boolean
         get() = WSLUtil.isSystemCompatible()
 
-    override fun getCompilers(): Sequence<CrystalTool> {
+    private fun getWslTools(path: String): Sequence<CrystalTool> {
         return WslDistributionManager
             .getInstance()
             .installedDistributions
             .asSequence()
             .map {
-                CrystalWslTool(STD_COMPILER_PATH, it)
+                CrystalWslTool(path, it)
             }
     }
+
+    override fun getCompilers() = getWslTools(STD_COMPILER_PATH)
+
+    override fun getShardsTools() = getWslTools(STD_SHARDS_PATH)
 }
 
 private val finders = listOf(
@@ -41,4 +49,8 @@ private val finders = listOf(
 
 fun getCrystalCompilers(): Sequence<CrystalTool> {
     return finders.filter { it.isApplicable }.asSequence().flatMap { it.getCompilers() }
+}
+
+fun getCrystalShardsTools(): Sequence<CrystalTool> {
+    return finders.filter { it.isApplicable }.asSequence().flatMap { it.getShardsTools() }
 }

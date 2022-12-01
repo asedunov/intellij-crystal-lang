@@ -20,7 +20,8 @@ import com.intellij.ui.ComboboxSpeedSearch
 import com.intellij.ui.components.fields.ExtendableTextComponent
 import com.intellij.ui.components.fields.ExtendableTextField
 import org.crystal.intellij.CrystalBundle
-import org.crystal.intellij.sdk.CrystalSdkFlavor
+import org.crystal.intellij.sdk.CrystalTool
+import org.crystal.intellij.sdk.isValidCompilerPath
 import org.crystal.intellij.util.addTextChangeListener
 import org.crystal.intellij.util.toPathOrNull
 import java.awt.event.ItemEvent
@@ -31,7 +32,7 @@ import kotlin.io.path.name
 /**
  * Based on RsToolchainPathChoosingComboBox from IntelliJ Rust plugin (https://github.com/intellij-rust/intellij-rust)
  */
-class CrystalExePathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<Path>>(ComboBoxWithWidePopup(), null) {
+class CrystalToolPathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<Path>>(ComboBoxWithWidePopup(), null) {
     private val editor: BasicComboBoxEditor = object : BasicComboBoxEditor() {
         override fun createEditorComponent(): ExtendableTextField = ExtendableTextField()
     }
@@ -73,7 +74,7 @@ class CrystalExePathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<P
                 override fun validateSelectedFiles(files: Array<VirtualFile>) {
                     if (files.isEmpty()) return
                     val path = StandardFileSystems.local().getNioPath(files.first()) ?: return
-                    if (!CrystalSdkFlavor.isValidCrystalExePath(path)) {
+                    if (!path.isValidCompilerPath) {
                         throw Exception(CrystalBundle.message("settings.sdk.invalid.interpreter.name.0", path.name))
                     }
                 }
@@ -108,12 +109,12 @@ class CrystalExePathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<P
     }
 
     @Suppress("UnstableApiUsage")
-    fun addToolchainsAsync(pathRetriever: () -> List<Path>) {
+    fun addToolchainsAsync(toolRetriever: () -> List<CrystalTool>) {
         setBusy(true)
         ApplicationManager.getApplication().executeOnPooledThread {
-            var paths = emptyList<Path>()
+            var tools = emptyList<CrystalTool>()
             try {
-                paths = pathRetriever()
+                tools = toolRetriever()
             } finally {
                 val executor = AppUIExecutor.onUiThread(ModalityState.any()).expireWith(this)
                 executor.execute {
@@ -121,7 +122,9 @@ class CrystalExePathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<P
                     val oldSelectedPath = selectedPath
                     isUpdatingPaths = true
                     childComponent.removeAllItems()
-                    paths.forEach(childComponent::addItem)
+                    tools.forEach {
+                        childComponent.addItem(it.fullPath)
+                    }
                     isUpdatingPaths = false
                     childComponent.selectedItem = null
                     selectedPath = oldSelectedPath

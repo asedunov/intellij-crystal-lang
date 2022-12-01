@@ -9,8 +9,8 @@ import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
-import org.crystal.intellij.sdk.CrystalExe
-import org.crystal.intellij.sdk.CrystalSdkFlavor
+import org.crystal.intellij.sdk.CrystalTool
+import org.crystal.intellij.sdk.getCrystalTool
 import org.crystal.intellij.util.toPsi
 
 private const val SERVICE_NAME = "CrystalWorkspaceSettings"
@@ -23,7 +23,7 @@ class CrystalProjectWorkspaceSettings(
     private val project: Project
 ) : PersistentConfigBase<CrystalProjectWorkspaceSettings.State>(SERVICE_NAME) {
     data class State(
-        var crystalExePath: String = "",
+        var compilerPath: String = "",
         var stdlibPath: String = ""
     )
 
@@ -32,8 +32,8 @@ class CrystalProjectWorkspaceSettings(
     override fun State.copyState() = copy()
 
     override fun onStateChange(oldState: State, newState: State) {
-        if (oldState.crystalExePath != newState.crystalExePath) {
-            _crystalExe.drop()
+        if (oldState.compilerPath != newState.compilerPath) {
+            _compilerTool.drop()
         }
         if (oldState.stdlibPath != newState.stdlibPath) {
             updateProjectRoots(project)
@@ -46,12 +46,12 @@ class CrystalProjectWorkspaceSettings(
     val stdlibRootDirectory: VirtualFile?
         get() = if (stdlibPath.isNotEmpty()) StandardFileSystems.local().findFileByPath(stdlibPath) else null
 
-    private val _crystalExe = ClearableLazyValue.createAtomic {
-        CrystalSdkFlavor.INSTANCE?.createCrystalExe(protectedState.crystalExePath) ?: CrystalExe.EMPTY
+    private val _compilerTool = ClearableLazyValue.createAtomic {
+        getCrystalTool(protectedState.compilerPath) ?: CrystalTool.EMPTY
     }
 
-    val crystalExe: CrystalExe
-        get() = _crystalExe.value
+    val compilerTool: CrystalTool
+        get() = _compilerTool.value
 }
 
 val Project.crystalWorkspaceSettings: CrystalProjectWorkspaceSettings

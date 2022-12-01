@@ -144,9 +144,6 @@
     </extensions>
 
     <extensionPoints>
-        <extensionPoint qualifiedName="org.crystal.sdkFlavor"
-                        interface="org.crystal.intellij.sdk.CrystalSdkFlavor"
-                        dynamic="true"/>
         <extensionPoint qualifiedName="org.crystal.classInheritorsSearch"
                         interface="com.intellij.util.QueryExecutor"
                         dynamic="true"/>
@@ -156,9 +153,6 @@
     </extensionPoints>
 
     <extensions defaultExtensionNs="org.crystal">
-        <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalUnixSdkFlavor"/>
-        <sdkFlavor implementation="org.crystal.intellij.sdk.CrystalWslSdkFlavor"/>
-
         <classInheritorsSearch implementation="org.crystal.intellij.search.CrystalInheritorsSearcher"/>
         <overridingMacroSearch implementation="org.crystal.intellij.search.CrystalOverridingMacroSearcher"/>
     </extensions>

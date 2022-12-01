@@ -53,8 +53,8 @@ class CrystalFileRunConfiguration(
     }
 
     override fun checkConfiguration() {
-        val crystalExe = project.crystalWorkspaceSettings.crystalExe
-        if (!crystalExe.isValid) throw RuntimeConfigurationError("Crystal is not configured")
+        val compilerTool = project.crystalWorkspaceSettings.compilerTool
+        if (!compilerTool.isValid) throw RuntimeConfigurationError("Crystal is not configured")
         val file = filePath?.let(::File)
         when {
             file == null || !file.exists() -> throw RuntimeConfigurationError("Target file doesn't exist")
@@ -83,8 +83,8 @@ class CrystalFileRunConfiguration(
             parameters.addAll(programArgList)
         }
 
-        val crystalExe = project.crystalWorkspaceSettings.crystalExe
-        if (!crystalExe.isValid) return null
+        val compilerTool = project.crystalWorkspaceSettings.compilerTool
+        if (!compilerTool.isValid) return null
 
         var effectiveEnv = env
         val project = environment.project
@@ -96,14 +96,14 @@ class CrystalFileRunConfiguration(
         val crystalPathRoots = module?.crystalPathRoots() ?: emptyList()
         if (crystalPathRoots.isNotEmpty()) {
             val crystalPath = crystalPathRoots.joinToString(":") {
-                crystalExe.convertPathForCrystal(it.virtualFile.path)
+                compilerTool.convertArgumentPath(it.virtualFile.path)
             }
             val envMap = HashMap(env.envs)
             envMap["CRYSTAL_PATH"] = crystalPath
             effectiveEnv = env.with(envMap)
         }
 
-        val commandLine = crystalExe.crystalCommandLine(parameters, effectiveEnv) ?: return null
+        val commandLine = compilerTool.buildCommandLine(parameters, effectiveEnv) ?: return null
         return CrystalFileRunState(commandLine, environment)
     }
 

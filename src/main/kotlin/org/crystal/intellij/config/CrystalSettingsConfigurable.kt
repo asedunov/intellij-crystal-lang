@@ -11,12 +11,11 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.JBColor
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.layout.listCellRenderer
 import com.intellij.ui.dsl.gridLayout.HorizontalAlign
+import com.intellij.ui.layout.listCellRenderer
 import org.crystal.intellij.CrystalBundle
-import org.crystal.intellij.config.ui.CrystalExePathComboBox
-import org.crystal.intellij.sdk.CrystalSdkFlavor
-import org.crystal.intellij.sdk.requestVersion
+import org.crystal.intellij.config.ui.CrystalToolPathComboBox
+import org.crystal.intellij.sdk.*
 import org.crystal.intellij.util.toPathOrNull
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JLabel
@@ -37,7 +36,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
             override fun validateSelectedFiles(files: Array<VirtualFile>) {
                 if (files.isEmpty()) return
                 val file = files.first()
-                if (!CrystalSdkFlavor.isValidStdlibPath(file.toNioPath())) {
+                if (!file.toNioPath().isValidStdlibPath) {
                     throw Exception(CrystalBundle.message("settings.sdk.invalid.stdlib.path.0", file.name))
                 }
             }
@@ -75,7 +74,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
     private val workspaceSettings = project.crystalWorkspaceSettings.currentState
 
     private lateinit var languageVersionComboBox: ComboBox<LanguageVersion>
-    private lateinit var crystalExeComboBox: CrystalExePathComboBox
+    private lateinit var compilerComboBox: CrystalToolPathComboBox
     private lateinit var stdlibEditor: TextFieldWithBrowseButton
     private lateinit var mainFileEditor: TextFieldWithBrowseButton
     private lateinit var sdkVersionLabel: JLabel
@@ -89,14 +88,14 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         }
 
         row(CrystalBundle.message("settings.crystal.exe.path")) {
-            crystalExeComboBox = cell(CrystalExePathComboBox())
+            compilerComboBox = cell(CrystalToolPathComboBox())
                 .resizableColumn()
                 .horizontalAlign(HorizontalAlign.FILL)
                 .component
-            crystalExeComboBox.addTextChangeListener {
+            compilerComboBox.addTextChangeListener {
                 onExePathUpdate()
             }
-            crystalExeComboBox.addSelectPathListener {
+            compilerComboBox.addSelectPathListener {
                 onPathSelection()
             }
         }
@@ -135,32 +134,32 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 .bindSelected(settings::useFormatTool)
         }
 
-        crystalExeComboBox.addToolchainsAsync {
-            CrystalSdkFlavor.INSTANCE?.suggestCrystalExePaths()?.toList() ?: emptyList()
+        compilerComboBox.addToolchainsAsync {
+            getCrystalCompilers().toList()
         }
     }
 
     override fun isModified(): Boolean {
         return super.isModified() ||
-                workspaceSettings.crystalExePath != (crystalExeComboBox.selectedPath?.toString() ?: "")
+                workspaceSettings.compilerPath != (compilerComboBox.selectedPath?.toString() ?: "")
     }
 
     override fun reset() {
-        crystalExeComboBox.selectedPath = workspaceSettings.crystalExePath.toPathOrNull()
+        compilerComboBox.selectedPath = workspaceSettings.compilerPath.toPathOrNull()
         super.reset()
     }
 
     override fun apply() {
         validateSettings()
         super.apply()
-        workspaceSettings.crystalExePath = crystalExeComboBox.selectedPath?.toString() ?: ""
+        workspaceSettings.compilerPath = compilerComboBox.selectedPath?.toString() ?: ""
         project.crystalWorkspaceSettings.currentState = workspaceSettings
         project.crystalSettings.currentState = settings
     }
 
     private fun onExePathUpdate() {
-        val crystalExePath = crystalExeComboBox.selectedPath?.toString()
-        val version = crystalExePath?.let { CrystalSdkFlavor.INSTANCE?.createCrystalExe(it)?.requestVersion() }
+        val compilerPath = compilerComboBox.selectedPath?.toString()
+        val version = compilerPath?.let { getCrystalTool(it)?.requestVersion() }
         if (version != null) {
             sdkVersionLabel.text = version.parsedVersion
             sdkVersionLabel.foreground = JBColor.foreground()
@@ -174,23 +173,23 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
     }
 
     private fun onPathSelection() {
-        val crystalExePath = crystalExeComboBox.selectedPath
-        val stdlibPath = crystalExePath?.let { CrystalSdkFlavor.suggestStdlibPath(crystalExePath) }
+        val compilerPath = compilerComboBox.selectedPath
+        val stdlibPath = compilerPath?.let { suggestStdlibPath(compilerPath) }
         stdlibEditor.text = stdlibPath?.toString() ?: ""
     }
 
     private fun validateSettings() {
         val errorMessage = sequence {
-            if (crystalExeComboBox.selectedPathAsText.isNotEmpty()) {
-                val crystalExePath = crystalExeComboBox.selectedPath
-                if (crystalExePath == null || !CrystalSdkFlavor.isValidCrystalExePath(crystalExePath)) {
+            if (compilerComboBox.selectedPathAsText.isNotEmpty()) {
+                val compilerPath = compilerComboBox.selectedPath
+                if (compilerPath == null || !compilerPath.isValidCompilerPath) {
                     yield(CrystalBundle.message("settings.sdk.invalid.interpreter.path"))
                 }
             }
 
             if (stdlibEditor.text.isNotEmpty()) {
                 val stdlibPath = stdlibEditor.text.toPathOrNull()
-                if (stdlibPath == null || !CrystalSdkFlavor.isValidStdlibPath(stdlibPath)) {
+                if (stdlibPath == null || !stdlibPath.isValidStdlibPath) {
                     yield(CrystalBundle.message("settings.sdk.invalid.stdlib.path"))
                 }
             }

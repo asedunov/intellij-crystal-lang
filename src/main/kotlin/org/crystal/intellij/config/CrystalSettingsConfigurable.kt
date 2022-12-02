@@ -103,7 +103,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
             }
         }
 
-        row(CrystalBundle.message("settings.sdk.version")) {
+        row(CrystalBundle.message("settings.crystal.version")) {
             sdkVersionLabel = label("").component
             button("Check") { onCompilerPathUpdate() }
         }

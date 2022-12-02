@@ -83,73 +83,81 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
     private lateinit var shardsVersionLabel: JLabel
 
     override fun createPanel() = panel {
-        row(CrystalBundle.message("settings.language.level")) {
-            languageVersionComboBox = comboBox(
-                DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
-                listCellRenderer { value, _, _ -> setText(value.description) }
-            ).bindItem(settings::languageVersion.toNullableProperty()).component
-        }
-
-        row(CrystalBundle.message("settings.crystal.exe.path")) {
-            compilerComboBox = cell(CrystalToolPathComboBox())
-                .resizableColumn()
-                .horizontalAlign(HorizontalAlign.FILL)
-                .component
-            compilerComboBox.addTextChangeListener {
-                onCompilerPathUpdate()
+        group(CrystalBundle.message("settings.group.compiler")) {
+            row(CrystalBundle.message("settings.language.level")) {
+                languageVersionComboBox = comboBox(
+                    DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
+                    listCellRenderer { value, _, _ -> setText(value.description) }
+                ).bindItem(settings::languageVersion.toNullableProperty()).component
             }
-            compilerComboBox.addSelectPathListener {
-                onCompilerPathSelection()
+
+            row(CrystalBundle.message("settings.crystal.exe.path")) {
+                compilerComboBox = cell(CrystalToolPathComboBox())
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
+                compilerComboBox.addTextChangeListener {
+                    onCompilerPathUpdate()
+                }
+                compilerComboBox.addSelectPathListener {
+                    onCompilerPathSelection()
+                }
             }
-        }
 
-        row(CrystalBundle.message("settings.crystal.version")) {
-            sdkVersionLabel = label("").component
-            button("Check") { onCompilerPathUpdate() }
-        }
-
-        row(CrystalBundle.message("settings.crystal.stdlib.path")) {
-            stdlibEditor = textFieldWithBrowseButton(
-                CrystalBundle.message("settings.sdk.select.stdlib.path"),
-                project,
-                STDLIB_FILE_CHOOSER_DESCRIPTOR
-            ) { file -> file.presentableUrl }
-                .bindText(workspaceSettings::stdlibPath)
-                .resizableColumn()
-                .horizontalAlign(HorizontalAlign.FILL)
-                .component
-        }
-
-        row(CrystalBundle.message("settings.crystal.shards.path")) {
-            shardsComboBox = cell(CrystalToolPathComboBox())
-                .resizableColumn()
-                .horizontalAlign(HorizontalAlign.FILL)
-                .component
-            shardsComboBox.addTextChangeListener {
-                onShardsPathUpdate()
+            row(CrystalBundle.message("settings.crystal.version")) {
+                sdkVersionLabel = label("").component
+                button("Check") { onCompilerPathUpdate() }
             }
         }
 
-        row(CrystalBundle.message("settings.shards.version")) {
-            shardsVersionLabel = label("").component
-            button("Check") { onShardsPathUpdate() }
+        group(CrystalBundle.message("settings.group.stdlib")) {
+            row(CrystalBundle.message("settings.crystal.stdlib.path")) {
+                stdlibEditor = textFieldWithBrowseButton(
+                    CrystalBundle.message("settings.sdk.select.stdlib.path"),
+                    project,
+                    STDLIB_FILE_CHOOSER_DESCRIPTOR
+                ) { file -> file.presentableUrl }
+                    .bindText(workspaceSettings::stdlibPath)
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
+            }
         }
 
-        row(CrystalBundle.message("settings.main.file.path")) {
-            mainFileEditor = textFieldWithBrowseButton(
-                CrystalBundle.message("settings.select.main.path"),
-                project,
-                mainFileChooserDescriptor
-            ) { file -> file.presentableUrl }
-                .bindText(settings::mainFilePath)
-                .resizableColumn()
-                .horizontalAlign(HorizontalAlign.FILL)
-                .component
+        group(CrystalBundle.message("settings.group.shards")) {
+            row(CrystalBundle.message("settings.crystal.shards.path")) {
+                shardsComboBox = cell(CrystalToolPathComboBox())
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
+                shardsComboBox.addTextChangeListener {
+                    onShardsPathUpdate()
+                }
+            }
+
+            row(CrystalBundle.message("settings.shards.version")) {
+                shardsVersionLabel = label("").component
+                button("Check") { onShardsPathUpdate() }
+            }
         }
 
-        row {
-            checkBox(CrystalBundle.message("settings.format.tool.use.instead.of.builtin"))
-                .bindSelected(settings::useFormatTool)
+        group(CrystalBundle.message("settings.group.misc")) {
+            row(CrystalBundle.message("settings.main.file.path")) {
+                mainFileEditor = textFieldWithBrowseButton(
+                    CrystalBundle.message("settings.select.main.path"),
+                    project,
+                    mainFileChooserDescriptor
+                ) { file -> file.presentableUrl }
+                    .bindText(settings::mainFilePath)
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
+            }
+
+            row {
+                checkBox(CrystalBundle.message("settings.format.tool.use.instead.of.builtin"))
+                    .bindSelected(settings::useFormatTool)
+            }
         }
 
         compilerComboBox.addToolchainsAsync {

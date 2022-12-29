@@ -16,10 +16,7 @@
 
     <change-notes><![CDATA[
     <ul>
-      <li>Keyword completion</li>
-      <li>Type/constant reference completion</li>
-      <li>External formatter support</li>
-      <li>Support of syntax changes in Crystal 1.6</li>
+      <li>Support Crystal on Windows</li>
     </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>

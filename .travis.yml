@@ -21,4 +21,4 @@ script:
 
 branches:
   only:
-    - v0.5_223
+    - v0.5.5_223

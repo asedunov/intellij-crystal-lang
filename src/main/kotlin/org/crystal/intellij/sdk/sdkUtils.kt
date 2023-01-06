@@ -15,6 +15,7 @@ import java.nio.file.Path
 import java.util.regex.Pattern
 import javax.swing.SwingUtilities
 import kotlin.io.path.name
+import kotlin.io.path.nameWithoutExtension
 
 private val LOG = Logger.getInstance(CrystalTool::class.java)
 
@@ -65,10 +66,10 @@ fun suggestStdlibPath(compilerPath: Path): Path? {
 }
 
 val Path.isValidCompilerPath: Boolean
-    get() = isValidFile && name == "crystal"
+    get() = isValidFile && nameWithoutExtension == "crystal"
 
 val Path.isValidShardsPath: Boolean
-    get() = isValidFile && name == "shards"
+    get() = isValidFile && nameWithoutExtension == "shards"
 
 val Path.isValidStdlibPath: Boolean
     get() = exists() &&

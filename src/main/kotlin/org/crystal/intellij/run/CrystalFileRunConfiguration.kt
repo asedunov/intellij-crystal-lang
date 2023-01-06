@@ -9,11 +9,13 @@ import com.intellij.execution.configurations.RuntimeConfigurationError
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.util.ProgramParametersConfigurator
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.psi.PsiManager
 import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.psi.module
 import org.crystal.intellij.resolve.crystalPathRoots
+import org.crystal.intellij.sdk.CrystalLocalTool
 import org.crystal.intellij.util.toPathOrNull
 import org.crystal.intellij.util.toPsi
 import org.jdom.Element
@@ -95,7 +97,8 @@ class CrystalFileRunConfiguration(
             ?.module()
         val crystalPathRoots = module?.crystalPathRoots() ?: emptyList()
         if (crystalPathRoots.isNotEmpty()) {
-            val crystalPath = crystalPathRoots.joinToString(":") {
+            val separator = if (compilerTool is CrystalLocalTool && SystemInfo.isWindows) ";" else ":"
+            val crystalPath = crystalPathRoots.joinToString(separator) {
                 compilerTool.convertArgumentPath(it.virtualFile.path)
             }
             val envMap = HashMap(env.envs)

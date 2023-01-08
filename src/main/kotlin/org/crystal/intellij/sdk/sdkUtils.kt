@@ -60,6 +60,7 @@ fun CrystalTool.requestVersion(): SemVer? {
 
 fun suggestStdlibPath(compilerPath: Path): Path? {
     return listOfNotNull(
+        compilerPath.parent?.resolve("src"),
         compilerPath.parent?.parent?.resolve("src"),
         compilerPath.parent?.parent?.resolve("share/crystal/src")
     ).firstOrNull { it.isValidStdlibPath }

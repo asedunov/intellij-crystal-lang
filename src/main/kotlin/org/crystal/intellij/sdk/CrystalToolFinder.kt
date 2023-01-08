@@ -3,6 +3,8 @@ package org.crystal.intellij.sdk
 import com.intellij.execution.wsl.WSLUtil
 import com.intellij.execution.wsl.WslDistributionManager
 import com.intellij.openapi.util.SystemInfo
+import com.intellij.util.SystemProperties
+import java.io.File
 
 private const val STD_COMPILER_PATH = "/usr/bin/crystal"
 
@@ -17,6 +19,19 @@ object CrystalUnixToolFinder : CrystalToolFinder {
         get() = SystemInfo.isUnix
 
     override fun getCompilers() = sequenceOf(CrystalLocalTool(STD_COMPILER_PATH))
+}
+
+object CrystalWindowsToolFinder : CrystalToolFinder {
+    override val isApplicable: Boolean
+        get() = SystemInfo.isWindows
+
+    override fun getCompilers(): Sequence<CrystalTool> {
+        val userHome = SystemProperties.getUserHome()
+        val crystalRoot = File("$userHome\\scoop\\apps\\crystal")
+        return crystalRoot.listFiles()?.asSequence()?.mapNotNull {
+            CrystalLocalTool(it.absolutePath + "\\crystal.exe")
+        } ?: emptySequence()
+    }
 }
 
 object CrystalWslToolFinder : CrystalToolFinder {
@@ -36,7 +51,8 @@ object CrystalWslToolFinder : CrystalToolFinder {
 
 private val finders = listOf(
     CrystalWslToolFinder,
-    CrystalUnixToolFinder
+    CrystalUnixToolFinder,
+    CrystalWindowsToolFinder
 )
 
 fun getCrystalCompilers(): Sequence<CrystalTool> {

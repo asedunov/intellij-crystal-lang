@@ -1,0 +1,24 @@
+FILE
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0b1011_f32')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0b1011_f64')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0o1234_f32')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('0o1234_f64')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1234_f32')
+
+  CrFloatLiteralExpression(CR_FLOAT_LITERAL_EXPRESSION)
+    PsiElement(<float literal>)('1234_f64')
+
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('0x1AD8_f32')
+
+  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+    PsiElement(<integer literal>)('0x1AD8_f64')

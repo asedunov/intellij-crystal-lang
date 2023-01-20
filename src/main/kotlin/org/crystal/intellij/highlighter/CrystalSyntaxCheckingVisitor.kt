@@ -80,6 +80,17 @@ class CrystalSyntaxCheckingVisitor(
             return "The value is out of ${literalKind.typeName} range. $typeName literals that don't fit in an ${literalKind.typeName} are currently not supported"
         }
 
+    override fun visitFloatLiteralExpression(o: CrFloatLiteralExpression) {
+        super.visitFloatLiteralExpression(o)
+
+        if (ll >= LanguageLevel.CRYSTAL_1_7) {
+            when (o.radix) {
+                2 -> error(o, "Binary float literals are not supported")
+                8 -> error(o, "Octal float literals are not supported")
+            }
+        }
+    }
+
     override fun visitStringLiteralExpression(o: CrStringLiteralExpression) {
         super.visitStringLiteralExpression(o)
 

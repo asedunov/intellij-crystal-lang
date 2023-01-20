@@ -486,6 +486,12 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             TokenSet.create(CR_SEMICOLON)
         )
 
+        private val classEndTokens = TokenSet.create(
+            CR_NEWLINE,
+            CR_SEMICOLON,
+            CR_END
+        )
+
         private fun PsiBuilder.skipStatementEnd() {
             skipWhile { at(statementEndTokens) }
         }
@@ -2956,14 +2962,27 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 parsePath()
                 skipSpaces()
 
+                if (ll >= LanguageLevel.CRYSTAL_1_7) {
+                    recoverUntil("'<', '(', <statement end>", false) {
+                        at(CR_LESS_OP) || at(CR_LPAREN) || at(classEndTokens)
+                    }
+                }
+
                 parseTypeVars()
 
                 if (at(CR_LESS_OP)) composite(CR_SUPERTYPE_CLAUSE) {
                     nextTokenSkipSpacesAndNewlines()
+
                     if (at(CR_SELF)) {
                         composite(CR_SELF_TYPE) { nextToken() }
                     }
                     else parseGeneric()
+
+                    if (ll >= LanguageLevel.CRYSTAL_1_7) {
+                        recoverUntil("<statement end>", false) {
+                            at(CR_WHITESPACES) || at(classEndTokens)
+                        }
+                    }
                 }
                 skipStatementEnd()
 

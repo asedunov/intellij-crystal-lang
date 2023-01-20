@@ -610,4 +610,28 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
             "class Foo\r\nend\r\n\r\n1"
         )
     }
+
+    @Test
+    fun testExpressionsInClassHeader() = doTestExpressionsInClassHeader()
+
+    @Test
+    fun testExpressionsInClassHeader_1_6() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_6) {
+        doTestExpressionsInClassHeader()
+    }
+
+    private fun doTestExpressionsInClassHeader() {
+        doTestMultiFragments(
+            sequence {
+                for (expr in listOf(
+                    "\"a\"", "'a'", "[1]", "{1}", "{|a|a}", "->{}", "->(x : Bar){}", ":Bar", ":bar", "%x()", "%w()", "%()"
+                )) {
+                    yield("class Foo$expr; end")
+                    yield("class Foo$expr < Baz; end")
+                    yield("class Foo$expr < self; end")
+                    yield("class Foo < Baz$expr; end")
+                    yield("class Foo < self$expr; end")
+                }
+            }
+        )
+    }
 }

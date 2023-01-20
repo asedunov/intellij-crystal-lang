@@ -1,6 +1,6 @@
 # OWNER: <null>
 
-class
+class A
   <caret>@[Foo]
 end
 x : Int32

@@ -1,16 +1,19 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.languageLevel
 import org.crystal.intellij.lexer.CR_INTEGER_LITERAL
 import org.crystal.intellij.lexer.CR_MINUS_OP
+import org.crystal.intellij.lexer.CrystalTokenType
 import kotlin.math.max
 
-class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLiteralExpression {
+class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitIntegerLiteralExpression(this)
+
+    override val tokenType: CrystalTokenType
+        get() = CR_INTEGER_LITERAL
 
     val value: Any?
         get() = kind.parser(valueAsString(true), radix, languageLevel)
@@ -31,22 +34,8 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLite
             return null
         }
 
-    val radix: Int
-        get() = when(prefix) {
-            "0b" -> 2
-            "0o", "0" -> 8
-            "0x" -> 16
-            else -> 10
-        }
-
     private val isNegated: Boolean
         get() = firstChild?.elementType == CR_MINUS_OP
-
-    private val body: PsiElement?
-        get() = findChildByType(CR_INTEGER_LITERAL)
-
-    private val bodyText: String
-        get() = body?.text ?: ""
 
     private fun valueAsString(withSign: Boolean) = buildString {
         if (withSign && isNegated) append('-')
@@ -64,17 +53,6 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLite
 
     val valueString: String
         get() = valueAsString(true)
-
-    val prefix: String
-        get() {
-            val text = bodyText
-            if (text.length < 2 || text[0] != '0') return ""
-            return when (text[1]) {
-                'b', 'o', 'x' -> text.substring(0, 2)
-                in '0'..'9' -> "0"
-                else -> ""
-            }
-        }
 
     private fun String.findSuffixStart(): Int {
         val text = bodyText

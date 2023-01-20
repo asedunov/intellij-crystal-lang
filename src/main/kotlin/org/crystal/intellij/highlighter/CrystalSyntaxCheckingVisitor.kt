@@ -840,6 +840,9 @@ class CrystalSyntaxCheckingVisitor(
                     if (nameElement.isQuestion || nameElement.isExclamation) {
                         error(e, "Assignment is now allowed for ?/! method calls")
                     }
+                    if (ll >= LanguageLevel.CRYSTAL_1_7 && nameElement.kind == CrNameKind.GLOBAL_MATCH_INDEX) {
+                        error(e, "Assignment is not allowed for global match data index")
+                    }
                 }
             }
 

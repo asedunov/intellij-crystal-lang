@@ -19,11 +19,13 @@ class CrystalSyntaxCheckingVisitor(
 
     private var funNest = 0
     private var typeNest = 0
+    private var constNest = 0
     private var exprNest = 0
 
     private val inType: (String) -> String? = { if (typeNest > 0) "Can't $it in type body" else null }
     private val inFun: (String) -> String? = { if (funNest > 0) "Can't $it in method/function body" else null }
     private val inExpr: (String) -> String? = { if (exprNest > 0) "Can't $it dynamically" else null }
+    private val inConst: (String) -> String? = { if (constNest > 0) "Can't $it dynamically" else null }
 
     private inline infix fun ((String) -> String?).or(crossinline op: (String) -> String?): (String) -> String? {
         return { this(it) ?: op(it) }
@@ -35,6 +37,9 @@ class CrystalSyntaxCheckingVisitor(
                 super.visitElement(element)
             }
             element.isTypeBody -> inType {
+                super.visitElement(element)
+            }
+            element is CrConstant -> inConst {
                 super.visitElement(element)
             }
             element.isNestingExpression -> inExpr {
@@ -596,9 +601,12 @@ class CrystalSyntaxCheckingVisitor(
             is CrFunction,
             is CrAlias,
             is CrAnnotation,
-            is CrMacro,
-            is CrConstant -> {
+            is CrMacro -> {
                 errorIf(o.defaultAnchor, "declare ${o.presentableKind}", inFun or inExpr)
+            }
+            is CrConstant -> {
+                val validator = if (ll >= LanguageLevel.CRYSTAL_1_7) inFun or inConst or inExpr else inFun or inExpr
+                errorIf(o.defaultAnchor, "declare ${o.presentableKind}", validator)
             }
             else -> {}
         }
@@ -923,11 +931,18 @@ class CrystalSyntaxCheckingVisitor(
         typeNest--
     }
 
+    private inline fun inConst(body: () -> Unit) {
+        constNest++
+        body()
+        constNest--
+    }
+
     private inline fun inExpr(body: () -> Unit) {
         exprNest++
         body()
         exprNest--
     }
+
 
     private fun <T : CrNamedElement> checkDuplicateNames(
         elements: Iterable<T>,

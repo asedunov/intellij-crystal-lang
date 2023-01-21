@@ -3535,11 +3535,16 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             composite(CR_LIBRARY_DEFINITION) {
                 nextTokenSkipSpacesAndNewlines()
 
-                if (at(CR_CONSTANT)) {
-                    composite(CR_PATH_NAME_ELEMENT) { nextToken() }
+                if (ll >= LanguageLevel.CRYSTAL_1_7) {
+                    parsePath()
                 }
                 else {
-                    error("Expected: <library name>")
+                    if (at(CR_CONSTANT)) {
+                        composite(CR_PATH_NAME_ELEMENT) { nextToken() }
+                    }
+                    else {
+                        error("Expected: <library name>")
+                    }
                 }
 
                 skipStatementEnd()

@@ -1823,7 +1823,8 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     checkPlusMinus = false,
                     allowCurly = true,
                     endToken = CR_RBRACKET,
-                    allowBeginlessRange = true
+                    allowBeginlessRange = true,
+                    isControl = ll >= LanguageLevel.CRYSTAL_1_7
                 )
             }
             skipSpacesAndNewlines()

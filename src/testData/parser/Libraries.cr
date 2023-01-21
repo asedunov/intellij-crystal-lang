@@ -125,3 +125,6 @@ lib LibFoo
   fun foo(x : Int32
         y : Float64)
 end
+
+lib Foo::Bar
+end

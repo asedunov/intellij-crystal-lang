@@ -1,0 +1,2 @@
+lib Foo::Bar
+end

@@ -6,8 +6,6 @@ begin
   X = 1
 end
 
-A = X = 1
-
 a = <error descr="Can't declare constant dynamically">X</error> = 1
 
 if true

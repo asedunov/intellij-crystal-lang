@@ -410,6 +410,8 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
                 """
                     def foo(@$kw); end
                     def foo(@@$kw); end
+                    def foo(x @$kw); end
+                    def foo(x @@$kw); end
                 """.trimIndent()
             ) { replace("\$kw", kw) }
         }

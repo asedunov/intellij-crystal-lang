@@ -7,7 +7,9 @@ import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.psi.impl.source.PsiFileWithStubSupport
 import com.intellij.psi.stubs.ObjectStubBase
 import com.intellij.psi.stubs.StubElement
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.elementType
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.util.firstInstanceOrNull
 import kotlin.reflect.KClass
@@ -133,6 +135,8 @@ fun PsiElement.lastSignificantLeaf(): PsiElement? {
     }
     return lastLeaf
 }
+
+fun PsiElement.firstChildWithElementType(type: IElementType) = allChildren().firstOrNull { it.elementType == type }
 
 inline fun <reified T : PsiElement> PsiElement.replaceTyped(replacement: T) = replace(replacement) as T
 

@@ -42,7 +42,7 @@ abstract class CrystalHighlightingVisitorBase(
         return highlight(anchor, message, HighlightInfoType.DEPRECATED, range)
     }
 
-    private fun highlight(
+    protected fun highlight(
         anchor: PsiElement,
         message: String,
         type: HighlightInfoType,

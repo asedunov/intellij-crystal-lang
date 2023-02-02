@@ -183,6 +183,7 @@ class CrystalSyntaxCheckingVisitor(
         if (o.index == null) {
             error(o, "Index doesn't fit in an Int32")
         }
+        checkGlobalMatchIndexPre17(o)
     }
 
     override fun visitArgumentList(o: CrArgumentList) {
@@ -672,12 +673,6 @@ class CrystalSyntaxCheckingVisitor(
         super.visitNameElement(o)
 
         errorIfEmptyName(o)
-    }
-
-    override fun visitSimpleNameElement(o: CrSimpleNameElement) {
-        super.visitSimpleNameElement(o)
-
-        checkGlobalMatchIndexPre17(o.nameLeaf as? CrGlobalMatchIndexName ?: return)
     }
 
     private fun checkGlobalMatchIndexPre17(o: CrGlobalMatchIndexName) {

@@ -6,9 +6,18 @@ sealed class LanguageVersion {
     abstract val level: LanguageLevel
     abstract val description: String
 
+    override fun toString() = description
+
     class Specific private constructor (override val level: LanguageLevel) : LanguageVersion() {
         override val description: String
             get() = level.shortName
+
+        override fun equals(other: Any?): Boolean {
+            return this === other ||
+                    other is Specific && level == other.level
+        }
+
+        override fun hashCode() = level.hashCode()
 
         companion object {
             private val instanceMap = enumValues<LanguageLevel>().associateWithTo(

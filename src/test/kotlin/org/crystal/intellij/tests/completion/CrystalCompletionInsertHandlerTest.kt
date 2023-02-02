@@ -1,7 +1,6 @@
 package org.crystal.intellij.tests.completion
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.junit.Test
 
 class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
     private fun doTest(beforeText: String, afterText: String) {
@@ -15,7 +14,6 @@ class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
         doTest(this, after)
     }
 
-    @Test
     fun testSpaceRequiringKeywords() {
         "abstract<caret>" expects "abstract <caret>"
         "alias<caret>" expects "alias <caret>"
@@ -41,7 +39,6 @@ class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
         "yield<caret>" expects "yield <caret>"
     }
 
-    @Test
     fun testParenRequiringKeywords() {
         "asm<caret>" expects "asm(<caret>)"
         "instance_sizeof<caret>" expects "instance_sizeof(<caret>)"
@@ -51,12 +48,10 @@ class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
         "typeof<caret>" expects "typeof(<caret>)"
     }
 
-    @Test
     fun testRequire() {
         "require<caret>" expects "require \"<caret>\""
     }
 
-    @Test
     fun testNonGenericTypeReference() {
         """
             class Foooo
@@ -71,7 +66,6 @@ class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
         """.trimIndent()
     }
 
-    @Test
     fun testGenericTypeReference() {
         """
             class Foooo(A, B)

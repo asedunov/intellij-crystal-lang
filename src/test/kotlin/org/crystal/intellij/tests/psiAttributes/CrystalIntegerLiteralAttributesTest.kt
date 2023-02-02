@@ -2,7 +2,6 @@ package org.crystal.intellij.tests.psiAttributes
 
 import org.crystal.intellij.psi.CrIntegerKind
 import org.crystal.intellij.psi.CrIntegerLiteralExpression
-import org.junit.Test
 
 class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
     private fun checkIntKind(text: String, kind: CrIntegerKind) {
@@ -17,7 +16,6 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         checkFirst<CrIntegerLiteralExpression>(text, { value?.toString() }, value?.toString())
     }
 
-    @Test
     fun testIntegerKinds() {
         checkIntKind("1_i8", CrIntegerKind.I8)
         checkIntKind("1_u8", CrIntegerKind.U8)
@@ -39,7 +37,6 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         checkIntKind("0x8000000000000000", CrIntegerKind.U64)
     }
 
-    @Test
     fun testIntegerRadix() {
         checkIntRadix("123", 10)
         checkIntRadix("0x123", 16)
@@ -47,7 +44,6 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         checkIntRadix("0b101", 2)
     }
 
-    @Test
     fun testBinIntegers() {
         checkIntValue("0b1_i8", 1)
         checkIntValue("0b1_1010_i8", 26)
@@ -162,7 +158,6 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         checkIntValue("-0b1_u128", null)
     }
 
-    @Test
     fun testOctalIntegers() {
         checkIntValue("0o1_i8", 1)
         checkIntValue("0o3_2_i8", 26)
@@ -247,7 +242,6 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         checkIntValue("-0o1_u128", null)
     }
 
-    @Test
     fun testDecimalIntegers() {
         checkIntValue("1_i8", 1)
         checkIntValue("1_0_0_i8", 100)
@@ -332,7 +326,6 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         checkIntValue("-1_u128", null)
     }
 
-    @Test
     fun testHexIntegers() {
         checkIntValue("0x1_i8", 1)
         checkIntValue("0x1_A_i8", 26)

@@ -4,7 +4,6 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
 import org.crystal.intellij.completion.*
 import org.crystal.intellij.lexer.*
-import org.junit.Test
 
 private val NONE = emptyList<CrystalTokenType>()
 
@@ -24,12 +23,10 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         doTest(this, listOf(keyword))
     }
 
-    @Test
     fun testAbstract() {
         "abstract <caret>" expects AFTER_ABSTRACT_KEYWORDS
     }
 
-    @Test
     fun testAlias() {
         "alias A = <caret>" expects ALIAS_RHS_START_KEYWORDS
         "alias <caret>" expects NONE
@@ -38,7 +35,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "alias A = B <caret>" expects NONE
     }
 
-    @Test
     fun testArgumentList() {
         "foo(<caret>)" expects ARGUMENT_START_KEYWORDS
         "foo(<caret>, 1)" expects ARGUMENT_START_KEYWORDS
@@ -50,7 +46,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "foo 1, <caret>, 2" expects ARGUMENT_START_KEYWORDS
     }
 
-    @Test
     fun testArrayLiteral() {
         "[<caret>]" expects GENERAL_EXPRESSION_START_KEYWORDS
         "[<caret>, 1]" expects GENERAL_EXPRESSION_START_KEYWORDS
@@ -58,7 +53,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "[1, <caret>, 2]" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testAs() {
         "1.as(<caret>)" expects TYPE_START_KEYWORDS
         "1.as(Int32 <caret>)" expects NONE
@@ -68,7 +62,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "1.as <caret> Int32" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testAsmOperand() {
         """asm("nop" : "a"(<caret>))""" expects GENERAL_EXPRESSION_START_KEYWORDS
         """asm("nop" : "a"(<caret> 1))""" expects GENERAL_EXPRESSION_START_KEYWORDS
@@ -76,7 +69,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """asm("nop" : "a"<caret>())""" expects NONE
     }
 
-    @Test
     fun testAssignment() {
         "<caret> = 1" expects CR_SELF
         "a <caret> = 1" expects CR_SELF
@@ -86,7 +78,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a = <caret> 1" expects GENERAL_EXPRESSION_START_KEYWORDS.extend(CR_UNINITIALIZED)
     }
 
-    @Test
     fun testAtomicSuffix() {
         "1.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
         "1.5.<caret>" expects ATOMIC_METHOD_SUFFIX_START_KEYWORDS
@@ -159,7 +150,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a = uninitialized Int32.<caret>" expects CR_CLASS
     }
 
-    @Test
     fun testBeginEnd() {
         """
             begin
@@ -175,7 +165,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testBinaryExpression() {
         "<caret> + 1" expects GENERAL_EXPRESSION_START_KEYWORDS
         "a <caret> + 1" expects GENERAL_EXPRESSION_START_KEYWORDS
@@ -185,14 +174,12 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a + <caret> 1" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testBreak() {
         "break <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "break <caret>, 1" expects GENERAL_EXPRESSION_START_KEYWORDS
         "break 1, <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testCField() {
         """
             lib L
@@ -217,7 +204,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects C_STRUCT_OR_UNION_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testCFieldGroup() {
         """
             lib L
@@ -242,7 +228,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects C_STRUCT_OR_UNION_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testCStructBody() {
         """
             lib L
@@ -262,7 +247,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects C_STRUCT_OR_UNION_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testCUnionBody() {
         """
             lib L
@@ -282,7 +266,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects C_STRUCT_OR_UNION_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testCase() {
         """
             case <caret>
@@ -356,7 +339,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS.extend(CR_IN)
     }
 
-    @Test
     fun testClassBody() {
         """
             class X
@@ -372,21 +354,18 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects TYPE_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testConditionalExpression() {
         "<caret> ? 1 : 2" expects GENERAL_EXPRESSION_START_KEYWORDS
         "x ? <caret> : 2" expects GENERAL_EXPRESSION_START_KEYWORDS
         "x ? 1 : <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testConstant() {
         "A = <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "A = 1 <caret>" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "A = <caret> 1" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testCurlyBlock() {
         """
             foo {
@@ -402,7 +381,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testDoBlock() {
         """
             foo do
@@ -418,14 +396,12 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testDoubleSplatArgument() {
         "foo(**<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "foo(**x <caret>)" expects ARGUMENT_START_KEYWORDS
         "foo(**<caret> x)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testDoubleSplatTypeElement() {
         """
             def foo(**x : **<caret>)
@@ -441,7 +417,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects NONE
     }
 
-    @Test
     fun testExceptionHandler() {
         """
             begin
@@ -500,20 +475,17 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testExpressionSuffix() {
         "1 <caret>" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "require \"foo\" <caret>" expects NONE
     }
 
-    @Test
     fun testExpressionTypeElement() {
         "x : typeof(<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "x : typeof(1 <caret>)" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "x : typeof(<caret> 1)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testFile() {
         "<caret>" expects TOP_LEVEL_EXPRESSION_START_KEYWORDS
         """
@@ -527,7 +499,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects TOP_LEVEL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testFunction() {
         """
             fun foo <caret>
@@ -547,20 +518,17 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects LIB_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testHashLiteral() {
         "{a => <caret>}" expects GENERAL_EXPRESSION_START_KEYWORDS
         "{<caret> => b}" expects GENERAL_EXPRESSION_START_KEYWORDS
         "{a => b, <caret>}" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testHashTypeElement() {
         "{a => b} of <caret> => Int" expects TYPE_START_KEYWORDS
         "{a => b} of Int => <caret>" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testIf() {
         """
             if <caret>
@@ -604,21 +572,18 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testInstanceSizeOf() {
         "instance_sizeof(<caret>)" expects TYPE_START_KEYWORDS
         "instance_sizeof(Int32 <caret>)" expects NONE
         "instance_sizeof(<caret> Int32)" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testInstantiatedTypeElement() {
         "a : Foo(<caret>)" expects TYPE_ARGUMENT_START_KEYWORD
         "a : Foo(Int32, <caret>)" expects TYPE_ARGUMENT_START_KEYWORD
         "a : Foo(<caret>, Int32)" expects TYPE_ARGUMENT_START_KEYWORD
     }
 
-    @Test
     fun testIs() {
         "1.is_a?(<caret>)" expects TYPE_START_KEYWORDS
         "1.is_a?(Int32 <caret>)" expects NONE
@@ -628,7 +593,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "1.is_a? <caret> Int32" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testIsNilMacro() {
         "{{ 1.nil<caret> }}" expects NONE
         "{% 1.nil<caret> %}" expects NONE
@@ -651,14 +615,12 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects NONE
     }
 
-    @Test
     fun testLabeledTypeElement() {
         "x: {a: <caret>}" expects TYPE_START_KEYWORDS
         "x: {a: <caret> Int32}" expects TYPE_START_KEYWORDS
         "x: {a: Int32 <caret>}" expects NONE
     }
 
-    @Test
     fun testLibBody() {
         """
             lib X
@@ -674,13 +636,11 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects LIB_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testListExpression() {
         "a, <caret> = x" expects CR_SELF
         "a, b = x, <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testMetaclass() {
         "def foo(**a : **A.<caret>); end" expects CR_CLASS
         "a : typeof(1).<caret>" expects CR_CLASS
@@ -704,7 +664,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a : A | B | C.<caret>" expects CR_CLASS
     }
 
-    @Test
     fun testMethod() {
         """
             def foo <caret>
@@ -719,7 +678,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testModuleBody() {
         """
             module X
@@ -735,28 +693,24 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects TYPE_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testNamedArgument() {
         "foo(x: <caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "foo(x: <caret> 1)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "foo(x: 1 <caret>)" expects ARGUMENT_START_KEYWORDS.extend(EXPRESSION_SUFFIX_START_KEYWORDS)
     }
 
-    @Test
     fun testNamedTupleEntry() {
         "{x: <caret>}" expects GENERAL_EXPRESSION_START_KEYWORDS
         "{x: <caret> 1}" expects GENERAL_EXPRESSION_START_KEYWORDS
         "{x: 1 <caret>}" expects EXPRESSION_SUFFIX_START_KEYWORDS
     }
 
-    @Test
     fun testNext() {
         "next <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "next <caret>, 1" expects GENERAL_EXPRESSION_START_KEYWORDS
         "next 1, <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testOfArray() {
         "[] <caret>" expects CR_OF
         "[1, 2, 3] <caret>" expects CR_OF
@@ -765,13 +719,11 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "[1, 2, 3] of Int32 <caret>" expects EXPRESSION_SUFFIX_START_KEYWORDS
     }
 
-    @Test
     fun testOfTuple() {
         "{1, 2, 3} <caret>" expects NONE
         "{a: 1, b: 2, c: 3} <caret>" expects NONE
     }
 
-    @Test
     fun testOfHash() {
         "{a => 1, b => 2, c => 3} <caret>" expects CR_OF
         "{a => 1, b => 2, c => 3} of <caret>" expects TYPE_START_KEYWORDS
@@ -779,20 +731,17 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "{a => 1, b => 2, c => 3} of <caret> Int32" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testOfCustomLiteral() {
         "Foo{1, 2, 3} <caret>" expects NONE
         "Foo{a => 1, b => 2, c => 3} <caret>" expects NONE
     }
 
-    @Test
     fun testOffset() {
         "offsetof(<caret>)" expects TYPE_START_KEYWORDS
         "offsetof(<caret> Int32)" expects TYPE_START_KEYWORDS
         "offsetof(Int32 <caret>)" expects NONE
     }
 
-    @Test
     fun testParenthesizedExpression() {
         "(<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         """
@@ -802,24 +751,20 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testParenthesizedTypeElement() {
         "a : (<caret>)" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testPointer() {
         "pointerof(<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "pointerof(1 <caret>)" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "pointerof(<caret> 1)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testPrivate() {
         "private <caret>" expects AFTER_PRIVATE_KEYWORDS
     }
 
-    @Test
     fun testProcType() {
         "a : <caret> -> Int32" expects TYPE_START_KEYWORDS
         "a : Int32, <caret> -> Int32" expects TYPE_START_KEYWORDS
@@ -829,19 +774,16 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "a : Int32 -> <caret> Int32" expects NONE
     }
 
-    @Test
     fun testProtected() {
         "protected <caret>" expects AFTER_PROTECTED_KEYWORDS
     }
 
-    @Test
     fun testReturn() {
         "return <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "return <caret>, 1" expects GENERAL_EXPRESSION_START_KEYWORDS
         "return 1, <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testSelect() {
         """
             select <caret>
@@ -891,12 +833,10 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testShortBlockArgument() {
         "foo(&<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testSimpleParameter() {
         """
             def foo(a = <caret>)
@@ -912,19 +852,16 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects PARAM_VALUE_START_KEYWORDS
     }
 
-    @Test
     fun testSizeOf() {
         "sizeof(<caret>)" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testSplatArgument() {
         "foo(*<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "foo(*x <caret>)" expects ARGUMENT_START_KEYWORDS
         "foo(*<caret> x)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testSplatTypeElement() {
         """
             def foo(*x : *<caret>)
@@ -940,28 +877,24 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects NONE
     }
 
-    @Test
     fun testStaticArrayType() {
         "a : Int32[<caret>]" expects TYPE_ARGUMENT_START_KEYWORD
         "a : Int32[100 <caret>]" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "a : Int32[<caret> 100]" expects NONE
     }
 
-    @Test
     fun testTupleExpression() {
         "{<caret>}" expects GENERAL_EXPRESSION_START_KEYWORDS
         "{1, <caret>}" expects GENERAL_EXPRESSION_START_KEYWORDS
         "{<caret>, 1}" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testTupleTypeElement() {
         "a : {<caret>}" expects TYPE_START_KEYWORDS
         "a : {Int32, <caret>}" expects TYPE_START_KEYWORDS
         "a : {<caret>, Int32}" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testStructBody() {
         """
             struct X
@@ -977,31 +910,26 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects TYPE_ITEM_START_KEYWORDS
     }
 
-    @Test
     fun testTypeofExpression() {
         "typeof(<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testUnaryExpression() {
         "+ <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "+ 1 <caret>" expects EXPRESSION_SUFFIX_START_KEYWORDS
     }
 
-    @Test
     fun testUninitialized() {
         "a = uninitialized <caret>" expects TYPE_START_KEYWORDS
         "a = uninitialized Int32 <caret>" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "a = uninitialized <caret> Int32" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testUnionTypeElement() {
         "a : Int32 | <caret>" expects TYPE_START_KEYWORDS
         "a : <caret> | Int32" expects TYPE_START_KEYWORDS
     }
 
-    @Test
     fun testUnless() {
         """
             unless <caret>
@@ -1033,7 +961,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testUntil() {
         """
             until <caret>
@@ -1052,7 +979,6 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testWhile() {
         """
             while <caret>
@@ -1071,13 +997,11 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
-    @Test
     fun testWith() {
         "with <caret>" expects GENERAL_EXPRESSION_START_KEYWORDS
         "with 1 <caret>" expects EXPRESSION_SUFFIX_START_KEYWORDS.extend(CR_YIELD)
     }
 
-    @Test
     fun testYield() {
         "yield <caret>" expects ARGUMENT_START_KEYWORDS
         "yield 1, <caret>" expects ARGUMENT_START_KEYWORDS

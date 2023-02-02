@@ -9,7 +9,6 @@ import org.crystal.intellij.psi.CrDefinitionWithFqName
 import org.crystal.intellij.psi.presentableKind
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.findDirectives
-import org.junit.Test
 import java.io.File
 
 abstract class CrystalGotoDeclarationTest(private val testFile: File) : BasePlatformTestCase() {
@@ -24,7 +23,6 @@ abstract class CrystalGotoDeclarationTest(private val testFile: File) : BasePlat
         }
     }
 
-    @Test
     fun testGoto() {
         myFixture.testDataPath = testFile.parent
         myFixture.configureByFile(testFile.name)

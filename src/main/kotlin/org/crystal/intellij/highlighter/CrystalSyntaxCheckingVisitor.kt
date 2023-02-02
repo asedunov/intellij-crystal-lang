@@ -15,6 +15,7 @@ import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.psi.*
+import org.crystal.intellij.quickFixes.CrystalAddSpaceAction
 import org.crystal.intellij.quickFixes.CrystalChangeLanguageVersionAction
 import org.crystal.intellij.quickFixes.withFix
 
@@ -693,6 +694,7 @@ class CrystalSyntaxCheckingVisitor(
         val nextSpace = colon.nextLeaf() as? PsiWhiteSpace
         if (prevSpace == null || nextSpace == null) {
             error(colon, "Space is missing before/after colon", range)
+                ?.withFix(CrystalAddSpaceAction(colon, range.shiftLeft(colon.startOffset)))
         }
     }
 

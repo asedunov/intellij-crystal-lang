@@ -6,7 +6,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.util.containers.ContainerUtil
 import org.crystal.intellij.CrystalBundle
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.LanguageVersion
 import org.crystal.intellij.config.asSpecificVersion
 import org.crystal.intellij.config.crystalSettings
@@ -33,6 +33,6 @@ class CrystalChangeLanguageVersionAction private constructor(private val targetV
             return instanceCache.getOrPut(targetVersion) { CrystalChangeLanguageVersionAction(targetVersion) }
         }
 
-        fun of(targetVersion: LanguageLevel) = of(targetVersion.asSpecificVersion())
+        fun of(targetVersion: CrystalLevel) = of(targetVersion.asSpecificVersion())
     }
 }

@@ -2,7 +2,7 @@ package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.psi.util.elementType
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.languageLevel
 import org.crystal.intellij.lexer.CR_INTEGER_LITERAL
 import org.crystal.intellij.lexer.CR_MINUS_OP
@@ -70,7 +70,7 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(nod
         val u64Value = valueString.toULongOrNull(radix)
 
         if (u64Value == null) {
-            if (languageLevel < LanguageLevel.CRYSTAL_1_3) return CrIntegerKind.U64
+            if (languageLevel < CrystalLevel.CRYSTAL_1_3) return CrIntegerKind.U64
 
             val kind = if (negated) CrIntegerKind.I64 else CrIntegerKind.U64
             if (valueString.length > 128) return kind

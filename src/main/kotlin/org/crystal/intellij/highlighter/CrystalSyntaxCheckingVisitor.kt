@@ -1,6 +1,7 @@
 package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
+import com.intellij.codeInsight.daemon.impl.HighlightInfoType
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
@@ -608,6 +609,11 @@ class CrystalSyntaxCheckingVisitor(
                 error(nameElement, "External variables must start with lowercase")
             }
         }
+
+        val p = o.parent
+        if (ll >= CrystalLevel.CRYSTAL_1_7 && !(p is CrRescueClause || p is CrBody && p.parent is CrLibrary)) {
+            checkColonSpaces(o, HighlightInfoType.WARNING)
+        }
     }
 
     override fun visitDefinition(o: CrDefinition) {
@@ -666,6 +672,9 @@ class CrystalSyntaxCheckingVisitor(
         super.visitMethod(o)
 
         processMethodOrMacro(o)
+        if (ll >= CrystalLevel.CRYSTAL_1_7) {
+            checkColonSpaces(o, HighlightInfoType.WARNING)
+        }
     }
 
     override fun visitMacro(o: CrMacro) {
@@ -692,12 +701,18 @@ class CrystalSyntaxCheckingVisitor(
             }
         }
 
-        checkColonSpaces(o)
+        val paramList = o.parent as? CrParameterList
+        if (paramList?.parent is CrMethod) {
+            if (o.kind != CrParameterKind.BLOCK) {
+                checkColonSpaces(o, HighlightInfoType.ERROR)
+            }
+            else if (ll >= CrystalLevel.CRYSTAL_1_7) {
+                checkColonSpaces(o, HighlightInfoType.WARNING)
+            }
+        }
     }
 
-    private fun checkColonSpaces(o: CrParameter) {
-        val paramList = o.parent as? CrParameterList ?: return
-        if (paramList.parent !is CrMethod) return
+    private fun checkColonSpaces(o: CrDefinition, type: HighlightInfoType) {
         val colon = o.firstChildWithElementType(CR_COLON)
             ?: o.firstChildWithElementType(CR_SYMBOL_EXPRESSION)
             ?: return
@@ -705,7 +720,7 @@ class CrystalSyntaxCheckingVisitor(
         val prevSpace = colon.prevLeaf() as? PsiWhiteSpace
         val nextSpace = colon.nextLeaf() as? PsiWhiteSpace
         if (prevSpace == null || nextSpace == null) {
-            error(colon, "Space is missing before/after colon", range)
+            highlight(colon, "Space is missing before/after colon", type, range)
                 ?.withFix(CrystalAddSpaceAction(colon, range.shiftLeft(colon.startOffset)))
         }
     }

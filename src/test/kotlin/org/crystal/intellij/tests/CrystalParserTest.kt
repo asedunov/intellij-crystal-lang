@@ -5,7 +5,7 @@ import com.intellij.psi.util.hasErrorElementInRange
 import com.intellij.testFramework.ParsingTestCase
 import junit.framework.TestCase
 import org.crystal.intellij.config.CrystalProjectSettings
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CrystalParserDefinition
 import org.crystal.intellij.tests.util.withLanguageLevel
@@ -85,13 +85,13 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     @Test
     fun testCallInsideIndexing() = doTestSingleFileWithMultiFragments("\n\n")
     @Test
-    fun testCallInsideIndexing_1_6() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_6) {
+    fun testCallInsideIndexing_1_6() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_6) {
         doTestSingleFileWithMultiFragments("\n\n")
     }
     @Test
     fun testCallsAndRefs() = doTestSingleFileWithMultiFragments("\n\n\n")
     @Test
-    fun testCallsAndRefs_1_1() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_1) {
+    fun testCallsAndRefs_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments("\n\n\n")
     }
     @Test
@@ -107,21 +107,21 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     @Test
     fun testFileFragments() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testFloatRadixes_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+    fun testFloatRadixes_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
-    fun testFloatRadixes_1_3() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_3) {
+    fun testFloatRadixes_1_3() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_3) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
-    fun testFunctionLiterals_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+    fun testFunctionLiterals_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
     fun testFunctionLiterals() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testGenerics_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+    fun testGenerics_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
@@ -129,43 +129,43 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     @Test
     fun testHashesAndTuples() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testHashesAndTuples_1_1() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_1) {
+    fun testHashesAndTuples_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
     fun testLibraries() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testLibraries_1_6() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_6) {
+    fun testLibraries_1_6() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_6) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
     fun testMacroDefs() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testMacroDefs_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+    fun testMacroDefs_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
-    fun testMacroDefs_1_2() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_2) {
+    fun testMacroDefs_1_2() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_2) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
     fun testMacroExpressions() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testMacroExpressions_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+    fun testMacroExpressions_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
     fun testMacroStatements() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testMacroStatements_1_1() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_1) {
+    fun testMacroStatements_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
-    fun testMacroStatements_1_2() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_2) {
+    fun testMacroStatements_1_2() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_2) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
-    fun testMisc_1_0() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_0) {
+    fun testMisc_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
@@ -175,7 +175,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     @Test
     fun testParamAnnotations() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testParamAnnotations_1_4() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_4) {
+    fun testParamAnnotations_1_4() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_4) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
@@ -187,7 +187,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     @Test
     fun testSimpleLiterals() = doTestSingleFileWithMultiFragments()
     @Test
-    fun testSimpleLiterals_1_2() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_2) {
+    fun testSimpleLiterals_1_2() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_2) {
         doTestSingleFileWithMultiFragments()
     }
     @Test
@@ -627,7 +627,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testExpressionsInClassHeader() = doTestExpressionsInClassHeader()
 
     @Test
-    fun testExpressionsInClassHeader_1_6() = project.withLanguageLevel(LanguageLevel.CRYSTAL_1_6) {
+    fun testExpressionsInClassHeader_1_6() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_6) {
         doTestExpressionsInClassHeader()
     }
 

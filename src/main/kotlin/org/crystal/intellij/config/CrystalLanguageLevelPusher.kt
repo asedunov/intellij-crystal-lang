@@ -27,7 +27,7 @@ class CrystalLanguageLevelPusher : FileIntPropertyPusher<String> {
 
     override fun pushDirectoriesOnly() = true
 
-    override fun getDefaultValue() = LanguageLevel.LATEST_STABLE.name
+    override fun getDefaultValue() = CrystalLevel.LATEST_STABLE.name
 
     override fun getImmediateValue(project: Project, file: VirtualFile?): String {
         return project.crystalSettings.languageVersion.level.name
@@ -35,8 +35,8 @@ class CrystalLanguageLevelPusher : FileIntPropertyPusher<String> {
 
     override fun getImmediateValue(module: Module): String? = null
 
-    override fun fromInt(value: Int) = enumValues<LanguageLevel>()[value].name
-    override fun toInt(property: String) = enumValueOf<LanguageLevel>(property).ordinal
+    override fun fromInt(value: Int) = enumValues<CrystalLevel>()[value].name
+    override fun toInt(property: String) = enumValueOf<CrystalLevel>(property).ordinal
 
     override fun acceptsDirectory(file: VirtualFile, project: Project) = true
 

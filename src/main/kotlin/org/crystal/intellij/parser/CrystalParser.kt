@@ -6,12 +6,12 @@ import com.intellij.lang.impl.PsiBuilderAdapter
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.containers.SmartHashSet
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.builder.LazyPsiBuilder
 import java.util.*
 
-class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
+class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
     private class OpInfo(
         val opType: IElementType,
         val precedence: Int,
@@ -1153,7 +1153,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                                 parseRespondsTo()
                             }
 
-                            (!inMacroExpression || ll < LanguageLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> finishComposite(CR_IS_NIL_EXPRESSION, m) {
+                            (!inMacroExpression || ll < CrystalLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> finishComposite(CR_IS_NIL_EXPRESSION, m) {
                                 parseTokenWithOptEmptyParens()
                             }
 
@@ -1581,7 +1581,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     parseAtomicMethodSuffixSpecial()
                 }
 
-                (!inMacroExpression || ll < LanguageLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> {
+                (!inMacroExpression || ll < CrystalLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> {
                     finishComposite(CR_IS_NIL_EXPRESSION, m) {
                         parseTokenWithOptEmptyParens()
                     }
@@ -1824,7 +1824,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     allowCurly = true,
                     endToken = CR_RBRACKET,
                     allowBeginlessRange = true,
-                    isControl = ll >= LanguageLevel.CRYSTAL_1_7
+                    isControl = ll >= CrystalLevel.CRYSTAL_1_7
                 )
             }
             skipSpacesAndNewlines()
@@ -1906,7 +1906,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
                 val foundDelimiter = at(CR_NEWLINE) || at(CR_SEMICOLON)
                 if (foundDelimiter) {
-                    if (ll >= LanguageLevel.CRYSTAL_1_4) nextTokenSkipSpacesAndNewlines() else nextTokenSkipSpaces()
+                    if (ll >= CrystalLevel.CRYSTAL_1_4) nextTokenSkipSpacesAndNewlines() else nextTokenSkipSpaces()
                 }
                 if (!at(CR_RPAREN)) {
                     if (foundDelimiter) continue
@@ -1933,7 +1933,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpacesAndNewlines()
 
             while (!(eof() || at(CR_RBRACKET))) {
-                if (ll >= LanguageLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
+                if (ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
                 parseAssignment()
 
                 if (at(CR_COMMA)) {
@@ -1981,7 +1981,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             val mEntry = mark()
 
-            val firstIsSplat = ll >= LanguageLevel.CRYSTAL_1_1 && at(CR_MUL_OP)
+            val firstIsSplat = ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)
             if (firstIsSplat) nextTokenSkipSpacesAndNewlines()
 
             ensureParseAssignment()
@@ -2048,7 +2048,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseTupleTail() {
             while (!at(CR_RBRACE)) {
-                if (ll >= LanguageLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
+                if (ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
                 parseAssignment()
 
                 if (at(CR_COMMA)) {
@@ -2159,7 +2159,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                         at(CR_COLON) || at(CR_BIG_ARROW_OP) || at(CR_COMMA) || at(CR_RBRACE)
                     }
 
-                    if (ll >= LanguageLevel.CRYSTAL_1_2 && at(CR_COLON)) {
+                    if (ll >= CrystalLevel.CRYSTAL_1_2 && at(CR_COLON)) {
                         error("Can't use 'key: value' syntax in a hash literal")
                     }
 
@@ -2258,7 +2258,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
 
             nextTokenSkipSpacesAndNewlines()
 
-            if (ll >= LanguageLevel.CRYSTAL_1_3 && at(CR_SYMBOL_START)) {
+            if (ll >= CrystalLevel.CRYSTAL_1_3 && at(CR_SYMBOL_START)) {
                 error("A space is mandatory between ':' and return type")
             }
 
@@ -2299,7 +2299,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 skipSpacesAndNewlines()
             }
 
-            if (ll >= LanguageLevel.CRYSTAL_1_3) {
+            if (ll >= CrystalLevel.CRYSTAL_1_3) {
                 when {
                     at(CR_SYMBOL_START) -> {
                         error("A space is mandatory between ':' and return type")
@@ -2344,7 +2344,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.doParseFunPointer() {
-            val isGlobal = at(CR_PATH_OP) && ll >= LanguageLevel.CRYSTAL_1_4
+            val isGlobal = at(CR_PATH_OP) && ll >= CrystalLevel.CRYSTAL_1_4
             val nextToken = if (isGlobal) {
                 lexer.lookAhead {
                     skipSpacesAndNewlines()
@@ -2963,7 +2963,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 parsePath()
                 skipSpaces()
 
-                if (ll >= LanguageLevel.CRYSTAL_1_7) {
+                if (ll >= CrystalLevel.CRYSTAL_1_7) {
                     recoverUntil("'<', '(', <statement end>", false) {
                         at(CR_LESS_OP) || at(CR_LPAREN) || at(classEndTokens)
                     }
@@ -2979,7 +2979,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     }
                     else parseGeneric()
 
-                    if (ll >= LanguageLevel.CRYSTAL_1_7) {
+                    if (ll >= CrystalLevel.CRYSTAL_1_7) {
                         recoverUntil("<statement end>", false) {
                             at(CR_WHITESPACES) || at(classEndTokens)
                         }
@@ -3070,7 +3070,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseParam(inMacroDef: Boolean): Boolean {
-            if (ll >= LanguageLevel.CRYSTAL_1_5) {
+            if (ll >= CrystalLevel.CRYSTAL_1_5) {
                 while (at(CR_ANNO_LBRACKET)) {
                     parseAnnotation()
                     skipSpacesAndNewlines()
@@ -3535,7 +3535,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
             composite(CR_LIBRARY_DEFINITION) {
                 nextTokenSkipSpacesAndNewlines()
 
-                if (ll >= LanguageLevel.CRYSTAL_1_7) {
+                if (ll >= CrystalLevel.CRYSTAL_1_7) {
                     parsePath()
                 }
                 else {
@@ -4277,7 +4277,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                     parseRespondsTo()
                 }
 
-                (!inMacroExpression || ll < LanguageLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> return composite(CR_IS_NIL_EXPRESSION) {
+                (!inMacroExpression || ll < CrystalLevel.CRYSTAL_1_1) && at(CR_IS_NIL) -> return composite(CR_IS_NIL_EXPRESSION) {
                     parseTokenWithOptEmptyParens()
                 }
             }
@@ -4426,7 +4426,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseMacroFor(macroState: MacroState?): IElementType {
             nextTokenSkipSpaces()
             while (true) {
-                val isValidNameToken = at(CR_IDS) || ll >= LanguageLevel.CRYSTAL_1_2 && at(CR_UNDERSCORE)
+                val isValidNameToken = at(CR_IDS) || ll >= CrystalLevel.CRYSTAL_1_2 && at(CR_UNDERSCORE)
                 if (!isValidNameToken) {
                     error("Expected: <identifier>")
                     break
@@ -4877,7 +4877,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 return true
             }
 
-            scopes.withLexicalVarScope(ll >= LanguageLevel.CRYSTAL_1_2) {
+            scopes.withLexicalVarScope(ll >= CrystalLevel.CRYSTAL_1_2) {
                 while (!eof()) {
                     ensureParseAssignment()
 
@@ -4955,7 +4955,7 @@ class CrystalParser(private val ll: LanguageLevel) : PsiParser, LightPsiParser {
                 if (isNamedTupleStart() || at(CR_STRING_START)) {
                     parseNamedTypeArgs(CR_RPAREN)
                 }
-                else if(ll < LanguageLevel.CRYSTAL_1_4 || !at(CR_RPAREN)) {
+                else if(ll < CrystalLevel.CRYSTAL_1_4 || !at(CR_RPAREN)) {
                     val m = mark()
 
                     parseTypeSplat { parseTypeArg() }

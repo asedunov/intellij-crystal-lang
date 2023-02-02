@@ -13,9 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import org.crystal.intellij.config.LanguageLevel;
+import org.crystal.intellij.config.CrystalLevel;
 
-import static org.crystal.intellij.config.LanguageLevel.*;
 import static org.crystal.intellij.lexer.TokenTypesKt.*;
 
 
@@ -1230,8 +1229,8 @@ public class _CrystalLexer15 extends CrystalLexerBase {
   }
 
   @Override
-  protected LanguageLevel getMinLevel() {
-    return LanguageLevel.CRYSTAL_1_5;
+  protected CrystalLevel getMinLevel() {
+    return CrystalLevel.CRYSTAL_1_5;
   }
 
   @Override

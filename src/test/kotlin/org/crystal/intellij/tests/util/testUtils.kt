@@ -5,7 +5,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.asSpecificVersion
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.config.findVersionOrLatest
@@ -17,7 +17,7 @@ fun getCrystalTestFilesAsParameters(dirName: String): List<Array<Any>> =
         .filter { file -> file.name.endsWith(".cr") && !file.name.endsWith(".after.cr") }
         .map { arrayOf(it as Any) }.toList()
 
-fun Project.withLanguageLevel(level: LanguageLevel, body: () -> Unit) {
+fun Project.withLanguageLevel(level: CrystalLevel, body: () -> Unit) {
     val settings = crystalSettings
     val oldVersion = settings.languageVersion
     settings.setLanguageLevelSilently(level.asSpecificVersion())

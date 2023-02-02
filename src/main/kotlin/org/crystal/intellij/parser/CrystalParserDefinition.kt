@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.CR_COMMENTS
 import org.crystal.intellij.lexer.CrystalLexer
@@ -26,12 +26,12 @@ class CrystalParserDefinition : ParserDefinition, ASTFactory() {
     override fun getFileNodeType() = CrStubElementTypes.FILE
 
     override fun createLexer(project: Project?): CrystalLexer {
-        val languageLevel = project?.crystalSettings?.languageVersion?.level ?: LanguageLevel.LATEST_STABLE
+        val languageLevel = project?.crystalSettings?.languageVersion?.level ?: CrystalLevel.LATEST_STABLE
         return CrystalLexer(languageLevel)
     }
 
     override fun createParser(project: Project?): CrystalParser {
-        val languageLevel = project?.crystalSettings?.languageVersion?.level ?: LanguageLevel.LATEST_STABLE
+        val languageLevel = project?.crystalSettings?.languageVersion?.level ?: CrystalLevel.LATEST_STABLE
         return CrystalParser(languageLevel)
     }
 

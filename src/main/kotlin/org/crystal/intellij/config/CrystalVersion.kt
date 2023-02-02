@@ -2,13 +2,13 @@ package org.crystal.intellij.config
 
 import java.util.*
 
-sealed class LanguageVersion {
+sealed class CrystalVersion {
     abstract val level: CrystalLevel
     abstract val description: String
 
     override fun toString() = description
 
-    class Specific private constructor (override val level: CrystalLevel) : LanguageVersion() {
+    class Specific private constructor (override val level: CrystalLevel) : CrystalVersion() {
         override val description: String
             get() = level.shortName
 
@@ -25,14 +25,14 @@ sealed class LanguageVersion {
                 ::Specific
             )
 
-            val instances: Collection<LanguageVersion>
+            val instances: Collection<CrystalVersion>
                 get() = instanceMap.values
 
             fun of(level: CrystalLevel) = instanceMap[level]!!
         }
     }
 
-    object LatestStable : LanguageVersion() {
+    object LatestStable : CrystalVersion() {
         override val level: CrystalLevel
             get() = CrystalLevel.LATEST_STABLE
 
@@ -47,9 +47,9 @@ sealed class LanguageVersion {
     }
 }
 
-fun CrystalLevel.asSpecificVersion() = LanguageVersion.Specific.of(this)
+fun CrystalLevel.asSpecificVersion() = CrystalVersion.Specific.of(this)
 
-fun findVersionOrLatest(version: String?): LanguageVersion {
-    return LanguageVersion.Specific.instances.firstOrNull { it.level.shortName == version }
-        ?: LanguageVersion.LatestStable
+fun findVersionOrLatest(version: String?): CrystalVersion {
+    return CrystalVersion.Specific.instances.firstOrNull { it.level.shortName == version }
+        ?: CrystalVersion.LatestStable
 }

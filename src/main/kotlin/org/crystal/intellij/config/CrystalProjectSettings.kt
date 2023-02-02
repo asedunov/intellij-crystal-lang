@@ -21,20 +21,20 @@ class CrystalProjectSettings(
 ) : PersistentConfigBase<CrystalProjectSettings.State>(SERVICE_NAME) {
     data class State(
         @Attribute("languageLevel", converter = VersionConverter::class)
-        var languageVersion: LanguageVersion = LanguageVersion.LatestStable,
+        var languageVersion: CrystalVersion = CrystalVersion.LatestStable,
         var mainFilePath: String = "",
         var useFormatTool: Boolean = false,
         var runFormatToolOnSave: Boolean = false
     )
 
-    private class VersionConverter : Converter<LanguageVersion>() {
-        override fun toString(value: LanguageVersion) = when (value) {
-            is LanguageVersion.Specific -> value.level.shortName
-            LanguageVersion.LatestStable -> "latest-stable"
+    private class VersionConverter : Converter<CrystalVersion>() {
+        override fun toString(value: CrystalVersion) = when (value) {
+            is CrystalVersion.Specific -> value.level.shortName
+            CrystalVersion.LatestStable -> "latest-stable"
         }
 
-        override fun fromString(value: String): LanguageVersion {
-            if (value.equals("latest-stable", true)) return LanguageVersion.LatestStable
+        override fun fromString(value: String): CrystalVersion {
+            if (value.equals("latest-stable", true)) return CrystalVersion.LatestStable
             return findVersionOrLatest(value)
         }
     }
@@ -52,7 +52,7 @@ class CrystalProjectSettings(
         }
     }
 
-    val languageVersion: LanguageVersion
+    val languageVersion: CrystalVersion
         get() = protectedState.languageVersion
 
     val mainFile: CrFile?
@@ -75,7 +75,7 @@ class CrystalProjectSettings(
         get() = protectedState.runFormatToolOnSave
 
     @TestOnly
-    fun setLanguageLevelSilently(version: LanguageVersion) {
+    fun setLanguageLevelSilently(version: CrystalVersion) {
         protectedState.languageVersion = version
     }
 }

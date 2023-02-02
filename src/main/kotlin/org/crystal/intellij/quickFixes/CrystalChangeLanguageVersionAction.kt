@@ -7,11 +7,11 @@ import com.intellij.psi.PsiFile
 import com.intellij.util.containers.ContainerUtil
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.config.CrystalLevel
-import org.crystal.intellij.config.LanguageVersion
+import org.crystal.intellij.config.CrystalVersion
 import org.crystal.intellij.config.asSpecificVersion
 import org.crystal.intellij.config.crystalSettings
 
-class CrystalChangeLanguageVersionAction private constructor(private val targetVersion: LanguageVersion) : IntentionAction {
+class CrystalChangeLanguageVersionAction private constructor(private val targetVersion: CrystalVersion) : IntentionAction {
     override fun startInWriteAction() = false
 
     override fun getText() = CrystalBundle.message("intention.change.language.level.text", targetVersion.description)
@@ -27,9 +27,9 @@ class CrystalChangeLanguageVersionAction private constructor(private val targetV
     }
 
     companion object {
-        private val instanceCache = ContainerUtil.createConcurrentWeakKeySoftValueMap<LanguageVersion, CrystalChangeLanguageVersionAction>()
+        private val instanceCache = ContainerUtil.createConcurrentWeakKeySoftValueMap<CrystalVersion, CrystalChangeLanguageVersionAction>()
 
-        fun of(targetVersion: LanguageVersion): CrystalChangeLanguageVersionAction {
+        fun of(targetVersion: CrystalVersion): CrystalChangeLanguageVersionAction {
             return instanceCache.getOrPut(targetVersion) { CrystalChangeLanguageVersionAction(targetVersion) }
         }
 

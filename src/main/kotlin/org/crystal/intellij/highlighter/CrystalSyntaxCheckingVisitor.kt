@@ -1,14 +1,19 @@
 package org.crystal.intellij.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.nextLeaf
+import com.intellij.refactoring.suggested.startOffset
 import com.intellij.util.SmartList
 import com.intellij.util.containers.JBIterable
 import com.intellij.util.containers.MultiMap
 import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
+import org.crystal.intellij.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.quickFixes.CrystalChangeLanguageVersionAction
 import org.crystal.intellij.quickFixes.withFix
@@ -672,6 +677,22 @@ class CrystalSyntaxCheckingVisitor(
             if (function != null && function.isTopLevel) {
                 error(o, "Top-level function parameter must have a name")
             }
+        }
+
+        checkColonSpaces(o)
+    }
+
+    private fun checkColonSpaces(o: CrParameter) {
+        val paramList = o.parent as? CrParameterList ?: return
+        if (paramList.parent !is CrMethod) return
+        val colon = o.firstChildWithElementType(CR_COLON)
+            ?: o.firstChildWithElementType(CR_SYMBOL_EXPRESSION)
+            ?: return
+        val range = if (colon.elementType == CR_SYMBOL_EXPRESSION) TextRange.from(colon.startOffset, 1) else colon.textRange
+        val prevSpace = colon.prevLeaf() as? PsiWhiteSpace
+        val nextSpace = colon.nextLeaf() as? PsiWhiteSpace
+        if (prevSpace == null || nextSpace == null) {
+            error(colon, "Space is missing before/after colon", range)
         }
     }
 

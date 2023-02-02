@@ -128,7 +128,6 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         private val lastLHSVarNames = SmartHashSet<String>()
         private var callArgsNest = 0
         private var stopOnYield = 0
-        private var foundSpaceInLastArg = false
         private var tempArgNameCount = 0
         private var defNest = 0
         private var typeNest = 0
@@ -3091,31 +3090,33 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
                 if (isAnySplat) nextTokenSkipSpaces()
 
-                foundSpaceInLastArg = false
                 var paramName = ""
                 if (!(isAnySplat && (at(CR_COMMA) || at(CR_RPAREN)))) {
                     parseParamName(!isAnySplat, inMacroDef)
                     lastTokenTextInProductionIf(CR_IDENTIFIER)?.let { paramName = it }
                 }
 
-                if (!inMacroDef && at(CR_COLON)) {
-                    if (!foundSpaceInLastArg) error("Space required before colon in type restriction")
-                    advanceLexer()
-                    if (!at(CR_WHITESPACES)) error("Space required after colon in type restriction")
-                    skipSpacesAndNewlines()
-
+                if (!inMacroDef) {
                     when {
-                        isSplat && at(CR_MUL_OP) -> composite(CR_SPLAT_TYPE) {
-                            nextToken()
-                            parseBareProcType()
-                        }
+                        at(CR_COLON) -> {
+                            advanceLexer()
+                            skipSpacesAndNewlines()
 
-                        isDoubleSplat && at(CR_EXP_OP) -> composite(CR_DOUBLE_SPLAT_TYPE) {
-                            nextToken()
-                            parseBareProcType()
-                        }
+                            when {
+                                isSplat && at(CR_MUL_OP) -> composite(CR_SPLAT_TYPE) {
+                                    nextToken()
+                                    parseBareProcType()
+                                }
 
-                        else -> parseBareProcType()
+                                isDoubleSplat && at(CR_EXP_OP) -> composite(CR_DOUBLE_SPLAT_TYPE) {
+                                    nextToken()
+                                    parseBareProcType()
+                                }
+
+                                else -> parseBareProcType()
+                            }
+                        }
+                        at(CR_SYMBOL_START) -> parseSymbolLiteral()
                     }
                 }
 
@@ -3172,7 +3173,6 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 }
 
                 hasExternalName = true
-                foundSpaceInLastArg = at(CR_WHITESPACES_AND_NEWLINES)
                 skipSpaces()
                 doNextToken = false
             }
@@ -3199,7 +3199,6 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 else {
                     nextToken()
                 }
-                foundSpaceInLastArg = at(CR_WHITESPACES_AND_NEWLINES)
             }
 
             skipSpaces()

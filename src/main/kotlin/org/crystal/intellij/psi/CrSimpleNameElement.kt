@@ -51,6 +51,9 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
             return (firstChild as? CrNameKindAware)?.kind ?: CrNameKind.UNKNOWN
         }
 
+    val nameLeaf: CrNameLeafElement?
+        get() = firstChild as? CrNameLeafElement
+
     val isQuestion: Boolean
         get() = name?.lastOrNull() == '?'
 

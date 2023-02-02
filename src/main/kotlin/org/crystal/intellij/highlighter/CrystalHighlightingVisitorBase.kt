@@ -16,24 +16,25 @@ abstract class CrystalHighlightingVisitorBase(
         error(anchor, validator(description) ?: return)
     }
 
-    protected fun error(anchor: PsiElement, message: String) {
-        highlight(anchor, message, HighlightInfoType.ERROR)
+    protected fun error(anchor: PsiElement, message: String): HighlightInfo? {
+        return highlight(anchor, message, HighlightInfoType.ERROR)
     }
 
-    protected fun warning(anchor: PsiElement, message: String) {
-        highlight(anchor, message, HighlightInfoType.WARNING)
+    protected fun warning(anchor: PsiElement, message: String): HighlightInfo? {
+        return highlight(anchor, message, HighlightInfoType.WARNING)
     }
 
-    protected fun deprecated(anchor: PsiElement, message: String) {
-        highlight(anchor, message, HighlightInfoType.DEPRECATED)
+    protected fun deprecated(anchor: PsiElement, message: String): HighlightInfo? {
+        return highlight(anchor, message, HighlightInfoType.DEPRECATED)
     }
 
-    private fun highlight(anchor: PsiElement, message: String, type: HighlightInfoType) {
+    private fun highlight(anchor: PsiElement, message: String, type: HighlightInfoType): HighlightInfo? {
         val info = HighlightInfo
             .newHighlightInfo(type)
             .range(anchor)
             .descriptionAndTooltip(message)
-            .create() ?: return
+            .create() ?: return null
         highlightInfos += info
+        return info
     }
 }

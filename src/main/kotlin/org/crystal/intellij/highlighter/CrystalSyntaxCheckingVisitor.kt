@@ -10,6 +10,8 @@ import org.crystal.intellij.config.LanguageLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
+import org.crystal.intellij.quickFixes.CrystalChangeLanguageVersionAction
+import org.crystal.intellij.quickFixes.withFix
 
 class CrystalSyntaxCheckingVisitor(
     file: CrFile,
@@ -117,8 +119,10 @@ class CrystalSyntaxCheckingVisitor(
         }
         if (errorIfInterpolated(o, context)) return
 
-        if (p is CrAsmOptionsList && o.stringValue !in validAsmOptions) {
-            error(o, "Unknown asm option")
+        if (p is CrAsmOptionsList) {
+            val supportLevel = getAsmOptionSupportLevel(o.stringValue)
+            if (supportLevel.check(ll)) return
+            error(o, "Unknown asm option")?.withFix(supportLevel.quickFix())
         }
     }
 
@@ -236,8 +240,9 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitSplatExpression(o: CrSplatExpression) {
         super.visitSplatExpression(o)
 
-        if (!isAllowedSplat(o)) {
-            error(o.splatElement, "Splat argument is not allowed here")
+        val splatState = getSplatSupportLevel(o)
+        if (!splatState.check(ll)) {
+            error(o.splatElement, "Splat argument is not allowed here")?.withFix(splatState.quickFix())
         }
 
         if (o.parent is CrListExpression && o.prevSiblingOfType<CrSplatExpression>() != null) {
@@ -245,36 +250,37 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    private fun isAllowedSplat(o: CrSplatExpression): Boolean {
+    private fun getSplatSupportLevel(o: CrSplatExpression): HighlightingSupportLevel {
         when (val p = o.parent) {
             is CrArgumentList,
-            is CrTupleExpression -> return true
+            is CrTupleExpression -> return HighlightingSupportLevel.Always
 
             is CrListExpression -> {
-                val pp = p.parent as? CrAssignmentExpression ?: return false
-                if (pp.rhs == p && pp.canHaveSplatRHS()) return true
-                if (ll >= LanguageLevel.CRYSTAL_1_3 && pp.lhs == p) return true
-                return false
+                val pp = p.parent as? CrAssignmentExpression ?: return HighlightingSupportLevel.Never
+                if (pp.rhs == p && pp.canHaveSplatRHS()) return HighlightingSupportLevel.Always
+                if (pp.lhs == p) return HighlightingSupportLevel.SinceVersion.of(LanguageLevel.CRYSTAL_1_3)
+                return HighlightingSupportLevel.Never
             }
 
             is CrAssignmentExpression -> {
-                if (p.opSign != CR_ASSIGN_OP) return false
-                if (p.rhs == o && p.canHaveSplatRHS()) return true
-                if (ll >= LanguageLevel.CRYSTAL_1_3 && p.lhs == o) return true
-                return false
+                if (p.opSign != CR_ASSIGN_OP) return HighlightingSupportLevel.Never
+                if (p.rhs == o && p.canHaveSplatRHS()) return HighlightingSupportLevel.Always
+                if (p.lhs == o) return HighlightingSupportLevel.SinceVersion.of(LanguageLevel.CRYSTAL_1_3)
+                return HighlightingSupportLevel.Never
             }
 
             is CrParenthesizedExpression -> {
                 val pp = p.parent
-                return pp is CrAssignmentExpression
-                        && pp.opSign == CR_ASSIGN_OP
-                        && pp.rhs == p
-                        && pp.canHaveSplatRHS()
-                        && p.prevSibling == pp.operation
-                        && o.prevSibling?.elementType == CR_LPAREN
+                if (pp is CrAssignmentExpression
+                    && pp.opSign == CR_ASSIGN_OP
+                    && pp.rhs == p
+                    && pp.canHaveSplatRHS()
+                    && p.prevSibling == pp.operation
+                    && o.prevSibling?.elementType == CR_LPAREN) return HighlightingSupportLevel.Always
+                return HighlightingSupportLevel.Never
             }
 
-            else -> return false
+            else -> return HighlightingSupportLevel.Never
         }
     }
 
@@ -679,7 +685,8 @@ class CrystalSyntaxCheckingVisitor(
         val text = o.text
         if (ll < LanguageLevel.CRYSTAL_1_7) {
             if (text.length >= 4 && text[2] == '0') {
-                error(o, "Global match index with zero at second position is invalid in pre-1.7")
+                error(o, "Global match index with zero at second position is invalid before 1.7")
+                    ?.withFix(CrystalChangeLanguageVersionAction.of(LanguageLevel.CRYSTAL_1_7))
             }
         }
         else {
@@ -890,11 +897,11 @@ class CrystalSyntaxCheckingVisitor(
         error(o, message)
     }
 
-    private val validAsmOptions
-        get() = when {
-            ll < LanguageLevel.CRYSTAL_1_2 -> validAsmOptions10
-            else -> validAsmOptions12
-        }
+    private fun getAsmOptionSupportLevel(option: String?): HighlightingSupportLevel = when(option) {
+        in asmOptionsCommon -> HighlightingSupportLevel.Always
+        "unwind" -> HighlightingSupportLevel.SinceVersion.of(LanguageLevel.CRYSTAL_1_2)
+        else -> HighlightingSupportLevel.Never
+    }
 
     private val PsiElement.isFunBody
         get() = this is CrBlockExpression && parent is CrFunctionLikeDefinition
@@ -1019,17 +1026,10 @@ class CrystalSyntaxCheckingVisitor(
             "self", "in", "end"
         )
 
-        private val validAsmOptions10 = setOf(
+        private val asmOptionsCommon = setOf(
             "volatile",
             "alignstack",
             "intel"
-        )
-
-        private val validAsmOptions12 = setOf(
-            "volatile",
-            "alignstack",
-            "intel",
-            "unwind"
         )
     }
 }

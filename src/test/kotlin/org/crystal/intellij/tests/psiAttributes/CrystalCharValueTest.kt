@@ -1,14 +1,12 @@
 package org.crystal.intellij.tests.psiAttributes
 
 import org.crystal.intellij.psi.CrCharValueHolder
-import org.junit.Test
 
 class CrystalCharValueTest : CrystalPsiAttributeTest() {
     private fun checkCharValue(text: String, value: Char?) {
         checkFirst(text, CrCharValueHolder::charValue, value)
     }
 
-    @Test
     fun testOctalEscapes() {
         checkCharValue("\"\\5\"", '\u0005')
         checkCharValue("\"\\52\"", '*')
@@ -16,7 +14,6 @@ class CrystalCharValueTest : CrystalPsiAttributeTest() {
         checkCharValue("\"\\0377\"", 'ÿ')
     }
 
-    @Test
     fun testHexEscapes() {
         checkCharValue("\"\\x\"", null)
         checkCharValue("\"\\xA\"", null)
@@ -25,7 +22,6 @@ class CrystalCharValueTest : CrystalPsiAttributeTest() {
         checkCharValue("\"\\xDE\"", 'Þ')
     }
 
-    @Test
     fun testUnicodeEscapes() {
         checkCharValue("'\\u''", null)
         checkCharValue("'\\uA'", null)
@@ -47,7 +43,6 @@ class CrystalCharValueTest : CrystalPsiAttributeTest() {
         checkCharValue("\"\\uEEEE\"", '')
     }
 
-    @Test
     fun testUnicodeBlocks() {
         checkCharValue("'\\u{1}\'", '\u0001')
         checkCharValue("'\\u{1A}\'", '\u001A')
@@ -70,7 +65,6 @@ class CrystalCharValueTest : CrystalPsiAttributeTest() {
         checkCharValue("\"\\u{AAAAAA}\"", null)
     }
 
-    @Test
     fun testSpecialEscapes() {
         checkCharValue("'\\a'", '\u0007')
         checkCharValue("'\\b'", '\b')

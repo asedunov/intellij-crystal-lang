@@ -1,3 +1,5 @@
+# LANGUAGE_LEVEL: 1.6
+
 def foo1(a<error descr="Space is missing before/after colon">:</error>Int)
 end
 
@@ -14,18 +16,18 @@ def foo5(a<error descr="Space is missing before/after colon">:</error>(Int))
 end
 
 lib L
-  $a: Int
+  $a : Int
 end
 
 begin
-rescue e: Foo
+rescue e : Foo
 end
 
-a1<warning descr="Space is missing before/after colon">:</warning> Int
+a1: Int
 
 a2 : Int
 
-def foo6()<warning descr="Space is missing before/after colon">:</warning> Int
+def foo6(): Int
   1
 end
 
@@ -33,7 +35,7 @@ def foo7() : Int
   1
 end
 
-def foo8(&b<warning descr="Space is missing before/after colon">:</warning> Int)
+def foo8(&b: Int)
 
 end
 

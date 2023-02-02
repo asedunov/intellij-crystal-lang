@@ -74,7 +74,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
     private val settings = project.crystalSettings.currentState
     private val workspaceSettings = project.crystalWorkspaceSettings.currentState
 
-    private lateinit var languageVersionComboBox: ComboBox<LanguageVersion>
+    private lateinit var languageVersionComboBox: ComboBox<CrystalVersion>
     private lateinit var compilerComboBox: CrystalToolPathComboBox
     private lateinit var shardsComboBox: CrystalToolPathComboBox
     private lateinit var stdlibEditor: TextFieldWithBrowseButton
@@ -86,7 +86,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
         group(CrystalBundle.message("settings.group.compiler")) {
             row(CrystalBundle.message("settings.language.level")) {
                 languageVersionComboBox = comboBox(
-                    DefaultComboBoxModel(LanguageVersion.allVersions.toTypedArray()),
+                    DefaultComboBoxModel(CrystalVersion.allVersions.toTypedArray()),
                     listCellRenderer { value, _, _ -> setText(value.description) }
                 ).bindItem(settings::languageVersion.toNullableProperty()).component
             }

@@ -2766,8 +2766,6 @@ FILE
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
-        PsiErrorElement:Space required before colon in type restriction
-          <empty list>
         PsiElement(:)(':')
         PsiWhiteSpace(' ')
         CrPathTypeElement(CR_PATH_TYPE)
@@ -2788,10 +2786,10 @@ FILE
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
-      PsiWhiteSpace(' ')
-      PsiErrorElement:Expected: ')'
-        PsiElement(<symbol start>)(':')
-        PsiElement(<string raw>)('Int32')
+        PsiWhiteSpace(' ')
+        CrSymbolExpression(CR_SYMBOL_EXPRESSION)
+          PsiElement(<symbol start>)(':')
+          PsiElement(<string raw>)('Int32')
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')

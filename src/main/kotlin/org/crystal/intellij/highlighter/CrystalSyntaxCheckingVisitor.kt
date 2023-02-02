@@ -674,6 +674,26 @@ class CrystalSyntaxCheckingVisitor(
         errorIfEmptyName(o)
     }
 
+    override fun visitSimpleNameElement(o: CrSimpleNameElement) {
+        super.visitSimpleNameElement(o)
+
+        checkGlobalMatchIndexPre17(o.nameLeaf as? CrGlobalMatchIndexName ?: return)
+    }
+
+    private fun checkGlobalMatchIndexPre17(o: CrGlobalMatchIndexName) {
+        val text = o.text
+        if (ll < LanguageLevel.CRYSTAL_1_7) {
+            if (text.length >= 4 && text[2] == '0') {
+                error(o, "Global match index with zero at second position is invalid in pre-1.7")
+            }
+        }
+        else {
+            if (text.length >= 3 && text[1] == '0') {
+                error(o, "Global match index starting with leading zero is invalid since 1.7")
+            }
+        }
+    }
+
     private fun errorIfEmptyName(o: CrNameElement) {
         if (ll >= LanguageLevel.CRYSTAL_1_5 && o.kind == CrNameKind.STRING && o.name == "") {
             val messageHead = when (o.parent) {

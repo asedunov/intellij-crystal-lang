@@ -5,7 +5,6 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
 import org.crystal.intellij.resolve.symbols.CrConstantLikeSym
 import org.crystal.intellij.tests.util.setupMainFile
-import org.junit.Test
 
 class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
     private fun doTest(text: String, variants: Collection<String>) {
@@ -22,7 +21,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         doTest(this, variants)
     }
 
-    @Test
     fun testFallbackTypes() {
         "x : <caret>" expects listOf(
             "AlwaysInline",
@@ -85,7 +83,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         )
     }
 
-    @Test
     fun testGlobals() {
         val defs = """
             MyConst = 1
@@ -143,7 +140,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects variantsWithConsts
     }
 
-    @Test
     fun testTypeScope() {
         val innerVariants = listOf(
             "MyAlias",
@@ -244,7 +240,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects (innerVariants + "MyConst").sorted()
     }
 
-    @Test
     fun testLibScope() {
         val outerVariants = listOf(
             "MyOuterAlias",
@@ -280,7 +275,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent()
     }
 
-    @Test
     fun testSuperOrdinality() {
         """
             class MyA
@@ -297,7 +291,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects listOf("MyA", "MyB")
     }
 
-    @Test
     fun testSuperNoOriginalRef() {
         """
             class MyA
@@ -374,7 +367,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         )
     }
 
-    @Test
     fun testSupertypes() {
         """
             module MyA
@@ -402,7 +394,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects listOf("FooA", "FooB", "FooC")
     }
 
-    @Test
     fun testIncludeOrdinality() {
         """
             module MyA
@@ -420,7 +411,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects listOf("MyA", "MyB", "MyX")
     }
 
-    @Test
     fun testGenericPresentation() {
         """
             class Foooo(A)
@@ -433,7 +423,6 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
         """.trimIndent() expects listOf("Foooo(A)", "Foooooo(X, Y)")
     }
 
-    @Test
     fun testDefinitionName() {
         """
             class Foo

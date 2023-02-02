@@ -4,12 +4,11 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.hasErrorElementInRange
 import com.intellij.testFramework.ParsingTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.config.CrystalProjectSettings
 import org.crystal.intellij.config.CrystalLevel
+import org.crystal.intellij.config.CrystalProjectSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CrystalParserDefinition
 import org.crystal.intellij.tests.util.withLanguageLevel
-import org.junit.Test
 import java.io.File
 
 class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinition()) {
@@ -74,136 +73,88 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         doCheckResult(myFullDataPath, "$name.txt", actualTree.toString())
     }
 
-    @Test
     fun testAsm() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testAnnotations() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testArrayLiterals() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testAssignments() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testCallInsideIndexing() = doTestSingleFileWithMultiFragments("\n\n")
-    @Test
     fun testCallInsideIndexing_1_6() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_6) {
         doTestSingleFileWithMultiFragments("\n\n")
     }
-    @Test
     fun testCallsAndRefs() = doTestSingleFileWithMultiFragments("\n\n\n")
-    @Test
     fun testCallsAndRefs_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments("\n\n\n")
     }
-    @Test
     fun testCaseSelect() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testCharLiterals() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testControlExpressions() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testDefs() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testExceptionHandlers() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testFileFragments() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testFloatRadixes_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testFloatRadixes_1_3() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_3) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testFunctionLiterals_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testFunctionLiterals() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testGenerics_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testGenerics() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testHashesAndTuples() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testHashesAndTuples_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testLibraries() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testLibraries_1_6() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_6) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMacroDefs() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testMacroDefs_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMacroDefs_1_2() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_2) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMacroExpressions() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testMacroExpressions_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMacroStatements() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testMacroStatements_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMacroStatements_1_2() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_2) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMisc_1_0() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_0) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testMisc() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testOperators() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testParamAnnotations() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testParamAnnotations_1_4() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_4) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testPseudoConstants() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testPseudoMethods() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testSplatsInCollectionLiterals() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testSimpleLiterals() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testSimpleLiterals_1_2() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_2) {
         doTestSingleFileWithMultiFragments()
     }
-    @Test
     fun testStringLiterals() = doTestSingleFileWithMultiFragments("\n\n\n")
-    @Test
     fun testSymbols() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testTypes() = doTestSingleFileWithMultiFragments()
-    @Test
     fun testTypeDefs() = doTestSingleFileWithMultiFragments("\n\n\n")
-    @Test
     fun testVisibility() = doTestSingleFileWithMultiFragments()
 
     // Custom tests
 
-    @Test
     fun testSpaces() {
         doTestMultiFragments(
             "",
@@ -217,7 +168,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testComments() {
         doTestMultiFragments(
             "1 #",
@@ -227,7 +177,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testIntegers() {
         doTestMultiFragments(
             sequence {
@@ -279,7 +228,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testFloats() {
         doTestMultiFragments(
             sequence {
@@ -320,7 +268,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testIdentifiers() {
         doTestMultiFragments(
             sequence {
@@ -384,7 +331,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testKeywords() {
         CR_KEYWORDS.types.forEach {
             val kw = it.toString()
@@ -401,7 +347,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testKeywordsInDefParamsWithAt() {
         CR_KEYWORDS.types.forEach {
             val kw = it.toString()
@@ -426,7 +371,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         CR_RESPONDS_TO
     )
 
-    @Test
     fun testKeywordsInVarDefinition() {
         CR_KEYWORDS.types.forEach {
             if (it in keywordsForbiddenInVarDef) return@forEach
@@ -440,7 +384,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testKeywordsForbiddenAsReferences() {
         listOf(
             CR_DEF, CR_CLASS, CR_STRUCT, CR_MODULE, CR_FUN, CR_ALIAS, CR_ABSTRACT,
@@ -457,7 +400,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testComboAssignments() {
         listOf("+", "-", "*", "/", "//", "%", "|", "&", "^", "**", "<<", ">>", "&+", "&-", "&*").forEach { op ->
             doCustomTest(
@@ -473,7 +415,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testOperatorDefs() {
         listOf("/", "<", "<=", "==", "!=", "=~", "!~", ">", ">=", "+", "-", "*", "/", "~", "%", "&", "|", "^", "**", "===").forEach { op ->
             doCustomTest(
@@ -487,7 +428,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testMacroOperatorDefs() {
         listOf("`", "<<", "<", "<=", "==", "===", "!=", "=~", "!~", ">>", ">", ">=", "+", "-", "*", "/", "//", "~", "%", "&", "|", "^", "**", "[]?", "[]=", "<=>", "&+", "&-", "&*", "&**").forEach { op ->
             doCustomTest(
@@ -498,7 +438,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testStringBlocksInMacroFragment() {
         listOf("(" to ")", "[" to "]", "{" to "}", "<" to ">", "|" to "|").forEach { (open, close) ->
             doCustomTest(
@@ -515,7 +454,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testBinaryOperators() {
         listOf("<<", "<", "<=", "==", ">>", ">", ">=", "+", "-", "*", "/", "//", "%", "|", "&", "^", "**", "===", "=~", "!~", "&+", "&-", "&*", "&**").forEach { op ->
             doCustomTest(
@@ -533,7 +471,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testQualifiedOperatorCalls() {
         listOf("+", "-", "*", "/", "<", "<=", "==", ">", ">=", "%", "|", "&", "^", "**", "===", "=~", "!~").forEach {
             doCustomTest(
@@ -546,7 +483,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         }
     }
 
-    @Test
     fun testHeredocs() {
         doTestMultiFragments(
             "<<-HERE\nHello, mom! I am HERE.\nHER dress is beautiful.\nHE is OK.\n  HERESY\nHERE",
@@ -591,7 +527,6 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testStringArrayLiterals() {
         doTestMultiFragments(
             "%w{one  two}",
@@ -616,17 +551,14 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
         )
     }
 
-    @Test
     fun testWithRN() {
         doTestMultiFragments(
             "class Foo\r\nend\r\n\r\n1"
         )
     }
 
-    @Test
     fun testExpressionsInClassHeader() = doTestExpressionsInClassHeader()
 
-    @Test
     fun testExpressionsInClassHeader_1_6() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_6) {
         doTestExpressionsInClassHeader()
     }

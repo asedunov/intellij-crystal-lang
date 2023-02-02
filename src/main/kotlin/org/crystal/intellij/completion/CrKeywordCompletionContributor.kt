@@ -3,9 +3,7 @@ package org.crystal.intellij.completion
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionResultSet
-import com.intellij.codeInsight.completion.InsertionContext
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.openapi.editor.EditorModificationUtil
 import com.intellij.openapi.project.DumbAware
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
@@ -15,7 +13,7 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.elementType
 import com.intellij.psi.util.siblings
 import com.intellij.refactoring.suggested.endOffset
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CR_PARAMETER_LIST
@@ -391,7 +389,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
 
         fun consumeKeyword(keyword: CrystalTokenType) {
             if (keyword == CR_IS_NIL &&
-                ll >= LanguageLevel.CRYSTAL_1_1 &&
+                ll >= CrystalLevel.CRYSTAL_1_1 &&
                 position.inMacroExpression()) return
             val builder = LookupElementBuilder
                 .create(keyword)

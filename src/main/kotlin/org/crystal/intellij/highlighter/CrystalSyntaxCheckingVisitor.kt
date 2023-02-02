@@ -6,7 +6,7 @@ import com.intellij.psi.util.elementType
 import com.intellij.util.SmartList
 import com.intellij.util.containers.JBIterable
 import com.intellij.util.containers.MultiMap
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.psi.*
@@ -66,7 +66,7 @@ class CrystalSyntaxCheckingVisitor(
             error(o, "Octal constants should be prefixed with 0o")
         }
 
-        if (ll >= LanguageLevel.CRYSTAL_1_6 &&
+        if (ll >= CrystalLevel.CRYSTAL_1_6 &&
                 o.explicitKind == null &&
                 o.kind == CrIntegerKind.U64 &&
                 value is ULong &&
@@ -77,7 +77,7 @@ class CrystalSyntaxCheckingVisitor(
 
     private val CrIntegerKind.outOfValueError: String
         get() {
-            if (ll >= LanguageLevel.CRYSTAL_1_3) return "The value is out of $typeName range"
+            if (ll >= CrystalLevel.CRYSTAL_1_3) return "The value is out of $typeName range"
 
             val literalKind = when(this) {
                 CrIntegerKind.I128 -> CrIntegerKind.I64
@@ -90,7 +90,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitFloatLiteralExpression(o: CrFloatLiteralExpression) {
         super.visitFloatLiteralExpression(o)
 
-        if (ll >= LanguageLevel.CRYSTAL_1_7) {
+        if (ll >= CrystalLevel.CRYSTAL_1_7) {
             when (o.radix) {
                 2 -> error(o, "Binary float literals are not supported")
                 8 -> error(o, "Octal float literals are not supported")
@@ -176,7 +176,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitReferenceExpression(o: CrReferenceExpression) {
         super.visitReferenceExpression(o)
 
-        if (ll >= LanguageLevel.CRYSTAL_1_3 && o.nameElement?.kind == CrNameKind.GLOBAL_VARIABLE) {
+        if (ll >= CrystalLevel.CRYSTAL_1_3 && o.nameElement?.kind == CrNameKind.GLOBAL_VARIABLE) {
             error(o, "Global variables are not supported, use class variables instead")
         }
     }
@@ -258,14 +258,14 @@ class CrystalSyntaxCheckingVisitor(
             is CrListExpression -> {
                 val pp = p.parent as? CrAssignmentExpression ?: return HighlightingSupportLevel.Never
                 if (pp.rhs == p && pp.canHaveSplatRHS()) return HighlightingSupportLevel.Always
-                if (pp.lhs == p) return HighlightingSupportLevel.SinceVersion.of(LanguageLevel.CRYSTAL_1_3)
+                if (pp.lhs == p) return HighlightingSupportLevel.SinceVersion.of(CrystalLevel.CRYSTAL_1_3)
                 return HighlightingSupportLevel.Never
             }
 
             is CrAssignmentExpression -> {
                 if (p.opSign != CR_ASSIGN_OP) return HighlightingSupportLevel.Never
                 if (p.rhs == o && p.canHaveSplatRHS()) return HighlightingSupportLevel.Always
-                if (p.lhs == o) return HighlightingSupportLevel.SinceVersion.of(LanguageLevel.CRYSTAL_1_3)
+                if (p.lhs == o) return HighlightingSupportLevel.SinceVersion.of(CrystalLevel.CRYSTAL_1_3)
                 return HighlightingSupportLevel.Never
             }
 
@@ -411,7 +411,7 @@ class CrystalSyntaxCheckingVisitor(
         val isTupleCondition = condition is CrTupleExpression
         val conditionSize = condition.tupleSizeIfAny()
 
-        if (ll >= LanguageLevel.CRYSTAL_1_1 && isTupleCondition) {
+        if (ll >= CrystalLevel.CRYSTAL_1_1 && isTupleCondition) {
             for (child in condition!!.allChildren()) {
                 if (child.elementType == CR_MUL_OP) {
                     error(child, "Splat is not allowed inside case expression")
@@ -567,7 +567,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitTypeParameterList(o: CrTypeParameterList) {
         super.visitTypeParameterList(o)
 
-        if (o.parent !is CrModuleLikeDefinition<*, *> && ll <= LanguageLevel.CRYSTAL_1_4) return
+        if (o.parent !is CrModuleLikeDefinition<*, *> && ll <= CrystalLevel.CRYSTAL_1_4) return
 
         checkDuplicateNames(o.elements)
 
@@ -612,7 +612,7 @@ class CrystalSyntaxCheckingVisitor(
                 errorIf(o.defaultAnchor, "declare ${o.presentableKind}", inFun or inExpr)
             }
             is CrConstant -> {
-                val validator = if (ll >= LanguageLevel.CRYSTAL_1_7) inFun or inConst or inExpr else inFun or inExpr
+                val validator = if (ll >= CrystalLevel.CRYSTAL_1_7) inFun or inConst or inExpr else inFun or inExpr
                 errorIf(o.defaultAnchor, "declare ${o.presentableKind}", validator)
             }
             else -> {}
@@ -659,7 +659,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitFunction(o: CrFunction) {
         super.visitFunction(o)
 
-        if (ll >= LanguageLevel.CRYSTAL_1_5) {
+        if (ll >= CrystalLevel.CRYSTAL_1_5) {
             checkDuplicateNames(o.parameters.toList())
         }
     }
@@ -667,7 +667,7 @@ class CrystalSyntaxCheckingVisitor(
     override fun visitParameter(o: CrParameter) {
         super.visitParameter(o)
 
-        if (ll >= LanguageLevel.CRYSTAL_1_5 && o.nameElement == null) {
+        if (ll >= CrystalLevel.CRYSTAL_1_5 && o.nameElement == null) {
             val function = (o.parent as? CrParameterList)?.parent as? CrFunction
             if (function != null && function.isTopLevel) {
                 error(o, "Top-level function parameter must have a name")
@@ -683,10 +683,10 @@ class CrystalSyntaxCheckingVisitor(
 
     private fun checkGlobalMatchIndexPre17(o: CrGlobalMatchIndexName) {
         val text = o.text
-        if (ll < LanguageLevel.CRYSTAL_1_7) {
+        if (ll < CrystalLevel.CRYSTAL_1_7) {
             if (text.length >= 4 && text[2] == '0') {
                 error(o, "Global match index with zero at second position is invalid before 1.7")
-                    ?.withFix(CrystalChangeLanguageVersionAction.of(LanguageLevel.CRYSTAL_1_7))
+                    ?.withFix(CrystalChangeLanguageVersionAction.of(CrystalLevel.CRYSTAL_1_7))
             }
         }
         else {
@@ -697,7 +697,7 @@ class CrystalSyntaxCheckingVisitor(
     }
 
     private fun errorIfEmptyName(o: CrNameElement) {
-        if (ll >= LanguageLevel.CRYSTAL_1_5 && o.kind == CrNameKind.STRING && o.name == "") {
+        if (ll >= CrystalLevel.CRYSTAL_1_5 && o.kind == CrNameKind.STRING && o.name == "") {
             val messageHead = when (o.parent) {
                 is CrNamedTupleEntry -> "Tuple entry"
                 is CrParameter -> "Parameter external"
@@ -870,7 +870,7 @@ class CrystalSyntaxCheckingVisitor(
                     if (nameElement.isQuestion || nameElement.isExclamation) {
                         error(e, "Assignment is now allowed for ?/! method calls")
                     }
-                    if (ll >= LanguageLevel.CRYSTAL_1_7 && nameElement.kind == CrNameKind.GLOBAL_MATCH_INDEX) {
+                    if (ll >= CrystalLevel.CRYSTAL_1_7 && nameElement.kind == CrNameKind.GLOBAL_MATCH_INDEX) {
                         error(e, "Assignment is not allowed for global match data index")
                     }
                 }
@@ -899,7 +899,7 @@ class CrystalSyntaxCheckingVisitor(
 
     private fun getAsmOptionSupportLevel(option: String?): HighlightingSupportLevel = when(option) {
         in asmOptionsCommon -> HighlightingSupportLevel.Always
-        "unwind" -> HighlightingSupportLevel.SinceVersion.of(LanguageLevel.CRYSTAL_1_2)
+        "unwind" -> HighlightingSupportLevel.SinceVersion.of(CrystalLevel.CRYSTAL_1_2)
         else -> HighlightingSupportLevel.Never
     }
 

@@ -2,7 +2,7 @@ package org.crystal.intellij.lexer
 
 import com.intellij.lexer.FlexLexer
 import com.intellij.psi.tree.IElementType
-import org.crystal.intellij.config.LanguageLevel
+import org.crystal.intellij.config.CrystalLevel
 import java.io.IOException
 
 abstract class CrystalLexerBase : FlexLexer {
@@ -17,7 +17,7 @@ abstract class CrystalLexerBase : FlexLexer {
         protected val CR_INT_COMMENT_START = CrystalTokenType("CR_INT_COMMENT_START")
     }
 
-    protected abstract val minLevel: LanguageLevel
+    protected abstract val minLevel: CrystalLevel
 
     abstract val lexerState: LexerState
 
@@ -142,7 +142,7 @@ abstract class CrystalLexerBase : FlexLexer {
     }
 
     private fun nextComesIdPartAfterEnd(): Boolean {
-        return if (minLevel >= LanguageLevel.CRYSTAL_1_3) nextComesIdPartOrColon() else nextComesIdPart()
+        return if (minLevel >= CrystalLevel.CRYSTAL_1_3) nextComesIdPartOrColon() else nextComesIdPart()
     }
 
     private fun nextComesIdPart(): Boolean {

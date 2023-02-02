@@ -6,7 +6,6 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.util.ThrowableComputable
 import com.intellij.util.PatternUtil
-import com.intellij.util.io.exists
 import com.intellij.util.io.isDirectory
 import com.intellij.util.text.SemVer
 import org.crystal.intellij.CrystalBundle
@@ -14,6 +13,7 @@ import org.crystal.intellij.util.isValidFile
 import java.nio.file.Path
 import java.util.regex.Pattern
 import javax.swing.SwingUtilities
+import kotlin.io.path.exists
 import kotlin.io.path.name
 import kotlin.io.path.nameWithoutExtension
 

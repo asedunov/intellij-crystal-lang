@@ -9,10 +9,10 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.RawCommandLineEditor
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.layout.panel
-import com.intellij.util.io.exists
 import com.intellij.util.io.isFile
 import org.crystal.intellij.CrystalBundle
 import javax.swing.JComponent
+import kotlin.io.path.exists
 import kotlin.io.path.extension
 import kotlin.io.path.name
 

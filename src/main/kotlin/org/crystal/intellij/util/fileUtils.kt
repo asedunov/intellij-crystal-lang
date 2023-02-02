@@ -1,10 +1,10 @@
 package org.crystal.intellij.util
 
-import com.intellij.util.io.exists
 import com.intellij.util.io.isFile
 import java.nio.file.InvalidPathException
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.exists
 
 private val emptyPath: Path = Path.of("")
 

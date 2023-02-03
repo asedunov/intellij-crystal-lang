@@ -22,6 +22,6 @@ enum class CrNameKind {
     }
 }
 
-interface CrNameKindAware {
+interface CrNameKindAware : CrElement {
     val kind: CrNameKind
 }

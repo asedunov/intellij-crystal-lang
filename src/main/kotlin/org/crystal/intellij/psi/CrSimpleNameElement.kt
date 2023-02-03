@@ -48,11 +48,11 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
     override val kind: CrNameKind
         get() {
             greenStub?.let { return it.kind }
-            return (firstChild as? CrNameKindAware)?.kind ?: CrNameKind.UNKNOWN
+            return body?.kind ?: CrNameKind.UNKNOWN
         }
 
-    val nameLeaf: CrNameLeafElement?
-        get() = firstChild as? CrNameLeafElement
+    val body: CrNameKindAware?
+        get() = firstChild as? CrNameKindAware
 
     val isQuestion: Boolean
         get() = name?.lastOrNull() == '?'

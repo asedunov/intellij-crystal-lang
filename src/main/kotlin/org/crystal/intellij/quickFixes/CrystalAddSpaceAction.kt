@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.refactoring.suggested.startOffset
 import org.crystal.intellij.CrystalBundle
+import org.crystal.intellij.util.hasWhitespaceAt
 
 class CrystalAddSpaceAction(
     element: PsiElement,
@@ -21,14 +22,11 @@ class CrystalAddSpaceAction(
 
     override fun invoke(project: Project, file: PsiFile, editor: Editor?, start: PsiElement, end: PsiElement) {
         val document = file.viewProvider.document ?: return
-        val chars = document.charsSequence
         val range = rangeInElement.shiftRight(start.startOffset)
-        val prevChar = chars.getOrNull(range.startOffset - 1)
-        val nextChar = chars.getOrNull(range.endOffset)
-        if (nextChar == null || !nextChar.isWhitespace()) {
+        if (!document.hasWhitespaceAt(range.endOffset)) {
             document.insertString(range.endOffset, " ")
         }
-        if (prevChar == null || !prevChar.isWhitespace()) {
+        if (!document.hasWhitespaceAt(range.startOffset - 1)) {
             document.insertString(range.startOffset, " ")
         }
     }

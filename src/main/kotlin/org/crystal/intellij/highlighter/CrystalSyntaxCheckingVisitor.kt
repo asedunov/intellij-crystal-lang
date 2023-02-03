@@ -17,6 +17,7 @@ import org.crystal.intellij.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.quickFixes.CrystalAddSpaceAction
 import org.crystal.intellij.quickFixes.CrystalChangeLanguageVersionAction
+import org.crystal.intellij.quickFixes.CrystalConvertNamedTupleToHashAction
 import org.crystal.intellij.quickFixes.withFix
 
 class CrystalSyntaxCheckingVisitor(
@@ -164,7 +165,8 @@ class CrystalSyntaxCheckingVisitor(
         super.visitNamedTupleExpression(o)
 
         if (o.constructorType != null) {
-            error(o, "Can't use named tuple syntax for Hash-like literal, use '=>' instead")
+            error(o, "Tuple syntax is not supported for Hash-like literal")
+                ?.withFix(CrystalConvertNamedTupleToHashAction(o))
             return
         }
 

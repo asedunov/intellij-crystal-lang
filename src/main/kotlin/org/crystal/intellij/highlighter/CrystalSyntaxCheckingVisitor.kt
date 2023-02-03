@@ -808,7 +808,7 @@ class CrystalSyntaxCheckingVisitor(
             if (externalNameElement != null) {
                 val externalName = externalNameElement.name
                 if (externalName == name) {
-                    error(externalNameElement, "When specified, external name must be different than internal nam")
+                    error(externalNameElement, "When specified, external name must be different than internal name")
                 }
             }
 

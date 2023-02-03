@@ -16,8 +16,8 @@ end
 macro foo(<error descr="Duplicated external name name: x">"x"</error> a, "y" b, <error descr="Duplicated external name name: x">x</error> c)
 end
 
-macro foo(<error descr="When specified, external name must be different than internal nam">a</error> a, y b, z c)
+macro foo(<error descr="When specified, external name must be different than internal name">a</error> a, y b, z c)
 end
 
-macro foo(x a, <error descr="When specified, external name must be different than internal nam">"b"</error> b, z c)
+macro foo(x a, <error descr="When specified, external name must be different than internal name">"b"</error> b, z c)
 end

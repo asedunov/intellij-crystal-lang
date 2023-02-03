@@ -15,10 +15,7 @@ import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.psi.*
-import org.crystal.intellij.quickFixes.CrystalAddSpaceAction
-import org.crystal.intellij.quickFixes.CrystalChangeLanguageVersionAction
-import org.crystal.intellij.quickFixes.CrystalConvertNamedTupleToHashAction
-import org.crystal.intellij.quickFixes.withFix
+import org.crystal.intellij.quickFixes.*
 
 class CrystalSyntaxCheckingVisitor(
     file: CrFile,
@@ -217,7 +214,9 @@ class CrystalSyntaxCheckingVisitor(
             }
             if (fullBlock != null) blocks += fullBlock
             for (i in 1 until blocks.size) {
-                error(blocks[i], "Multiple block arguments are not allowed")
+                val block = blocks[i]
+                error(block, "Multiple block arguments are not allowed")
+                    ?.withFix(CrystalDropListElementAction(block))
             }
         }
 
@@ -229,15 +228,24 @@ class CrystalSyntaxCheckingVisitor(
                 }
 
                 is CrSplatExpression -> {
-                    if (foundDoubleSplat) error(argument, "Splat not allowed after double splat")
+                    if (foundDoubleSplat) {
+                        error(argument, "Splat not allowed after double splat")
+                            ?.withFix(CrystalDropListElementAction(argument))
+                    }
                 }
 
                 is CrOutArgument -> {
-                    if (foundDoubleSplat) error(argument, "Out argument not allowed after double splat")
+                    if (foundDoubleSplat) {
+                        error(argument, "Out argument not allowed after double splat")
+                            ?.withFix(CrystalDropListElementAction(argument))
+                    }
                 }
 
                 is CrExpression, is CrNamedArgument -> {
-                    if (foundDoubleSplat) error(argument, "Argument not allowed after double splat")
+                    if (foundDoubleSplat) {
+                        error(argument, "Argument not allowed after double splat")
+                            ?.withFix(CrystalDropListElementAction(argument))
+                    }
                 }
 
                 is CrShortBlockArgument -> {}
@@ -353,6 +361,7 @@ class CrystalSyntaxCheckingVisitor(
             if (parameter.kind == CrParameterKind.SPLAT) {
                 if (splat != null) {
                     error(parameter, "Splat parameter is already specified")
+                        ?.withFix(CrystalDropListElementAction(parameter))
                 }
                 else splat = parameter
             }
@@ -584,6 +593,7 @@ class CrystalSyntaxCheckingVisitor(
             if (!typeParameter.isSplat) continue
             if (foundSplat) {
                 error(typeParameter, "Splat type parameter already specified")
+                    ?.withFix(CrystalDropListElementAction(typeParameter))
             }
             foundSplat = true
         }
@@ -649,7 +659,7 @@ class CrystalSyntaxCheckingVisitor(
             ParamListState.BLOCK -> "Only block parameter is allowed after double splat"
             ParamListState.END -> "No parameters are allowed after block"
         }
-        error(parameter, message)
+        error(parameter, message)?.withFix(CrystalDropListElementAction(parameter))
     }
 
     override fun visitMethod(o: CrMethod) {
@@ -831,7 +841,9 @@ class CrystalSyntaxCheckingVisitor(
                     offset++
                 }
                 for (i in offset until parameters.size) {
-                    error(parameters[i], "Setter method '${defName}' cannot have more than one parameter")
+                    val parameter = parameters[i]
+                    error(parameter, "Setter method '${defName}' cannot have more than one parameter")
+                        ?.withFix(CrystalDropListElementAction(parameter))
                 }
             }
             else if (block != null) {

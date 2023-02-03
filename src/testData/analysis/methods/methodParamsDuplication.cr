@@ -16,8 +16,8 @@ end
 def foo(<error descr="Duplicated external name name: x">"x"</error> a, "y" b : Int32, <error descr="Duplicated external name name: x">x</error> c : String)
 end
 
-def foo(<error descr="When specified, external name must be different than internal nam">a</error> a, y b : Int32, z c : String)
+def foo(<error descr="When specified, external name must be different than internal name">a</error> a, y b : Int32, z c : String)
 end
 
-def foo(x a, <error descr="When specified, external name must be different than internal nam">"b"</error> b : Int32, z c : String)
+def foo(x a, <error descr="When specified, external name must be different than internal name">"b"</error> b : Int32, z c : String)
 end

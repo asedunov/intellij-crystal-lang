@@ -15,7 +15,7 @@
  */
 package org.crystal.intellij.parser.builder;
 
-import com.intellij.util.containers.IntStack;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 /**
@@ -23,8 +23,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
  */
 final class MarkerPool extends ObjectArrayList<LazyPsiBuilder.ProductionMarker> {
   private final LazyPsiBuilder myBuilder;
-  private final IntStack myFreeStartMarkers = new IntStack();
-  private final IntStack myFreeErrorItems = new IntStack();
+  private final IntArrayList myFreeStartMarkers = new IntArrayList();
+  private final IntArrayList myFreeErrorItems = new IntArrayList();
 
   MarkerPool(LazyPsiBuilder builder) {
     myBuilder = builder;
@@ -33,7 +33,7 @@ final class MarkerPool extends ObjectArrayList<LazyPsiBuilder.ProductionMarker> 
 
   LazyPsiBuilder.StartMarker allocateStartMarker() {
     if (myFreeStartMarkers.size() > 0) {
-      return (LazyPsiBuilder.StartMarker)get(myFreeStartMarkers.pop());
+      return (LazyPsiBuilder.StartMarker)get(myFreeStartMarkers.popInt());
     }
 
     LazyPsiBuilder.StartMarker marker = new LazyPsiBuilder.StartMarker(size(), myBuilder);
@@ -43,7 +43,7 @@ final class MarkerPool extends ObjectArrayList<LazyPsiBuilder.ProductionMarker> 
 
   LazyPsiBuilder.ErrorItem allocateErrorItem() {
     if (myFreeErrorItems.size() > 0) {
-      return (LazyPsiBuilder.ErrorItem)get(myFreeErrorItems.pop());
+      return (LazyPsiBuilder.ErrorItem)get(myFreeErrorItems.popInt());
     }
     
     LazyPsiBuilder.ErrorItem item = new LazyPsiBuilder.ErrorItem(size(), myBuilder);

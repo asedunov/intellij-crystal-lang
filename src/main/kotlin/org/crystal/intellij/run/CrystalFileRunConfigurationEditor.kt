@@ -8,7 +8,8 @@ import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.RawCommandLineEditor
 import com.intellij.ui.components.JBCheckBox
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.gridLayout.HorizontalAlign
 import com.intellij.util.io.exists
 import com.intellij.util.io.isFile
 import org.crystal.intellij.CrystalBundle
@@ -30,16 +31,28 @@ class CrystalFileRunConfigurationEditor : SettingsEditor<CrystalFileRunConfigura
                 showProgressEditor = checkBox("Show compilation progress").component
             }
             row("Compiler arguments: ") {
-                compilerArgumentsEditor = RawCommandLineEditor()(growX).component
+                compilerArgumentsEditor = cell(RawCommandLineEditor())
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
             }
             row("Target file: ") {
-                fileEditor = textFieldWithBrowseButton(null, "", null, fileChooserDescriptor()).component
+                fileEditor = textFieldWithBrowseButton(null, null, fileChooserDescriptor())
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
             }
             row("Program arguments: ") {
-                programArgumentsEditor = RawCommandLineEditor()(growX).component
+                programArgumentsEditor = cell(RawCommandLineEditor())
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
             }
             row("Environment variables: ") {
-                envEditor = EnvironmentVariablesTextFieldWithBrowseButton()(growX).component
+                envEditor = cell(EnvironmentVariablesTextFieldWithBrowseButton())
+                    .resizableColumn()
+                    .horizontalAlign(HorizontalAlign.FILL)
+                    .component
             }
         }
     }

@@ -11,8 +11,6 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.JBColor
 import com.intellij.ui.dsl.builder.*
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
-import com.intellij.ui.layout.listCellRenderer
 import com.intellij.util.text.SemVer
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.config.ui.CrystalToolPathComboBox
@@ -87,14 +85,14 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
             row(CrystalBundle.message("settings.language.level")) {
                 languageVersionComboBox = comboBox(
                     DefaultComboBoxModel(CrystalVersion.allVersions.toTypedArray()),
-                    listCellRenderer { value, _, _ -> setText(value.description) }
+                    listCellRenderer<CrystalVersion> { setText(it.description) }
                 ).bindItem(settings::languageVersion.toNullableProperty()).component
             }
 
             row(CrystalBundle.message("settings.crystal.exe.path")) {
                 compilerComboBox = cell(CrystalToolPathComboBox())
                     .resizableColumn()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .component
                 compilerComboBox.addTextChangeListener {
                     onCompilerPathUpdate()
@@ -119,7 +117,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 ) { file -> file.presentableUrl }
                     .bindText(workspaceSettings::stdlibPath)
                     .resizableColumn()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .component
             }
         }
@@ -128,7 +126,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
             row(CrystalBundle.message("settings.crystal.shards.path")) {
                 shardsComboBox = cell(CrystalToolPathComboBox())
                     .resizableColumn()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .component
                 shardsComboBox.addTextChangeListener {
                     onShardsPathUpdate()
@@ -150,7 +148,7 @@ class CrystalSettingsConfigurable(private val project: Project) : BoundConfigura
                 ) { file -> file.presentableUrl }
                     .bindText(settings::mainFilePath)
                     .resizableColumn()
-                    .horizontalAlign(HorizontalAlign.FILL)
+                    .align(AlignX.FILL)
                     .component
             }
 

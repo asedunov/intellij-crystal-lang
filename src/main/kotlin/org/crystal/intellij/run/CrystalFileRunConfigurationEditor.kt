@@ -8,7 +8,8 @@ import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.RawCommandLineEditor
 import com.intellij.ui.components.JBCheckBox
-import com.intellij.ui.layout.panel
+import com.intellij.ui.dsl.builder.AlignX
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.io.isFile
 import org.crystal.intellij.CrystalBundle
 import javax.swing.JComponent
@@ -30,16 +31,25 @@ class CrystalFileRunConfigurationEditor : SettingsEditor<CrystalFileRunConfigura
                 showProgressEditor = checkBox("Show compilation progress").component
             }
             row("Compiler arguments: ") {
-                compilerArgumentsEditor = RawCommandLineEditor()(growX).component
+                compilerArgumentsEditor = cell(RawCommandLineEditor())
+                    .resizableColumn()
+                    .align(AlignX.FILL)
+                    .component
             }
             row("Target file: ") {
-                fileEditor = textFieldWithBrowseButton(null, "", null, fileChooserDescriptor()).component
+                fileEditor = textFieldWithBrowseButton(null, null, fileChooserDescriptor()).component
             }
             row("Program arguments: ") {
-                programArgumentsEditor = RawCommandLineEditor()(growX).component
+                programArgumentsEditor = cell(RawCommandLineEditor())
+                    .resizableColumn()
+                    .align(AlignX.FILL)
+                    .component
             }
             row("Environment variables: ") {
-                envEditor = EnvironmentVariablesTextFieldWithBrowseButton()(growX).component
+                envEditor = cell(EnvironmentVariablesTextFieldWithBrowseButton())
+                    .resizableColumn()
+                    .align(AlignX.FILL)
+                    .component
             }
         }
     }

@@ -189,7 +189,7 @@ FILE
   CrTupleExpression(CR_TUPLE_EXPRESSION)
     PsiElement({)('{')
     PsiElement(*)('*')
-    CrVariable(CR_VARIABLE_DECLARATION)
+    CrVariable(CR_VARIABLE_DEFINITION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('a')
       PsiElement(:)(':')

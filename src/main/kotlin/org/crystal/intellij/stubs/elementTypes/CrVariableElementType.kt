@@ -11,7 +11,7 @@ import org.crystal.intellij.stubs.impl.CrVariableStubImpl
 import org.crystal.intellij.stubs.indexes.indexVariable
 
 object CrVariableElementType : CrStubElementType<CrVariable, CrVariableStub>(
-    "CR_VARIABLE_DECLARATION",
+    "CR_VARIABLE_DEFINITION",
     ::CrVariable,
     ::CrVariable
 ) {

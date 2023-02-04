@@ -16,5 +16,5 @@ class CrystalGotoSymbolTest(testFile: File) : CrystalGotoDeclarationTest(testFil
                 getCrystalTestFilesAsParameters("navigation/gotoSymbol")
     }
 
-    override fun createModel(project: Project) = GotoSymbolModel2(project)
+    override fun createModel(project: Project) = GotoSymbolModel2(project, myFixture.testRootDisposable)
 }

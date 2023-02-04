@@ -650,7 +650,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(end)('end')
 
-  CrVariable(CR_VARIABLE_DECLARATION)
+  CrVariable(CR_VARIABLE_DEFINITION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('x')
     PsiWhiteSpace(' ')
@@ -687,7 +687,7 @@ FILE
       <empty list>
     PsiElement(end)('end')
 
-  CrVariable(CR_VARIABLE_DECLARATION)
+  CrVariable(CR_VARIABLE_DEFINITION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('x')
     PsiWhiteSpace(' ')
@@ -716,7 +716,7 @@ FILE
             PsiElement(<constant>)('C')
         PsiElement())(')')
 
-  CrVariable(CR_VARIABLE_DECLARATION)
+  CrVariable(CR_VARIABLE_DEFINITION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('x')
     PsiWhiteSpace(' ')

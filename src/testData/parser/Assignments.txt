@@ -477,7 +477,7 @@ FILE
 
   CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
     CrListExpression(CR_LIST_EXPRESSION)
-      CrVariable(CR_VARIABLE_DECLARATION)
+      CrVariable(CR_VARIABLE_DEFINITION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
         PsiWhiteSpace(' ')

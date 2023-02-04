@@ -1,5 +1,6 @@
 package org.crystal.intellij.tests
 
+import com.intellij.codeInsight.intention.impl.invokeAsAction
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.crystal.intellij.tests.util.findDirective
@@ -25,7 +26,7 @@ class CrystalIntentionTest(private val testFile: File) : BasePlatformTestCase() 
         val action = myFixture.availableIntentions.first { it.text == actionText }
         val expectedFile = File(testFile.parent, testFile.nameWithoutExtension + ".after.cr")
         val expectedText = FileUtil.loadFile(expectedFile, true)
-        myFixture.checkPreviewAndLaunchAction(action)
+        action.invokeAsAction(myFixture.editor, myFixture.file)
         myFixture.checkResult(expectedText)
     }
 }

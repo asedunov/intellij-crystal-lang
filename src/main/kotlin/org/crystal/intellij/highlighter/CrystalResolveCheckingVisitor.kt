@@ -35,7 +35,7 @@ class CrystalResolveCheckingVisitor(
     override fun visitClass(o: CrClass) {
         super.visitClass(o)
 
-        val sym = o.resolveSymbol() as? CrConstantLikeSym<*> ?: return
+        val sym = o.resolveSymbol() ?: return
         if (sym.fqName != CrStdFqNames.CLASS) {
             checkKindMismatch<CrClassSym>(sym, o)
         }

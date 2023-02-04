@@ -6,9 +6,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.siblings
 
-fun HighlightInfo.withFix(action: IntentionAction?): HighlightInfo {
-    registerFix(action, null, null, null, null)
-    return this
+fun HighlightInfo.Builder.withFix(action: IntentionAction?): HighlightInfo.Builder {
+    if (action == null) return this
+    return registerFix(action, null, null, null, null)
 }
 
 fun PsiElement.deleteWithLeadingSpaces(spaceAnchor: PsiElement = this) {

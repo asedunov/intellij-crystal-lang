@@ -126,7 +126,9 @@ class CrystalSyntaxCheckingVisitor(
         if (p is CrAsmOptionsList) {
             val supportLevel = getAsmOptionSupportLevel(o.stringValue)
             if (supportLevel.check(ll)) return
-            error(o, "Unknown asm option")?.withFix(supportLevel.quickFix())
+            error(o, "Unknown asm option") {
+                withFix(supportLevel.quickFix())
+            }
         }
     }
 
@@ -162,8 +164,9 @@ class CrystalSyntaxCheckingVisitor(
         super.visitNamedTupleExpression(o)
 
         if (o.constructorType != null) {
-            error(o, "Tuple syntax is not supported for Hash-like literal")
-                ?.withFix(CrystalConvertNamedTupleToHashAction(o))
+            error(o, "Tuple syntax is not supported for Hash-like literal") {
+                withFix(CrystalConvertNamedTupleToHashAction(o))
+            }
             return
         }
 
@@ -215,8 +218,9 @@ class CrystalSyntaxCheckingVisitor(
             if (fullBlock != null) blocks += fullBlock
             for (i in 1 until blocks.size) {
                 val block = blocks[i]
-                error(block, "Multiple block arguments are not allowed")
-                    ?.withFix(CrystalDropListElementAction(block))
+                error(block, "Multiple block arguments are not allowed") {
+                    withFix(CrystalDropListElementAction(block))
+                }
             }
         }
 
@@ -229,22 +233,25 @@ class CrystalSyntaxCheckingVisitor(
 
                 is CrSplatExpression -> {
                     if (foundDoubleSplat) {
-                        error(argument, "Splat not allowed after double splat")
-                            ?.withFix(CrystalDropListElementAction(argument))
+                        error(argument, "Splat not allowed after double splat") {
+                            withFix(CrystalDropListElementAction(argument))
+                        }
                     }
                 }
 
                 is CrOutArgument -> {
                     if (foundDoubleSplat) {
-                        error(argument, "Out argument not allowed after double splat")
-                            ?.withFix(CrystalDropListElementAction(argument))
+                        error(argument, "Out argument not allowed after double splat") {
+                            withFix(CrystalDropListElementAction(argument))
+                        }
                     }
                 }
 
                 is CrExpression, is CrNamedArgument -> {
                     if (foundDoubleSplat) {
-                        error(argument, "Argument not allowed after double splat")
-                            ?.withFix(CrystalDropListElementAction(argument))
+                        error(argument, "Argument not allowed after double splat") {
+                            withFix(CrystalDropListElementAction(argument))
+                        }
                     }
                 }
 
@@ -258,7 +265,9 @@ class CrystalSyntaxCheckingVisitor(
 
         val splatState = getSplatSupportLevel(o)
         if (!splatState.check(ll)) {
-            error(o.splatElement, "Splat argument is not allowed here")?.withFix(splatState.quickFix())
+            error(o.splatElement, "Splat argument is not allowed here") {
+                withFix(splatState.quickFix())
+            }
         }
 
         if (o.parent is CrListExpression && o.prevSiblingOfType<CrSplatExpression>() != null) {
@@ -360,8 +369,9 @@ class CrystalSyntaxCheckingVisitor(
         for (parameter in parameters) {
             if (parameter.kind == CrParameterKind.SPLAT) {
                 if (splat != null) {
-                    error(parameter, "Splat parameter is already specified")
-                        ?.withFix(CrystalDropListElementAction(parameter))
+                    error(parameter, "Splat parameter is already specified") {
+                        withFix(CrystalDropListElementAction(parameter))
+                    }
                 }
                 else splat = parameter
             }
@@ -592,8 +602,9 @@ class CrystalSyntaxCheckingVisitor(
         for (typeParameter in o.elements) {
             if (!typeParameter.isSplat) continue
             if (foundSplat) {
-                error(typeParameter, "Splat type parameter already specified")
-                    ?.withFix(CrystalDropListElementAction(typeParameter))
+                error(typeParameter, "Splat type parameter already specified") {
+                    withFix(CrystalDropListElementAction(typeParameter))
+                }
             }
             foundSplat = true
         }
@@ -659,7 +670,9 @@ class CrystalSyntaxCheckingVisitor(
             ParamListState.BLOCK -> "Only block parameter is allowed after double splat"
             ParamListState.END -> "No parameters are allowed after block"
         }
-        error(parameter, message)?.withFix(CrystalDropListElementAction(parameter))
+        error(parameter, message) {
+            withFix(CrystalDropListElementAction(parameter))
+        }
     }
 
     override fun visitMethod(o: CrMethod) {
@@ -705,8 +718,9 @@ class CrystalSyntaxCheckingVisitor(
         val prevSpace = colon.prevLeaf() as? PsiWhiteSpace
         val nextSpace = colon.nextLeaf() as? PsiWhiteSpace
         if (prevSpace == null || nextSpace == null) {
-            error(colon, "Space is missing before/after colon", range)
-                ?.withFix(CrystalAddSpaceAction(colon, range.shiftLeft(colon.startOffset)))
+            error(colon, "Space is missing before/after colon", range) {
+                withFix(CrystalAddSpaceAction(colon, range.shiftLeft(colon.startOffset)))
+            }
         }
     }
 
@@ -720,8 +734,9 @@ class CrystalSyntaxCheckingVisitor(
         val text = o.text
         if (ll < CrystalLevel.CRYSTAL_1_7) {
             if (text.length >= 4 && text[2] == '0') {
-                error(o, "Global match index with zero at second position is invalid before 1.7")
-                    ?.withFix(CrystalChangeLanguageVersionAction.of(CrystalLevel.CRYSTAL_1_7))
+                error(o, "Global match index with zero at second position is invalid before 1.7") {
+                    withFix(CrystalChangeLanguageVersionAction.of(CrystalLevel.CRYSTAL_1_7))
+                }
             }
         }
         else {
@@ -842,8 +857,9 @@ class CrystalSyntaxCheckingVisitor(
                 }
                 for (i in offset until parameters.size) {
                     val parameter = parameters[i]
-                    error(parameter, "Setter method '${defName}' cannot have more than one parameter")
-                        ?.withFix(CrystalDropListElementAction(parameter))
+                    error(parameter, "Setter method '${defName}' cannot have more than one parameter") {
+                        withFix(CrystalDropListElementAction(parameter))
+                    }
                 }
             }
             else if (block != null) {

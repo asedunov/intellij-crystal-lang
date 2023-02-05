@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.6] - 2023-02-05
+
+### New features
+
+- [Crystal 1.7 support](https://github.com/asedunov/intellij-crystal-lang/issues/32)
+- New quick fixes:
+  - [Upgrade language level when some feature is available in newer version](https://github.com/asedunov/intellij-crystal-lang/issues/33)
+  - [Add missing space in type restrictions](https://github.com/asedunov/intellij-crystal-lang/issues/34)
+  - [Convert named tuples with constructor type into hash literals](https://github.com/asedunov/intellij-crystal-lang/issues/35)
+  - [Remove call arguments and parameters at improper positions](https://github.com/asedunov/intellij-crystal-lang/issues/36)
+
 ## [0.5.5] - 2023-01-19
 
 ### New features

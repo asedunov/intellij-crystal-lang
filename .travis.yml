@@ -21,4 +21,4 @@ script:
 
 branches:
   only:
-    - master_221
+    - v0.6_221

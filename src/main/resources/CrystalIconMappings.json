@@ -1,0 +1,15 @@
+{
+  "icons": {
+    "expui": {
+      "abstractStruct.svg": "icons/abstractStruct.svg",
+      "alias.svg": "icons/alias.svg",
+      "constant.svg": "icons/constant.svg",
+      "instanceVariable.svg": "icons/instanceVariable.svg",
+      "library.svg": "icons/library.svg",
+      "macro.svg": "icons/macro.svg",
+      "module.svg": "icons/module.svg",
+      "struct.svg": "icons/struct.svg",
+      "union.svg": "icons/union.svg"
+    }
+  }
+}

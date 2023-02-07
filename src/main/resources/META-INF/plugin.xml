@@ -73,6 +73,7 @@
         <filePropertyPusher implementation="org.crystal.intellij.config.CrystalLanguageLevelPusher"/>
 
         <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
+        <iconMapper mappingFile="CrystalIconMappings.json"/>
         <!--suppress PluginXmlValidity -->
         <lang.symbolDocumentation implementation="org.crystal.intellij.presentation.CrSymbolDocumentationTargetProvider"/>
 

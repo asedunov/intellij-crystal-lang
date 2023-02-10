@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.1] - 2023-02-11
+
+### New features
+
+### Fixes
+
+- [Fix compatibility with IntelliJ IDEA EAP (231.6890.12)](https://github.com/asedunov/intellij-crystal-lang/issues/38)
+- [Add new icons according to IDEA "New UI" style](https://github.com/asedunov/intellij-crystal-lang/issues/37)
+
 ## [0.6] - 2023-02-05
 
 ### New features

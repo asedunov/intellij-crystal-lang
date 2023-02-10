@@ -15,16 +15,10 @@
     </ul>]]></description>
 
     <change-notes><![CDATA[
-    <h2>New features</h2>
+    <h2>Fixes</h2>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/32">#32</a> Crystal 1.7 support</li>
-      <li>New quickfixes:</li>
-      <ul>
-        <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/33">#33</a> Upgrade language level when some feature is available in newer version</li>
-        <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/34">#34</a> Add missing space in type restrictions</li>
-        <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/35">#35</a> Convert named tuples with constructor type into hash literals</li>
-        <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/36">#36</a> Remove call arguments and parameters at improper positions</li>
-      </ul>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/32">#38</a>Fix compatibility with IntelliJ IDEA EAP (231.6890.12)</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/32">#37</a>Add new icons according to IDEA "New UI" style</li>
     </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>

@@ -1,11 +1,11 @@
 package org.crystal.intellij.presentation
 
-import com.intellij.lang.documentation.DocumentationTarget
-import com.intellij.lang.documentation.symbol.SymbolDocumentationTargetProvider
 import com.intellij.model.Pointer
 import com.intellij.model.Symbol
 import com.intellij.navigation.TargetPresentation
 import com.intellij.openapi.project.Project
+import com.intellij.platform.documentation.DocumentationTarget
+import com.intellij.platform.documentation.SymbolDocumentationTargetProvider
 import com.intellij.pom.Navigatable
 import org.crystal.intellij.resolve.symbols.CrSym
 
@@ -14,7 +14,7 @@ class CrSymbolDocumentationTargetProvider : SymbolDocumentationTargetProvider {
     private class DocumentationTargetImpl(
         private val symbol: CrSym<*>
     ) : DocumentationTarget {
-        override fun presentation(): TargetPresentation {
+        override fun computePresentation(): TargetPresentation {
             return TargetPresentation
                 .builder(symbol.shortDescription)
                 .icon(symbol.getIcon())

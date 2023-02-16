@@ -1,0 +1,2 @@
+<error descr="Missing required key(s): 'name, version'">authors:
+  - John Smith</error>

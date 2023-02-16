@@ -18,18 +18,12 @@ class CrystalShardYamlCompletionTest(private val testFile: File) : BasePlatformT
     companion object {
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
-        fun testFiles() = getTestFilesAsParameters("shards/yaml/completion", "yml")
+        fun testFiles() = getShardYamlTestFilesAsParameters("shards/yaml/completion")
     }
 
     @Test
     fun testCompletion() {
-        val shardYmlName = if (testFile.name.endsWith("override.yml")) {
-            SHARD_OVERRIDE_YAML_NAME
-        } else {
-            SHARD_YAML_NAME
-        }
-        val content = FileUtil.loadFile(testFile)
-        myFixture.configureByText(shardYmlName, content)
+        myFixture.configureShardYml(testFile)
         val expectedVariants = myFixture.file.findDirective("# VARIANTS:")?.split(",")?.map { it.trim() }
         val actualVariants = myFixture
             .completeBasic()

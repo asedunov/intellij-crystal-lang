@@ -145,6 +145,16 @@
                          level="WARNING"
                          implementationClass="org.crystal.intellij.inspections.CrystalMissingMainFileInspection"/>
 
+        <localInspection language="yaml"
+                         shortName="ShardYamlMissingKeysInspection"
+                         suppressId="ShardYamlMissingKeys"
+                         bundle="messages.CrystalBundle"
+                         key="inspections.shard.yaml.missing.keys"
+                         groupKey="inspections.group"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.crystal.intellij.shards.yaml.inspections.ShardYamlMissingKeysInspection"/>
+
         <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
         <vetoRenameCondition implementation="org.crystal.intellij.refactoring.rename.CrystalVetoRenameCondition"/>
         <rename.symbolRenameTargetFactory implementation="org.crystal.intellij.refactoring.rename.CrystalSymbolRenameTargetFactory"/>

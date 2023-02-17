@@ -155,6 +155,16 @@
                          level="ERROR"
                          implementationClass="org.crystal.intellij.shards.yaml.inspections.ShardYamlMissingKeysInspection"/>
 
+        <localInspection language="yaml"
+                         shortName="ShardYamlUnknownKeysInspection"
+                         suppressId="ShardYamlUnknownKeys"
+                         bundle="messages.CrystalBundle"
+                         key="inspections.shard.yaml.unknown.keys"
+                         groupKey="inspections.group"
+                         enabledByDefault="true"
+                         level="ERROR"
+                         implementationClass="org.crystal.intellij.shards.yaml.inspections.ShardYamlUnknownKeysInspection"/>
+
         <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
         <vetoRenameCondition implementation="org.crystal.intellij.refactoring.rename.CrystalVetoRenameCondition"/>
         <rename.symbolRenameTargetFactory implementation="org.crystal.intellij.refactoring.rename.CrystalSymbolRenameTargetFactory"/>

@@ -1,0 +1,6 @@
+name: Test
+version: 1.0
+development_dependencies:
+  foo:
+    version: 1.0
+    <error descr="Key 'foo' is not expected here">foo</error>: bar

@@ -1,0 +1,6 @@
+name: Test
+version: 1.0
+targets:
+  foo:
+    main: foo.cr
+    <error descr="Key 'foo' is not expected here">foo</error>: baz

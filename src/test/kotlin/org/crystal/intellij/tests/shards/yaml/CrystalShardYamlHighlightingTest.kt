@@ -2,6 +2,7 @@ package org.crystal.intellij.tests.shards.yaml
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.crystal.intellij.shards.yaml.inspections.ShardYamlMissingKeysInspection
+import org.crystal.intellij.shards.yaml.inspections.ShardYamlUnknownKeysInspection
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -18,7 +19,8 @@ class CrystalShardYamlHighlightingTest(private val testFile: File) : BasePlatfor
     override fun setUp() {
         super.setUp()
         myFixture.enableInspections(
-            ShardYamlMissingKeysInspection::class.java
+            ShardYamlMissingKeysInspection::class.java,
+            ShardYamlUnknownKeysInspection::class.java
         )
     }
 

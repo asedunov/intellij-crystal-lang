@@ -1,0 +1,5 @@
+name: Test
+version: 1.0
+scripts:
+  postinstall: echo bar
+  <error descr="Key 'foo' is not expected here">foo</error>: bar

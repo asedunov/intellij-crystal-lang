@@ -1,2 +1,2 @@
-authors:
+<error descr="Key 'authors' is not expected here">authors</error>:
   - John Smith

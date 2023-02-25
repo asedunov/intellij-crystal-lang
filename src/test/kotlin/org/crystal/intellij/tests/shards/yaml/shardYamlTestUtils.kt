@@ -11,11 +11,16 @@ fun getShardYamlTestFilesAsParameters(dirName: String): List<Array<Any>> =
     getTestFilesAsParameters(dirName, "yml")
 
 fun CodeInsightTestFixture.configureShardYml(testFile: File) {
-    val shardYmlName = if (testFile.name.endsWith("override.yml")) {
+    val content = FileUtil.loadFile(testFile)
+    val isOverride = testFile.name.endsWith("override.yml")
+    configureShardYml(content, isOverride)
+}
+
+fun CodeInsightTestFixture.configureShardYml(text: String, isOverride: Boolean = false) {
+    val shardYmlName = if (isOverride) {
         SHARD_OVERRIDE_YAML_NAME
     } else {
         SHARD_YAML_NAME
     }
-    val content = FileUtil.loadFile(testFile)
-    configureByText(shardYmlName, content)
+    configureByText(shardYmlName, text)
 }

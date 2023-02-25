@@ -1,0 +1,32 @@
+# REF: test/aaa -> https://github.com/test/aaa
+# REF: git://git.example.org/bbb.git -> git://git.example.org/bbb.git
+# REF: https://hg.example.org/eee -> https://hg.example.org/eee
+# REF: test/ccc -> https://gitlab.com/test/ccc
+# REF: test/ddd -> https://bitbucket.org/test/ddd
+# REF: https://fossil.example.org/fff -> https://fossil.example.org/fff
+# REF: github.com/crystal-lang/crystal -> https://github.com/crystal-lang/crystal
+# REF: https://github.com/crystal-lang/shards -> https://github.com/crystal-lang/shards
+
+version: 1.0
+
+name: test
+
+dependencies:
+  aaa:
+    github: test/aaa
+  bbb:
+    git: git://git.example.org/bbb.git
+  eee:
+    hg: https://hg.example.org/eee
+
+development_dependencies:
+  ccc:
+    gitlab: test/ccc
+  ddd:
+    bitbucket: test/ddd
+  fff:
+    fossil: https://fossil.example.org/fff
+
+homepage: github.com/crystal-lang/crystal
+
+repository: https://github.com/crystal-lang/shards

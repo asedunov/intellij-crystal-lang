@@ -1,0 +1,19 @@
+version: 1.0
+
+name: test
+
+targets:
+  production:
+    main: src/main.cr
+  test:
+    main: src/test/test.cr
+  foo:
+    main: src/<error descr="Cannot resolve file 'foo.cr'">foo.cr</error>
+
+dependencies:
+  foo:
+    path: lib/libB.cr
+
+development_dependencies:
+  foo:
+    path: lib/<error descr="Cannot resolve file 'libA.cr'">libA.cr</error>

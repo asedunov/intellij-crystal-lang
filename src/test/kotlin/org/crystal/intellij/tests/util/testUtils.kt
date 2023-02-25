@@ -12,6 +12,10 @@ import org.crystal.intellij.config.findVersionOrLatest
 import org.crystal.intellij.psi.childrenOfType
 import java.io.File
 
+fun getTestDirectoriesAsParameters(rootDirName: String): List<Array<Any>> {
+    return File("src/testData/$rootDirName").listFiles { file -> file.isDirectory }!!.map { arrayOf(it) }
+}
+
 fun getTestFilesAsParameters(dirName: String, ext: String): List<Array<Any>> =
     FileUtil.fileTraverser(File("src/testData/$dirName"))
         .filter { file -> file.name.endsWith(".$ext") && !file.name.endsWith(".after.$ext") }
@@ -49,9 +53,8 @@ fun PsiFile.findDirective(prefix: String): String? {
 
 fun PsiFile.findDirectives(prefix: String): List<String> {
     val result = ArrayList<String>()
-    for (comment in childrenOfType<PsiComment>()) {
-        val text = comment.text
-        if (text.startsWith(prefix)) result += text.substring(prefix.length).trim()
+    for (line in text.lines()) {
+        if (line.startsWith(prefix)) result += line.substring(prefix.length).trim()
     }
     return result
 }

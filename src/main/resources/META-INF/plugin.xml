@@ -125,6 +125,9 @@
                                 implementationClass="org.crystal.intellij.shards.yaml.completion.ShardYamlCompletionContributor"
                                 id="CrShardsYamlKeyCompletionContributor"/>
 
+        <psi.referenceContributor language="yaml"
+                                  implementation="org.crystal.intellij.shards.yaml.references.ShardYamlReferenceContributor"/>
+
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"
                          suppressId="CrystalResolve"

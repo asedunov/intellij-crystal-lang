@@ -17,7 +17,14 @@ class ShardYamlReferenceContributor : PsiReferenceContributor() {
             .inFile(psiFile(YAMLFile::class.java).withName(SHARD_YAML_NAME, SHARD_OVERRIDE_YAML_NAME))
     )
 
+    private val urlPattern = psiElement(YAMLScalar::class.java).withParent(
+        psiElement(YAMLKeyValue::class.java)
+            .withName("homepage", "repository", "git", "github", "gitlab", "bitbucket", "hg", "fossil")
+            .inFile(psiFile(YAMLFile::class.java).withName(SHARD_YAML_NAME, SHARD_OVERRIDE_YAML_NAME))
+    )
+
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {
         registrar.registerReferenceProvider(pathPattern, ShardYamlFileReferenceProvider)
+        registrar.registerReferenceProvider(urlPattern, ShardYamlUrlReferenceProvider)
     }
 }

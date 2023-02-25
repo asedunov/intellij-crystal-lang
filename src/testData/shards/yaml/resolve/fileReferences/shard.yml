@@ -1,0 +1,28 @@
+# REF: src -> src
+# REF: main.cr -> src/main.cr
+# REF: test -> src/test
+# REF: test.cr -> src/test/test.cr
+# REF: foo.cr -> <null>
+# REF: lib -> lib
+# REF: libB.cr -> lib/libB.cr
+# REF: libA.cr -> <null>
+
+version: 1.0
+
+name: test
+
+targets:
+  production:
+    main: src/main.cr
+  test:
+    main: src/test/test.cr
+  foo:
+    main: src/foo.cr
+
+dependencies:
+  foo:
+    path: lib/libB.cr
+
+development_dependencies:
+  foo:
+    path: lib/libA.cr

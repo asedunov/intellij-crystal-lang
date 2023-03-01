@@ -1,20 +1,13 @@
 package org.crystal.intellij.stubs.indexes
 
-import com.intellij.openapi.project.Project
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.stubs.StringStubIndexExtension
-import com.intellij.psi.stubs.StubIndex
-import com.intellij.psi.stubs.StubIndexKey
 import org.crystal.intellij.psi.CrConstantSource
 
-object CrystalTypeBySuperclassNameIndex : StringStubIndexExtension<CrConstantSource>() {
-    private val KEY = StubIndexKey.createIndexKey<String, CrConstantSource>(
-        CrystalTypeBySuperclassNameIndex::class.java.canonicalName
+class CrystalTypeBySuperclassNameIndex : CrystalStringStubIndexExtensionBase<CrConstantSource>() {
+    companion object Helper: HelperBase<CrConstantSource>(
+        CrystalTypeBySuperclassNameIndex::class.java,
+        CrConstantSource::class.java
     )
 
-    override fun getKey() = KEY
-
-    override fun get(s: String, project: Project, scope: GlobalSearchScope): Collection<CrConstantSource> {
-        return StubIndex.getElements(KEY, s, project, scope, CrConstantSource::class.java)
-    }
+    override val helper
+        get() = Helper
 }

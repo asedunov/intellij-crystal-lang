@@ -12,7 +12,7 @@ import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrProperTypeSym
 import org.crystal.intellij.stubs.indexes.CrystalTypeBySuperclassNameIndex
 
-object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInheritorsSearch.Parameters>(true) {
+class CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInheritorsSearch.Parameters>(true) {
     private val rootsToSkip = setOf(CrStdFqNames.OBJECT, CrStdFqNames.REFERENCE, CrStdFqNames.VALUE, CrStdFqNames.STRUCT)
 
     override fun processQuery(
@@ -39,7 +39,7 @@ object CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInh
             val inheritorSym = program.memberScope.getTypeAs<CrModuleLikeSym>(it) ?: return@forEach
             processCandidateSymbol(inheritorSym, baseSym, checkDeep, searchScope, consumer, processed)
         }
-        val candidates = CrystalTypeBySuperclassNameIndex.get(superName, project, searchScope)
+        val candidates = CrystalTypeBySuperclassNameIndex[superName, project, searchScope]
         for (candidate in candidates) {
             val classDef = candidate as? CrTypeDefinition ?: continue
             val inheritorSym = classDef.resolveSymbol() as? CrModuleLikeSym ?: continue

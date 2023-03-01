@@ -3,9 +3,9 @@ package org.crystal.intellij.tests
 import com.intellij.openapi.editor.Caret
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope.FilesScope
-import com.intellij.psi.stubs.AbstractStubIndex
 import com.intellij.refactoring.suggested.startOffset
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.crystal.intellij.stubs.indexes.CrystalStringStubIndexExtensionBase
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test
@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.io.File
 import kotlin.math.max
+import kotlin.reflect.full.companionObjectInstance
 
 @RunWith(Parameterized::class)
 class CrystalIndexTest(private val testFile: File) : BasePlatformTestCase() {
@@ -32,10 +33,8 @@ class CrystalIndexTest(private val testFile: File) : BasePlatformTestCase() {
         val indexClassName = file.findDirective("# INDEX:")!!
         val key = file.findDirective("# KEY:")!!
         val indexClass = Class.forName("org.crystal.intellij.stubs.indexes.$indexClassName").kotlin
-        val index = indexClass.objectInstance as AbstractStubIndex<String, *>
-        val results = index
-            .get(key, project, FilesScope.fileScope(file))
-            .sortedBy { it.startOffset }
+        val index = indexClass.companionObjectInstance as CrystalStringStubIndexExtensionBase.HelperBase<*>
+        val results = index[key, project, FilesScope.fileScope(file)].sortedBy { it.startOffset }
         val caretModel = myFixture.editor.caretModel
         val carets = caretModel.allCarets
         for (i in 0 until max(carets.size, results.size)) {

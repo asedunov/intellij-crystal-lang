@@ -1,20 +1,13 @@
 package org.crystal.intellij.stubs.indexes
 
-import com.intellij.openapi.project.Project
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.stubs.StringStubIndexExtension
-import com.intellij.psi.stubs.StubIndex
-import com.intellij.psi.stubs.StubIndexKey
 import org.crystal.intellij.psi.CrMacro
 
-object CrystalMacroSignatureIndex : StringStubIndexExtension<CrMacro>() {
-    private val KEY = StubIndexKey.createIndexKey<String, CrMacro>(
-        CrystalMacroSignatureIndex::class.java.canonicalName
+class CrystalMacroSignatureIndex : CrystalStringStubIndexExtensionBase<CrMacro>() {
+    companion object Helper: HelperBase<CrMacro>(
+        CrystalMacroSignatureIndex::class.java,
+        CrMacro::class.java
     )
 
-    override fun getKey() = KEY
-
-    override fun get(s: String, project: Project, scope: GlobalSearchScope): Collection<CrMacro> {
-        return StubIndex.getElements(KEY, s, project, scope, CrMacro::class.java)
-    }
+    override val helper
+        get() = Helper
 }

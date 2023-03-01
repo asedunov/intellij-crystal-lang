@@ -11,11 +11,13 @@ import org.crystal.intellij.psi.CrFunctionLikeDefinition
 import org.crystal.intellij.psi.CrTypeDefinition
 
 sealed class CrystalDeclarationGroupingRuleProvider : FileStructureGroupRuleProvider {
-    object ByType : CrystalDeclarationGroupingRuleProvider() {
+    @Suppress("CanSealedSubClassBeObject")
+    class ByType : CrystalDeclarationGroupingRuleProvider() {
         override fun getDefinition(usageElement: PsiElement?) = usageElement?.parentOfType<CrTypeDefinition>()
     }
 
-    object ByFunction : CrystalDeclarationGroupingRuleProvider() {
+    @Suppress("CanSealedSubClassBeObject")
+    class ByFunction : CrystalDeclarationGroupingRuleProvider() {
         override fun getDefinition(usageElement: PsiElement?) = usageElement?.parentOfType<CrFunctionLikeDefinition>()
     }
 

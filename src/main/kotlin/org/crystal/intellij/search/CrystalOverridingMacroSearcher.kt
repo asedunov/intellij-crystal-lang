@@ -6,7 +6,7 @@ import org.crystal.intellij.resolve.symbols.CrMacroSym
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.stubs.indexes.CrystalMacroSignatureIndex
 
-object CrystalOverridingMacroSearcher : QueryExecutorBase<CrMacroSym, CrystalOverridingMacroSearch.Parameters>(true) {
+class CrystalOverridingMacroSearcher : QueryExecutorBase<CrMacroSym, CrystalOverridingMacroSearch.Parameters>(true) {
     override fun processQuery(
         queryParameters: CrystalOverridingMacroSearch.Parameters,
         consumer: Processor<in CrMacroSym>
@@ -18,11 +18,7 @@ object CrystalOverridingMacroSearcher : QueryExecutorBase<CrMacroSym, CrystalOve
             return
         }
 
-        val candidates = CrystalMacroSignatureIndex.get(
-            macroSym.signature.serialize(),
-            macroSym.program.project,
-            searchScope
-        )
+        val candidates = CrystalMacroSignatureIndex[macroSym.signature.serialize(), macroSym.program.project, searchScope]
         for (candidate in candidates) {
             val curMacroSym = candidate.resolveSymbol() ?: continue
             processNextMacro(macroSym, curMacroSym.namespace, consumer)

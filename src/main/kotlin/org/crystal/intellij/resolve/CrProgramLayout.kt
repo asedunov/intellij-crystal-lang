@@ -166,35 +166,27 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     fun getTypeSources(fqName: StableFqName): List<CrConstantSource> {
         return project.resolveCache.getOrCompute(TYPE_SOURCES, fqName) {
-            CrystalConstantFqNameIndex
-                .get(fqName.fullName, project, GlobalSearchScope.allScope(project))
-                .sortSources()
+            CrystalConstantFqNameIndex[fqName.fullName, project, GlobalSearchScope.allScope(project)].sortSources()
         } ?: emptyList()
     }
 
     fun getPrimaryTypeSourcesByParent(fqName: StableFqName?): List<CrConstantSource> {
         val fullName = fqName?.fullName ?: ""
         return project.resolveCache.getOrCompute(PRIMARY_TYPE_SOURCES_BY_PARENT, fullName) {
-            CrystalConstantParentFqNameIndex
-                .get(fullName, project, GlobalSearchScope.allScope(project))
-                .distinctBy { it.name }
+            CrystalConstantParentFqNameIndex[fullName, project, GlobalSearchScope.allScope(project)].distinctBy { it.name }
         } ?: emptyList()
     }
 
     fun getIncludeLikeSources(parentFqName: StableFqName?): List<CrIncludeLikeExpression> {
         val fullName = parentFqName?.fullName ?: ""
         return project.resolveCache.getOrCompute(INCLUDE_LIKE_SOURCES, fullName) {
-            CrystalIncludeLikeByContainerFqNameIndex
-                .get(fullName, project, GlobalSearchScope.allScope(project))
-                .sortSources()
+            CrystalIncludeLikeByContainerFqNameIndex[fullName, project, GlobalSearchScope.allScope(project)].sortSources()
         } ?: emptyList()
     }
 
     private fun getMacroSources(signature: CrMacroSignature): List<CrMacro> {
         return project.resolveCache.getOrCompute(MACRO_SOURCES_BY_SIGNATURE, signature) {
-            CrystalMacroSignatureIndex
-                .get(signature.serialize(), project, GlobalSearchScope.allScope(project))
-                .sortSources()
+            CrystalMacroSignatureIndex[signature.serialize(), project, GlobalSearchScope.allScope(project)].sortSources()
         } ?: emptyList()
     }
 
@@ -204,9 +196,7 @@ class CrProgramLayout(val program: CrProgramSym) {
 
     fun getMacroSources(fqName: MemberFqName): List<CrMacro> {
         return project.resolveCache.getOrCompute(MACRO_SOURCES_BY_FQ_NAME, fqName) {
-            CrystalMacroFqNameIndex
-                .get(fqName.fullName, project, GlobalSearchScope.allScope(project))
-                .sortSources()
+            CrystalMacroFqNameIndex[fqName.fullName, project, GlobalSearchScope.allScope(project)].sortSources()
         } ?: emptyList()
     }
 

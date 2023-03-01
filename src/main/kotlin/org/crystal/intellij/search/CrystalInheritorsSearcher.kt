@@ -58,8 +58,6 @@ class CrystalInheritorsSearcher : QueryExecutorBase<CrModuleLikeSym, CrystalInhe
     ): Boolean {
         if (baseSym !in candidate.parents) return true
         if (!consumer.process(candidate)) return false
-        if (checkDeep &&
-            !processDirectInheritors(candidate, true, searchScope, consumer, processed)) return false
-        return true
+        return !checkDeep || processDirectInheritors(candidate, true, searchScope, consumer, processed)
     }
 }

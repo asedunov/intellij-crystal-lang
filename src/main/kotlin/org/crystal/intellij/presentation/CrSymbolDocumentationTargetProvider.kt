@@ -4,8 +4,8 @@ import com.intellij.model.Pointer
 import com.intellij.model.Symbol
 import com.intellij.navigation.TargetPresentation
 import com.intellij.openapi.project.Project
-import com.intellij.platform.documentation.DocumentationTarget
-import com.intellij.platform.documentation.SymbolDocumentationTargetProvider
+import com.intellij.platform.backend.documentation.DocumentationTarget
+import com.intellij.platform.backend.documentation.SymbolDocumentationTargetProvider
 import com.intellij.pom.Navigatable
 import org.crystal.intellij.resolve.symbols.CrSym
 

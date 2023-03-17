@@ -70,7 +70,7 @@
         <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
         <iconMapper mappingFile="CrystalIconMappings.json"/>
         <!--suppress PluginXmlValidity -->
-        <platform.documentation.symbolTargetProvider implementation="org.crystal.intellij.presentation.CrSymbolDocumentationTargetProvider"/>
+        <platform.backend.documentation.symbolTargetProvider implementation="org.crystal.intellij.presentation.CrSymbolDocumentationTargetProvider"/>
 
         <elementDescriptionProvider implementation="org.crystal.intellij.presentation.CrystalElementDescriptionProvider"/>
 

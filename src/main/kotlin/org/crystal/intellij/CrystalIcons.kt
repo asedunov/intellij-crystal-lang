@@ -32,6 +32,8 @@ object CrystalIcons {
     val MODULE = load("module")
     val OVERRIDER = AllIcons.Gutter.OverridingMethod
     val OVERRIDEN = AllIcons.Gutter.OverridenMethod
+    val PARTIAL_CLASS = load("partialClass")
+    val PARTIAL_MODULE = load("partialModule")
     val PRIVATE = PlatformIcons.PRIVATE_ICON!!
     val PROTECTED = PlatformIcons.PROTECTED_ICON!!
     val PUBLIC = PlatformIcons.PUBLIC_ICON!!

@@ -9,8 +9,7 @@ import com.intellij.psi.PsiElement
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.CrystalIcons
 import org.crystal.intellij.psi.CrConstantName
-import org.crystal.intellij.psi.CrPathNameElement
-import org.crystal.intellij.psi.CrTypeDefinition
+import org.crystal.intellij.resolve.resolveAs
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleSym
 import org.crystal.intellij.search.CrystalInheritorsSearch
@@ -30,7 +29,7 @@ class CrystalInheritorsLineMarkerProvider : LineMarkerProvider {
     ) {
         for (e in elements) {
             if (e !is CrConstantName) continue
-            val sym = e.getModuleSym() ?: continue
+            val sym = e.resolveAs<CrModuleLikeSym>() ?: continue
             if (!sym.hasInheritors()) continue
             val isModule = sym is CrModuleSym
             val icon = if (isModule) CrystalIcons.INCLUDER else CrystalIcons.SUBCLASS
@@ -52,14 +51,8 @@ class CrystalInheritorsLineMarkerProvider : LineMarkerProvider {
         }
     }
 
-    private fun CrConstantName.getModuleSym(): CrModuleLikeSym? {
-        val path = parent as? CrPathNameElement ?: return null
-        val typeDef = path.parent as? CrTypeDefinition ?: return null
-        return typeDef.resolveSymbol() as? CrModuleLikeSym
-    }
-
     private fun getTooltip(e: CrConstantName): String? {
-        val sym = e.getModuleSym() ?: return null
+        val sym = e.resolveAs<CrModuleLikeSym>() ?: return null
         val isModule = sym is CrModuleSym
         val processor = CollectProcessorWithLimit<CrModuleLikeSym>(INHERITOR_THRESHOLD)
         CrystalInheritorsSearch.search(sym, true).forEach(processor)

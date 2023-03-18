@@ -8,6 +8,8 @@
       "library.svg": "icons/library.svg",
       "macro.svg": "icons/macro.svg",
       "module.svg": "icons/module.svg",
+      "partialClass.svg": "icons/partialClass.svg",
+      "partialModule.svg": "icons/partialModule.svg",
       "struct.svg": "icons/struct.svg",
       "union.svg": "icons/union.svg"
     }

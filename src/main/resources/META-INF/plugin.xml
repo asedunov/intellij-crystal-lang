@@ -101,6 +101,8 @@
         <codeInsight.lineMarkerProvider language="Crystal"
                                         implementationClass="org.crystal.intellij.lineMarkers.CrystalInheritorsLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="Crystal"
+                                        implementationClass="org.crystal.intellij.lineMarkers.CrystalPartialDeclarationLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="Crystal"
                                         implementationClass="org.crystal.intellij.lineMarkers.CrystalMacroOverrideLineMarkerProvider"/>
 
         <typeHierarchyProvider language="Crystal"

@@ -9,9 +9,8 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.util.parents
 import com.intellij.util.containers.addIfNotNull
 import org.crystal.intellij.config.stdlibRootPsiDirectory
-import org.crystal.intellij.psi.CrElement
-import org.crystal.intellij.psi.CrTypeDefinition
-import org.crystal.intellij.psi.parentStubOrPsiOfType
+import org.crystal.intellij.psi.*
+import org.crystal.intellij.resolve.symbols.CrConstantLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 
 fun Module.crystalPathRoots(): List<PsiFileSystemItem> {
@@ -35,4 +34,10 @@ fun PsiFile.isCrystalLibraryFile(): Boolean {
 fun CrElement.currentModuleLikeSym(): CrModuleLikeSym? {
     val typeDef = parentStubOrPsiOfType<CrTypeDefinition>()
     return if (typeDef != null) typeDef.resolveSymbol() as? CrModuleLikeSym else project.resolveFacade.program
+}
+
+inline fun <reified S : CrConstantLikeSym<*>> CrConstantName.resolveAs(): S? {
+    val path = parent as? CrPathNameElement ?: return null
+    val typeDef = path.parent as? CrTypeDefinition ?: return null
+    return typeDef.resolveSymbol() as? S
 }

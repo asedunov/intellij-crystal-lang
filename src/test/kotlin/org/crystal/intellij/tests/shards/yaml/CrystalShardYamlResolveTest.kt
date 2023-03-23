@@ -1,6 +1,5 @@
 package org.crystal.intellij.tests.shards.yaml
 
-import ai.grazie.utils.toLinkedSet
 import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.paths.WebReference
 import com.intellij.openapi.vfs.VfsUtilCore
@@ -32,7 +31,7 @@ class CrystalShardYamlResolveTest(private val testDir: File) : BasePlatformTestC
         myFixture.testDataPath = testDir.parent
         val vRoot = myFixture.copyDirectoryToProject(testDir.name, "")
         val shardFile = vRoot.findChild("shard.yml")!!.toPsi(project) as YAMLFile
-        val expectedInfos = shardFile.findDirectives("# REF:").toLinkedSet()
+        val expectedInfos = shardFile.findDirectives("# REF:").toSet()
         val actualInfos = shardFile
             .allDescendants()
             .filter { it is YAMLScalar }
@@ -47,7 +46,7 @@ class CrystalShardYamlResolveTest(private val testDir: File) : BasePlatformTestC
                 }
                 "${it.canonicalText} -> $targetText"
             }
-            .toLinkedSet()
+            .toSet()
         TestCase.assertEquals(expectedInfos, actualInfos)
     }
 }

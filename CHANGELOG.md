@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.7] - 2023-03-23
+
+### New features
+
+#### Completion
+- [Key completion for shard.yml](https://github.com/asedunov/intellij-crystal-lang/issues/26)
+
+#### Inspections
+- [Report when required keys are missing in shard.yml](https://github.com/asedunov/intellij-crystal-lang/issues/39)
+- [Report unknown keys in shard.yml](https://github.com/asedunov/intellij-crystal-lang/issues/39)
+- [Report unresolved file references in shard.yml](https://github.com/asedunov/intellij-crystal-lang/issues/41)
+
+#### Navigation
+- [Support file references in shard.yml](https://github.com/asedunov/intellij-crystal-lang/issues/40)
+- [Support URL references in shard.yml](https://github.com/asedunov/intellij-crystal-lang/issues/42)
+
+#### Editor
+- [Add line markers for partial definitions](https://github.com/asedunov/intellij-crystal-lang/issues/43)
+
+#### Configuration
+- [Implement Crystal project wizard](https://github.com/asedunov/intellij-crystal-lang/issues/27)
+
 ## [0.6.1] - 2023-02-11
 
 ### New features

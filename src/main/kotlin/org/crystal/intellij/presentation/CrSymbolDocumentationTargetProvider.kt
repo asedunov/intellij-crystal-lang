@@ -2,10 +2,10 @@ package org.crystal.intellij.presentation
 
 import com.intellij.model.Pointer
 import com.intellij.model.Symbol
-import com.intellij.navigation.TargetPresentation
 import com.intellij.openapi.project.Project
 import com.intellij.platform.backend.documentation.DocumentationTarget
 import com.intellij.platform.backend.documentation.SymbolDocumentationTargetProvider
+import com.intellij.platform.backend.presentation.TargetPresentation
 import com.intellij.pom.Navigatable
 import org.crystal.intellij.resolve.symbols.CrSym
 

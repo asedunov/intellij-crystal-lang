@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.1] - 2023-04-15
+
+### New features
+
+### Fixes
+
+- [Fix compatibility with IntelliJ IDEA 231.8770.17](https://github.com/asedunov/intellij-crystal-lang/issues/48)
+
 ## [0.7] - 2023-03-23
 
 ### New features

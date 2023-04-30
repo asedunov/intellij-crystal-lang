@@ -24,7 +24,7 @@ class CrystalFileRunConfigurationProducer : LazyRunConfigurationProducer<Crystal
         sourceElement: Ref<PsiElement>
     ): Boolean {
         val crFile = context.crystalFile ?: return false
-        configuration.filePath = crFile.virtualFile.path
+        configuration.setFileAndWorkingDirectory(crFile.virtualFile)
         configuration.name = configuration.suggestedName()
         return true
     }

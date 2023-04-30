@@ -12,20 +12,24 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.psi.PsiManager
+import com.intellij.util.io.isDirectory
 import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.psi.module
 import org.crystal.intellij.resolve.crystalPathRoots
 import org.crystal.intellij.sdk.CrystalLocalToolPeer
-import org.crystal.intellij.util.toPathOrNull
-import org.crystal.intellij.util.toPsi
+import org.crystal.intellij.shards.yaml.model.findAllShardYamls
+import org.crystal.intellij.util.*
 import org.jdom.Element
 import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.exists
 
 abstract class CrystalFileRunConfigurationBase(
     project: Project,
     name: String,
     factory: ConfigurationFactory
 ) : LocatableConfigurationBase<RunProfileState>(project, factory, name) {
+    var workingDirectory: Path? = project.findAllShardYamls().firstOrNull()?.toNioPath()?.parent
     var filePath: String? = null
     var env: EnvironmentVariablesData = EnvironmentVariablesData.DEFAULT
     var compilerArguments: String = ""
@@ -40,16 +44,18 @@ abstract class CrystalFileRunConfigurationBase(
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
-        filePath = element.getChild("filePath")?.text
+        workingDirectory = element.getNestedPath("workingDirectory")
+        filePath = element.getNestedString("filePath")
         env = EnvironmentVariablesData.readExternal(element)
-        compilerArguments = element.getChild("compilerArguments")?.text ?: ""
+        compilerArguments = element.getNestedString("compilerArguments") ?: ""
     }
 
     override fun writeExternal(element: Element) {
         super.writeExternal(element)
-        element.addContent(Element("filePath").apply { text = filePath })
+        element.addNestedPath("workingDirectory", workingDirectory)
+        element.addNestedValue("filePath", filePath)
         env.writeExternal(element)
-        element.addContent(Element("compilerArguments").apply { text = compilerArguments })
+        element.addNestedValue("compilerArguments", compilerArguments)
     }
 
     override fun checkConfiguration() {
@@ -60,6 +66,11 @@ abstract class CrystalFileRunConfigurationBase(
             file == null || !file.exists() -> throw RuntimeConfigurationError("Target file doesn't exist")
             !(file.isFile && file.extension == "cr") -> throw RuntimeConfigurationError("Target file is not valid")
         }
+        val workingDirectory = workingDirectory
+        when {
+            workingDirectory == null || !workingDirectory.exists() -> throw RuntimeConfigurationError("Working directory doesn't exist")
+            !workingDirectory.isDirectory() -> throw RuntimeConfigurationError("Working directory path refers to non-directory")
+        }
     }
 
     abstract val commandArgument: String
@@ -68,6 +79,7 @@ abstract class CrystalFileRunConfigurationBase(
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): CrystalFileRunState? {
         val filePath = filePath ?: return null
+        val workingDirectory = workingDirectory ?: return null
         val parameters = ArrayList<Any>(4)
 
         parameters += commandArgument
@@ -104,7 +116,9 @@ abstract class CrystalFileRunConfigurationBase(
             effectiveEnv = env.with(envMap)
         }
 
-        val commandLine = compiler.peer.buildCommandLine(parameters, effectiveEnv) ?: return null
+        val commandLine = compiler.peer
+            .buildCommandLine(parameters, effectiveEnv)
+            ?.withWorkDirectory(workingDirectory.toFile()) ?: return null
         return CrystalFileRunState(commandLine, environment)
     }
 }

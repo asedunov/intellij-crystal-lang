@@ -18,6 +18,10 @@ fun VirtualFile.toPsi(manager: PsiManager) =
 
 fun VirtualFile.toPsi(project: Project) = toPsi(PsiManager.getInstance(project))
 
+fun VirtualFile.isAncestor(file: VirtualFile, strict: Boolean = true): Boolean {
+    return VfsUtil.isAncestor(this, file, strict)
+}
+
 val PsiElement.virtualFile: VirtualFile?
     get() = PsiUtilCore.getVirtualFile(this)
 

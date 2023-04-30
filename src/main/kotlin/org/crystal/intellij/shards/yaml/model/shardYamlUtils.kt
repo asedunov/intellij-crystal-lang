@@ -1,6 +1,10 @@
 package org.crystal.intellij.shards.yaml.model
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.search.FilenameIndex
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.ReflectionUtil
 import org.jetbrains.yaml.meta.impl.YamlMetaTypeProvider
 import java.io.InputStreamReader
@@ -53,4 +57,8 @@ fun getShardYamlMetaTypeProvider(fileName: String): YamlMetaTypeProvider? {
         SHARD_OVERRIDE_YAML_NAME -> SHARD_OVERRIDE_YAML_META_TYPE_PROVIDER
         else -> return null
     }
+}
+
+fun Project.findAllShardYamls(): Collection<VirtualFile> {
+    return FilenameIndex.getVirtualFilesByName(SHARD_YAML_NAME, GlobalSearchScope.projectScope(this))
 }

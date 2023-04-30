@@ -3,6 +3,9 @@ package org.crystal.intellij.run
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.util.ProgramParametersConfigurator
 import com.intellij.openapi.project.Project
+import org.crystal.intellij.util.addNestedValue
+import org.crystal.intellij.util.getNestedBoolean
+import org.crystal.intellij.util.getNestedString
 import org.jdom.Element
 
 class CrystalFileRunConfiguration(
@@ -18,14 +21,14 @@ class CrystalFileRunConfiguration(
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
-        showProgress = element.getChild("showProgress")?.text.toBoolean()
-        programArguments = element.getChild("programArguments")?.text ?: ""
+        showProgress = element.getNestedBoolean("showProgress")
+        programArguments = element.getNestedString("programArguments") ?: ""
     }
 
     override fun writeExternal(element: Element) {
         super.writeExternal(element)
-        element.addContent(Element("showProgress").apply { text = "$showProgress" })
-        element.addContent(Element("programArguments").apply { text = programArguments })
+        element.addNestedValue("showProgress", showProgress)
+        element.addNestedValue("programArguments", programArguments)
     }
 
     override val commandArgument: String

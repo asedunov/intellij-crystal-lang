@@ -13,6 +13,7 @@ import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.run.CrystalFileRunConfiguration
 import org.crystal.intellij.run.CrystalFileRunConfigurationType
+import org.crystal.intellij.run.setFileAndWorkingDirectory
 import org.crystal.intellij.sdk.CrystalGeneratedProjectLayout
 import org.crystal.intellij.sdk.getCrystalCompiler
 import org.crystal.intellij.util.CrProcessResult
@@ -32,7 +33,7 @@ fun Project.addDefaultRunConfiguration(template: CrystalProjectTemplate, layout:
     val configuration = runManager
         .createConfiguration("Run", CrystalFileRunConfigurationType::class.java).apply {
             (configuration as CrystalFileRunConfiguration).apply {
-                filePath = layout.mainFile?.path
+                setFileAndWorkingDirectory(layout.mainFile)
             }
         }
 

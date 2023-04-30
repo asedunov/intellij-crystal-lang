@@ -15,6 +15,7 @@ class CrystalFileRunConfigurationEditor : CrystalFileRunConfigurationEditorBase<
         addFileToRun()
         addProgramArguments()
         addEnvironmentVariables()
+        addWorkingDirectory()
     }
 
     private fun Panel.addProgramArguments() {

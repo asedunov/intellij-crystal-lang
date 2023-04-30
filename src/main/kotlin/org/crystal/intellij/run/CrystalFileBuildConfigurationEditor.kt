@@ -11,6 +11,7 @@ class CrystalFileBuildConfigurationEditor : CrystalFileRunConfigurationEditorBas
         addCompilerArguments()
         addFileToRun()
         addEnvironmentVariables()
+        addWorkingDirectory()
         addOutputFile()
     }
 

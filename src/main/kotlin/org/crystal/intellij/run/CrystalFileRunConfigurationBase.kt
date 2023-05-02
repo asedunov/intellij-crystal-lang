@@ -13,6 +13,7 @@ import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.psi.PsiManager
 import com.intellij.util.io.isDirectory
+import com.intellij.util.io.isFile
 import org.crystal.intellij.config.crystalWorkspaceSettings
 import org.crystal.intellij.psi.module
 import org.crystal.intellij.resolve.crystalPathRoots
@@ -20,9 +21,10 @@ import org.crystal.intellij.sdk.CrystalLocalToolPeer
 import org.crystal.intellij.shards.yaml.model.findAllShardYamls
 import org.crystal.intellij.util.*
 import org.jdom.Element
-import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.exists
+import kotlin.io.path.extension
+import kotlin.io.path.pathString
 
 abstract class CrystalFileRunConfigurationBase(
     project: Project,
@@ -30,7 +32,7 @@ abstract class CrystalFileRunConfigurationBase(
     factory: ConfigurationFactory
 ) : LocatableConfigurationBase<RunProfileState>(project, factory, name) {
     var workingDirectory: Path? = project.findAllShardYamls().firstOrNull()?.toNioPath()?.parent
-    var filePath: String? = null
+    var targetFile: Path? = null
     var env: EnvironmentVariablesData = EnvironmentVariablesData.DEFAULT
     var compilerArguments: String = ""
 
@@ -39,13 +41,14 @@ abstract class CrystalFileRunConfigurationBase(
     abstract val suggestedNamePrefix: String
 
     override fun suggestedName(): String {
-        return suggestedNamePrefix + (filePath?.toPathOrNull()?.fileName?.let { " $it" } ?: "")
+        return suggestedNamePrefix + (targetFile?.fileName?.let { " $it" } ?: "")
     }
 
     override fun readExternal(element: Element) {
         super.readExternal(element)
         workingDirectory = element.getNestedPath("workingDirectory")
-        filePath = element.getNestedString("filePath")
+        targetFile = element.getNestedPath("targetFile")
+            ?: element.getNestedString("filePath")?.toPathOrNull()
         env = EnvironmentVariablesData.readExternal(element)
         compilerArguments = element.getNestedString("compilerArguments") ?: ""
     }
@@ -53,7 +56,7 @@ abstract class CrystalFileRunConfigurationBase(
     override fun writeExternal(element: Element) {
         super.writeExternal(element)
         element.addNestedPath("workingDirectory", workingDirectory)
-        element.addNestedValue("filePath", filePath)
+        element.addNestedPath("targetFile", targetFile)
         env.writeExternal(element)
         element.addNestedValue("compilerArguments", compilerArguments)
     }
@@ -61,10 +64,10 @@ abstract class CrystalFileRunConfigurationBase(
     override fun checkConfiguration() {
         val compilerTool = project.crystalWorkspaceSettings.compiler
         if (!compilerTool.isValid) throw RuntimeConfigurationError("Crystal is not configured")
-        val file = filePath?.let(::File)
+        val file = targetFile
         when {
             file == null || !file.exists() -> throw RuntimeConfigurationError("Target file doesn't exist")
-            !(file.isFile && file.extension == "cr") -> throw RuntimeConfigurationError("Target file is not valid")
+            !(file.isFile() && file.extension == "cr") -> throw RuntimeConfigurationError("Target file is not valid")
         }
         val workingDirectory = workingDirectory
         when {
@@ -78,7 +81,7 @@ abstract class CrystalFileRunConfigurationBase(
     open fun patchArgumentList(arguments: ArrayList<Any>) {}
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): CrystalFileRunState? {
-        val filePath = filePath ?: return null
+        val targetFile = targetFile ?: return null
         val workingDirectory = workingDirectory ?: return null
         val parameters = ArrayList<Any>(4)
 
@@ -91,7 +94,7 @@ abstract class CrystalFileRunConfigurationBase(
         val compilerArgList = ProgramParametersConfigurator.expandMacrosAndParseParameters(compilerArguments)
         parameters.addAll(compilerArgList)
 
-        parameters += File(filePath)
+        parameters += targetFile.toFile()
 
         patchArgumentList(parameters)
 
@@ -102,7 +105,7 @@ abstract class CrystalFileRunConfigurationBase(
         val project = environment.project
         val module = StandardFileSystems
             .local()
-            .findFileByPath(filePath)
+            .findFileByPath(targetFile.pathString)
             ?.toPsi(PsiManager.getInstance(project))
             ?.module()
         val crystalPathRoots = module?.crystalPathRoots() ?: emptyList()

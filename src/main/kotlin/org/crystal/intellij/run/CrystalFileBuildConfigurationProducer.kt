@@ -6,6 +6,7 @@ import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 import com.intellij.util.PathUtil
 import org.crystal.intellij.psi.CrFile
+import kotlin.io.path.pathString
 
 class CrystalFileBuildConfigurationProducer : LazyRunConfigurationProducer<CrystalFileBuildConfiguration>() {
     override fun getConfigurationFactory() = CrystalFileBuildConfigurationType.getInstance().factory
@@ -15,7 +16,7 @@ class CrystalFileBuildConfigurationProducer : LazyRunConfigurationProducer<Cryst
         context: ConfigurationContext
     ): Boolean {
         val crFile = context.crystalFile ?: return false
-        return PathUtil.toSystemIndependentName(configuration.filePath) == crFile.virtualFile.path
+        return PathUtil.toSystemIndependentName(configuration.targetFile?.pathString) == crFile.virtualFile.path
     }
 
     override fun setupConfigurationFromContext(

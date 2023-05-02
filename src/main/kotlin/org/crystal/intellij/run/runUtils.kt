@@ -1,6 +1,7 @@
 package org.crystal.intellij.run
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.io.toNioPath
 import com.intellij.openapi.vfs.VirtualFile
 import org.crystal.intellij.shards.yaml.model.findAllShardYamls
 import org.crystal.intellij.util.isAncestor
@@ -14,7 +15,7 @@ private fun suggestWorkingDirectoryByFileToRun(file: VirtualFile, project: Proje
 }
 
 fun CrystalFileRunConfigurationBase.setFileAndWorkingDirectory(file: VirtualFile?) {
-    filePath = file?.path
+    targetFile = file?.path?.toNioPath()
     val wcCandidate = file?.let { suggestWorkingDirectoryByFileToRun(it, project) }
     if (wcCandidate != null) {
         workingDirectory = wcCandidate.toNioPath()

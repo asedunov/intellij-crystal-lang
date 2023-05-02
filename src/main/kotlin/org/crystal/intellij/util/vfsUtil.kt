@@ -6,6 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiUtilCore
+import java.nio.file.Path
 
 operator fun VirtualFile.get(name: String) = when (name) {
     "." -> this
@@ -25,6 +26,8 @@ fun VirtualFile.isAncestor(file: VirtualFile, strict: Boolean = true): Boolean {
 val PsiElement.virtualFile: VirtualFile?
     get() = PsiUtilCore.getVirtualFile(this)
 
-fun VirtualFile.fullRefresh() {
-    VfsUtil.markDirtyAndRefresh(false, true, true, this)
+fun VirtualFile.fullRefresh(async: Boolean) {
+    VfsUtil.markDirtyAndRefresh(async, true, true, this)
 }
+
+fun Path.findVirtualFile(refreshIfNeeded: Boolean) = VfsUtil.findFile(this, refreshIfNeeded)

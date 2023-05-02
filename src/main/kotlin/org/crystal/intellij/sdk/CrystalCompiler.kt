@@ -21,7 +21,7 @@ class CrystalCompiler(val peer: CrystalToolPeer) {
             ?.execute(null) { runProcess() }
             ?.unwrapOrElse { return Result.Err(it) }
 
-        baseDir.fullRefresh()
+        baseDir.fullRefresh(false)
 
         val shardYaml = baseDir.findChild(SHARD_YAML_NAME)
         val mainFile = baseDir.findFileByRelativePath("src/$name.cr")

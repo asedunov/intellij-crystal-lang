@@ -14,17 +14,16 @@ import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.util.io.exists
 import com.intellij.util.io.isFile
-import com.intellij.util.text.nullize
 import org.crystal.intellij.CrystalBundle
+import org.crystal.intellij.util.textAsPath
 import java.nio.file.Path
-import java.nio.file.Paths
 import javax.swing.JComponent
 import kotlin.io.path.extension
 import kotlin.io.path.name
 
 abstract class CrystalFileRunConfigurationEditorBase<C : CrystalFileRunConfigurationBase> : SettingsEditor<C>() {
     private lateinit var workingDirectoryEditor: TextFieldWithBrowseButton
-    private lateinit var fileEditor: TextFieldWithBrowseButton
+    private lateinit var targetFileEditor: TextFieldWithBrowseButton
     private lateinit var envEditor: EnvironmentVariablesTextFieldWithBrowseButton
     private lateinit var compilerArgumentsEditor: RawCommandLineEditor
 
@@ -60,7 +59,9 @@ abstract class CrystalFileRunConfigurationEditorBase<C : CrystalFileRunConfigura
 
     protected fun Panel.addFileToRun() {
         row("Target file: ") {
-            fileEditor = textFieldWithBrowseButton(null, null, fileChooserDescriptor())
+            targetFileEditor = textFieldWithBrowseButton(null, null, fileChooserDescriptor())
+                .resizableColumn()
+                .align(AlignX.FILL)
                 .component
         }
     }
@@ -98,21 +99,18 @@ abstract class CrystalFileRunConfigurationEditorBase<C : CrystalFileRunConfigura
 
     override fun createEditor(): JComponent = component
 
-    private var workingDirectory: Path?
-        get() = workingDirectoryEditor.text.nullize()?.let { Paths.get(it) }
-        set(value) {
-            workingDirectoryEditor.text = value?.toString().orEmpty()
-        }
+    private var targetFile: Path? by textAsPath(::targetFileEditor)
+    private var workingDirectory: Path? by textAsPath(::workingDirectoryEditor)
 
     override fun resetEditorFrom(configuration: C) {
-        fileEditor.text = configuration.filePath ?: ""
+        targetFile = configuration.targetFile
         envEditor.data = configuration.env
         compilerArgumentsEditor.text = configuration.compilerArguments
         workingDirectory = configuration.workingDirectory
     }
 
     override fun applyEditorTo(configuration: C) {
-        configuration.filePath = fileEditor.text
+        configuration.targetFile = targetFile
         configuration.env = envEditor.data
         configuration.compilerArguments = compilerArgumentsEditor.text
         configuration.workingDirectory = workingDirectory

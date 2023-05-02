@@ -212,6 +212,8 @@
         <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileRunConfigurationProducer"/>
         <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileBuildConfigurationProducer"/>
 
+        <runConfigurationTemplateProvider implementation="org.crystal.intellij.run.CrystalRunConfigurationTemplateProvider"/>
+
         <moduleBuilder builderClass="org.crystal.intellij.config.project.CrystalModuleBuilder"/>
         <directoryProjectGenerator implementation="org.crystal.intellij.config.project.CrystalDirectoryProjectGenerator"/>
     </extensions>

@@ -3534,7 +3534,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             composite(CR_LIBRARY_DEFINITION) {
                 nextTokenSkipSpacesAndNewlines()
 
-                if (ll >= CrystalLevel.CRYSTAL_1_7) {
+                if (ll >= CrystalLevel.CRYSTAL_1_8) {
                     parsePath()
                 }
                 else {

@@ -11,9 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.refactoring.util.CommonRefactoringUtil
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.config.crystalWorkspaceSettings
-import org.crystal.intellij.run.CrystalFileRunConfiguration
-import org.crystal.intellij.run.CrystalFileRunConfigurationType
-import org.crystal.intellij.run.setFileAndWorkingDirectory
+import org.crystal.intellij.run.*
 import org.crystal.intellij.sdk.CrystalGeneratedProjectLayout
 import org.crystal.intellij.sdk.getCrystalCompiler
 import org.crystal.intellij.util.CrProcessResult
@@ -30,15 +28,22 @@ fun Project.openFiles(layout: CrystalGeneratedProjectLayout) {
 fun Project.addDefaultRunConfiguration(template: CrystalProjectTemplate, layout: CrystalGeneratedProjectLayout) {
     if (template != CrystalProjectTemplate.APPLICATION) return
     val runManager = RunManager.getInstance(this)
-    val configuration = runManager
+    val buildConfig = runManager
+        .createConfiguration("Build", CrystalFileBuildConfigurationType::class.java).apply {
+            (configuration as CrystalFileBuildConfiguration).apply {
+                setFileAndWorkingDirectory(layout.mainFile, layout.shardYaml)
+            }
+            isActivateToolWindowBeforeRun = false
+        }
+    runManager.addConfiguration(buildConfig)
+    val runConfig = runManager
         .createConfiguration("Run", CrystalFileRunConfigurationType::class.java).apply {
             (configuration as CrystalFileRunConfiguration).apply {
                 setFileAndWorkingDirectory(layout.mainFile, layout.shardYaml)
             }
         }
-
-    runManager.addConfiguration(configuration)
-    runManager.selectedConfiguration = configuration
+    runManager.addConfiguration(runConfig)
+    runManager.selectedConfiguration = runConfig
 }
 
 private val log = Logger.getInstance("ProjectWizardUtils")

@@ -2,7 +2,10 @@ package org.crystal.intellij.run
 
 import com.intellij.execution.Executor
 import com.intellij.execution.configuration.EnvironmentVariablesData
-import com.intellij.execution.configurations.*
+import com.intellij.execution.configurations.ConfigurationFactory
+import com.intellij.execution.configurations.LocatableConfigurationBase
+import com.intellij.execution.configurations.RunProfileState
+import com.intellij.execution.configurations.RuntimeConfigurationError
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.util.ProgramParametersConfigurator
 import com.intellij.openapi.project.Project
@@ -77,14 +80,7 @@ abstract class CrystalFileRunConfigurationBase(
 
     open fun patchArgumentList(arguments: ArrayList<Any>) {}
 
-    open fun createState(
-        commandLine: GeneralCommandLine,
-        environment: ExecutionEnvironment
-    ): CrystalFileRunStateBase {
-        return CrystalFileRunStateBase(commandLine, environment)
-    }
-
-    override fun getState(executor: Executor, environment: ExecutionEnvironment): CrystalFileRunStateBase? {
+    override fun getState(executor: Executor, environment: ExecutionEnvironment): CrystalFileRunState? {
         val targetFile = targetFile ?: return null
         val workingDirectory = workingDirectory ?: return null
         val parameters = ArrayList<Any>(4)
@@ -126,6 +122,6 @@ abstract class CrystalFileRunConfigurationBase(
         val commandLine = compiler.peer
             .buildCommandLine(parameters, effectiveEnv)
             ?.withWorkDirectory(workingDirectory.toFile()) ?: return null
-        return createState(commandLine, environment)
+        return CrystalFileRunState(commandLine, environment)
     }
 }

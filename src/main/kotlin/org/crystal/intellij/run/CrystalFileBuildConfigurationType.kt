@@ -7,18 +7,18 @@ import com.intellij.execution.configurations.RunConfiguration
 import com.intellij.openapi.project.Project
 import org.crystal.intellij.CrystalIcons
 
-class CrystalFileRunConfigurationType : ConfigurationTypeBase(
-    "CrystalFileRunConfiguration",
-    "Crystal Run",
-    "Crystal file run configuration",
+class CrystalFileBuildConfigurationType : ConfigurationTypeBase(
+    "CrystalFileBuildConfiguration",
+    "Crystal Build",
+    "Crystal file build configuration",
     CrystalIcons.LANGUAGE
 ) {
     init {
         addFactory(object : ConfigurationFactory(this) {
-            override fun getId() = "Crystal Run"
+            override fun getId() = "Crystal Build"
 
             override fun createTemplateConfiguration(project: Project): RunConfiguration {
-                return CrystalFileRunConfiguration(project, "Crystal Run", this)
+                return CrystalFileBuildConfiguration(project, "Crystal Build", this)
             }
         })
     }
@@ -26,8 +26,8 @@ class CrystalFileRunConfigurationType : ConfigurationTypeBase(
     val factory: ConfigurationFactory get() = configurationFactories.single()
 
     companion object {
-        fun getInstance(): CrystalFileRunConfigurationType {
-            return ConfigurationTypeUtil.findConfigurationType(CrystalFileRunConfigurationType::class.java)
+        fun getInstance(): CrystalFileBuildConfigurationType {
+            return ConfigurationTypeUtil.findConfigurationType(CrystalFileBuildConfigurationType::class.java)
         }
     }
 }

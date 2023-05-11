@@ -1,8 +1,6 @@
 package org.crystal.intellij.run
 
 import com.intellij.execution.configurations.ConfigurationFactory
-import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.openapi.project.Project
 import org.crystal.intellij.util.addNestedValue
 import org.crystal.intellij.util.getNestedString
@@ -39,13 +37,6 @@ class CrystalFileBuildConfiguration(
             arguments += "-o"
             arguments += outputFileName
         }
-    }
-
-    override fun createState(
-        commandLine: GeneralCommandLine,
-        environment: ExecutionEnvironment
-    ): CrystalFileRunStateBase {
-        return CrystalFileBuildState(commandLine, environment)
     }
 
     override fun getConfigurationEditor() = CrystalFileBuildConfigurationEditor()

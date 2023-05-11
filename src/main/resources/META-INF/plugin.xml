@@ -207,7 +207,9 @@
                   implementationClass="org.crystal.intellij.refactoring.rename.CrystalRenameUsageSearcher"/>
 
         <configurationType implementation="org.crystal.intellij.run.CrystalFileRunConfigurationType"/>
+        <configurationType implementation="org.crystal.intellij.run.CrystalFileBuildConfigurationType"/>
         <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileRunConfigurationProducer"/>
+        <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileBuildConfigurationProducer"/>
 
         <moduleBuilder builderClass="org.crystal.intellij.config.project.CrystalModuleBuilder"/>
         <directoryProjectGenerator implementation="org.crystal.intellij.config.project.CrystalDirectoryProjectGenerator"/>

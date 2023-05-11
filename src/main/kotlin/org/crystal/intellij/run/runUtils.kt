@@ -14,9 +14,9 @@ private fun suggestWorkingDirectoryByFileToRun(file: VirtualFile, project: Proje
     return null
 }
 
-fun CrystalFileRunConfigurationBase.setFileAndWorkingDirectory(file: VirtualFile?) {
-    targetFile = file?.path?.toNioPath()
-    val wcCandidate = file?.let { suggestWorkingDirectoryByFileToRun(it, project) }
+fun CrystalFileRunConfigurationBase.setFileAndWorkingDirectory(mainFile: VirtualFile?, shardFile: VirtualFile? = null) {
+    targetFile = mainFile?.path?.toNioPath()
+    val wcCandidate = shardFile?.parent ?: mainFile?.let { suggestWorkingDirectoryByFileToRun(it, project) }
     if (wcCandidate != null) {
         workingDirectory = wcCandidate.toNioPath()
     }

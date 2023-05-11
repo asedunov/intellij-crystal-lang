@@ -33,7 +33,7 @@ fun Project.addDefaultRunConfiguration(template: CrystalProjectTemplate, layout:
     val configuration = runManager
         .createConfiguration("Run", CrystalFileRunConfigurationType::class.java).apply {
             (configuration as CrystalFileRunConfiguration).apply {
-                setFileAndWorkingDirectory(layout.mainFile)
+                setFileAndWorkingDirectory(layout.mainFile, layout.shardYaml)
             }
         }
 

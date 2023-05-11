@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8] - 2023-05-12
+
+### New features
+
+#### General
+- [Crystal 1.8 support](https://github.com/asedunov/intellij-crystal-lang/issues/55)
+
+#### Execution
+- [Allow user to specify working directory in Crystal run configurations](https://github.com/asedunov/intellij-crystal-lang/issues/53)
+
+#### Build
+- [Add run configuration for project build](https://github.com/asedunov/intellij-crystal-lang/issues/52)
+- [Track compilation progress in Build toolwindow](https://github.com/asedunov/intellij-crystal-lang/issues/54)
+
 ## [0.7.1] - 2023-04-15
 
 ### New features

@@ -7,6 +7,7 @@ import com.intellij.execution.configurations.RunConfiguration
 import com.intellij.execution.impl.RunConfigurationTemplateProvider
 import com.intellij.execution.impl.RunManagerImpl
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl
+import com.intellij.openapi.util.ModificationTracker
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
@@ -19,7 +20,7 @@ class CrystalRunConfigurationTemplateProvider : UserDataHolderBase(), RunConfigu
     ): RunnerAndConfigurationSettingsImpl? {
         if (factory.type == CrystalFileBuildConfigurationType.getInstance()) {
             return CachedValuesManager.getManager(runManager.project).getCachedValue(this) {
-                CachedValueProvider.Result(createTemplate(runManager))
+                CachedValueProvider.Result(createTemplate(runManager), ModificationTracker.NEVER_CHANGED)
             }
         }
         return null

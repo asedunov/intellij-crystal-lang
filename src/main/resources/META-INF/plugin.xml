@@ -16,9 +16,19 @@
     </ul>]]></description>
 
     <change-notes><![CDATA[
-    <h2>Fixes</h2>
+    <h2>New features</h2>
+    <h3>General</h3>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/48">#48</a> Fix compatibility with IntelliJ IDEA 231.8770.17</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/55">#55</a> Crystal 1.8 support</li>
+    </ul>
+    <h3>Execution</h3>
+    <ul>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/53">#53</a> Allow user to specify working directory in Crystal run configurations</li>
+    </ul>
+    <h3>Build</h3>
+    <ul>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/52">#52</a> Add run configuration for project build</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/54">#54</a> Track compilation progress in Build toolwindow</li>
     </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>

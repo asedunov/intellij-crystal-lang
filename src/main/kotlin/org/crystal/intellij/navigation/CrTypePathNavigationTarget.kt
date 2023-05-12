@@ -3,8 +3,8 @@ package org.crystal.intellij.navigation
 import com.intellij.codeInsight.navigation.fileStatusAttributes
 import com.intellij.ide.util.PsiElementListCellRenderer
 import com.intellij.model.Pointer
-import com.intellij.navigation.NavigationTarget
 import com.intellij.openapi.vfs.newvfs.VfsPresentationUtil
+import com.intellij.platform.backend.navigation.NavigationTarget
 import com.intellij.platform.backend.presentation.TargetPresentation
 import org.crystal.intellij.presentation.getIcon
 import org.crystal.intellij.presentation.locationString

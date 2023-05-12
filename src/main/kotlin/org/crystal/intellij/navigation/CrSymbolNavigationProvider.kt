@@ -1,9 +1,9 @@
 package org.crystal.intellij.navigation
 
 import com.intellij.model.Symbol
-import com.intellij.navigation.NavigationTarget
 import com.intellij.navigation.SymbolNavigationProvider
 import com.intellij.openapi.project.Project
+import com.intellij.platform.backend.navigation.NavigationTarget
 import org.crystal.intellij.psi.CrTypeDefinition
 import org.crystal.intellij.resolve.symbols.CrSym
 

@@ -1,13 +1,12 @@
 package org.crystal.intellij.run
 
 import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.Panel
-import com.intellij.ui.dsl.gridLayout.HorizontalAlign
+import com.intellij.ui.layout.LayoutBuilder
 
 class CrystalFileBuildConfigurationEditor : CrystalFileRunConfigurationEditorBase<CrystalFileBuildConfiguration>() {
     private lateinit var outputFileNameEditor: JBTextField
 
-    override fun Panel.initUI() {
+    override fun LayoutBuilder.initUI() {
         addCompilerArguments()
         addFileToRun()
         addEnvironmentVariables()
@@ -15,12 +14,9 @@ class CrystalFileBuildConfigurationEditor : CrystalFileRunConfigurationEditorBas
         addOutputFile()
     }
 
-    private fun Panel.addOutputFile() {
+    private fun LayoutBuilder.addOutputFile() {
         row("Output file name: ") {
-            outputFileNameEditor = textField()
-                .resizableColumn()
-                .horizontalAlign(HorizontalAlign.FILL)
-                .component
+            outputFileNameEditor = JBTextField()(growX).component
         }
     }
 

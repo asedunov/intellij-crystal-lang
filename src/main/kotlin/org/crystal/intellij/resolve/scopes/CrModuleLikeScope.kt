@@ -28,7 +28,7 @@ class CrModuleLikeScope(
     private val declaredMacrosBySignatureSlice = newResolveSlice<CrMacroSignature, List<CrMacroSym>>("DECLARED_MACROS_BY_SIGNATURE: ${symbol.fqName}")
     private val declaredMacrosForCallResolveSlice = newResolveSlice<String, List<CrMacroSym>>("DECLARED_MACROS_FOR_CALL_RESOLVE: ${symbol.fqName}")
     private val macrosByNameSlice = newResolveSlice<CrMacroSignature, List<CrMacroSym>>("MACROS_BY_NAME: ${symbol.fqName}")
-    private val macroByCallSlice = newResolveSlice<CrCall, CrMacroSym>("MACRO_BY_CALL: ${symbol.fqName}")
+    private val resolvedMacroCallSlice = newResolveSlice<CrCall, CrResolvedMacroCall>("RESOLVED_MACRO_CALL: ${symbol.fqName}")
 
     private fun createTypeSymbol(fqName: StableFqName, sources: List<CrConstantSource>): CrConstantLikeSym<*>? {
         if (fqName == CrStdFqNames.CLASS) return CrMetaclassSym(
@@ -110,9 +110,9 @@ class CrModuleLikeScope(
         }
     }
 
-    private tailrec fun ParentList.findMacroInParents(call: CrCall): CrMacroSym? {
+    private tailrec fun ParentList.resolveMacroCallInParents(call: CrCall): CrResolvedMacroCall? {
         val macroOwner = if (this@CrModuleLikeScope.symbol.isMetaclass) symbol.metaclass else symbol
-        return macroOwner.memberScope.getMacro(call) ?: prev?.findMacroInParents(call)
+        return macroOwner.memberScope.lookupMacroCall(call) ?: prev?.resolveMacroCallInParents(call)
     }
 
     private fun getDeclaredMacros(signature: CrMacroSignature): List<CrMacroSym> {
@@ -155,14 +155,15 @@ class CrModuleLikeScope(
         } ?: emptyList()
     }
 
-    override fun getMacro(call: CrCall): CrMacroSym? {
+    override fun lookupMacroCall(call: CrCall): CrResolvedMacroCall? {
         val name = call.expression.name ?: return null
         if (name in HOOK_NAMES) return null
-        return project.resolveCache.getOrCompute(macroByCallSlice, call) {
+        return project.resolveCache.getOrCompute(resolvedMacroCallSlice, call) {
             val macroOwner = if (symbol.isMetaclass) symbol else symbol.metaclass
             // TODO: check if there are methods with the same name
-            (macroOwner.memberScope as? CrModuleLikeScope)?.getDeclaredMacrosForCallResolve(name)?.firstOrNull { it.matches(call) }
-                ?: (symbol.instanceSym ?: symbol).parents?.findMacroInParents(call)
+            val macros = (macroOwner.memberScope as? CrModuleLikeScope)?.getDeclaredMacrosForCallResolve(name)
+            macros?.firstOrNull { it.matches(call) }?.let { CrResolvedMacroCall(call, it) }
+                ?: (symbol.instanceSym ?: symbol).parents?.resolveMacroCallInParents(call)
         }
     }
 }

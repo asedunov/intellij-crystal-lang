@@ -36,14 +36,14 @@ macro <warning descr="#11: Macro \"foo\"">foo</warning>(a, b, c)
 
 end
 
-<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#2: Macro \"foo\"">foo</warning> 1
-<warning descr="#4: Module \"M\"">M</warning>.<warning descr="#5: Macro \"foo\"">foo</warning> 1
+<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#2: Macro \"foo\", call<args: 0, params: 0>">foo</warning> 1
+<warning descr="#4: Module \"M\"">M</warning>.<warning descr="#5: Macro \"foo\", call<args: 0, params: 0>">foo</warning> 1
 
-<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#8: Macro \"foo\"">foo</warning> 1, 2
-<warning descr="#4: Module \"M\"">M</warning>.<warning descr="#8: Macro \"foo\"">foo</warning> 1, 2
+<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#8: Macro \"foo\", call<args: 0, 1, params: 0, 1>">foo</warning> 1, 2
+<warning descr="#4: Module \"M\"">M</warning>.<warning descr="#8: Macro \"foo\", call<args: 0, 1, params: 0, 1>">foo</warning> 1, 2
 
-<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#11: Macro \"foo\"">foo</warning> 1, 2, 3
-<warning descr="#4: Module \"M\"">M</warning>.<warning descr="#11: Macro \"foo\"">foo</warning> 1, 2, 3
+<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#11: Macro \"foo\", call<args: 0, 1, 2, params: 0, 1, 2>">foo</warning> 1, 2, 3
+<warning descr="#4: Module \"M\"">M</warning>.<warning descr="#11: Macro \"foo\", call<args: 0, 1, 2, params: 0, 1, 2>">foo</warning> 1, 2, 3
 
-<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#3: Macro \"bar\"">bar</warning> 1
+<warning descr="#1: Class \"A\"">A</warning>.<warning descr="#3: Macro \"bar\", call<args: 0, params: 0>">bar</warning> 1
 <warning descr="#4: Module \"M\"">M</warning>.bar 1

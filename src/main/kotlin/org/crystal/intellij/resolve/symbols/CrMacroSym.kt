@@ -59,8 +59,9 @@ sealed class CrMacroSym(
         source.parameters.map { CrMacroParameterSym(it, this) }.toList()
     }
 
-    private val splatIndex: Int
-        get() = parameters.indexOfFirst { it.source.kind == CrParameterKind.SPLAT }
+    val splatIndex: Int by lazy {
+        parameters.indexOfFirst { it.source.kind == CrParameterKind.SPLAT }
+    }
 
     private fun matchPositionalArgs(
         args: List<CrCallArgument>,

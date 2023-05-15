@@ -12,5 +12,5 @@ interface CrScope {
 
     fun getAllMacros(signature: CrMacroSignature): List<CrMacroSym> = emptyList()
 
-    fun getMacro(call: CrCall): CrMacroSym? = null
+    fun lookupMacroCall(call: CrCall): CrResolvedMacroCall? = null
 }

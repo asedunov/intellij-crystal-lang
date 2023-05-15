@@ -9,13 +9,16 @@ import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.currentModuleLikeSym
 import org.crystal.intellij.resolve.resolveFacade
+import org.crystal.intellij.resolve.scopes.CrResolvedMacroCall
 import org.crystal.intellij.resolve.scopes.getTypeAs
-import org.crystal.intellij.resolve.symbols.*
+import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
+import org.crystal.intellij.resolve.symbols.CrModuleSym
+import org.crystal.intellij.resolve.symbols.instanceSym
 
 sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSimpleNameElementHolder {
     companion object {
         private val CALL = newResolveSlice<CrCallLikeExpression, CrCall>("CALL")
-        private val CALLEE_TARGET = newResolveSlice<CrCallLikeExpression, CrSym<*>>("CALLEE_TARGET")
+        private val RESOLVED_CALL = newResolveSlice<CrCallLikeExpression, CrResolvedMacroCall>("RESOLVED_CALL")
     }
 
     private val isGlobal: Boolean
@@ -32,11 +35,11 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
             CrCall(this)
         }
 
-    fun resolveCallee(): CrSym<*>? = project.resolveCache.getOrCompute(CALLEE_TARGET, this) {
+    fun resolveCall(): CrResolvedMacroCall? = project.resolveCache.getOrCompute(RESOLVED_CALL, this) {
         tryMacroResolve()
     }
 
-    private fun tryMacroResolve(): CrMacroSym? {
+    private fun tryMacroResolve(): CrResolvedMacroCall? {
         val nameKind = nameElement?.kind ?: return null
         if (nameKind == CrNameKind.SUPER || nameKind == CrNameKind.PREVIOUS_DEF) return null
 
@@ -49,19 +52,19 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
         } ?: return null
 
         // TODO: "with" scope
-        var macro = scopeSymbol.lookupMacro()
+        var macro = scopeSymbol.lookupMacroCall()
         if (macro == null && scopeSymbol.instanceSym is CrModuleSym) {
-            macro = program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.OBJECT)?.lookupMacro()
+            macro = program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.OBJECT)?.lookupMacroCall()
         }
         if (macro == null) {
-            macro = program.lookupMacro()
+            macro = program.lookupMacroCall()
         }
         // TODO: File modules
         return macro
     }
 
-    private fun CrModuleLikeSym.lookupMacro(): CrMacroSym? {
+    private fun CrModuleLikeSym.lookupMacroCall(): CrResolvedMacroCall? {
         val call = call ?: return null
-        return memberScope.getMacro(call)
+        return memberScope.lookupMacroCall(call)
     }
 }

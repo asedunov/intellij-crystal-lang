@@ -7,10 +7,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
 import org.crystal.intellij.presentation.shortDescription
-import org.crystal.intellij.psi.CrNameElement
-import org.crystal.intellij.psi.CrPathNameElement
-import org.crystal.intellij.psi.CrSimpleNameElement
-import org.crystal.intellij.psi.CrVisitor
+import org.crystal.intellij.psi.*
+import org.crystal.intellij.resolve.scopes.CrMacroParameterMatch
+import org.crystal.intellij.resolve.scopes.CrResolvedMacroCall
 import org.crystal.intellij.resolve.symbols.CrSym
 import org.crystal.intellij.resolve.symbols.CrTypeSym
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
@@ -73,6 +72,29 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                 return this
             }
 
+            private fun StringBuilder.appendCall(call: CrResolvedMacroCall): StringBuilder {
+                append("call<")
+                append("args: ")
+                val arguments = call.call.expression.argumentList?.elements ?: emptyList()
+                val parameters = call.macro.parameters
+                arguments.joinTo(this) {
+                    parameters.indexOf(call.getArgumentMatch(it)).toString()
+                }
+                append(", params: ")
+                parameters.joinTo(this) { param ->
+                    when (val match = call.getParameterMatch(param)) {
+                        CrMacroParameterMatch.DefaultValue -> "<default>"
+                        is CrMacroParameterMatch.Simple -> arguments.indexOf(match.argument).toString()
+                        is CrMacroParameterMatch.Splat -> match.arguments.joinToString(prefix = "(", postfix = ")") {
+                            arguments.indexOf(it).toString()
+                        }
+                        else -> "???"
+                    }
+                }
+                append(">")
+                return this
+            }
+
             private fun report(e: PsiElement, message: String) {
                 holder.registerProblem(e, message, ProblemHighlightType.WARNING)
             }
@@ -86,10 +108,15 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                 }
                 val sym = o.resolveSymbol()
                 if (sym != null) {
+                    val resolvedCall = (o.parent as? CrCallLikeExpression)?.resolveCall()
                     val message = buildString {
                         appendSym(sym)
                         if (sym is CrTypeSym<*> && withMetaclass) {
                             append(" / ").appendSym(sym.metaclass)
+                        }
+                        if (resolvedCall != null) {
+                            append(", ")
+                            appendCall(resolvedCall)
                         }
                     }
                     report(nameElement, message)

@@ -76,7 +76,7 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
 
     override fun resolveSymbol(): CrSym<*>? {
         (parent as? CrMacro)?.let { return it.resolveSymbol() }
-        (parent as? CrCallLikeExpression)?.let { return it.resolveCallee() }
+        (parent as? CrCallLikeExpression)?.let { return it.resolveCall()?.macro }
         return null
     }
 }

@@ -46,10 +46,9 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
         val resolvedCall = resolveCall()
         if (resolvedCall != null) return listOf(resolvedCall)
 
-        val name = name ?: return emptyList()
-        val call = call ?: return emptyList()
-
         return project.resolveCache.getOrCompute(CANDIDATE_RESOLVED_CALLS, this) {
+            val name = name ?: return@getOrCompute null
+            val call = call ?: return@getOrCompute null
             macroModulesToTry()
                 .flatMap { it.memberScope.getAllMacros(CrMacroName(name)).asSequence() }
                 .distinctBy { it.signature }
@@ -58,9 +57,9 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
         } ?: emptyList()
     }
 
-    private fun tryMacroResolve(): CrResolvedMacroCall? {
-        val nameKind = nameElement?.kind ?: return null
-        if (nameKind == CrNameKind.SUPER || nameKind == CrNameKind.PREVIOUS_DEF) return null
+    private fun macroModulesToTry(): Sequence<CrModuleLikeSym> = sequence {
+        val nameKind = nameElement?.kind ?: return@sequence
+        if (nameKind == CrNameKind.SUPER || nameKind == CrNameKind.PREVIOUS_DEF) return@sequence
 
         val program = project.resolveFacade.program
 
@@ -68,22 +67,18 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
             null -> if (isGlobal) project.resolveFacade.program else currentModuleLikeSym()?.metaclass
             is CrPathExpression -> (receiver.nameElement?.resolveSymbol() as? CrModuleLikeSym)?.metaclass
             else -> null
-        } ?: return null
+        } ?: return@sequence
 
         // TODO: "with" scope
-        var macro = scopeSymbol.lookupMacroCall()
-        if (macro == null && scopeSymbol.instanceSym is CrModuleSym) {
-            macro = program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.OBJECT)?.lookupMacroCall()
+        yield(scopeSymbol)
+        if (scopeSymbol.instanceSym is CrModuleSym) {
+            val objectSym = program.memberScope.getTypeAs<CrModuleLikeSym>(CrStdFqNames.OBJECT)
+            if (objectSym != null) yield(objectSym)
         }
-        if (macro == null) {
-            macro = program.lookupMacroCall()
+        if (scopeSymbol != program) {
+            yield(program)
         }
-        // TODO: File modules
-        return macro
-    }
 
-    private fun CrModuleLikeSym.lookupMacroCall(): CrResolvedMacroCall? {
-        val call = call ?: return null
-        return memberScope.lookupMacroCall(call)
+        // TODO: File modules
     }
 }

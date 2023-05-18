@@ -79,4 +79,46 @@ class CrystalCompletionInsertHandlerTest : BasePlatformTestCase() {
             c : Foooo(<caret>)
         """.trimIndent()
     }
+
+    fun testMacroNoParams() {
+        """
+            macro fooo
+            end
+            
+            foo<caret>
+        """.trimIndent() expects """
+            macro fooo
+            end
+            
+            fooo<caret>
+        """.trimIndent()
+    }
+
+    fun testMacroWithParams() {
+        """
+            macro fooo(a, b, c)
+            end
+            
+            foo<caret>
+        """.trimIndent() expects """
+            macro fooo(a, b, c)
+            end
+            
+            fooo(<caret>)
+        """.trimIndent()
+    }
+
+    fun testMacroWithParamsAndParensPresent() {
+        """
+            macro fooo
+            end
+            
+            foo<caret>()
+        """.trimIndent() expects """
+            macro fooo
+            end
+            
+            fooo<caret>()
+        """.trimIndent()
+    }
 }

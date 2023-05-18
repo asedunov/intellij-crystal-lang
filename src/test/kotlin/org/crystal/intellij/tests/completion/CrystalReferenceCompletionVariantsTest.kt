@@ -3,22 +3,31 @@ package org.crystal.intellij.tests.completion
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.resolve.symbols.CrConstantLikeSym
+import org.crystal.intellij.resolve.symbols.CrMacroSym
+import org.crystal.intellij.resolve.symbols.CrSym
+import org.crystal.intellij.tests.util.configureMultiFileByText
 import org.crystal.intellij.tests.util.setupMainFile
 
-class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
-    private fun doTest(text: String, variants: Collection<String>) {
-        myFixture.configureByText("a.cr", text)
+class CrystalReferenceCompletionVariantsTest : BasePlatformTestCase() {
+    private fun doTest(text: String, variants: Collection<String>, filter: (CrSym<*>) -> Boolean = { true }) {
+        myFixture.configureMultiFileByText(text)
         myFixture.setupMainFile()
         val actualLookups = myFixture
             .completeBasic()
-            .filter { lookup -> lookup.`object` is CrConstantLikeSym<*> }
+            .filter { lookup ->
+                val obj = lookup.`object`
+                obj is CrSym<*> && filter(obj)
+            }
             .map { lookup -> LookupElementPresentation().also { lookup.renderElement(it) }.itemText }
         TestCase.assertEquals(variants, actualLookups)
     }
 
     private infix fun String.expects(variants: Collection<String>) {
         doTest(this, variants)
+    }
+
+    private infix fun String.expectsMacros(variants: Collection<String>) {
+        doTest(this, variants) { it is CrMacroSym }
     }
 
     fun testFallbackTypes() {
@@ -431,5 +440,147 @@ class CrystalConstantReferenceCompletionVariantsTest : BasePlatformTestCase() {
             class Fo<caret>
             end
         """.trimIndent() expects emptyList()
+    }
+
+    fun testMacros() {
+        """
+            macro foo_bar(a)
+            end
+            
+            macro bar_foo(a)
+            end
+            
+            macro bar_baz(a)
+            end
+            
+            foo<caret>
+        """.trimIndent() expectsMacros listOf("foo_bar", "bar_foo")
+    }
+
+    fun testPrivateMacros() {
+        """
+            # !FILE! lib.cr
+            
+            private macro foo_lib_private(a)
+            end
+            
+            macro foo_lib_public(a)
+            end
+            
+            # !FILE! main.cr
+            
+            require "lib"
+            
+            private macro foo_main_private(a)
+            end
+            
+            macro foo_main_public(a)
+            end
+            
+            foo<caret>
+        """.trimIndent() expectsMacros listOf("foo_lib_public", "foo_main_private", "foo_main_public")
+    }
+
+    fun testMacrosNoPrefix() {
+        """
+            private macro foo_private(a)
+            end
+            
+            macro foo_public(a)
+            end
+            
+            class A
+                private macro bar_private(a)
+                end
+            
+                macro bar_public(a)
+                end
+            end
+            
+            <caret>
+        """.trimIndent() expectsMacros listOf("foo_private", "foo_public")
+    }
+
+    fun testMacrosInClassBodyNoPrefix() {
+        """
+            private macro foo_private(a)
+            end
+            
+            macro foo_public(a)
+            end
+            
+            class A
+                private macro bar_private(a)
+                end
+            
+                macro bar_public(a)
+                end
+                
+                <caret>
+            end
+        """.trimIndent() expectsMacros listOf("bar_private", "bar_public", "foo_private", "foo_public")
+    }
+
+    fun testMacrosInClassBody() {
+        """
+            private macro foo_private(a)
+            end
+            
+            macro foo_public(a)
+            end
+            
+            class A
+                private macro bar_private(a)
+                end
+            
+                macro bar_public(a)
+                end
+                
+                A.bar<caret>
+            end
+        """.trimIndent() expectsMacros listOf("bar_private", "bar_public")
+    }
+
+    fun testMacrosWithReceiverNoPrefix() {
+        """
+            private macro foo_private(a)
+            end
+            
+            macro foo_public(a)
+            end
+            
+            class A
+                private macro bar_private(a)
+                end
+            
+                macro bar_public(a)
+                end
+            end
+            
+            A.<caret>
+        """.trimIndent() expectsMacros listOf("bar_public", "foo_private", "foo_public")
+    }
+
+    fun testMacrosWithReceiver() {
+        """
+            private macro foo_private(a)
+            end
+            
+            macro foo_public(a)
+            end
+            
+            class A
+                private macro bar_private(a)
+                end
+            
+                macro bar_public(a)
+                end
+                
+                macro bar_public2(a)
+                end
+            end
+            
+            A.bar<caret>
+        """.trimIndent() expectsMacros listOf("bar_public", "bar_public2")
     }
 }

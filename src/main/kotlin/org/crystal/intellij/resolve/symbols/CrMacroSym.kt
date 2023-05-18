@@ -1,8 +1,8 @@
 package org.crystal.intellij.resolve.symbols
 
-import org.crystal.intellij.psi.CrCallArgument
-import org.crystal.intellij.psi.CrMacro
-import org.crystal.intellij.psi.CrParameterKind
+import com.intellij.psi.PsiElement
+import com.intellij.psi.util.isAncestor
+import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.CrCall
 import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
@@ -151,6 +151,15 @@ sealed class CrMacroSym(
         return parameters.withIndex().all { (i, param) ->
             i == splatIndex || param.hasDefaultValue || mandatoryArgs[i]
         }
+    }
+
+    fun isVisible(context: PsiElement): Boolean {
+        if (visibility == CrVisibility.PRIVATE) {
+            val source = source
+            if (source.isTopLevel) return context.containingFile == source.containingFile
+            return (namespace.instanceSym ?: namespace).sources.any { it.isAncestor(context) }
+        }
+        return true
     }
 
     override fun equals(other: Any?): Boolean {

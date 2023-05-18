@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.8.1] - 2023-05-19
+
+### Fixes
+
+- [Fix compatibility with IntelliJ IDEA EAP (232.6095.10)](https://github.com/asedunov/intellij-crystal-lang/issues/58)
+
 ## [0.8] - 2023-05-12
 
 ### New features

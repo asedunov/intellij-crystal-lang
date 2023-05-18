@@ -10,6 +10,8 @@ interface CrScope {
 
     fun getConstant(name: String, isRoot: Boolean = false): CrConstantLikeSym<*>? = null
 
+    fun getAllMacros(): Sequence<CrMacroSym> = emptySequence()
+
     fun getAllMacros(id: CrMacroId): List<CrMacroSym> = emptyList()
 
     fun lookupMacroCall(call: CrCall): CrResolvedMacroCall? = null

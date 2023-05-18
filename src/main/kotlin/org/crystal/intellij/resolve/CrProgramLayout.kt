@@ -20,6 +20,7 @@ class CrProgramLayout(val program: CrProgramSym) {
         private val INCLUDE_LIKE_SOURCES = newResolveSlice<String, List<CrIncludeLikeExpression>>("INCLUDE_LIKE_SOURCES")
         private val MACRO_SOURCES_BY_SIGNATURE = newResolveSlice<CrMacroSignature, List<CrMacro>>("MACRO_SOURCES_BY_SIGNATURE")
         private val MACRO_SOURCES_BY_FQ_NAME = newResolveSlice<MemberFqName, List<CrMacro>>("MACRO_SOURCES_BY_FQ_NAME")
+        private val MACRO_SOURCES_BY_PARENT = newResolveSlice<String, Collection<CrMacro>>("MACRO_SOURCES_BY_PARENT")
     }
 
     private val project: Project
@@ -181,6 +182,13 @@ class CrProgramLayout(val program: CrProgramSym) {
         val fullName = parentFqName?.fullName ?: ""
         return project.resolveCache.getOrCompute(INCLUDE_LIKE_SOURCES, fullName) {
             CrystalIncludeLikeByContainerFqNameIndex[fullName, project, GlobalSearchScope.allScope(project)].sortSources()
+        } ?: emptyList()
+    }
+
+    fun getMacroSourcesByParent(fqName: StableFqName?): Collection<CrMacro> {
+        val fullName = fqName?.fullName ?: ""
+        return project.resolveCache.getOrCompute(MACRO_SOURCES_BY_PARENT, fullName) {
+            CrystalMacroParentFqNameIndex[fullName, project, GlobalSearchScope.allScope(project)]
         } ?: emptyList()
     }
 

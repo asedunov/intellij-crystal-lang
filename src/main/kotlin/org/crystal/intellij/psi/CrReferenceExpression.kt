@@ -7,7 +7,7 @@ import org.crystal.intellij.lexer.CR_DOT
 class CrReferenceExpression(node: ASTNode) : CrCallLikeExpression(node), CrMethodReceiver {
     override fun accept(visitor: CrVisitor) = visitor.visitReferenceExpression(this)
 
-    override val receiver: CrExpression?
+    override val ownReceiver: CrExpression?
         get() = childOfType()
 
     val hasImplicitReceiver: Boolean

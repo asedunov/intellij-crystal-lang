@@ -77,3 +77,31 @@ fun CodeInsightTestFixture.setupMainFile() {
         mainFilePath = file.virtualFile.path
     }
 }
+
+private const val FILE_NAME_DIRECTIVE = "# !FILE!"
+private const val MAIN_FILE_NAME = "main.cr"
+
+fun CodeInsightTestFixture.configureMultiFileByText(text: String) {
+    val length = text.length
+    var start = 0
+    var name = MAIN_FILE_NAME
+    while (true) {
+        val dirStart = text.indexOf(FILE_NAME_DIRECTIVE, start)
+        val end = if (dirStart >= 0) dirStart else length
+
+        if (start > 0 || start < end) {
+            val fragment = if (start < end) text.substring(start, end) else ""
+            configureByText(name, fragment)
+            if (name == MAIN_FILE_NAME) {
+                setupMainFile()
+            }
+        }
+
+        if (dirStart >= 0) {
+            val dirEnd = text.indexOf('\n', dirStart).let { if (it >= 0) it else length }
+            name = text.substring(dirStart + FILE_NAME_DIRECTIVE.length, dirEnd).trim()
+            start = dirEnd + 1
+        }
+        else break
+    }
+}

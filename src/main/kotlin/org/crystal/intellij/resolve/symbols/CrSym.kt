@@ -51,7 +51,7 @@ sealed class CrSym<Source: CrElement>(
             map
         } ?: emptyMap()
 
-    open val visibility: CrVisibility? by lazy {
+    val visibility: CrVisibility by lazy {
         val typeDef = sources.firstOrNull { it is CrVisibilityHolder } as? CrVisibilityHolder
         typeDef?.visibility ?: CrVisibility.PUBLIC
     }

@@ -11,17 +11,17 @@ import org.crystal.intellij.resolve.cache.newResolveSlice
 import org.crystal.intellij.resolve.cache.resolveCache
 import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.scopes.CrScope
-import org.crystal.intellij.resolve.symbols.*
+import org.crystal.intellij.resolve.symbols.CrConstantLikeSym
+import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
+import org.crystal.intellij.resolve.symbols.CrSymbolOrdinal
 import org.crystal.intellij.stubs.api.CrPathStub
+import org.crystal.intellij.util.UserDataProperty
 
 @Suppress("UnstableApiUsage")
 open class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, CrConstantSource {
     companion object {
         private val PATH_TARGET = newResolveSlice<CrPathNameElement, CrConstantLikeSym<*>>("PATH_TARGET")
         private val PATH_RESOLVE_SCOPE = newResolveSlice<CrPathNameElement, CrScope>("PATH_RESOLVE_SCOPE")
-
-        val EXPLICIT_PARENT = Key.create<PsiElement>("EXPLICIT_PARENT")
-        val EXPLICIT_QUALIFIER = Key.create<CrPathNameElement>("EXPLICIT_QUALIFIER")
     }
 
     constructor(stub: CrPathStub) : super(stub, CR_PATH_NAME_ELEMENT)
@@ -30,9 +30,9 @@ open class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, 
 
     override fun accept(visitor: CrVisitor) = visitor.visitPathNameElement(this)
 
-    override fun getParent(): PsiElement {
-        return getUserData(EXPLICIT_PARENT) ?: super.getParent()
-    }
+    override fun getParent(): PsiElement = explicitParent ?: super.getParent()
+
+    var explicitQualifier: CrPathNameElement? by UserDataProperty(Key.create("EXPLICIT_QUALIFIER"))
 
     override val kind: CrNameKind
         get() = CrNameKind.PATH
@@ -41,7 +41,7 @@ open class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, 
         get() = name.isEmpty() && qualifier == null
 
     val qualifier: CrPathNameElement?
-        get() = getUserData(EXPLICIT_QUALIFIER) ?: stubChildOfType()
+        get() = explicitQualifier ?: stubChildOfType()
 
     val item: CrConstantName?
         get() = childOfType()

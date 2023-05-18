@@ -143,6 +143,16 @@ class CrModuleLikeScope(
         } ?: emptyList()
     }
 
+    override fun getAllMacros(): Sequence<CrMacroSym> = sequence {
+        val currentSym = symbol.instanceSym ?: symbol
+        layout.getMacroSourcesByParent(currentSym.fqName).forEach { source ->
+            source.resolveSymbol()?.let { yield(it) }
+        }
+        generateSequence(parentList) { it.prev }.forEach { p ->
+            yieldAll(p.symbol.memberScope.getAllMacros())
+        }
+    }.distinctBy { it.signature }
+
     override fun getAllMacros(id: CrMacroId): List<CrMacroSym> {
         if (id.name in HOOK_NAMES) return emptyList()
         return project.resolveCache.getOrCompute(macrosByIdSlice, id) {

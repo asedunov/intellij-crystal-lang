@@ -1,5 +1,6 @@
 package org.crystal.intellij.psi
 
+import com.intellij.openapi.util.Key
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
 import org.crystal.intellij.lexer.CR_ANDAND_OP
@@ -7,6 +8,7 @@ import org.crystal.intellij.lexer.CR_ASSIGN_OP
 import org.crystal.intellij.lexer.CR_NOT_OP
 import org.crystal.intellij.lexer.CR_OROR_OP
 import org.crystal.intellij.resolve.StableFqName
+import org.crystal.intellij.util.UserDataProperty
 
 val CrNamedElement.presentableKind: String
     get() = when (this) {
@@ -90,3 +92,5 @@ val CrBlockExpression.whenBody: CrWhenClause?
 
 val CrBlockExpression.isWhenBody: Boolean
     get() = whenBody != null
+
+var CrElement.explicitParent: PsiElement? by UserDataProperty(Key.create("EXPLICIT_PARENT"))

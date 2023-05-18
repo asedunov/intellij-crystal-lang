@@ -5,10 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
 import org.crystal.intellij.presentation.getIcon
-import org.crystal.intellij.psi.CrConstantName
-import org.crystal.intellij.psi.CrDefinition
-import org.crystal.intellij.psi.CrPathNameElement
-import org.crystal.intellij.psi.CrTypeElement
+import org.crystal.intellij.psi.*
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrTypeSym
 
@@ -28,8 +25,8 @@ class CrPathReferenceCompletionContributor : CompletionContributor() {
                     val originalParent = parameters.originalPosition?.parent
                     val originalPath = originalParent as? CrPathNameElement
                     val pathToComplete = path.copy() as CrPathNameElement
-                    pathToComplete.putUserData(CrPathNameElement.EXPLICIT_PARENT, originalPath?.parent ?: originalParent)
-                    pathToComplete.putUserData(CrPathNameElement.EXPLICIT_QUALIFIER, originalPath?.qualifier)
+                    pathToComplete.explicitParent = originalPath?.parent ?: originalParent
+                    pathToComplete.explicitQualifier = originalPath?.qualifier
                     val isTypeElement = path.parent is CrTypeElement<*>
                     pathToComplete.getCompletionCandidates().forEach { sym ->
                         if (isTypeElement && sym !is CrTypeSym<*>) return@forEach

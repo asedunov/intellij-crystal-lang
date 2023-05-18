@@ -127,6 +127,9 @@
         <completion.contributor language="Crystal"
                                 implementationClass="org.crystal.intellij.completion.CrPathReferenceCompletionContributor"
                                 id="CrPathReferenceCompletionContributor"/>
+        <completion.contributor language="Crystal"
+                                implementationClass="org.crystal.intellij.completion.CrMacroReferenceCompletionContributor"
+                                id="CrMacroReferenceCompletionContributor"/>
         <completion.contributor language="yaml"
                                 implementationClass="org.crystal.intellij.shards.yaml.completion.ShardYamlCompletionContributor"
                                 id="CrShardsYamlKeyCompletionContributor"/>

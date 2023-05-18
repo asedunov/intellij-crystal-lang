@@ -1,6 +1,8 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.util.Key
+import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_PATH_OP
 import org.crystal.intellij.resolve.CrCall
@@ -15,6 +17,7 @@ import org.crystal.intellij.resolve.symbols.CrMacroName
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleSym
 import org.crystal.intellij.resolve.symbols.instanceSym
+import org.crystal.intellij.util.UserDataProperty
 
 sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSimpleNameElementHolder {
     companion object {
@@ -23,14 +26,21 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
         private val CANDIDATE_RESOLVED_CALLS = newResolveSlice<CrCallLikeExpression, List<CrResolvedMacroCall>>("CANDIDATE_RESOLVED_CALLS")
     }
 
+    var explicitReceiver: CrExpression? by UserDataProperty(Key.create("EXPLICIT_RECEIVER"))
+
     private val isGlobal: Boolean
         get() = firstChild.elementType == CR_PATH_OP
 
-    abstract val receiver: CrExpression?
+    val receiver: CrExpression?
+        get() = explicitReceiver ?: ownReceiver
+
+    protected abstract val ownReceiver: CrExpression?
 
     abstract val argumentList: CrArgumentList?
 
     abstract val blockArgument: CrBlockExpression?
+
+    override fun getParent(): PsiElement = explicitParent ?: super.getParent()
 
     private val call: CrCall?
         get() = project.resolveCache.getOrCompute(CALL, this) {
@@ -55,6 +65,10 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
                 .map { CrResolvedMacroCall(call, it) }
                 .toList()
         } ?: emptyList()
+    }
+
+    fun getCompletionCandidates() = macroModulesToTry().flatMap { module ->
+        module.memberScope.getAllMacros().filter { it.isDefined && it.isVisible(parent) }
     }
 
     private fun macroModulesToTry(): Sequence<CrModuleLikeSym> = sequence {

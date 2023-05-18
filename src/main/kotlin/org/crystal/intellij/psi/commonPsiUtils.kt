@@ -141,3 +141,9 @@ fun PsiElement.firstChildWithElementType(type: IElementType) = allChildren().fir
 inline fun <reified T : PsiElement> PsiElement.replaceTyped(replacement: T) = replace(replacement) as T
 
 fun PsiElement.module() = ModuleUtilCore.findModuleForPsiElement(this)
+
+fun PsiElement.findSameElementInCopy(fileCopy: PsiFile) = try {
+    PsiTreeUtil.findSameElementInCopy(this, fileCopy)
+} catch (e: IllegalStateException) {
+    null
+}

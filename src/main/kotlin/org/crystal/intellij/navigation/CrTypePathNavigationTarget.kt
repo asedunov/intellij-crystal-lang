@@ -23,7 +23,7 @@ class CrTypePathNavigationTarget(
 
     override fun navigationRequest() = psi.navigationRequest()
 
-    override fun presentation(): TargetPresentation {
+    override fun computePresentation(): TargetPresentation {
         val file = psi.containingFile
         val vFile = file.virtualFile
         val project = file.project

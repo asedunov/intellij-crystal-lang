@@ -62,6 +62,7 @@ fun indexMacro(stub: CrMacroStub, sink: IndexSink) {
     }
     stub.psi.fqName?.let { fqName ->
         sink.occurrence(CrystalMacroFqNameIndex.key, fqName.fullName)
+        sink.occurrence(CrystalMacroParentFqNameIndex.key, fqName.parent?.fullName ?: "")
     }
     sink.occurrence(CrystalMacroSignatureIndex.key, stub.psi.signature.serialize())
 }

@@ -84,6 +84,7 @@
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeBySuperclassNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroParentFqNameIndex"/>
         <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroSignatureIndex"/>
 
         <additionalLibraryRootsProvider implementation="org.crystal.intellij.sdk.CrystalSdkLibraryRootProvider"/>

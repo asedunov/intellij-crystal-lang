@@ -106,15 +106,20 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
                     is CrPathNameElement -> o.item ?: return
                     is CrSimpleNameElement -> o
                 }
-                val sym = o.resolveSymbol()
-                if (sym != null) {
-                    val resolvedCall = (o.parent as? CrCallLikeExpression)?.resolveCall()
+                val symbols = o.resolveCandidates()
+                if (symbols.isNotEmpty()) {
+                    val resolvedCalls = (o.parent as? CrCallLikeExpression)?.resolveCandidateCalls() ?: emptyList()
                     val message = buildString {
-                        appendSym(sym)
-                        if (sym is CrTypeSym<*> && withMetaclass) {
-                            append(" / ").appendSym(sym.metaclass)
+                        for ((i, sym) in symbols.withIndex()) {
+                            if (i > 0) {
+                                append(", ")
+                            }
+                            appendSym(sym)
+                            if (sym is CrTypeSym<*> && withMetaclass) {
+                                append(" / ").appendSym(sym.metaclass)
+                            }
                         }
-                        if (resolvedCall != null) {
+                        for (resolvedCall in resolvedCalls) {
                             append(", ")
                             appendCall(resolvedCall)
                         }

@@ -79,4 +79,14 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
         (parent as? CrCallLikeExpression)?.let { return it.resolveCall()?.macro }
         return null
     }
+
+    override fun resolveCandidates(): List<CrSym<*>> {
+        val call = parent as? CrCallLikeExpression
+        if (call != null) return call.resolveCandidateCalls().map { it.macro }
+
+        val symbol = resolveSymbol()
+        if (symbol != null) return listOf(symbol)
+
+        return emptyList()
+    }
 }

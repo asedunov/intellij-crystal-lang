@@ -190,8 +190,9 @@ class CrProgramLayout(val program: CrProgramSym) {
         } ?: emptyList()
     }
 
-    fun getMacroSources(signature: CrMacroSignature, parentFqName: StableFqName?): List<CrMacro> {
-        return getMacroSources(signature).filter { it.parentFqName() == parentFqName }
+    fun getMacroSources(id: CrMacroId, parentFqName: StableFqName?) = when (id) {
+        is CrMacroName -> getMacroSources(MemberFqName(id.name, parentFqName))
+        is CrMacroSignature -> getMacroSources(id).filter { it.parentFqName() == parentFqName }
     }
 
     fun getMacroSources(fqName: MemberFqName): List<CrMacro> {

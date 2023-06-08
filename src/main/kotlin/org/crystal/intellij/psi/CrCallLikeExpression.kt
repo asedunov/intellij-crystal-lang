@@ -11,6 +11,7 @@ import org.crystal.intellij.resolve.currentModuleLikeSym
 import org.crystal.intellij.resolve.resolveFacade
 import org.crystal.intellij.resolve.scopes.CrResolvedMacroCall
 import org.crystal.intellij.resolve.scopes.getTypeAs
+import org.crystal.intellij.resolve.symbols.CrMacroName
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleSym
 import org.crystal.intellij.resolve.symbols.instanceSym
@@ -19,6 +20,7 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
     companion object {
         private val CALL = newResolveSlice<CrCallLikeExpression, CrCall>("CALL")
         private val RESOLVED_CALL = newResolveSlice<CrCallLikeExpression, CrResolvedMacroCall>("RESOLVED_CALL")
+        private val CANDIDATE_RESOLVED_CALLS = newResolveSlice<CrCallLikeExpression, List<CrResolvedMacroCall>>("CANDIDATE_RESOLVED_CALLS")
     }
 
     private val isGlobal: Boolean
@@ -36,7 +38,24 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
         }
 
     fun resolveCall(): CrResolvedMacroCall? = project.resolveCache.getOrCompute(RESOLVED_CALL, this) {
-        tryMacroResolve()
+        val call = call ?: return@getOrCompute null
+        macroModulesToTry().firstNotNullOfOrNull { it.memberScope.lookupMacroCall(call) }
+    }
+
+    fun resolveCandidateCalls(): List<CrResolvedMacroCall> {
+        val resolvedCall = resolveCall()
+        if (resolvedCall != null) return listOf(resolvedCall)
+
+        val name = name ?: return emptyList()
+        val call = call ?: return emptyList()
+
+        return project.resolveCache.getOrCompute(CANDIDATE_RESOLVED_CALLS, this) {
+            macroModulesToTry()
+                .flatMap { it.memberScope.getAllMacros(CrMacroName(name)).asSequence() }
+                .distinctBy { it.signature }
+                .map { CrResolvedMacroCall(call, it) }
+                .toList()
+        } ?: emptyList()
     }
 
     private fun tryMacroResolve(): CrResolvedMacroCall? {

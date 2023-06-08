@@ -3,13 +3,20 @@ package org.crystal.intellij.resolve.symbols
 import com.intellij.util.ConcurrencyUtil
 import com.intellij.util.containers.ContainerUtil
 
+sealed interface CrMacroId {
+    val name: String
+}
+
+@JvmInline
+value class CrMacroName(override val name: String): CrMacroId
+
 data class CrMacroSignature(
-    val name: String,
+    override val name: String,
     private val paramCount: Int = 0,
     private val splatIndex: Int = -1,
     val hasDoubleSplat: Boolean = false,
     private val requiredExternalNames: List<String> = emptyList()
-) {
+) : CrMacroId {
     companion object {
         private val signatureInterner = ContainerUtil.createConcurrentWeakKeyWeakValueMap<CrMacroSignature, CrMacroSignature>()
     }

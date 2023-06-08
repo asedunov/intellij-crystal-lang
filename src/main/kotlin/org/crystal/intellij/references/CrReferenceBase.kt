@@ -16,7 +16,8 @@ abstract class CrReferenceBase<T : CrReferenceElement>(
 
     override fun getRangeInElement() = _rangeInElement
 
-    override fun resolveReference() = listOfNotNull(element.resolveSymbol())
+    override fun resolveReference() =
+        element.resolveSymbol()?.let { listOfNotNull(it) } ?: element.resolveCandidates()
 
     override fun equals(other: Any?): Boolean =
         this === other || other is CrReferenceBase<*> && element === other.element

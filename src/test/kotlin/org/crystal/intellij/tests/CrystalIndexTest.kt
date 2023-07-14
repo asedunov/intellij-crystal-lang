@@ -23,7 +23,6 @@ class CrystalIndexTest(private val testFile: File) : BasePlatformTestCase() {
         fun testFiles() = getCrystalTestFilesAsParameters("indexes")
     }
 
-    @Suppress("UNCHECKED_CAST")
     @Test
     fun testIndex() {
         myFixture.testDataPath = testFile.parent

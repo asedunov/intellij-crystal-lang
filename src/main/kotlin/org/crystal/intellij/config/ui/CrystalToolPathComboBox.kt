@@ -108,7 +108,6 @@ class CrystalToolPathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<
         }
     }
 
-    @Suppress("UnstableApiUsage")
     fun addToolchainsAsync(toolRetriever: () -> List<CrystalToolPeer>) {
         setBusy(true)
         ApplicationManager.getApplication().executeOnPooledThread {

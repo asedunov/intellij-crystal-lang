@@ -9,7 +9,6 @@ import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.scopes.getTypeAs
 import org.crystal.intellij.resolve.symbols.*
 
-@Suppress("UnstableApiUsage")
 class CrystalResolveCheckingVisitor(
     highlightInfos: MutableList<HighlightInfo>
 ) : CrystalHighlightingVisitorBase(highlightInfos) {

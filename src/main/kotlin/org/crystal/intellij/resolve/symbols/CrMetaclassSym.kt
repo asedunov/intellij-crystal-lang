@@ -2,7 +2,6 @@ package org.crystal.intellij.resolve.symbols
 
 import org.crystal.intellij.psi.CrConstantSource
 import org.crystal.intellij.psi.CrExtendExpression
-import org.crystal.intellij.psi.CrIncludeLikeExpression
 import org.crystal.intellij.resolve.CrStdFqNames
 import org.crystal.intellij.resolve.layout
 import org.crystal.intellij.resolve.scopes.getTypeAs

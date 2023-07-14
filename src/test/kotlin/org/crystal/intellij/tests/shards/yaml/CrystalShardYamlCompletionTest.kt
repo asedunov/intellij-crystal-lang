@@ -4,10 +4,7 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.shards.yaml.model.SHARD_OVERRIDE_YAML_NAME
-import org.crystal.intellij.shards.yaml.model.SHARD_YAML_NAME
 import org.crystal.intellij.tests.util.findDirective
-import org.crystal.intellij.tests.util.getTestFilesAsParameters
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

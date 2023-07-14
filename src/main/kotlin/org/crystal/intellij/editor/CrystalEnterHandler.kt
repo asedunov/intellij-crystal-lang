@@ -77,7 +77,6 @@ class CrystalEnterHandler : EnterHandlerDelegateAdapter() {
                 is CrAnnotation,
                 is CrModuleLikeDefinition<*, *>,
                 is CrFunctionLikeDefinition,
-                is CrLibrary,
                 is CrWhileExpression,
                 is CrUntilExpression,
                 is CrCaseExpression,

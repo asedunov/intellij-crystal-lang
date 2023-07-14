@@ -49,7 +49,6 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
         }
     }
 
-    @Suppress("UnstableApiUsage")
     private class RefAnnotator(
         private val withMetaclass: Boolean = false
     ) : LocalInspectionTool() {

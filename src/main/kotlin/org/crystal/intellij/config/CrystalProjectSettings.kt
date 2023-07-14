@@ -71,9 +71,6 @@ class CrystalProjectSettings(
     val useFormatTool: Boolean
         get() = protectedState.useFormatTool
 
-    val runFormatToolOnSave: Boolean
-        get() = protectedState.runFormatToolOnSave
-
     @TestOnly
     fun setLanguageLevelSilently(version: CrystalVersion) {
         protectedState.languageVersion = version

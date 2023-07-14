@@ -3,7 +3,6 @@ package org.crystal.intellij.psi
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElementVisitor
-import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.CrystalFileType
 import org.crystal.intellij.CrystalLanguage
 

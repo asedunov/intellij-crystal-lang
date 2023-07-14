@@ -2035,7 +2035,12 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
 
             lexerState.slashIsRegex = true
-            nextTokenSkipSpaces()
+            if (ll < CrystalLevel.CRYSTAL_1_9) {
+                nextTokenSkipSpaces()
+            }
+            else {
+                nextTokenSkipSpacesAndNewlines()
+            }
             parseHashLiteralTail(mEntry, allowOf)
             m.done(CR_HASH_EXPRESSION)
             return true

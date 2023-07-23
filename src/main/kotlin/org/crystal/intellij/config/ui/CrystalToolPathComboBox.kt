@@ -56,7 +56,7 @@ class CrystalToolPathComboBox : ComponentWithBrowseButton<ComboBoxWithWidePopup<
     private var isUpdatingPaths: Boolean = false
 
     init {
-        ComboboxSpeedSearch(childComponent)
+        ComboboxSpeedSearch.installOn(childComponent)
         childComponent.editor = editor
         childComponent.isEditable = true
 

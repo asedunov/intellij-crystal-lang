@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.9] - 2023-07-30
+
+### New features
+
+#### General
+- [Crystal 1.9 support](https://github.com/asedunov/intellij-crystal-lang/issues/61)
+
+#### Analysis
+
+- [When macro call is not resolved exactly, resolve it to possible candidate macros](https://github.com/asedunov/intellij-crystal-lang/issues/59)
+
+#### Parameter Info
+
+- [Support parameter info for macro calls](https://github.com/asedunov/intellij-crystal-lang/issues/57)
+
+#### Completion
+
+- [Support reference completion for macros](https://github.com/asedunov/intellij-crystal-lang/issues/56)
+
 ## [0.8.1] - 2023-05-19
 
 ### Fixes

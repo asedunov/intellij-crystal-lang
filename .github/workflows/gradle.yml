@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - v_0.9_231
+      - v0.9_231
   pull_request:
     branches:
-      - v_0.9_231
+      - v0.9_231
   workflow_dispatch:    
 
 permissions:

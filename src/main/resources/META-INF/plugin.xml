@@ -9,6 +9,7 @@
       <li>Basic formatting support</li>
       <li>File structure view</li>
       <li>Go to Class/Go to Symbol navigation</li>
+      <li>Parameter info</li>
       <li>Find Usages</li>
       <li>Rename</li>
       <li>Completion</li>
@@ -19,16 +20,19 @@
     <h2>New features</h2>
     <h3>General</h3>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/55">#55</a> Crystal 1.8 support</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/61">#61</a> Crystal 1.9 support</li>
     </ul>
-    <h3>Execution</h3>
+    <h3>Analysis</h3>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/53">#53</a> Allow user to specify working directory in Crystal run configurations</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/59">#59</a> When macro call is not resolved exactly, resolve it to possible candidate macros</li>
     </ul>
-    <h3>Build</h3>
+    <h3>Parameter Info</h3>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/52">#52</a> Add run configuration for project build</li>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/54">#54</a> Track compilation progress in Build toolwindow</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/57">#57</a> Support parameter info for macro calls</li>
+    </ul>
+    <h3>Completion</h3>
+    <ul>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/56">#56</a> Support reference completion for macros</li>
     </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>

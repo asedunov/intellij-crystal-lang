@@ -4502,7 +4502,9 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             nestedMacroState.controlNest++
 
             consumeMacroStatementClosingBrace(nestedMacroState)
-            parseMacroLiteral()
+            composite(CR_THEN_CLAUSE) {
+                parseMacroLiteral()
+            }
 
             nestedMacroState.controlNest--
 
@@ -4531,7 +4533,9 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                     nestedMacroState.controlNest++
 
                     consumeMacroStatementClosingBrace(nestedMacroState)
-                    parseMacroLiteral()
+                    composite(CR_ELSE_CLAUSE) {
+                        parseMacroLiteral()
+                    }
 
                     nestedMacroState.controlNest--
 

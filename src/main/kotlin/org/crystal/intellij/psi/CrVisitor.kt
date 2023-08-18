@@ -223,6 +223,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitRegexExpression(o: CrRegexExpression) = visitExpression(o)
 
+    open fun visitRegexOptionsElement(o: CrRegexOptionsElement) = visitCrElement(o)
+
     open fun visitRequireExpression(o: CrRequireExpression) = visitExpression(o)
 
     open fun visitRescueClause(o: CrRescueClause) = visitCrElement(o)

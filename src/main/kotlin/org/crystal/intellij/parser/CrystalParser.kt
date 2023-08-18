@@ -2581,6 +2581,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             zeroOrMore { tok(stringLiteralTokens) || parseInterpolation() }
             recoverUntil("<regex end>", true) { at(CR_REGEX_END) }
             tok(CR_REGEX_END)
+            tok(CR_REGEX_OPTIONS)
         }
 
         private fun PsiBuilder.parseInterpolation(): Boolean {

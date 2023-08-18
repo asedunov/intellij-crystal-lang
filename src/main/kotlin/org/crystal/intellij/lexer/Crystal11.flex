@@ -514,6 +514,7 @@ MACRO_START_KEYWORD2 =
 %state STRING_LITERAL_BODY
 %state COMMAND_LITERAL_BODY
 %state REGEX_LITERAL_BODY
+%state REGEX_END
 
 %state CHAR_UNICODE_BLOCK
 %state STRING_UNICODE_BLOCK
@@ -655,7 +656,7 @@ MACRO_START_KEYWORD2 =
       ? closePrecedingBlockToken(CR_STRING_RAW)
       : enterBlock(INTERPOLATION_BLOCK, CR_INTERPOLATION_START, CR_INTERPOLATION_END);
   }
-  \/[imx]*                       {
+  \/                             {
     if (blockLength != 0) return closePrecedingBlockToken(CR_STRING_RAW);
     yypop();
     return handle(CR_REGEX_END);
@@ -665,6 +666,18 @@ MACRO_START_KEYWORD2 =
   \\                             {
     extendBlock();
     if (eof()) return closeBlockToken(CR_STRING_RAW);
+  }
+}
+
+<REGEX_END> {
+  [imx]+                         {
+    yypop();
+    return handle(CR_REGEX_OPTIONS);
+  }
+
+  [^imx]                         {
+    yypushback(1);
+    yypop();
   }
 }
 

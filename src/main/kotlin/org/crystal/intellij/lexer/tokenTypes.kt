@@ -212,6 +212,7 @@ fun crystalKeywordToken(
 @JvmField val CR_INTERPOLATION_END = CrystalTokenType("<interpolation end>")
 @JvmField val CR_INTERPOLATION_START = CrystalTokenType("<interpolation start>")
 @JvmField val CR_REGEX_END = CrystalTokenType("<regex end>")
+@JvmField val CR_REGEX_OPTIONS = crystalToken("<regex options>", ::CrRegexOptionsElement)
 @JvmField val CR_REGEX_START = CrystalTokenType("<regex start>")
 @JvmField val CR_STRING_ARRAY_END = CrystalTokenType("<string array end>")
 @JvmField val CR_STRING_ARRAY_START = CrystalTokenType("<string array start>")

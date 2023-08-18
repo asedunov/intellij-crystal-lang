@@ -13,388 +13,389 @@ import java.util.Deque;
 
 import org.crystal.intellij.config.CrystalLevel;
 
+import static org.crystal.intellij.config.CrystalLevel.*;
 import static org.crystal.intellij.lexer.TokenTypesKt.*;
 
 %%
 
 %{
   private static enum BlockKind {
-        PAREN, BRACKET, BRACE, ANGLE, PIPE
+      PAREN, BRACKET, BRACE, ANGLE, PIPE
+  }
+
+  private static class Block {
+    @NotNull
+    private final BlockKind kind;
+    private int balance = 1;
+    @NotNull
+    private final IElementType endType;
+
+    private Block(@NotNull BlockKind kind, @NotNull IElementType endType) {
+      this.kind = kind;
+      this.endType = endType;
     }
+  }
 
-    private static class Block {
-      @NotNull
-      private final BlockKind kind;
-      private int balance = 1;
-      @NotNull
-      private final IElementType endType;
+  private final LexerState lexerState = new LexerState();
 
-      private Block(@NotNull BlockKind kind, @NotNull IElementType endType) {
-        this.kind = kind;
-        this.endType = endType;
+  private final IntStack states = new IntArrayList();
+  private final Deque<Block> blocks = new ArrayDeque<>();
+
+  private final Deque<String> heredocIds = new ArrayDeque<>();
+  private int blockLength;
+
+  private int zzStartReadOld = -1;
+  private int zzMarkedPosOld = -1;
+  private int zzLexicalStateOld = YYINITIAL;
+
+  private int macroCurlyCount = 0;
+  private final Deque<DelimiterState> delimiterStates = new ArrayDeque<>();
+
+  public _CrystalLexer15() {
+    this((java.io.Reader)null);
+  }
+
+  @Override
+  protected CrystalLevel getMinLevel() {
+    return CrystalLevel.CRYSTAL_1_5;
+  }
+
+  @Override
+  public LexerState getLexerState() {
+    return lexerState;
+  }
+
+  @Override
+  public void enterLookAhead() {
+    if (zzStartReadOld != -1) throw new AssertionError("Already in look-ahead mode");
+    zzStartReadOld = zzStartRead;
+    zzMarkedPosOld = zzMarkedPos;
+    zzLexicalStateOld = zzLexicalState;
+    yybegin(LOOKAHEAD);
+  }
+
+  @Override
+  public void leaveLookAhead() {
+    yybegin(zzLexicalStateOld);
+    boolean nonEmpty = zzMarkedPos != zzMarkedPosOld;
+    zzMarkedPos = zzMarkedPosOld;
+    zzStartRead = zzStartReadOld;
+    zzStartReadOld = -1;
+    if (nonEmpty) zzAtEOF = false;
+  }
+
+  @Nullable
+  @Override
+  public IElementType lookAhead() throws java.io.IOException {
+    enterLookAhead();
+    IElementType tokenType = doAdvance();
+    leaveLookAhead();
+    return tokenType;
+  }
+
+  private boolean eof() {
+      return zzMarkedPos == zzBuffer.length();
+  }
+
+  @Override
+  @NotNull
+  protected IElementType handle(@NotNull IElementType type) {
+    if (yystate() != LOOKAHEAD) {
+      boolean resetRegexFlags =
+        type != CR_WHITESPACE &&
+        type != CR_NEWLINE &&
+        type != CR_LINE_CONTINUATION &&
+        type != CR_SEMICOLON;
+      if (resetRegexFlags) {
+        lexerState.wantsRegex = true;
+        lexerState.slashIsRegex = false;
       }
     }
 
-    private final LexerState lexerState = new LexerState();
+    return type;
+  }
 
-    private final IntStack states = new IntArrayList();
-    private final Deque<Block> blocks = new ArrayDeque<>();
+  private char yylastchar() {
+      return yycharat(yylength() - 1);
+  }
 
-    private final Deque<String> heredocIds = new ArrayDeque<>();
-    private int blockLength;
+  private void yypushbackAll() {
+    yypushback(yylength());
+  }
 
-    private int zzStartReadOld = -1;
-    private int zzMarkedPosOld = -1;
-    private int zzLexicalStateOld = YYINITIAL;
+  private void yypushbackAndBegin(int state) {
+    yypushbackAll();
+    yybegin(state);
+  }
 
-    private int macroCurlyCount = 0;
-    private final Deque<DelimiterState> delimiterStates = new ArrayDeque<>();
+  @Override
+  protected void yypushbegin(int state) {
+    states.push(yystate());
+    yybegin(state);
+  }
 
-    public _CrystalLexer15() {
-      this((java.io.Reader)null);
+  @Override
+  protected void yypop() {
+    int newState = states.isEmpty() ? YYINITIAL : states.popInt();
+    if (newState == PERCENT) newState = YYINITIAL;
+    yybegin(newState);
+  }
+
+  @NotNull
+  private IElementType popAndHandle(@NotNull IElementType type) {
+    yypop();
+    return handle(type);
+  }
+
+  @NotNull
+  private IElementType pushAndHandle(int nextState, @NotNull IElementType currentType) {
+    yypushbegin(nextState);
+    return handle(currentType);
+  }
+
+  @NotNull
+  private IElementType beginAndHandle(int nextState, @NotNull IElementType currentType) {
+    yybegin(nextState);
+    return handle(currentType);
+  }
+
+  @NotNull
+  private IElementType startRegex() {
+    return pushAndHandle(REGEX_LITERAL_BODY, CR_REGEX_START);
+  }
+
+  private char closingChar(char openChar) {
+    switch (openChar) {
+      case '(': return ')';
+      case '[': return ']';
+      case '{': return '}';
+      case '<': return '>';
+      default: return openChar;
     }
+  }
 
-    @Override
-    protected CrystalLevel getMinLevel() {
-      return CrystalLevel.CRYSTAL_1_5;
+  @Nullable
+  private BlockKind blockKindByStartChar(char ch) {
+    switch (ch) {
+      case '(': return BlockKind.PAREN;
+      case '[': return BlockKind.BRACKET;
+      case '{': return BlockKind.BRACE;
+      case '<': return BlockKind.ANGLE;
+      case '|': return BlockKind.PIPE;
+      default: return null;
     }
+  }
 
-    @Override
-    public LexerState getLexerState() {
-      return lexerState;
+  @Nullable
+  private BlockKind blockKindByEndChar(char ch) {
+    switch (ch) {
+      case ')': return BlockKind.PAREN;
+      case ']': return BlockKind.BRACKET;
+      case '}': return BlockKind.BRACE;
+      case '>': return BlockKind.ANGLE;
+      case '|': return BlockKind.PIPE;
+      default: return null;
     }
+  }
 
-    @Override
-    public void enterLookAhead() {
-      if (zzStartReadOld != -1) throw new AssertionError("Already in look-ahead mode");
-      zzStartReadOld = zzStartRead;
-      zzMarkedPosOld = zzMarkedPos;
-      zzLexicalStateOld = zzLexicalState;
-      yybegin(LOOKAHEAD);
+  @Nullable
+  private BlockKind blockKindByStartEndChar(char ch) {
+    switch (ch) {
+      case '(':
+      case ')': return BlockKind.PAREN;
+      case '[':
+      case ']': return BlockKind.BRACKET;
+      case '{':
+      case '}': return BlockKind.BRACE;
+      case '<':
+      case '>': return BlockKind.ANGLE;
+      case '|': return BlockKind.PIPE;
+      default: return null;
     }
+  }
 
-    @Override
-    public void leaveLookAhead() {
-      yybegin(zzLexicalStateOld);
-      boolean nonEmpty = zzMarkedPos != zzMarkedPosOld;
-      zzMarkedPos = zzMarkedPosOld;
-      zzStartRead = zzStartReadOld;
-      zzStartReadOld = -1;
-      if (nonEmpty) zzAtEOF = false;
+  @NotNull
+  private IElementType enterBlock(int blockState, @NotNull IElementType startType, @NotNull IElementType endType) {
+    char ch = yylastchar();
+    BlockKind kind = blockKindByStartChar(ch);
+    if (kind != null) {
+      blocks.push(new Block(kind, endType));
+      yypushbegin(blockState);
     }
+    blockLength = 0;
+    return handle(startType);
+  }
 
-    @Nullable
-    @Override
-    public IElementType lookAhead() throws java.io.IOException {
-      enterLookAhead();
-      IElementType tokenType = doAdvance();
-      leaveLookAhead();
-      return tokenType;
+  @NotNull
+  private IElementType exitBlock() {
+    yypop();
+    Block block = blocks.pop();
+    return handle(block.endType);
+  }
+
+  private void incBlock(int k) {
+    char ch = yylastchar();
+    BlockKind kind = blockKindByStartChar(ch);
+    Block block = blocks.peek();
+    if (block != null && block.kind == kind) block.balance += k;
+  }
+
+  private void incBlock() {
+    incBlock(1);
+  }
+
+  private void decBlock() {
+    char ch = yylastchar();
+    BlockKind kind = blockKindByEndChar(ch);
+    Block block = blocks.peek();
+    if (block != null && block.kind == kind) block.balance--;
+  }
+
+  private boolean isInBlockOf(@NotNull BlockKind kind) {
+    Block block = blocks.peek();
+    return block != null && block.kind == kind;
+  }
+
+  private boolean isBlockFinished() {
+    Block block = blocks.peek();
+    return block != null && block.balance == 0;
+  }
+
+  private void extendBlock() {
+    blockLength += yylength();
+  }
+
+  @NotNull
+  private IElementType closeBlockToken(@NotNull IElementType type) {
+    zzStartRead = zzMarkedPos - blockLength;
+    blockLength = 0;
+    return handle(type);
+  }
+
+  @NotNull
+  private IElementType closePrecedingBlockToken(@NotNull IElementType type) {
+    yypushbackAll();
+    return closeBlockToken(type);
+  }
+
+  @Nullable
+  private IElementType closePrecedingBlockToken(int nextState, @NotNull IElementType type) {
+    yypushbackAndBegin(nextState);
+
+    if (blockLength == 0) return null;
+    zzStartRead = zzMarkedPos - blockLength;
+    blockLength = 0;
+    return handle(type);
+  }
+
+  @NotNull
+  private IElementType closePrecedingBlockOrHandle(@NotNull IElementType blockTokenType, @NotNull IElementType currentType) {
+    return blockLength != 0 ? closePrecedingBlockToken(blockTokenType) : handle(currentType);
+  }
+
+  private boolean isFullHeredoc() {
+      return !StringUtil.startsWithChar(heredocIds.peekFirst(), '\'');
+  }
+
+  @NotNull
+  private IElementType consumeHeredocStartId() {
+    CharSequence text = yytext();
+    heredocIds.offer(text.toString());
+    yybegin(HEREDOC_HEADER);
+    return handle(CR_HEREDOC_START_ID);
+  }
+
+  private void startHeredocBody() {
+    blockLength = 0;
+    yybegin(HEREDOC_BODY);
+  }
+
+  @Nullable
+  private IElementType consumeHeredocPortion(boolean isEof) {
+    CharSequence text = yytext();
+    if (StringUtil.equals(StringUtil.trimLeading(text), StringUtil.unquoteString(heredocIds.getFirst()))) {
+      heredocIds.pop();
+      yypushbackAndBegin(HEREDOC_END_ID);
+      zzStartRead = zzMarkedPos - blockLength;
+      return handle(CR_HEREDOC_BODY);
     }
-
-    private boolean eof() {
-        return zzMarkedPos == zzBuffer.length();
-    }
-
-    @Override
-    @NotNull
-    protected IElementType handle(@NotNull IElementType type) {
-      if (yystate() != LOOKAHEAD) {
-        boolean resetRegexFlags =
-          type != CR_WHITESPACE &&
-          type != CR_NEWLINE &&
-          type != CR_LINE_CONTINUATION &&
-          type != CR_SEMICOLON;
-        if (resetRegexFlags) {
-          lexerState.wantsRegex = true;
-          lexerState.slashIsRegex = false;
-        }
-      }
-
-      return type;
-    }
-
-    private char yylastchar() {
-        return yycharat(yylength() - 1);
-    }
-
-    private void yypushbackAll() {
-      yypushback(yylength());
-    }
-
-    private void yypushbackAndBegin(int state) {
-      yypushbackAll();
-      yybegin(state);
-    }
-
-    @Override
-    protected void yypushbegin(int state) {
-      states.push(yystate());
-      yybegin(state);
-    }
-
-    @Override
-    protected void yypop() {
-      int newState = states.isEmpty() ? YYINITIAL : states.popInt();
-      if (newState == PERCENT) newState = YYINITIAL;
-      yybegin(newState);
-    }
-
-    @NotNull
-    private IElementType popAndHandle(@NotNull IElementType type) {
-      yypop();
-      return handle(type);
-    }
-
-    @NotNull
-    private IElementType pushAndHandle(int nextState, @NotNull IElementType currentType) {
-      yypushbegin(nextState);
-      return handle(currentType);
-    }
-
-    @NotNull
-    private IElementType beginAndHandle(int nextState, @NotNull IElementType currentType) {
-      yybegin(nextState);
-      return handle(currentType);
-    }
-
-    @NotNull
-    private IElementType startRegex() {
-      return pushAndHandle(REGEX_LITERAL_BODY, CR_REGEX_START);
-    }
-
-    private char closingChar(char openChar) {
-      switch (openChar) {
-        case '(': return ')';
-        case '[': return ']';
-        case '{': return '}';
-        case '<': return '>';
-        default: return openChar;
-      }
-    }
-
-    @Nullable
-    private BlockKind blockKindByStartChar(char ch) {
-      switch (ch) {
-        case '(': return BlockKind.PAREN;
-        case '[': return BlockKind.BRACKET;
-        case '{': return BlockKind.BRACE;
-        case '<': return BlockKind.ANGLE;
-        case '|': return BlockKind.PIPE;
-        default: return null;
-      }
-    }
-
-    @Nullable
-    private BlockKind blockKindByEndChar(char ch) {
-      switch (ch) {
-        case ')': return BlockKind.PAREN;
-        case ']': return BlockKind.BRACKET;
-        case '}': return BlockKind.BRACE;
-        case '>': return BlockKind.ANGLE;
-        case '|': return BlockKind.PIPE;
-        default: return null;
-      }
-    }
-
-    @Nullable
-    private BlockKind blockKindByStartEndChar(char ch) {
-      switch (ch) {
-        case '(':
-        case ')': return BlockKind.PAREN;
-        case '[':
-        case ']': return BlockKind.BRACKET;
-        case '{':
-        case '}': return BlockKind.BRACE;
-        case '<':
-        case '>': return BlockKind.ANGLE;
-        case '|': return BlockKind.PIPE;
-        default: return null;
-      }
-    }
-
-    @NotNull
-    private IElementType enterBlock(int blockState, @NotNull IElementType startType, @NotNull IElementType endType) {
-      char ch = yylastchar();
-      BlockKind kind = blockKindByStartChar(ch);
-      if (kind != null) {
-        blocks.push(new Block(kind, endType));
-        yypushbegin(blockState);
-      }
-      blockLength = 0;
-      return handle(startType);
-    }
-
-    @NotNull
-    private IElementType exitBlock() {
-      yypop();
-      Block block = blocks.pop();
-      return handle(block.endType);
-    }
-
-    private void incBlock(int k) {
-      char ch = yylastchar();
-      BlockKind kind = blockKindByStartChar(ch);
-      Block block = blocks.peek();
-      if (block != null && block.kind == kind) block.balance += k;
-    }
-
-    private void incBlock() {
-      incBlock(1);
-    }
-
-    private void decBlock() {
-      char ch = yylastchar();
-      BlockKind kind = blockKindByEndChar(ch);
-      Block block = blocks.peek();
-      if (block != null && block.kind == kind) block.balance--;
-    }
-
-    private boolean isInBlockOf(@NotNull BlockKind kind) {
-      Block block = blocks.peek();
-      return block != null && block.kind == kind;
-    }
-
-    private boolean isBlockFinished() {
-      Block block = blocks.peek();
-      return block != null && block.balance == 0;
-    }
-
-    private void extendBlock() {
+    else {
       blockLength += yylength();
-    }
-
-    @NotNull
-    private IElementType closeBlockToken(@NotNull IElementType type) {
-      zzStartRead = zzMarkedPos - blockLength;
-      blockLength = 0;
-      return handle(type);
-    }
-
-    @NotNull
-    private IElementType closePrecedingBlockToken(@NotNull IElementType type) {
-      yypushbackAll();
-      return closeBlockToken(type);
-    }
-
-    @Nullable
-    private IElementType closePrecedingBlockToken(int nextState, @NotNull IElementType type) {
-      yypushbackAndBegin(nextState);
-
-      if (blockLength == 0) return null;
-      zzStartRead = zzMarkedPos - blockLength;
-      blockLength = 0;
-      return handle(type);
-    }
-
-    @NotNull
-    private IElementType closePrecedingBlockOrHandle(@NotNull IElementType blockTokenType, @NotNull IElementType currentType) {
-      return blockLength != 0 ? closePrecedingBlockToken(blockTokenType) : handle(currentType);
-    }
-
-    private boolean isFullHeredoc() {
-        return !StringUtil.startsWithChar(heredocIds.peekFirst(), '\'');
-    }
-
-    @NotNull
-    private IElementType consumeHeredocStartId() {
-      CharSequence text = yytext();
-      heredocIds.offer(text.toString());
-      yybegin(HEREDOC_HEADER);
-      return handle(CR_HEREDOC_START_ID);
-    }
-
-    private void startHeredocBody() {
-      blockLength = 0;
-      yybegin(HEREDOC_BODY);
-    }
-
-    @Nullable
-    private IElementType consumeHeredocPortion(boolean isEof) {
-      CharSequence text = yytext();
-      if (StringUtil.equals(StringUtil.trimLeading(text), StringUtil.unquoteString(heredocIds.getFirst()))) {
-        heredocIds.pop();
-        yypushbackAndBegin(HEREDOC_END_ID);
+      if (isEof) {
+        heredocIds.clear();
         zzStartRead = zzMarkedPos - blockLength;
         return handle(CR_HEREDOC_BODY);
       }
-      else {
-        blockLength += yylength();
-        if (isEof) {
-          heredocIds.clear();
-          zzStartRead = zzMarkedPos - blockLength;
-          return handle(CR_HEREDOC_BODY);
-        }
-        return null;
-      }
+      return null;
     }
+  }
 
-    @NotNull
-    private IElementType consumeHeredocEndId() {
-      if (heredocIds.isEmpty()) {
-        yypop();
-      }
-      else {
-        yybegin(HEREDOC_HEADER);
-      }
-      return handle(CR_HEREDOC_END_ID);
+  @NotNull
+  private IElementType consumeHeredocEndId() {
+    if (heredocIds.isEmpty()) {
+      yypop();
     }
+    else {
+      yybegin(HEREDOC_HEADER);
+    }
+    return handle(CR_HEREDOC_END_ID);
+  }
 
-    @NotNull
-    private IElementType handleSlash() {
-      if (lexerState.wantsDefOrMacroName) return handle(CR_DIV_OP);
-      if (lexerState.slashIsRegex) return startRegex();
-      if (eof() || isAsciiWhitespace(zzBuffer.charAt(zzMarkedPos))) return handle(CR_DIV_OP);
-      if (lexerState.wantsRegex) return startRegex();
-      return handle(CR_DIV_OP);
-    }
+  @NotNull
+  private IElementType handleSlash() {
+    if (lexerState.wantsDefOrMacroName) return handle(CR_DIV_OP);
+    if (lexerState.slashIsRegex) return startRegex();
+    if (eof() || isAsciiWhitespace(zzBuffer.charAt(zzMarkedPos))) return handle(CR_DIV_OP);
+    if (lexerState.wantsRegex) return startRegex();
+    return handle(CR_DIV_OP);
+  }
 
-    private boolean isAsciiWhitespace(char c) {
-      return c == ' ' || (c >= 9 && c <= 13);
-    }
+  private boolean isAsciiWhitespace(char c) {
+    return c == ' ' || (c >= 9 && c <= 13);
+  }
 
-    private void processMacroStartKeyword(boolean nesting) {
-      if (nesting) macroState.nest++;
-      macroState.whitespace = true;
-      macroState.beginningOfLine = false;
-      yybegin(MACRO_MAIN);
-    }
+  private void processMacroStartKeyword(boolean nesting) {
+    if (nesting) macroState.nest++;
+    macroState.whitespace = true;
+    macroState.beginningOfLine = false;
+    yybegin(MACRO_MAIN);
+  }
 
-    @Override
-    protected int getMacroConsumeWhitespacesState() {
-      return MACRO_CONSUME_WHITESPACES;
-    }
+  @Override
+  protected int getMacroConsumeWhitespacesState() {
+    return MACRO_CONSUME_WHITESPACES;
+  }
 
-    @Override
-    protected int getMacroConsumeEscapedControlState() {
-        return MACRO_CONSUME_ESCAPED_CONTROL_PREFIX;
-    }
+  @Override
+  protected int getMacroConsumeEscapedControlState() {
+      return MACRO_CONSUME_ESCAPED_CONTROL_PREFIX;
+  }
 
-    @Override
-    protected int getMacroConsumeLBraceState() {
-      return MACRO_CONSUME_LBRACE;
-    }
+  @Override
+  protected int getMacroConsumeLBraceState() {
+    return MACRO_CONSUME_LBRACE;
+  }
 
-    @Override
-    protected int getMacroConsumeCommentStartState() {
-      return MACRO_CONSUME_COMMENT_START;
-    }
+  @Override
+  protected int getMacroConsumeCommentStartState() {
+    return MACRO_CONSUME_COMMENT_START;
+  }
 
-    @Override
-    protected int getMacroConsumeCommentBodyState() {
-      return MACRO_CONSUME_COMMENT_BODY;
-    }
+  @Override
+  protected int getMacroConsumeCommentBodyState() {
+    return MACRO_CONSUME_COMMENT_BODY;
+  }
 
-    @Override
-    protected int getMacroConsumeNoDelimiterState() {
-      return MACRO_CONSUME_NO_DELIMITER;
-    }
+  @Override
+  protected int getMacroConsumeNoDelimiterState() {
+    return MACRO_CONSUME_NO_DELIMITER;
+  }
 
-    @Override
-    protected int getMacroMainState() {
-      return MACRO_MAIN;
-    }
-  %}
+  @Override
+  protected int getMacroMainState() {
+    return MACRO_MAIN;
+  }
+%}
 
 %class _CrystalLexer15
 %extends CrystalLexerBase

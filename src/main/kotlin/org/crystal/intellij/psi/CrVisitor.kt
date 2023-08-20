@@ -313,8 +313,6 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitVisibilityModifier(o: CrVisibilityModifier) = visitCrElement(o)
 
-    open fun visitWithExpression(o: CrWithExpression) = visitExpression(o)
-
     open fun visitWhenClause(o: CrWhenClause) = visitCrElement(o)
 
     open fun visitWhileExpression(o: CrWhileExpression) = visitExpression(o)

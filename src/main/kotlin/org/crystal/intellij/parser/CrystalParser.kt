@@ -3824,19 +3824,21 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseYield() = varDeclarationOrElse {
             composite(CR_YIELD_EXPRESSION) {
                 nextToken()
-                withStopOnDo { parseCallArgs(isControl = true) }
+                parseYieldArgs()
             }
         }
 
+        private fun PsiBuilder.parseYieldArgs() = withStopOnDo { parseCallArgs(isControl = true) }
+
         private fun PsiBuilder.parseWith() = varDeclarationOrElse {
-            composite(CR_WITH_EXPRESSION) {
+            composite(CR_YIELD_EXPRESSION) {
                 nextTokenSkipSpaces()
                 stopOnYield++
                 ensureParseAssignment()
                 stopOnYield--
                 skipSpaces()
-                if (at(CR_YIELD)) {
-                    parseYield()
+                if (tok(CR_YIELD)) {
+                    parseYieldArgs()
                 }
                 else error("Expected: 'yield'")
             }

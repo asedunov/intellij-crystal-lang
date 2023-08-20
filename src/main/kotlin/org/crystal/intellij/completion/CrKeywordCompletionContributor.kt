@@ -240,10 +240,10 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         inParent<CrWhileExpression> { e, p, consumer ->
             if (p.condition == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
         }
-        inParent<CrWithExpression> { e, p, consumer ->
+        inParent<CrYieldExpression> { e, p, consumer ->
             when {
                 p.subject == e -> consumer(GENERAL_EXPRESSION_START_KEYWORDS)
-                p.yield == null -> consumer(CR_YIELD)
+                p.yieldKeyword == null -> consumer(CR_YIELD)
             }
         }
 

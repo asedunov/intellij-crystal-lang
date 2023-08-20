@@ -98,7 +98,6 @@ val CR_UNINITIALIZED_EXPRESSION = CrCompositeElementType("CR_UNINITIALIZED_EXPRE
 val CR_UNLESS_EXPRESSION = CrCompositeElementType("CR_UNLESS_EXPRESSION", ::CrUnlessExpression)
 val CR_UNTIL_EXPRESSION = CrCompositeElementType("CR_UNTIL_EXPRESSION", ::CrUntilExpression)
 val CR_WHILE_EXPRESSION = CrCompositeElementType("CR_WHILE_EXPRESSION", ::CrWhileExpression)
-val CR_WITH_EXPRESSION = CrCompositeElementType("CR_WITH_EXPRESSION", ::CrWithExpression)
 val CR_YIELD_EXPRESSION = CrCompositeElementType("CR_YIELD_EXPRESSION", ::CrYieldExpression)
 
 // Type elements

@@ -230,7 +230,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             if (p.condition == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
         }
         inParent<CrWhenClause> { e, p, consumer ->
-            if (p.expression == e) {
+            if (e in p.expressions) {
                 when (p.parent) {
                     is CrCaseExpression -> consumer(GENERAL_EXPRESSION_START_KEYWORDS)
                     is CrSelectExpression -> consumer(CR_SELF)

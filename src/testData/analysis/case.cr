@@ -35,6 +35,12 @@ when {0, 0} then 0
 when <error descr="Wrong number of tuple elements (given 3, expected 2)">{1, 2, 3}</error> then 0
 end
 
+case {x, y}
+when z then 0
+when {0, 0} then 0
+when {1, 2}, <error descr="Wrong number of tuple elements (given 3, expected 2)">{1, 2, 3}</error> then 0
+end
+
 case x
 when y then 0
 when {0, 0} then 0

@@ -457,33 +457,33 @@ class CrystalSyntaxCheckingVisitor(
                     error(whenClause.keyword, message)
                 }
 
-                val expression = whenClause.expression
+                for (expression in whenClause.expressions) {
+                    val expressionSize = expression.tupleSizeIfAny()
+                    if (isTupleCondition && expression is CrTupleExpression) {
+                        if (expressionSize != conditionSize) {
+                            error(
+                                expression,
+                                "Wrong number of tuple elements (given $expressionSize, expected $conditionSize)"
+                            )
+                        }
 
-                val expressionSize = expression.tupleSizeIfAny()
-                if (isTupleCondition && expression is CrTupleExpression) {
-                    if (expressionSize != conditionSize) {
-                        error(
-                            expression,
-                            "Wrong number of tuple elements (given $expressionSize, expected $conditionSize)"
-                        )
+                        if (isExhaustive) {
+                            expression.expressions.forEach { it.errorIfInvalidForExhaustion() }
+                        }
                     }
+                    else {
+                        if (expression is CrReferenceExpression &&
+                            expression.nameElement?.kind == CrNameKind.UNDERSCORE) {
+                            val message = if (isExhaustive)
+                                "'when _' is not supported"
+                            else
+                                "'when _' is not supported, use 'else' block instead"
+                            error(expression, message)
+                        }
 
-                    if (isExhaustive) {
-                        expression.expressions.forEach { it.errorIfInvalidForExhaustion() }
-                    }
-                }
-                else {
-                    if (expression is CrReferenceExpression &&
-                        expression.nameElement?.kind == CrNameKind.UNDERSCORE) {
-                        val message = if (isExhaustive)
-                            "'when _' is not supported"
-                        else
-                            "'when _' is not supported, use 'else' block instead"
-                        error(expression, message)
-                    }
-
-                    if (isExhaustive) {
-                        expression?.errorIfInvalidForExhaustion()
+                        if (isExhaustive) {
+                            expression?.errorIfInvalidForExhaustion()
+                        }
                     }
                 }
             }
@@ -494,9 +494,10 @@ class CrystalSyntaxCheckingVisitor(
         super.visitSelectExpression(o)
 
         for (whenClause in o.whenClauses) {
-            val expression = whenClause.expression ?: continue
-            if (!expression.isValidForSelectWhen()) {
-                error(expression, "invalid 'when' expression in 'select': must be an assignment or call")
+            for (expression in whenClause.expressions) {
+                if (!expression.isValidForSelectWhen()) {
+                    error(expression, "invalid 'when' expression in 'select': must be an assignment or call")
+                }
             }
         }
     }

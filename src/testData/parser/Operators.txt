@@ -483,15 +483,17 @@ FILE
     CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
 
-  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
     PsiElement(-)('-')
     PsiWhiteSpace(' ')
-    PsiElement(<integer literal>)('1')
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
 
-  CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+  CrUnaryExpression(CR_UNARY_EXPRESSION)
     PsiElement(+)('+')
     PsiWhiteSpace(' ')
-    PsiElement(<integer literal>)('1')
+    CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
+      PsiElement(<integer literal>)('1')
 
   CrUnaryExpression(CR_UNARY_EXPRESSION)
     PsiElement(~)('~')

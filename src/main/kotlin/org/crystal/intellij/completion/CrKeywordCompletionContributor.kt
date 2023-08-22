@@ -252,7 +252,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         afterToken(CR_PROTECTED, AFTER_PROTECTED_KEYWORDS)
 
         afterToken(CR_DOT) { e, consumer ->
-            val prev = e.prevSibling ?: return@afterToken
+            val prev = e.prevSibling ?: e.prevLeaf()?.prevSibling ?: return@afterToken
             if (prev.supportsMetaclass) {
                 consumer(CR_CLASS)
             }

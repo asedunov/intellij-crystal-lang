@@ -1001,17 +1001,22 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
             val m = mark()
             var nodeType: IElementType = CR_UNARY_EXPRESSION
-            nextTokenSkipSpaces()
-            if (parsePrefixOperand(commaOperand)) {
-                val lastType = lastType()
-                if (isPlusMinus &&
-                    lastType == CR_INTEGER_LITERAL_EXPRESSION || lastType == CR_FLOAT_LITERAL_EXPRESSION) {
-                    nodeType = lastType
-                    dropLast()
+            nextToken()
+            when {
+                isPlusMinus && at(CR_INTEGER_LITERAL) -> {
+                    nextToken()
+                    nodeType = CR_INTEGER_LITERAL_EXPRESSION
                 }
-            }
-            else {
-                error("Expression expected")
+                isPlusMinus && at(CR_FLOAT_LITERAL) -> {
+                    nextToken()
+                    nodeType = CR_FLOAT_LITERAL_EXPRESSION
+                }
+                else -> {
+                    skipSpaces()
+                    if (!parsePrefixOperand(commaOperand)) {
+                        error("Expression expected")
+                    }
+                }
             }
             m.done(nodeType)
 

@@ -1168,7 +1168,8 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                             }
 
                             else -> {
-                                if (!at(methodNameTokens)) {
+                                val nameToken = tokenType
+                                if (nameToken !in methodNameTokens) {
                                     error("Expected: <method name>")
                                     m.done(CR_REFERENCE_EXPRESSION)
                                     continue
@@ -1225,6 +1226,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                                 }
 
                                 if (parseOptBlock(stopOnDo)) isCall = true
+                                if (nameToken in CR_BASE_OPERATORS) isCall = true
 
                                 m.done(if (isCall) CR_CALL_EXPRESSION else CR_REFERENCE_EXPRESSION)
                             }

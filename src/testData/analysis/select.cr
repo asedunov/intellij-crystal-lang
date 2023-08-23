@@ -1,3 +1,4 @@
+y = 1
 select
 when <error descr="invalid 'when' expression in 'select': must be an assignment or call">!x</error> then 0;
 when +x then 0;
@@ -13,7 +14,8 @@ when <error descr="invalid 'when' expression in 'select': must be an assignment 
 when `abc` then 0;
 when <error descr="invalid 'when' expression in 'select': must be an assignment or call">"abc"</error> then 0;
 when <error descr="invalid 'when' expression in 'select': must be an assignment or call">123</error> then 0;
-when <error descr="invalid 'when' expression in 'select': must be an assignment or call">x</error> then 0;
+when x then 0;
+when <error descr="invalid 'when' expression in 'select': must be an assignment or call">y</error> then 0;
 when <error descr="invalid 'when' expression in 'select': must be an assignment or call">@x</error> then 0;
 when a.x then 0;
 when <error descr="invalid 'when' expression in 'select': must be an assignment or call">a.@x</error> then 0;

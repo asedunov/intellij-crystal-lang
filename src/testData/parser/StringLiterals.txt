@@ -116,7 +116,7 @@ FILE
     PsiElement(<regex end>)('/')
 
   CrBinaryExpression(CR_BINARY_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('a')
     PsiWhiteSpace(' ')
@@ -180,7 +180,7 @@ FILE
       PsiElement(<string raw>)('=')
       PsiElement(<regex end>)('/')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('a')
   PsiElement(;)(';')
@@ -219,7 +219,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(end)('end')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('a')
   PsiElement(;)(';')
@@ -254,7 +254,7 @@ FILE
     PsiWhiteSpace('\n')
     PsiElement(end)('end')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('a')
   PsiElement(;)(';')
@@ -287,7 +287,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(end)('end')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('a')
   PsiWhiteSpace('\n')
@@ -315,7 +315,7 @@ FILE
     PsiWhiteSpace('\n')
     PsiElement(end)('end')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('a')
   PsiWhiteSpace('\n')
@@ -337,7 +337,7 @@ FILE
     PsiWhiteSpace(' ')
     PsiElement(end)('end')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('a')
   PsiWhiteSpace('\n')
@@ -541,7 +541,7 @@ FILE
       PsiElement(<identifier>)('foo')
     PsiWhiteSpace(' ')
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrCallExpression(CR_CALL_EXPRESSION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('a')
       PsiElement(,)(',')
@@ -653,7 +653,7 @@ FILE
     PsiElement(<string raw>)('foo')
     CrStringInterpolation(CR_STRING_INTERPOLATION)
       PsiElement(<interpolation start>)('#{')
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrCallExpression(CR_CALL_EXPRESSION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('bar')
       PsiElement(<interpolation end>)('}')

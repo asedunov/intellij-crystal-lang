@@ -378,7 +378,10 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
         if (e is CrNameElement && e.textOffset == position.textOffset) {
             val p = e.parent
-            if ((p is CrPathExpression || p is CrPathTypeElement || p is CrReferenceExpression) && p.textOffset == position.textOffset) {
+            if ((p is CrPathExpression ||
+                p is CrPathTypeElement ||
+                p is CrReferenceExpression ||
+                p is CrCallExpression && p.argumentList == null && p.blockArgument == null) && p.textOffset == position.textOffset) {
                 e = p
             }
         }

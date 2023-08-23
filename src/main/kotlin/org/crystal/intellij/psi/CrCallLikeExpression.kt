@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.openapi.util.Key
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
+import org.crystal.intellij.lexer.CR_DOT
 import org.crystal.intellij.lexer.CR_PATH_OP
 import org.crystal.intellij.resolve.CrCall
 import org.crystal.intellij.resolve.CrStdFqNames
@@ -30,6 +31,9 @@ sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSim
 
     private val isGlobal: Boolean
         get() = firstChild.elementType == CR_PATH_OP
+
+    val hasImplicitReceiver: Boolean
+        get() = firstChild.elementType == CR_DOT
 
     val receiver: CrExpression?
         get() = explicitReceiver ?: ownReceiver

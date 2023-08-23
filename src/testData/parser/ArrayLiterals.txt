@@ -63,7 +63,7 @@ FILE
             PsiElement(<constant>)('Foo')
       PsiElement(,)(',')
       PsiWhiteSpace(' ')
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+      CrCallExpression(CR_CALL_EXPRESSION)
         CrPathExpression(CR_PATH_EXPRESSION)
           CrPathNameElement(CR_PATH_NAME_ELEMENT)
             PsiElement(<constant>)('Bar')

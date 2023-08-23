@@ -154,13 +154,23 @@ public class LazyPsiBuilder extends UnprotectedUserDataHolder implements PsiBuil
   @Override
   @Nullable
   public StartMarker getLatestDoneMarker() {
+    int index = getLatestDoneMarkerIndex();
+    return index >= 0 ? getDoneMarkerAt(index) : null;
+  }
+
+  public int getLatestDoneMarkerIndex() {
     int index = myProduction.size() - 1;
     while (index >= 0) {
-      LazyPsiBuilder.StartMarker marker = myProduction.getDoneMarkerAt(index);
-      if (marker != null) return marker;
+      LazyPsiBuilder.StartMarker marker = getDoneMarkerAt(index);
+      if (marker != null) return index;
       --index;
     }
-    return null;
+    return -1;
+  }
+
+  @Nullable
+  public StartMarker getDoneMarkerAt(int index) {
+    return index >= 0 ? myProduction.getDoneMarkerAt(index) : null;
   }
 
   private interface Node extends LighterASTNode {

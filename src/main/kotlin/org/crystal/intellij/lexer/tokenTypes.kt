@@ -292,6 +292,8 @@ val CR_ESCAPES: TokenSet = TokenSet.create(
 
 val CR_COMMENTS: TokenSet = TokenSet.create(CR_LINE_COMMENT)
 
+val CR_INSIGNIFICANT_TOKENS = TokenSet.orSet(CR_WHITESPACES_AND_NEWLINES, CR_COMMENTS)
+
 val CR_BASE_OPERATORS: TokenSet = TokenSet.create(
     CR_ANDAND_OP,
     CR_AND_OP,

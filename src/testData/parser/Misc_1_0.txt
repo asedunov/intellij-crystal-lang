@@ -1,14 +1,14 @@
 FILE
   CrParenthesizedExpression(CR_PARENTHESIZED_EXPRESSION)
     PsiElement(()('(')
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('a')
     PsiElement(;)(';')
     PsiErrorElement:Expected: <expression>
       <empty list>
     PsiWhiteSpace('\n')
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('b')
     PsiElement())(')')

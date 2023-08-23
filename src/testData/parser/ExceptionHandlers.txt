@@ -566,7 +566,7 @@ FILE
       PsiElement(<integer literal>)('2')
 
   CrEnsureExpression(CR_ENSURE_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiWhiteSpace(' ')
@@ -576,7 +576,7 @@ FILE
       PsiElement(<integer literal>)('2')
 
   CrRescueExpression(CR_RESCUE_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiWhiteSpace(' ')

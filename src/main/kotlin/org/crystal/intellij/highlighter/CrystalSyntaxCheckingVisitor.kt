@@ -14,6 +14,7 @@ import com.intellij.util.containers.MultiMap
 import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.config.crystalSettings
 import org.crystal.intellij.lexer.*
+import org.crystal.intellij.parser.CR_PARENTHESIZED_ARGUMENT_LIST
 import org.crystal.intellij.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.psi.*
 import org.crystal.intellij.quickFixes.*
@@ -310,6 +311,7 @@ class CrystalSyntaxCheckingVisitor(
             is CrListExpression -> elements.all { it.isSplatAssignable() }
             is CrReferenceExpression -> receiver != null
             is CrIndexedExpression -> true
+            is CrCallExpression -> receiver != null && argumentList == null && blockArgument == null
             else -> false
         }
     }
@@ -896,6 +898,10 @@ class CrystalSyntaxCheckingVisitor(
             is CrReferenceExpression -> {
                 val nameElement = nameElement ?: return false
                 if (nameElement.kind == CrNameKind.UNDERSCORE) return true
+            }
+            is CrCallLikeExpression -> {
+                if (argumentList != null || blockArgument != null) return false
+                val nameElement = nameElement ?: return false
                 val receiver = receiver
                 if (nameElement.isMetaClassRef &&
                     receiver is CrPathExpression || receiver is CrTypeExpression) return true
@@ -915,13 +921,29 @@ class CrystalSyntaxCheckingVisitor(
                 e.elements.forEach { checkIsWritable(it, op) }
             }
 
-            is CrReferenceExpression -> {
+            is CrIndexedExpression -> return
+
+            is CrCallLikeExpression -> {
                 e.nameElement?.let { nameElement ->
                     if (nameElement.isSelfRef) {
                         error(e, "Can't change the value of self")
                     }
                     if (nameElement.isQuestion || nameElement.isExclamation) {
                         error(e, "Assignment is now allowed for ?/! method calls")
+                    }
+                }
+                val name = e.name ?: ""
+                if (e.argumentList?.elementType != CR_PARENTHESIZED_ARGUMENT_LIST &&
+                    e.blockArgument == null &&
+                    (e.argumentList == null || name == "[]")) return
+                if (name.endsWith("=")) return
+                reportAsInvalidLHS(e)
+            }
+
+            is CrReferenceExpression -> {
+                e.nameElement?.let { nameElement ->
+                    if (nameElement.isSelfRef) {
+                        error(e, "Can't change the value of self")
                     }
                     if (ll >= CrystalLevel.CRYSTAL_1_7 && nameElement.kind == CrNameKind.GLOBAL_MATCH_INDEX) {
                         error(e, "Assignment is not allowed for global match data index")
@@ -934,11 +956,14 @@ class CrystalSyntaxCheckingVisitor(
                 if (e.parent is CrListExpression) error(e, "Multiple assignment is not allowed for constants")
             }
 
-            is CrIndexedExpression -> return
             is CrSplatExpression -> e.expression?.let { checkIsWritable(it, op) }
 
-            else -> error(e, "This expression is not allowed as assignment left-hand side")
+            else -> reportAsInvalidLHS(e)
         }
+    }
+
+    private fun reportAsInvalidLHS(e: PsiElement) {
+        error(e, "This expression is not allowed as assignment left-hand side")
     }
 
     private fun handleUnicode(o: CrCharValueHolder) {

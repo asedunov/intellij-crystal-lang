@@ -10,6 +10,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.builder.LazyPsiBuilder
+import org.crystal.intellij.parser.builder.LazyPsiBuilder.ProductionMarker
+import org.crystal.intellij.parser.builder.LazyPsiBuilder.StartMarker
 import java.util.*
 
 class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
@@ -568,8 +570,9 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.recordLastParsedRefName() {
-            val marker = latestDoneMarker as? LazyPsiBuilder.StartMarker ?: return
-            if (marker.tokenType != CR_REFERENCE_EXPRESSION) return
+            val marker = latestDoneMarker as? StartMarker ?: return
+            val lastType = marker.tokenType
+            if (lastType != CR_REFERENCE_EXPRESSION && lastType != CR_CALL_EXPRESSION) return
 
             val from = marker.getLexemeIndex(false)
             val to = marker.getLexemeIndex(true)
@@ -579,7 +582,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             for (i in from until to) {
                 val steps = i - rawTokenIndex()
                 val type = rawLookup(steps)
-                if (type in CR_WHITESPACES_AND_NEWLINES || type in CR_COMMENTS) continue
+                if (type in CR_INSIGNIFICANT_TOKENS) continue
                 if (type !in referenceTokens) return
                 if (offset != 0) return
                 offset = steps
@@ -770,13 +773,22 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             )
         )
 
-        private fun PsiBuilder.lastProductionTokenIndex(): Int? {
-            val marker = latestDoneMarker as? LazyPsiBuilder.ProductionMarker ?: return null
+        private inline fun PsiBuilder.forEachLexemeIn(
+            marker: ProductionMarker,
+            action: (Int, IElementType?) -> Unit
+        ) {
             val from = marker.getLexemeIndex(false)
             val to = marker.getLexemeIndex(true)
             for (i in to - 1 downTo from) {
                 val steps = i - rawTokenIndex()
                 val type = rawLookup(steps)
+                action(steps, type)
+            }
+        }
+
+        private fun PsiBuilder.lastProductionTokenIndex(): Int? {
+            val marker = latestDoneMarker as? ProductionMarker ?: return null
+            forEachLexemeIn(marker) { steps, type ->
                 if (type !in CR_WHITESPACES_AND_NEWLINES && type !in CR_COMMENTS) return steps
             }
             return null
@@ -802,6 +814,46 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             return doParseAssignment(allowSuffix, allowComma, true)
         }
 
+        private val allowedNameTokensForSimpleCall = TokenSet.create(
+            CR_IDENTIFIER,
+            CR_INSTANCE_VAR,
+            CR_CLASS_VAR
+        )
+
+        private fun PsiBuilder.isSimpleCall(marker: ProductionMarker): Boolean {
+            var foundId = false
+            forEachLexemeIn(marker) { _, type ->
+                if (type in CR_INSIGNIFICANT_TOKENS || type == CR_MUL_OP) return@forEachLexemeIn
+                if (type == CR_COMMA) {
+                    foundId = false
+                    return@forEachLexemeIn
+                }
+                if (type !in allowedNameTokensForSimpleCall) return false
+                if (foundId) return false
+                foundId = true
+            }
+            return true
+        }
+
+        private fun PsiBuilder.remapCallsToRefs(listMarker: ProductionMarker, listMarkerIndex: Int) {
+            val from = listMarker.getLexemeIndex(false)
+            val to = listMarker.getLexemeIndex(true)
+            val lb = asLazyBuilder()
+            for (i in listMarkerIndex downTo 0) {
+                val m = lb.getDoneMarkerAt(i) ?: continue
+                if (m.getLexemeIndex(false) !in from until to) break
+                if (m.tokenType == CR_CALL_EXPRESSION) {
+                    m.remapTokenType(CR_REFERENCE_EXPRESSION)
+                }
+            }
+        }
+
+        private val lhsTypesForCallToRefConversion = TokenSet.create(
+            CR_CALL_EXPRESSION,
+            CR_SPLAT_EXPRESSION,
+            CR_LIST_EXPRESSION
+        )
+
         private fun PsiBuilder.doParseAssignment(
             allowSuffix: Boolean = true,
             allowComma: Boolean = false,
@@ -812,11 +864,17 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 m.drop()
                 return false
             }
-            val lhsMarker = latestDoneMarker
-            if (forceAssignForList && lastType() == CR_LIST_EXPRESSION && !at(CR_ASSIGN_OPERATORS)) {
+            val lhsMarkerIndex = asLazyBuilder().latestDoneMarkerIndex
+            val lhsMarker = asLazyBuilder().getDoneMarkerAt(lhsMarkerIndex)
+            val isAssign = at(CR_ASSIGN_OPERATORS)
+            val lhsType = lhsMarker?.tokenType
+            if (forceAssignForList && lhsType == CR_LIST_EXPRESSION && !isAssign) {
                 m.drop()
                 error("Expected: '<assignment>'")
                 return true
+            }
+            if (isAssign && lhsMarker != null && lhsType in lhsTypesForCallToRefConversion && isSimpleCall(lhsMarker)) {
+                remapCallsToRefs(lhsMarker, lhsMarkerIndex)
             }
             var foundSimpleAssignment = false
             var foundComboAssignment = false
@@ -1180,7 +1238,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                                 val nameToken = tokenType
                                 if (nameToken !in methodNameTokens) {
                                     error("Expected: <method name>")
-                                    m.done(CR_REFERENCE_EXPRESSION)
+                                    m.done(CR_CALL_EXPRESSION)
                                     continue
                                 }
 
@@ -1188,18 +1246,16 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                                 lexerState.wantsRegex = hasSpace
                                 composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
 
-                                var isCall = false
-
                                 when {
                                     at(CR_ASSIGN_OP) -> {
                                         if (commaOperand) {
-                                            m.done(CR_REFERENCE_EXPRESSION)
+                                            m.done(CR_CALL_EXPRESSION)
                                             break
                                         }
 
                                         val mAssign = m.precede()
 
-                                        m.done(CR_REFERENCE_EXPRESSION)
+                                        m.done(CR_CALL_EXPRESSION)
                                         nextTokenSkipSpacesAndNewlines()
 
                                         if (at(CR_LPAREN) && lexer.lookAhead { skipSpacesAndNewlines(); at(CR_MUL_OP) }) {
@@ -1220,7 +1276,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
                                     at(CR_ASSIGN_COMBO_OPERATORS) -> {
                                         val mAssign = m.precede()
-                                        m.done(CR_REFERENCE_EXPRESSION)
+                                        m.done(CR_CALL_EXPRESSION)
                                         nextTokenSkipSpacesAndNewlines()
                                         ensureParseAssignment()
                                         mAssign.done(CR_ASSIGNMENT_EXPRESSION)
@@ -1229,15 +1285,13 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
                                     else -> {
                                         withStopOnDo {
-                                            isCall = if (hasSpace) parseCallArgsSpaceConsumed() else parseCallArgs()
+                                            if (hasSpace) parseCallArgsSpaceConsumed() else parseCallArgs()
                                         }
                                     }
                                 }
 
-                                if (parseOptBlock(stopOnDo)) isCall = true
-                                if (nameToken in CR_BASE_OPERATORS) isCall = true
-
-                                m.done(if (isCall) CR_CALL_EXPRESSION else CR_REFERENCE_EXPRESSION)
+                                parseOptBlock(stopOnDo)
+                                m.done(CR_CALL_EXPRESSION)
                             }
                         }
                     }
@@ -1620,7 +1674,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
                 at(methodNameTokens) -> {
                     withStopOnDo {
-                        parseVarOrCall()
+                        parseVarOrCall(forceCall = true)
 
                         mergeLatestDoneMarker(m)
 
@@ -2251,7 +2305,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 in CR_IDS -> {
                     val m = mark()
                     nextTokenSkipSpacesAndNewlines()
-                    parseVarOrCall()
+                    parseVarOrCall(global = true)
                     mergeLatestDoneMarker(m)
                 }
                 CR_CONSTANT -> parseGenericOrCustomLiteral()
@@ -2759,14 +2813,14 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.nextAndDoneIfNeeded(m: LazyPsiBuilder.StartMarker, type: IElementType) {
+        private fun PsiBuilder.nextAndDoneIfNeeded(m: StartMarker, type: IElementType) {
             nextToken()
             if (!m.isDone) m.done(type)
         }
 
         private fun PsiBuilder.advanceToMacroBody(
             beforeParamList: Boolean,
-            currentMarker: LazyPsiBuilder.StartMarker,
+            currentMarker: StartMarker,
             currentNodeType: IElementType
         ) {
             var la = lexer.lookAhead()
@@ -2811,7 +2865,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                     error("Macro can't have a receiver")
                 }
                 else {
-                    val mName = mark() as LazyPsiBuilder.StartMarker
+                    val mName = mark() as StartMarker
                     if (at(CR_IDS) && lexer.lookAhead() == CR_ASSIGN_OP) nextToken()
                     advanceToMacroBody(true, mName, CR_SIMPLE_NAME_ELEMENT)
                     if (at(CR_LPAREN)) parseParamList(true)
@@ -3108,7 +3162,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseParamList(inMacroDef: Boolean) {
-            val m = mark() as LazyPsiBuilder.StartMarker
+            val m = mark() as StartMarker
 
             nextTokenSkipSpacesAndNewlines()
 
@@ -4048,7 +4102,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 val m = mark()
 
                 nextToken()
-                if (parseVarOrCall()) {
+                if (parseVarOrCall(forceCall = true)) {
                     mergeLatestDoneMarker(m)
                 }
                 else {
@@ -4331,7 +4385,10 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             return inMacroExpression || name == "self" || scopes.isVarInScope(name)
         }
 
-        private fun PsiBuilder.parseVarOrCall(): Boolean {
+        private fun PsiBuilder.parseVarOrCall(
+            global: Boolean = false,
+            forceCall: Boolean = false
+        ): Boolean {
             val startIndex = rawTokenIndex()
             when {
                 at(CR_NOT_OP) -> return composite(CR_CALL_EXPRESSION) {
@@ -4391,23 +4448,27 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 parseOptBlock()
             }
 
-            if (hasArgs || hasBlock) {
+            if (hasArgs || hasBlock || global) {
                 m.done(CR_CALL_EXPRESSION)
+                return true
             }
-            else {
-                if (typeDeclarationCount == 0 && at(CR_COLON)) {
-                    parseVarDefinitionTail()
-                    val mayDeclareNewVar = if (ll < CrystalLevel.CRYSTAL_1_6) {
+
+            if (typeDeclarationCount == 0 && at(CR_COLON)) {
+                parseVarDefinitionTail()
+                val mayDeclareNewVar = if (ll < CrystalLevel.CRYSTAL_1_6) {
                     callArgsNest == 0
                 } else {
                     startIndex !in callArgsStartLocations
                 }
                 if (mayDeclareNewVar) scopes.pushVarName(name)
-                    m.done(CR_VARIABLE_DEFINITION)
-                }
-                else {
-                    m.done(CR_REFERENCE_EXPRESSION)
-                }
+                m.done(CR_VARIABLE_DEFINITION)
+                return true
+            }
+
+            if (isVar && !forceCall) {
+                m.done(CR_REFERENCE_EXPRESSION)
+            } else {
+                m.done(CR_CALL_EXPRESSION)
             }
 
             return true
@@ -4913,7 +4974,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 skipSpaces()
 
                 if (at(CR_ARROW_OP)) {
-                    (latestDoneMarker as LazyPsiBuilder.StartMarker).remapTokenType(CR_TYPE_ARGUMENT_LIST)
+                    (latestDoneMarker as StartMarker).remapTokenType(CR_TYPE_ARGUMENT_LIST)
                     compositeSuffix(CR_PROC_TYPE) { parseProcTypeOutput() }
                 }
             }

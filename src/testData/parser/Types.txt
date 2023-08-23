@@ -815,7 +815,7 @@ FILE
       <empty list>
     PsiElement(end)('end')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo')
   PsiErrorElement:Unexpected ::

@@ -26,7 +26,7 @@ FILE
     PsiElement(-)('-')
     PsiElement(<integer literal>)('1234')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
       PsiElement(<integer literal>)('1')
     PsiElement(.)('.')

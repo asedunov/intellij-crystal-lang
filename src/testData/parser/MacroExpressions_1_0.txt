@@ -67,7 +67,7 @@ FILE
       CrMacroExpression(CR_MACRO_EXPRESSION)
         PsiElement({{)('{{')
         PsiWhiteSpace(' ')
-        CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+        CrCallExpression(CR_CALL_EXPRESSION)
           CrReferenceExpression(CR_REFERENCE_EXPRESSION)
             CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
               PsiElement(<identifier>)('name')

@@ -3,7 +3,7 @@ FILE
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(_)('_')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('test')
 
@@ -35,166 +35,166 @@ FILE
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<class variable>)('@@foo')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('ident')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('something')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('with_underscores')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('with_1')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('bar!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('fooBar')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('❨╯°□°❩╯︵┻━┻')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('def?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('if?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('else?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('elsif?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('end?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('true?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('false?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('class?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('while?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('do?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('yield?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('return?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('unless?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('next?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('break?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('begin?')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('def!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('if!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('else!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('elsif!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('end!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('true!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('false!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('class!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('while!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('nil!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('do!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('yield!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('return!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('unless!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('next!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('break!')
 
-  CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+  CrCallExpression(CR_CALL_EXPRESSION)
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('begin!')

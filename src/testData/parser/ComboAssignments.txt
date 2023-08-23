@@ -1,7 +1,7 @@
 FILE
   CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
-      CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
+      CrCallExpression(CR_CALL_EXPRESSION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('f')
       PsiElement(.)('.')
@@ -56,7 +56,7 @@ FILE
       PsiElement(<integer literal>)('1')
   PsiWhiteSpace('\n')
   CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrReferenceExpression(CR_REFERENCE_EXPRESSION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('a')

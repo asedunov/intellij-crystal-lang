@@ -1,6 +1,6 @@
 FILE
   CrIndexedExpression(CR_INDEXED_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiElement([)('[')
@@ -19,7 +19,7 @@ FILE
     PsiElement(])(']')
 
   CrIndexedExpression(CR_INDEXED_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiElement(.)('.')
@@ -39,7 +39,7 @@ FILE
     PsiElement(])(']')
 
   CrCallExpression(CR_CALL_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiElement(.)('.')
@@ -61,7 +61,7 @@ FILE
       PsiElement())(')')
 
   CrIndexedExpression(CR_INDEXED_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiElement([)('[')
@@ -82,7 +82,7 @@ FILE
     PsiElement(])(']')
 
   CrIndexedExpression(CR_INDEXED_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiElement(.)('.')
@@ -104,7 +104,7 @@ FILE
     PsiElement(])(']')
 
   CrCallExpression(CR_CALL_EXPRESSION)
-    CrReferenceExpression(CR_REFERENCE_EXPRESSION)
+    CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('foo')
     PsiElement(.)('.')

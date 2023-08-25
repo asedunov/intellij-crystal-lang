@@ -115,6 +115,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiWhiteSpace('\n')
   CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)

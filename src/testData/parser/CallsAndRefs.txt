@@ -2337,6 +2337,8 @@ FILE
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
   PsiWhiteSpace(' ')
@@ -3927,6 +3929,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrCallExpression(CR_CALL_EXPRESSION)

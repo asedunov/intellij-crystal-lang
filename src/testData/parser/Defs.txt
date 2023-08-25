@@ -52,6 +52,8 @@ FILE
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -67,6 +69,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -83,6 +87,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -100,6 +106,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -120,6 +128,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -154,6 +164,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -201,6 +213,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -211,6 +225,8 @@ FILE
       PsiElement(=)('=')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -227,6 +243,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -247,6 +265,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -278,6 +298,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -295,6 +317,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -312,6 +336,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -329,6 +355,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -345,6 +373,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -697,6 +727,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -723,6 +755,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -739,6 +773,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -753,6 +789,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -768,6 +806,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -789,6 +829,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -824,6 +866,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -857,6 +901,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -872,6 +918,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -932,6 +980,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -993,6 +1043,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1011,6 +1063,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1038,6 +1092,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1065,6 +1121,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1099,6 +1157,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1297,6 +1357,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1323,6 +1385,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1519,6 +1583,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1540,6 +1606,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1562,6 +1630,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1604,6 +1674,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1622,6 +1694,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1762,6 +1836,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1781,6 +1857,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -1800,6 +1878,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2025,6 +2105,8 @@ FILE
           PsiElement(<constant>)('U')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2058,6 +2140,8 @@ FILE
           PsiElement(<constant>)('U')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2097,6 +2181,8 @@ FILE
           PsiElement(<constant>)('U')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2123,6 +2209,8 @@ FILE
         <empty list>
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2154,6 +2242,8 @@ FILE
         <empty list>
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2163,6 +2253,8 @@ FILE
       PsiElement([])('[]')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2172,6 +2264,8 @@ FILE
       PsiElement([]?)('[]?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2187,6 +2281,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2200,6 +2296,8 @@ FILE
       PsiElement([])('[]')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2213,6 +2311,8 @@ FILE
       PsiElement([]?)('[]?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2228,6 +2328,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrFunction(CR_FUNCTION_DEFINITION)
@@ -2373,6 +2475,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2382,6 +2486,8 @@ FILE
       PsiElement(=~)('=~')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2397,6 +2503,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
   PsiWhiteSpace(' ')
@@ -2637,6 +2745,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2659,6 +2769,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2681,6 +2793,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2703,6 +2817,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2724,6 +2840,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2734,6 +2852,8 @@ FILE
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(=)('=')
     PsiWhiteSpace('\n')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2774,6 +2894,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2793,6 +2915,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2803,6 +2927,8 @@ FILE
     PsiErrorElement:Expected: ';' or <newline>
       <empty list>
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrFunction(CR_FUNCTION_DEFINITION)
@@ -2909,6 +3035,8 @@ FILE
       PsiElement(!)('!')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2922,6 +3050,8 @@ FILE
       PsiElement(!)('!')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2931,6 +3061,8 @@ FILE
       PsiElement(is_a?)('is_a?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2944,6 +3076,8 @@ FILE
       PsiElement(is_a?)('is_a?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2953,6 +3087,8 @@ FILE
       PsiElement(as)('as')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2966,6 +3102,8 @@ FILE
       PsiElement(as)('as')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2975,6 +3113,8 @@ FILE
       PsiElement(as?)('as?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2988,6 +3128,8 @@ FILE
       PsiElement(as?)('as?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -2997,6 +3139,8 @@ FILE
       PsiElement(responds_to?)('responds_to?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -3010,6 +3154,8 @@ FILE
       PsiElement(responds_to?)('responds_to?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -3019,6 +3165,8 @@ FILE
       PsiElement(nil?)('nil?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -3032,6 +3180,8 @@ FILE
       PsiElement(nil?)('nil?')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -3053,6 +3203,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -3074,6 +3226,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -3148,6 +3302,8 @@ FILE
           <empty list>
       PsiElement())(')')
     PsiElement(;)(';')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)

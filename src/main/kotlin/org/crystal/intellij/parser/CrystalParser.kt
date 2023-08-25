@@ -2909,6 +2909,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                         skipStatementEnd()
 
                         if (at(CR_END)) {
+                            composite(CR_BLOCK_EXPRESSION) {}
                             nextTokenSkipSpaces()
                         }
                         else {

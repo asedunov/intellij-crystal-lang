@@ -6,6 +6,8 @@ FILE
       PsiElement($op)('$op')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
   PsiWhiteSpace('\n')
@@ -19,6 +21,8 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
   PsiWhiteSpace('\n')
@@ -33,6 +37,8 @@ FILE
       PsiElement($op)('$op')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')
   PsiWhiteSpace('\n')
@@ -50,5 +56,7 @@ FILE
       PsiElement())(')')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
   PsiElement(;)(';')

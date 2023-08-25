@@ -58,6 +58,8 @@ FILE
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMethod(CR_METHOD_DEFINITION)
@@ -69,6 +71,8 @@ FILE
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
     PsiWhiteSpace(' ')
+    CrBlockExpression(CR_BLOCK_EXPRESSION)
+      <empty list>
     PsiElement(end)('end')
 
   CrMacro(CR_MACRO_DEFINITION)

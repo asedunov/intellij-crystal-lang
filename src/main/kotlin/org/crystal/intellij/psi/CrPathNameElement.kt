@@ -37,7 +37,7 @@ open class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, 
     override val kind: CrNameKind
         get() = CrNameKind.PATH
 
-    val isGlobal: Boolean
+    val isRoot: Boolean
         get() = name.isEmpty() && qualifier == null
 
     val qualifier: CrPathNameElement?
@@ -94,7 +94,7 @@ open class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, 
         }
 
     override fun resolveSymbol(): CrConstantLikeSym<*>? {
-        if (isGlobal) {
+        if (isRoot) {
             return if (parentStubOrPsi() is CrPathNameElement) project.resolveFacade.program else null
         }
         if (name.isEmpty()) return null

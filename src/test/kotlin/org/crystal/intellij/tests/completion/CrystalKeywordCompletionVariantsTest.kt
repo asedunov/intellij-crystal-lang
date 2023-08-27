@@ -484,6 +484,7 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
         "x : typeof(<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
         "x : typeof(1 <caret>)" expects EXPRESSION_SUFFIX_START_KEYWORDS
         "x : typeof(<caret> 1)" expects GENERAL_EXPRESSION_START_KEYWORDS
+        "x : typeof(1, <caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
     fun testFile() {

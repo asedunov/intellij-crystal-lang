@@ -9,7 +9,7 @@ import org.crystal.intellij.lexer.CR_MINUS_OP
 import org.crystal.intellij.lexer.CrystalTokenType
 import kotlin.math.max
 
-class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(node) {
+class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(node), CrTypeArgument {
     override fun accept(visitor: CrVisitor) = visitor.visitIntegerLiteralExpression(this)
 
     override val tokenType: CrystalTokenType

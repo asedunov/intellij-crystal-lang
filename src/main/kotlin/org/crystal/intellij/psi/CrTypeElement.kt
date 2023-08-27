@@ -4,7 +4,8 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.stubs.IStubElementType
 import org.crystal.intellij.stubs.api.CrTypeStub
 
-sealed class CrTypeElement<Psi : CrTypeElement<Psi>> : CrStubbedElementImpl<CrTypeStub<Psi>>, CrMethodReceiver {
+sealed class CrTypeElement<Psi : CrTypeElement<Psi>> :
+    CrStubbedElementImpl<CrTypeStub<Psi>>, CrMethodReceiver, CrTypeArgument {
     constructor(stub: CrTypeStub<Psi>, nodeType: IStubElementType<*, *>) : super(stub, nodeType)
 
     constructor(node: ASTNode) : super(node)

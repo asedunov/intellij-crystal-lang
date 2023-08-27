@@ -1,6 +1,7 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
+import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.parser.CR_EXPRESSION_TYPE
 import org.crystal.intellij.stubs.api.CrTypeStub
 
@@ -11,6 +12,6 @@ class CrExpressionTypeElement : CrTypeElement<CrExpressionTypeElement> {
 
     override fun accept(visitor: CrVisitor) = visitor.visitExpressionType(this)
 
-    val expression: CrExpression?
-        get() = childOfType()
+    val expressions: JBIterable<CrExpression>
+        get() = childrenOfType()
 }

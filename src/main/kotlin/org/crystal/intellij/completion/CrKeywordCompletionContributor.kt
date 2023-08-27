@@ -114,7 +114,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
         inParent<CrEnsureClause>(GENERAL_EXPRESSION_START_KEYWORDS)
         inParent<CrExpressionTypeElement> { e, p, consumer ->
-            if (p.expression == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+            if (e in p.expressions) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
         }
         inParent<CrFile>(TOP_LEVEL_EXPRESSION_START_KEYWORDS)
         inParent<CrFunction> { e, _, consumer ->

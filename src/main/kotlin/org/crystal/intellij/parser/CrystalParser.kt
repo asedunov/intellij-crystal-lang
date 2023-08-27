@@ -6,6 +6,7 @@ import com.intellij.lang.impl.PsiBuilderAdapter
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import com.intellij.util.containers.SmartHashSet
+import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.crystal.intellij.config.CrystalLevel
 import org.crystal.intellij.lexer.*
 import org.crystal.intellij.parser.builder.LazyPsiBuilder
@@ -127,6 +128,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         private val scopes = ScopeHandler()
         private val lastLHSVarNames = SmartHashSet<String>()
         private var callArgsNest = 0
+        private val callArgsStartLocations = IntArrayList()
         private var stopOnYield = 0
         private var tempArgNameCount = 0
         private var defNest = 0
@@ -160,6 +162,16 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
             finally {
                 callArgsNest--
+            }
+        }
+
+        private inline fun <T> PsiBuilder.inCallArgLocation(body: PsiBuilder.() -> T): T {
+            callArgsStartLocations.push(rawTokenIndex())
+            try {
+                return body()
+            }
+            finally {
+                callArgsStartLocations.popInt()
             }
         }
 
@@ -1509,7 +1521,9 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                     parseOut()
                 }
                 else {
-                    ensureParseAssignment()
+                    inCallArgLocation {
+                        ensureParseAssignment()
+                    }
                 }
 
                 m.done(CR_NAMED_ARGUMENT)
@@ -1648,33 +1662,35 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseCallArg(): Boolean {
-            if (at(CR_OUT)) return parseOut()
+            inCallArgLocation {
+                if (at(CR_OUT)) return parseOut()
 
-            val m = mark()
+                val m = mark()
 
-            var splatType: IElementType? = null
-            if (lexer.lookAhead() != CR_WHITESPACE) {
-                when {
-                    at(CR_MUL_OP) -> {
-                        splatType = CR_SPLAT_EXPRESSION
-                        nextToken()
-                    }
+                var splatType: IElementType? = null
+                if (lexer.lookAhead() != CR_WHITESPACE) {
+                    when {
+                        at(CR_MUL_OP) -> {
+                            splatType = CR_SPLAT_EXPRESSION
+                            nextToken()
+                        }
 
-                    at(CR_EXP_OP) -> {
-                        splatType = CR_DOUBLE_SPLAT_ARGUMENT
-                        nextToken()
+                        at(CR_EXP_OP) -> {
+                            splatType = CR_DOUBLE_SPLAT_ARGUMENT
+                            nextToken()
+                        }
                     }
                 }
-            }
 
-            val parsedExpression = ensureParseAssignment()
+                val parsedExpression = ensureParseAssignment()
 
-            return if (splatType != null) {
-                m.done(splatType)
-                true
-            } else {
-                m.drop()
-                parsedExpression
+                return if (splatType != null) {
+                    m.done(splatType)
+                    true
+                } else {
+                    m.drop()
+                    parsedExpression
+                }
             }
         }
 
@@ -4275,6 +4291,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseVarOrCall(): Boolean {
+            val startIndex = rawTokenIndex()
             when {
                 at(CR_NOT_OP) -> return composite(CR_CALL_EXPRESSION) {
                     parseTokenWithOptEmptyParens(true)
@@ -4339,7 +4356,12 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             else {
                 if (typeDeclarationCount == 0 && at(CR_COLON)) {
                     parseVarDefinitionTail()
-                    if (callArgsNest == 0) scopes.pushVarName(name)
+                    val mayDeclareNewVar = if (ll < CrystalLevel.CRYSTAL_1_6) {
+                    callArgsNest == 0
+                } else {
+                    startIndex !in callArgsStartLocations
+                }
+                if (mayDeclareNewVar) scopes.pushVarName(name)
                     m.done(CR_VARIABLE_DEFINITION)
                 }
                 else {

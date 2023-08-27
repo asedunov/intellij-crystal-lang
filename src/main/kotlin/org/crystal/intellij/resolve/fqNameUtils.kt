@@ -6,7 +6,7 @@ fun CrPathNameElement.getFqName(root: () -> StableFqName? = { null }): StableFqN
     val qualifier = qualifier
     val parent = when {
         qualifier != null -> qualifier.getFqName(root)
-        isGlobal -> return null
+        isRoot -> return null
         else -> root()
     }
     return StableFqName(name, parent)

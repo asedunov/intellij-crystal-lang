@@ -15,7 +15,7 @@ class CrPathStubImpl(
     override fun toString() = "CrPathStubImpl(name=$name)"
 
     override val fqName: StableFqName? by lazy {
-        if (psi.isGlobal) null else StableFqName(name, findParentFqName())
+        if (psi.isRoot) null else StableFqName(name, findParentFqName())
     }
 
     private fun findParentFqName(): StableFqName? {

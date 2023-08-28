@@ -5,7 +5,11 @@ import org.crystal.intellij.parser.CR_SIMPLE_NAME_ELEMENT
 import org.crystal.intellij.parser.CR_SIMPLE_PARAMETER_DEFINITION
 import org.crystal.intellij.stubs.api.CrSimpleParameterStub
 
-class CrSimpleParameter : CrDefinitionImpl<CrSimpleParameterStub>, CrParameter, CrDefinitionWithInitializer {
+class CrSimpleParameter :
+    CrDefinitionImpl<CrSimpleParameterStub>,
+    CrParameter,
+    CrDefinitionWithInitializer,
+    CrExternalNameElementHolder{
     constructor(stub: CrSimpleParameterStub) : super(stub, CR_SIMPLE_PARAMETER_DEFINITION)
 
     constructor(node: ASTNode) : super(node)
@@ -15,7 +19,7 @@ class CrSimpleParameter : CrDefinitionImpl<CrSimpleParameterStub>, CrParameter, 
     override val kind: CrParameterKind
         get() = greenStub?.kind ?: super.kind
 
-    val externalNameElement: CrSimpleNameElement?
+    override val externalNameElement: CrSimpleNameElement?
         get() {
             greenStub?.let {
                 val nameStubs = it.getChildrenByType(CR_SIMPLE_NAME_ELEMENT, CrSimpleNameElement.EMPTY_ARRAY)

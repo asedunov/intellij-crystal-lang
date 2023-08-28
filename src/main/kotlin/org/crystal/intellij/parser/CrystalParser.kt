@@ -2630,7 +2630,13 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseStringArrayLiteral() = composite(CR_STRING_ARRAY_EXPRESSION) {
             nextTokenSkipSpaces()
-            zeroOrMore { tok(stringLiteralTokens) || tok(CR_WHITESPACES_AND_NEWLINES) }
+            do {
+                if (at(stringLiteralTokens)) {
+                    composite(CR_STRING_LITERAL_EXPRESSION) {
+                        while (at(stringLiteralTokens)) nextToken()
+                    }
+                }
+            } while (tok(CR_WHITESPACES_AND_NEWLINES))
             recoverUntil("<string array end>", true) { at(CR_STRING_ARRAY_END) }
             tok(CR_STRING_ARRAY_END)
         }

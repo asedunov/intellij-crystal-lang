@@ -66,6 +66,19 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         private val CrNameElement?.presentableText: String
             get() = this?.sourceName ?: "???"
 
+        private fun StringBuilder.appendTypeArgument(arg: CrTypeArgument): StringBuilder = when (arg) {
+            is CrTypeElement<*> -> appendType(arg)
+            is CrIntegerLiteralExpression, is CrFloatLiteralExpression -> append(arg.text)
+            is CrSizeExpression -> append("sizeof(").appendType(arg.typeElement).append(")")
+            is CrInstanceSizeExpression -> append("instance_sizeof(").appendType(arg.typeElement).append(")")
+            is CrOffsetExpression ->
+                append("offsetof(")
+                    .appendType(arg.type)
+                    .append(", ")
+                    .append(arg.offset?.text ?: "???")
+                    .append(")")
+        }
+
         private fun StringBuilder.appendType(type: CrTypeElement<*>?): StringBuilder = when (type) {
             is CrDoubleSplatTypeElement -> append("**").appendType(type.innerType)
             is CrExpressionTypeElement -> append("typeof(...)")
@@ -73,7 +86,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
             is CrInstantiatedTypeElement ->
                 appendType(type.constructorType)
                     .append("(")
-                    .append(type.argumentList?.elements ?: JBIterable.empty()) { appendType(it) }
+                    .append(type.argumentList?.elements ?: JBIterable.empty()) { appendTypeArgument(it) }
                     .append(")")
             is CrLabeledTypeElement -> append(type.nameElement?.text ?: "???").append(": ").appendType(type.innerType)
             is CrMetaclassTypeElement -> appendType(type.innerType).append(".class")
@@ -87,7 +100,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
             is CrPathTypeElement -> appendPath(type.path)
             is CrPointerTypeElement -> appendType(type.innerType).append("*")
             is CrProcTypeElement -> {
-                append(type.inputList?.elements) { appendType(it) }
+                append(type.inputList?.elements) { appendTypeArgument(it) }
                 append(" -> ")
                 type.outputType?.let { appendType(it) }
                 this

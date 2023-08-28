@@ -2628,22 +2628,26 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseStringArrayLiteral() = composite(CR_STRING_ARRAY_EXPRESSION) {
-            nextTokenSkipSpaces()
+        private fun PsiBuilder.parseStringLikeArrayContent(itemType: IElementType) {
             do {
                 if (at(stringLiteralTokens)) {
-                    composite(CR_STRING_LITERAL_EXPRESSION) {
+                    composite(itemType) {
                         while (at(stringLiteralTokens)) nextToken()
                     }
                 }
             } while (tok(CR_WHITESPACES_AND_NEWLINES))
+        }
+
+        private fun PsiBuilder.parseStringArrayLiteral() = composite(CR_STRING_ARRAY_EXPRESSION) {
+            nextTokenSkipSpaces()
+            parseStringLikeArrayContent(CR_STRING_LITERAL_EXPRESSION)
             recoverUntil("<string array end>", true) { at(CR_STRING_ARRAY_END) }
             tok(CR_STRING_ARRAY_END)
         }
 
         private fun PsiBuilder.parseSymbolArrayLiteral(): Boolean = composite(CR_SYMBOL_ARRAY_EXPRESSION) {
             nextTokenSkipSpaces()
-            zeroOrMore { tok(stringLiteralTokens) || tok(CR_WHITESPACES_AND_NEWLINES) }
+            parseStringLikeArrayContent(CR_SYMBOL_EXPRESSION)
             recoverUntil("<symbol array end>", true) { at(CR_SYMBOL_ARRAY_END) }
             tok(CR_SYMBOL_ARRAY_END)
         }

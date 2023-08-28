@@ -145,23 +145,21 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitMacroExpression(o: CrMacroExpression) = visitExpression(o)
 
-    open fun visitMacroBlockStatement(o: CrMacroBlockStatement) = visitMacroStatement(o)
+    open fun visitMacroBlockStatement(o: CrMacroBlockStatement) = visitExpression(o)
 
-    open fun visitMacroForStatement(o: CrMacroForStatement) = visitMacroStatement(o)
+    open fun visitMacroForStatement(o: CrMacroForStatement) = visitExpression(o)
 
-    open fun visitMacroIfStatement(o: CrMacroIfStatement) = visitMacroStatement(o)
+    open fun visitMacroIfStatement(o: CrMacroIfStatement) = visitExpression(o)
 
     open fun visitMacroLiteral(o: CrMacroLiteral) = visitCrElement(o)
 
-    open fun visitMacroStatement(o: CrMacroStatement) = visitCrElement(o)
-
-    open fun visitMacroUnlessStatement(o: CrMacroUnlessStatement) = visitMacroStatement(o)
+    open fun visitMacroUnlessStatement(o: CrMacroUnlessStatement) = visitExpression(o)
 
     open fun visitMacroVariableExpression(o: CrMacroVariableExpression) = visitExpression(o)
 
-    open fun visitMacroVerbatimStatement(o: CrMacroVerbatimStatement) = visitMacroStatement(o)
+    open fun visitMacroVerbatimStatement(o: CrMacroVerbatimStatement) = visitExpression(o)
 
-    open fun visitMacroWrapperStatement(o: CrMacroWrapperStatement) = visitMacroStatement(o)
+    open fun visitMacroWrapperStatement(o: CrMacroWrapperStatement) = visitExpression(o)
 
     open fun visitMetaclassType(o: CrMetaclassTypeElement) = visitType(o)
 

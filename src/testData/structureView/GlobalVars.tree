@@ -1,6 +1,6 @@
 -GlobalVars.cr
  -[MyLib]
-  bar : Int
+  bar = X : Int
   foo : Int
   foo2 : A::B::C
   foo3 : ::A::B::C

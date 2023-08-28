@@ -24,7 +24,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
                 else -> {}
             }
             append(definition.nameElement.presentableText)
-            if (definition is CrFunction) {
+            if (definition is CrExternalNameElementHolder && definition !is CrSimpleParameter) {
                 definition.externalNameElement?.let { appendSpaced("=").appendSpaced(it.presentableText) }
             }
             if (definition is CrFunctionLikeDefinition) {

@@ -15,16 +15,16 @@ class CrStringLiteralExpression(node: ASTNode) :
     CrNameKindAware {
     override fun accept(visitor: CrVisitor) = visitor.visitStringLiteralExpression(this)
 
-    val openQuote: PsiElement
-        get() = firstChild.takeIf { it.elementType == CR_STRING_START }!!
+    val openQuote: PsiElement?
+        get() = firstChild.takeIf { it.elementType == CR_STRING_START }
 
-    private val closeQuote: PsiElement
-        get() = lastChild.takeIf { it.elementType == CR_STRING_END }!!
+    private val closeQuote: PsiElement?
+        get() = lastChild.takeIf { it.elementType == CR_STRING_END }
 
     val valueRangeInElement: TextRange
         get() {
-            val from = openQuote.textLength
-            val to = textLength - closeQuote.textLength
+            val from = openQuote?.textLength ?: 0
+            val to = textLength - (closeQuote?.textLength ?: 0)
             return TextRange(from, to)
         }
 

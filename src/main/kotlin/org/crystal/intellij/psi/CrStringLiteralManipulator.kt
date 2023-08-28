@@ -24,7 +24,7 @@ class CrStringLiteralManipulator : AbstractElementManipulator<CrStringLiteralExp
         range: TextRange,
         newContent: String
     ): String {
-        val openQuote = element.openQuote.text
+        val openQuote = element.openQuote?.text ?: ""
 
         if (openQuote == "\"") {
             return combineTextAsIs(element, range, newContent.escape('\\', '"'))

@@ -444,7 +444,7 @@ FILE
 
   CrRegexExpression(CR_REGEX_EXPRESSION)
     PsiElement(<regex start>)('/')
-    PsiElement(<string raw>)('\ ')
+    PsiElement(<raw escape>)('\ ')
     PsiElement(<regex end>)('/')
 
   CrRegexExpression(CR_REGEX_EXPRESSION)
@@ -459,7 +459,7 @@ FILE
 
   CrRegexExpression(CR_REGEX_EXPRESSION)
     PsiElement(<regex start>)('%r(')
-    PsiElement(<string raw>)('\ ')
+    PsiElement(<raw escape>)('\ ')
     PsiElement(<regex end>)(')')
 
   CrCallExpression(CR_CALL_EXPRESSION)

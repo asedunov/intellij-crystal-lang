@@ -435,7 +435,8 @@ UNICODE_ESCAPE = \\ u {HEX_DIGIT}{0, 4}
 UNICODE_BLOCK_ESCAPE_START = \\ u \{
 UNICODE_BLOCK_CHAR = {HEX_DIGIT}{1, 6}
 UNICODE_BLOCK_ESCAPE_END = \}
-ANY_CHAR_ESCAPE = \\[^]
+SPACE_ESCAPE = \\{SINGLE_WHITE_SPACE}
+NON_SPACE_CHAR_ESCAPE = \\[^]
 
 VAR_CHAR_CODE = {HEX_DIGIT}{1, 6}
 
@@ -595,12 +596,16 @@ MACRO_START_KEYWORD2 =
   \\                             { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_BAD_ESCAPE); }
 }
 
+<STRING_LITERAL_BODY, COMMAND_LITERAL_BODY, STRING_BLOCK, SYMBOL_BODY, REGEX_LITERAL_BODY, REGEX_BLOCK> {
+  {SPACE_ESCAPE}                 { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_RAW_ESCAPE); }
+}
+
 <STRING_LITERAL_BODY, COMMAND_LITERAL_BODY, STRING_BLOCK, SYMBOL_BODY> {
   {OCTAL_ESCAPE}                 { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_OCTAL_ESCAPE); }
   {HEX_ESCAPE}                   { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_HEX_ESCAPE); }
   {UNICODE_ESCAPE}               { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_UNICODE_ESCAPE); }
   {SPECIAL_CHAR_ESCAPE}          { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_SPECIAL_ESCAPE); }
-  {ANY_CHAR_ESCAPE}              { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_RAW_ESCAPE); }
+  {NON_SPACE_CHAR_ESCAPE}        { return closePrecedingBlockOrHandle(CR_STRING_RAW, CR_RAW_ESCAPE); }
 
   {UNICODE_BLOCK_ESCAPE_START}   {
     if (blockLength != 0) return closePrecedingBlockToken(CR_STRING_RAW);

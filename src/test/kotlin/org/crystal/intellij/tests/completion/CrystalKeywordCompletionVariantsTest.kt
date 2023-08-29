@@ -913,6 +913,7 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
 
     fun testTypeofExpression() {
         "typeof(<caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
+        "typeof(1, <caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
     }
 
     fun testUnaryExpression() {

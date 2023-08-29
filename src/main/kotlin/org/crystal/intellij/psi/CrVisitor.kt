@@ -71,7 +71,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitDefinition(o: CrDefinition) = visitExpression(o)
 
-    open fun visitDoubleSplatArgument(o: CrDoubleSplatArgument) = visitCrElement(o)
+    open fun visitDoubleSplatExpression(o: CrDoubleSplatExpression) = visitExpression(o)
 
     open fun visitDoubleSplatType(o: CrDoubleSplatTypeElement) = visitType(o)
 

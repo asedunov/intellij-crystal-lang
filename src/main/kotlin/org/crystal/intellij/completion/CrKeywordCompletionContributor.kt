@@ -101,7 +101,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             if (e.siblings(forward = false).any { it.elementType == CR_ASSIGN_OP}) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
             if (e.siblings(forward = true).any { it.elementType == CR_ASSIGN_OP}) consumer(CR_SELF)
         }
-        inParent<CrDoubleSplatArgument> { e, p, consumer ->
+        inParent<CrDoubleSplatExpression> { e, p, consumer ->
             if (p.expression == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
         }
         inParent<CrDoubleSplatTypeElement> { e, p, consumer ->

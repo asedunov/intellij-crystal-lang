@@ -224,7 +224,7 @@ class CrystalSyntaxCheckingVisitor(
         var foundDoubleSplat = false
         for (argument in arguments) {
             when (argument) {
-                is CrDoubleSplatArgument -> {
+                is CrDoubleSplatExpression -> {
                     foundDoubleSplat = true
                 }
 

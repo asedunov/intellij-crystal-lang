@@ -50,6 +50,7 @@ val CR_CHAR_LITERAL_EXPRESSION = CrCompositeElementType("CR_CHAR_LITERAL_EXPRESS
 val CR_COMMAND_EXPRESSION = CrCompositeElementType("CR_COMMAND_EXPRESSION", ::CrCommandExpression)
 val CR_CONCATENATED_STRING_LITERAL_EXPRESSION = CrCompositeElementType("CR_CONCATENATED_STRING_LITERAL_EXPRESSION", ::CrConcatenatedStringLiteralExpression)
 val CR_CONDITIONAL_EXPRESSION = CrCompositeElementType("CR_CONDITIONAL_EXPRESSION", ::CrConditionalExpression)
+val CR_DOUBLE_SPLAT_EXPRESSION = CrCompositeElementType("CR_DOUBLE_SPLAT_EXPRESSION", ::CrDoubleSplatExpression)
 val CR_ENSURE_EXPRESSION = CrCompositeElementType("CR_ENSURE_EXPRESSION", ::CrEnsureExpression)
 val CR_EXTEND_EXPRESSION = CrStubElementTypes.EXTEND_EXPRESSION
 val CR_FLOAT_LITERAL_EXPRESSION = CrCompositeElementType("CR_FLOAT_LITERAL_EXPRESSION", ::CrFloatLiteralExpression)
@@ -121,7 +122,6 @@ val CR_UNDERSCORE_TYPE = CrStubElementTypes.UNDERSCORE_TYPE
 val CR_UNION_TYPE = CrStubElementTypes.UNION_TYPE
 
 // Arguments
-val CR_DOUBLE_SPLAT_ARGUMENT = CrCompositeElementType("CR_DOUBLE_SPLAT_ARGUMENT", ::CrDoubleSplatArgument)
 val CR_NAMED_ARGUMENT = CrCompositeElementType("CR_NAMED_ARGUMENT", ::CrNamedArgument)
 val CR_OUT_ARGUMENT = CrCompositeElementType("CR_OUT_ARGUMENT", ::CrOutArgument)
 val CR_SHORT_BLOCK_ARGUMENT = CrCompositeElementType("CR_SHORT_BLOCK_ARGUMENT", ::CrShortBlockArgument)

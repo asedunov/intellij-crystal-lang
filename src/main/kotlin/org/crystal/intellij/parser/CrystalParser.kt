@@ -2830,10 +2830,14 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         private fun PsiBuilder.parseMacroVariable(macroState: MacroState) = composite(CR_MACRO_VARIABLE_EXPRESSION) {
             if (lexer.lookAhead() != CR_LBRACE) {
                 lexer.enterMacro(macroState, false)
-                nextToken()
+                composite(CR_SIMPLE_NAME_ELEMENT) {
+                    nextToken()
+                }
             }
             else {
-                nextToken()
+                composite(CR_SIMPLE_NAME_ELEMENT) {
+                    nextToken()
+                }
                 parseMacroVariableExpressions(macroState)
             }
         }

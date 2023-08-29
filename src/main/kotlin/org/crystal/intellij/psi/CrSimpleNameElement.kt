@@ -27,7 +27,7 @@ class CrSimpleNameElement : CrStubbedElementImpl<CrNameStub<*>>, CrNameElement {
         if (e is CrStringLiteralExpression) return e.stringValue
         val name = text
         return when (e.elementType) {
-            CR_INSTANCE_VAR, CR_GLOBAL_VAR -> name.substring(1)
+            CR_INSTANCE_VAR, CR_GLOBAL_VAR, CR_MACRO_VAR -> name.substring(1)
             CR_CLASS_VAR -> name.substring(2)
             else -> name
         }

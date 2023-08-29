@@ -216,7 +216,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             }
         }
         inParent<CrTypeofExpression> { e, p, consumer ->
-            if (p.expression == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+            if (e in p.expressions) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
         }
         inParent<CrUnaryExpression> { e, p, consumer ->
             if (p.argument == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)

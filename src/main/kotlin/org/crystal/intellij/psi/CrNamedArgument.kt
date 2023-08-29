@@ -5,6 +5,6 @@ import com.intellij.lang.ASTNode
 class CrNamedArgument(node: ASTNode) : CrElementImpl(node), CrNamedElement, CrSimpleNameElementHolder, CrCallArgument {
     override fun accept(visitor: CrVisitor) = visitor.visitNamedArgument(this)
 
-    val expression: CrExpression?
+    val argument: CrCallArgument?
         get() = childOfType()
 }

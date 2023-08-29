@@ -150,7 +150,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
             }
         }
         inParent<CrNamedArgument> { e, p, consumer ->
-            if (p.expression == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)
+            if (p.argument == e) consumer(ARGUMENT_START_KEYWORDS)
         }
         inParent<CrNamedTupleEntry> { e, p, consumer ->
             if (p.expression == e) consumer(GENERAL_EXPRESSION_START_KEYWORDS)

@@ -1676,7 +1676,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                         }
 
                         at(CR_EXP_OP) -> {
-                            splatType = CR_DOUBLE_SPLAT_ARGUMENT
+                            splatType = CR_DOUBLE_SPLAT_EXPRESSION
                             nextToken()
                         }
                     }

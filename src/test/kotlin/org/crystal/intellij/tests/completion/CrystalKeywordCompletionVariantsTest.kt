@@ -695,8 +695,8 @@ class CrystalKeywordCompletionVariantsTest : BasePlatformTestCase() {
     }
 
     fun testNamedArgument() {
-        "foo(x: <caret>)" expects GENERAL_EXPRESSION_START_KEYWORDS
-        "foo(x: <caret> 1)" expects GENERAL_EXPRESSION_START_KEYWORDS
+        "foo(x: <caret>)" expects ARGUMENT_START_KEYWORDS
+        "foo(x: <caret> 1)" expects ARGUMENT_START_KEYWORDS
         "foo(x: 1 <caret>)" expects ARGUMENT_START_KEYWORDS.extend(EXPRESSION_SUFFIX_START_KEYWORDS)
     }
 

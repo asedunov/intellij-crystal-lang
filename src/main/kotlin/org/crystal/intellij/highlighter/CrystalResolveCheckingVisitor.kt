@@ -256,7 +256,7 @@ class CrystalResolveCheckingVisitor(
             val arg = arguments.single()
             return arg is CrNamedArgument
                     && arg.name == "union"
-                    && arg.expression is CrBooleanLiteralExpression
+                    && arg.argument is CrBooleanLiteralExpression
         }
         return true
     }
@@ -270,7 +270,7 @@ class CrystalResolveCheckingVisitor(
         var posCount = 0
         for (arg in args) {
             if (arg is CrNamedArgument) {
-                val value = arg.expression ?: continue
+                val value = arg.argument ?: continue
                 val name = arg.name ?: continue
                 when (name) {
                     "lib" -> {

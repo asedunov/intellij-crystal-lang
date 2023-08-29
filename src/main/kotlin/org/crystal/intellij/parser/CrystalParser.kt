@@ -4412,9 +4412,19 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.parseExpressionInsideMacro() = inMacroExpression {
-            if (at(CR_MUL_OP) || at(CR_EXP_OP)) nextTokenSkipSpaces()
+            when {
+                at(CR_MUL_OP) -> composite(CR_SPLAT_EXPRESSION) {
+                    nextTokenSkipSpaces()
+                    parseExpression()
+                }
 
-            parseExpression()
+                at(CR_EXP_OP) -> composite(CR_DOUBLE_SPLAT_EXPRESSION) {
+                    nextTokenSkipSpaces()
+                    parseExpression()
+                }
+
+                else -> parseExpression()
+            }
             skipSpacesAndNewlines()
         }
 

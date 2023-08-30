@@ -75,6 +75,10 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
                     consumer(CR_RESCUE)
                     consumer(CR_ENSURE)
                 }
+                (p.parent as? CrRescueClause)?.let { parent ->
+                    if (!parent.siblings(withSelf = false).any { it is CrElseClause }) consumer(CR_ELSE)
+                    if (!parent.siblings(withSelf = false).any { it is CrEnsureClause }) consumer(CR_ENSURE)
+                }
             }
         }
         inParent<CrBody> { _, p, consumer ->
@@ -172,8 +176,6 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         inParent<CrRescueClause> { e, p, consumer ->
             if (p.variable == e || p.type == e) return@inParent
             consumer(GENERAL_EXPRESSION_START_KEYWORDS)
-            if (!p.siblings(withSelf = false).any { it is CrElseClause }) consumer(CR_ELSE)
-            if (!p.siblings(withSelf = false).any { it is CrEnsureClause }) consumer(CR_ENSURE)
         }
         inParent<CrReturnExpression>(GENERAL_EXPRESSION_START_KEYWORDS)
         inParent<CrSelectExpression> { e, _, consumer ->

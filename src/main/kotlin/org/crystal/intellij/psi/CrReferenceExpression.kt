@@ -4,9 +4,6 @@ import com.intellij.lang.ASTNode
 
 class CrReferenceExpression(
     node: ASTNode
-) : CrExpressionImpl(node), CrSimpleNameElementHolder, CrMethodReceiver {
+) : CrExpressionImpl(node), CrSimpleNameElementHolder, CrMethodReceiver, CrExpressionWithReceiver {
     override fun accept(visitor: CrVisitor) = visitor.visitReferenceExpression(this)
-
-    val receiver: CrExpression?
-        get() = childOfType()
 }

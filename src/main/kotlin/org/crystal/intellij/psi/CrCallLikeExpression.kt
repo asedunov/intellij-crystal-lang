@@ -1,10 +1,8 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.openapi.util.Key
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
-import org.crystal.intellij.lexer.CR_DOT
 import org.crystal.intellij.lexer.CR_PATH_OP
 import org.crystal.intellij.resolve.CrCall
 import org.crystal.intellij.resolve.CrStdFqNames
@@ -18,27 +16,18 @@ import org.crystal.intellij.resolve.symbols.CrMacroName
 import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.resolve.symbols.CrModuleSym
 import org.crystal.intellij.resolve.symbols.instanceSym
-import org.crystal.intellij.util.UserDataProperty
 
-sealed class CrCallLikeExpression(node: ASTNode) : CrExpressionImpl(node), CrSimpleNameElementHolder {
+sealed class CrCallLikeExpression(
+    node: ASTNode
+) : CrExpressionImpl(node), CrSimpleNameElementHolder, CrExpressionWithReceiver {
     companion object {
         private val CALL = newResolveSlice<CrCallLikeExpression, CrCall>("CALL")
         private val RESOLVED_CALL = newResolveSlice<CrCallLikeExpression, CrResolvedMacroCall>("RESOLVED_CALL")
         private val CANDIDATE_RESOLVED_CALLS = newResolveSlice<CrCallLikeExpression, List<CrResolvedMacroCall>>("CANDIDATE_RESOLVED_CALLS")
     }
 
-    var explicitReceiver: CrExpression? by UserDataProperty(Key.create("EXPLICIT_RECEIVER"))
-
     private val isGlobal: Boolean
         get() = firstChild.elementType == CR_PATH_OP
-
-    val hasImplicitReceiver: Boolean
-        get() = firstChild.elementType == CR_DOT
-
-    val receiver: CrExpression?
-        get() = explicitReceiver ?: ownReceiver
-
-    protected abstract val ownReceiver: CrExpression?
 
     abstract val argumentList: CrArgumentList?
 

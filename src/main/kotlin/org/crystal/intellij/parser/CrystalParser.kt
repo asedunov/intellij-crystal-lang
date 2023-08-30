@@ -915,8 +915,8 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                         error("Trailing '${lexer.tokenText}' is not supported")
                         break
                     }
-                    at(CR_RESCUE) -> parseRescueOrEnsureExpression(CR_RESCUE_CLAUSE, CR_RESCUE_EXPRESSION)
-                    at(CR_ENSURE) -> parseRescueOrEnsureExpression(CR_ENSURE_CLAUSE, CR_ENSURE_EXPRESSION)
+                    at(CR_RESCUE) -> parseRescueOrEnsureExpression(CR_RESCUE_EXPRESSION)
+                    at(CR_ENSURE) -> parseRescueOrEnsureExpression(CR_ENSURE_EXPRESSION)
                     at(CR_IDS) -> break
                     else -> {
                         if (!(eof() || at(suffixStopTokens) || atEndToken())) {
@@ -940,33 +940,25 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseRescueOrEnsureExpression(
-            clauseType: IElementType,
-            expressionType: IElementType
-        ) {
+        private fun PsiBuilder.parseRescueOrEnsureExpression(expressionType: IElementType) {
             val lastType = lastType()
             if (lastType == CR_ASSIGNMENT_EXPRESSION || lastType == CR_CONSTANT_DEFINITION) {
                 val m = markBeforeLast()
                 dropLast()
 
-                doParseReduceOrEnsureExpression(clauseType, expressionType)
+                doParseReduceOrEnsureExpression(expressionType)
 
                 m.done(lastType)
             }
             else {
-                doParseReduceOrEnsureExpression(clauseType, expressionType)
+                doParseReduceOrEnsureExpression(expressionType)
             }
         }
 
-        private fun PsiBuilder.doParseReduceOrEnsureExpression(
-            clauseType: IElementType,
-            expressionType: IElementType
-        ) {
+        private fun PsiBuilder.doParseReduceOrEnsureExpression(expressionType: IElementType) {
             compositeSuffix(expressionType) {
-                composite(clauseType) {
-                    nextTokenSkipSpaces()
-                    ensureParseAssignment()
-                }
+                nextTokenSkipSpaces()
+                ensureParseAssignment()
             }
         }
 

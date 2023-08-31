@@ -441,8 +441,8 @@ class CrystalSyntaxCheckingVisitor(
 
         if (ll >= CrystalLevel.CRYSTAL_1_1 && isTupleCondition) {
             for (child in condition!!.allChildren()) {
-                if (child.elementType == CR_MUL_OP) {
-                    error(child, "Splat is not allowed inside case expression")
+                if (child is CrSplatExpression) {
+                    error(child.splatElement, "Splat is not allowed inside case expression")
                 }
             }
         }

@@ -2401,7 +2401,12 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                     parseGeneric()
                     if (at(CR_DOT)) {
                         advanceToDefOrMacroName()
-                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        if (ll >= CrystalLevel.CRYSTAL_1_2) {
+                            consumeDefOrMacroName()
+                        }
+                        else {
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        }
                     }
                     else {
                         error("Expected: '.'")
@@ -2415,7 +2420,12 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                         compositeSuffix(CR_REFERENCE_EXPRESSION) {}
 
                         advanceToDefOrMacroName()
-                        composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        if (ll >= CrystalLevel.CRYSTAL_1_2) {
+                            consumeDefOrMacroName()
+                        }
+                        else {
+                            composite(CR_SIMPLE_NAME_ELEMENT) { nextTokenSkipSpaces() }
+                        }
                     }
                     else {
                         error("Expected: '.'")

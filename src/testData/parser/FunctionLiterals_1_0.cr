@@ -37,6 +37,12 @@ Int32
 
 ->::foo.foo
 
+->::foo.foo=
+
 ->::@foo.foo
 
+->::@foo.foo=
+
 ->::@@foo.foo
+
+->::@@foo.foo=

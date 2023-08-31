@@ -241,7 +241,39 @@ FILE
       <empty list>
   PsiErrorElement:Expected: <end of expression>
     PsiElement(::)('::')
+    PsiElement(<identifier>)('foo')
+    PsiElement(.)('.')
+    PsiElement(<identifier>)('foo')
+    PsiElement(=)('=')
+
+  CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)
+    PsiElement(->)('->')
+    PsiErrorElement:Expected: <identifier>, <constant>, <instance variable> or <class variable>
+      <empty list>
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(::)('::')
     PsiElement(<instance variable>)('@foo')
+    PsiElement(.)('.')
+    PsiElement(<identifier>)('foo')
+
+  CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)
+    PsiElement(->)('->')
+    PsiErrorElement:Expected: <identifier>, <constant>, <instance variable> or <class variable>
+      <empty list>
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(::)('::')
+    PsiElement(<instance variable>)('@foo')
+    PsiElement(.)('.')
+    PsiElement(<identifier>)('foo')
+    PsiElement(=)('=')
+
+  CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)
+    PsiElement(->)('->')
+    PsiErrorElement:Expected: <identifier>, <constant>, <instance variable> or <class variable>
+      <empty list>
+  PsiErrorElement:Expected: <end of expression>
+    PsiElement(::)('::')
+    PsiElement(<class variable>)('@@foo')
     PsiElement(.)('.')
     PsiElement(<identifier>)('foo')
 
@@ -254,3 +286,4 @@ FILE
     PsiElement(<class variable>)('@@foo')
     PsiElement(.)('.')
     PsiElement(<identifier>)('foo')
+    PsiElement(=)('=')

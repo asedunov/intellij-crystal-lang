@@ -1947,8 +1947,15 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             nextTokenSkipSpacesAndNewlines()
 
             while (!(eof() || at(CR_RBRACKET))) {
-                if (ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
-                parseAssignment()
+                if (ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) {
+                    composite(CR_SPLAT_EXPRESSION) {
+                        nextTokenSkipSpacesAndNewlines()
+                        parseAssignment()
+                    }
+                }
+                else {
+                    parseAssignment()
+                }
 
                 if (at(CR_COMMA)) {
                     lexerState.slashIsRegex = true
@@ -1996,9 +2003,15 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             val mEntry = mark()
 
             val firstIsSplat = ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)
-            if (firstIsSplat) nextTokenSkipSpacesAndNewlines()
-
-            ensureParseAssignment()
+            if (firstIsSplat) {
+                composite(CR_SPLAT_EXPRESSION) {
+                    nextTokenSkipSpacesAndNewlines()
+                    ensureParseAssignment()
+                }
+            }
+            else {
+                ensureParseAssignment()
+            }
 
             recoverUntil("':', '=>', ',', '}', '<newline>'", true) {
                 at(CR_COLON) || at(CR_BIG_ARROW_OP) || at(CR_COMMA) || at(CR_RBRACE) || at(CR_NEWLINE)
@@ -2067,8 +2080,15 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
         private fun PsiBuilder.parseTupleTail() {
             while (!at(CR_RBRACE)) {
-                if (ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) nextTokenSkipSpacesAndNewlines()
-                parseAssignment()
+                if (ll >= CrystalLevel.CRYSTAL_1_1 && at(CR_MUL_OP)) {
+                    composite(CR_SPLAT_EXPRESSION) {
+                        nextTokenSkipSpacesAndNewlines()
+                        parseAssignment()
+                    }
+                }
+                else {
+                    parseAssignment()
+                }
 
                 if (at(CR_COMMA)) {
                     nextTokenSkipSpacesAndNewlines()

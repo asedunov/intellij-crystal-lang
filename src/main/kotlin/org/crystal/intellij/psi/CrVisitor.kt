@@ -21,7 +21,11 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitAsmOperand(o: CrAsmOperand) = visitCrElement(o)
 
+    open fun visitAsmInList(o: CrAsmInList) = visitAsmOperandList(o)
+
     open fun visitAsmOperandList(o: CrAsmOperandList) = visitCrElement(o)
+
+    open fun visitAsmOutList(o: CrAsmOutList) = visitAsmOperandList(o)
 
     open fun visitAsmOptionsList(o: CrAsmOptionsList) = visitCrElement(o)
 

@@ -1,7 +1,9 @@
 package org.crystal.intellij.psi
 
 import com.intellij.lang.ASTNode
+import kotlin.reflect.KClass
 
-class CrAsmOperandList(node: ASTNode) : CrElementImpl(node) {
-    override fun accept(visitor: CrVisitor) = visitor.visitAsmOperandList(this)
+sealed class CrAsmOperandList(node: ASTNode) : CrElementImpl(node), CrListElement<CrAsmOperand> {
+    override val elementClass: KClass<CrAsmOperand>
+        get() = CrAsmOperand::class
 }

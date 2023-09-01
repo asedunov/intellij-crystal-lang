@@ -137,7 +137,8 @@ val CR_MACRO_WRAPPER_STATEMENT = CrCompositeElementType("CR_MACRO_WRAPPER_STATEM
 // Miscellaneous
 val CR_ASM_CLOBBER_LIST = CrCompositeElementType("CR_ASM_CLOBBER_LIST", ::CrAsmClobberList)
 val CR_ASM_OPERAND = CrCompositeElementType("CR_ASM_OPERAND", ::CrAsmOperand)
-val CR_ASM_OPERAND_LIST = CrCompositeElementType("CR_ASM_OPERAND_LIST", ::CrAsmOperandList)
+val CR_ASM_IN_OPERAND_LIST = CrCompositeElementType("CR_ASM_IN_OPERAND_LIST", ::CrAsmInList)
+val CR_ASM_OUT_OPERAND_LIST = CrCompositeElementType("CR_ASM_OUT_OPERAND_LIST", ::CrAsmOutList)
 val CR_ASM_OPTIONS_LIST = CrCompositeElementType("CR_ASM_OPTIONS_LIST", ::CrAsmOptionsList)
 val CR_BLOCK_PARAMETER_LIST = CrCompositeElementType("CR_BLOCK_PARAMETER_LIST", ::CrBlockParameterList)
 val CR_BODY = CrCompositeElementType("CR_BODY", ::CrBody)

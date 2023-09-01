@@ -3821,7 +3821,8 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                     if (partIndex > 4) break
                     if (at(CR_STRING_START)) {
                         when (partIndex) {
-                            1, 2 -> parseAsmOperands()
+                            1 -> parseAsmOperands(CR_ASM_OUT_OPERAND_LIST)
+                            2 -> parseAsmOperands(CR_ASM_IN_OPERAND_LIST)
                             3 -> parseAsmClobbers()
                             4 -> parseAsmOptions()
                         }
@@ -3833,7 +3834,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseAsmOperands() = composite(CR_ASM_OPERAND_LIST) {
+        private fun PsiBuilder.parseAsmOperands(nodeType: IElementType) = composite(nodeType) {
             while (true) {
                 parseAsmOperand()
                 if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()

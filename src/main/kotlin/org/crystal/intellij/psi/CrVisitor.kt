@@ -51,6 +51,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitCharLiteralExpression(o: CrCharLiteralExpression) = visitExpression(o)
 
+    open fun visitCharRawElement(o: CrCharRawElement) = visitCrElement(o)
+
     open fun visitClass(o: CrClass) = visitDefinition(o)
 
     open fun visitCommandExpression(o: CrCommandExpression) = visitExpression(o)

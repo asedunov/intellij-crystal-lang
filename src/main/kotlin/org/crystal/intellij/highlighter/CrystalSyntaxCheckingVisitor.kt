@@ -133,7 +133,7 @@ class CrystalSyntaxCheckingVisitor(
     }
 
     override fun visitOctalEscapeElement(o: CrOctalEscapeElement) {
-        if (o.charValue > maxOctalChar) {
+        if (o.charValue > maxOctalCharCode) {
             error(o, "Octal value may not exceed 377 (decimal 255)")
         }
     }
@@ -968,9 +968,12 @@ class CrystalSyntaxCheckingVisitor(
 
     private fun handleUnicode(o: CrCharValueHolder) {
         val message = when (o.charValue) {
-            null -> "Invalid Unicode codepoint"
-            in Char.MIN_SURROGATE..Char.MAX_SURROGATE -> "Invalid Unicode codepoint (surrogate half)"
-            else -> return
+            null ->
+                "Invalid Unicode codepoint"
+            in Char.MIN_SURROGATE.code..Char.MAX_SURROGATE.code ->
+                "Invalid Unicode codepoint (surrogate half)"
+            else ->
+                return
         }
         error(o, message)
     }
@@ -1080,7 +1083,7 @@ class CrystalSyntaxCheckingVisitor(
     }
 
     companion object {
-        private const val maxOctalChar = 255.toChar()
+        private const val maxOctalCharCode = 255
 
         private val nonOverloadableOperators = setOf(
             "&&",

@@ -68,7 +68,7 @@ class CrStringLiteralEscaper(host: CrStringLiteralExpression) : LiteralTextEscap
                     }
 
                     is CrCharValueHolder -> {
-                        it.charValue?.let { c -> outChars.append(c) }
+                        it.charValue?.let { c -> outChars.appendCodePoint(c) }
                         sourceOffsets[indexOut++] = indexIn
                         indexIn += it.textLength
                     }

@@ -1,5 +1,5 @@
 package org.crystal.intellij.psi
 
 interface CrCharValueHolder : CrElement {
-    val charValue: Char?
+    val charValue: Int?
 }

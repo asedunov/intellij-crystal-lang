@@ -9,7 +9,7 @@ class CrUnicodeBlock(node: ASTNode) : CrElementImpl(node), CrStringValueHolder {
         get() {
             val charCodes = childrenOfType<CrCharCodeElement>().toList()
             return buildString(charCodes.size) {
-                charCodes.forEach { append(it.charValue ?: return null) }
+                charCodes.forEach { appendCodePoint(it.charValue ?: return null) }
             }
         }
 }

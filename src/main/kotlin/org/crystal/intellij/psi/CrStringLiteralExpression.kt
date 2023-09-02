@@ -35,7 +35,7 @@ class CrStringLiteralExpression(node: ASTNode) :
                 if (et == CR_STRING_START || et == CR_STRING_END) continue
                 when (child) {
                     is CrStringValueHolder -> append(child.stringValue ?: return null)
-                    is CrCharValueHolder -> append(child.charValue ?: return null)
+                    is CrCharValueHolder -> appendCodePoint(child.charValue ?: return null)
                     is PsiWhiteSpace -> continue
                     else -> return null
                 }

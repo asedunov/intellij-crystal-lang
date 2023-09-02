@@ -201,7 +201,7 @@ fun crystalKeywordToken(
 // Non-escape char/string/symbol components
 @JvmField val CR_CHAR_CODE = crystalToken("<char code>", ::CrCharCodeElement)
 @JvmField val CR_CHAR_END = CrystalTokenType("<char end>")
-@JvmField val CR_CHAR_RAW = CrystalTokenType("<char raw>")
+@JvmField val CR_CHAR_RAW = crystalToken("<char raw>", ::CrCharRawElement)
 @JvmField val CR_CHAR_START = CrystalTokenType("<char start>")
 @JvmField val CR_COMMAND_END = CrystalTokenType("<command end>")
 @JvmField val CR_COMMAND_START = CrystalTokenType("<command start>")

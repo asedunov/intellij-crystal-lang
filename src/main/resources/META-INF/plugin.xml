@@ -77,6 +77,8 @@
 
         <projectConfigurable id="crystal.settings"
                              groupId="language"
+                             key="settings.title"
+                             bundle="messages.CrystalBundle"
                              instance="org.crystal.intellij.config.CrystalSettingsConfigurable"/>
 
         <filePropertyPusher implementation="org.crystal.intellij.config.CrystalLanguageLevelPusher"/>

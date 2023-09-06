@@ -2,5 +2,6 @@
 /build/
 /.idea/workspace.xml
 /.idea/shelf
+/.idea/inspectionProfiles
 /*.jar
 *.skeleton

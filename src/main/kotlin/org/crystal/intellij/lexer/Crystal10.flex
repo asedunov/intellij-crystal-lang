@@ -810,7 +810,11 @@ MACRO_START_KEYWORD2 =
 }
 
 <REGEX_BLOCK_END> {
-  {BLOCK_END}[imx]*              { return exitBlock(); }
+  {BLOCK_END}                    {
+    IElementType blockType = exitBlock();
+    yypushbegin(REGEX_END);
+    return blockType;
+  }
 }
 
 <YYINITIAL> {

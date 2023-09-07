@@ -3374,6 +3374,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 if (requiresBody) {
                     inFunDef {
                         if (at(CR_END)) {
+                            composite(CR_BLOCK_EXPRESSION) {}
                             nextToken()
                         }
                         else {

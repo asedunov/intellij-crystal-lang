@@ -245,6 +245,9 @@ def self.[]?; end
 def [](x); end
 
 fun foo(x : Int32) : Int64
+end
+
+fun foo(x : Int32) : Int64
 x
 end
 

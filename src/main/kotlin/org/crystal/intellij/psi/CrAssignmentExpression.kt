@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.elementType
 import org.crystal.intellij.lexer.CR_ASSIGN_OPERATORS
+import org.crystal.intellij.lexer.CR_LPAREN
 
 class CrAssignmentExpression(node: ASTNode) : CrExpressionImpl(node), CrVisibilityHolder {
     override fun accept(visitor: CrVisitor) = visitor.visitAssignmentExpression(this)
@@ -20,4 +21,7 @@ class CrAssignmentExpression(node: ASTNode) : CrExpressionImpl(node), CrVisibili
 
     val rhs: CrExpression?
         get() = lhs?.nextSiblingOfType()
+
+    val isParenthesized: Boolean
+        get() = findChildByType<PsiElement>(CR_LPAREN) != null
 }

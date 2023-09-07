@@ -1259,12 +1259,10 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                                         nextTokenSkipSpacesAndNewlines()
 
                                         if (at(CR_LPAREN) && lexer.lookAhead { skipSpacesAndNewlines(); at(CR_MUL_OP) }) {
-                                            composite(CR_PARENTHESIZED_EXPRESSION) {
-                                                nextTokenSkipSpacesAndNewlines()
-                                                parseSingleArg()
-                                                recoverUntil("')'", true) { at(CR_RPAREN) }
-                                                tok(CR_RPAREN)
-                                            }
+                                            nextTokenSkipSpacesAndNewlines()
+                                            parseSingleArg()
+                                            recoverUntil("')'", true) { at(CR_RPAREN) }
+                                            tok(CR_RPAREN)
                                         }
                                         else {
                                             parseSingleArg()

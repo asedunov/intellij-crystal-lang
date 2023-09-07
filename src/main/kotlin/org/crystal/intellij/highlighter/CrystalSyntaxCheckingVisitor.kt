@@ -291,19 +291,16 @@ class CrystalSyntaxCheckingVisitor(
 
             is CrAssignmentExpression -> {
                 if (p.opSign != CR_ASSIGN_OP) return HighlightingSupportLevel.Never
+                if (p.isParenthesized) {
+                    val prev = o.prevSibling
+                    if (p.rhs == o
+                        && p.canHaveSplatRHS()
+                        && prev?.elementType == CR_LPAREN
+                        && prev.prevSibling == p.operation) return HighlightingSupportLevel.Always
+                    return HighlightingSupportLevel.Never
+                }
                 if (p.rhs == o && p.canHaveSplatRHS()) return HighlightingSupportLevel.Always
                 if (p.lhs == o) return HighlightingSupportLevel.SinceVersion.of(CrystalLevel.CRYSTAL_1_3)
-                return HighlightingSupportLevel.Never
-            }
-
-            is CrParenthesizedExpression -> {
-                val pp = p.parent
-                if (pp is CrAssignmentExpression
-                    && pp.opSign == CR_ASSIGN_OP
-                    && pp.rhs == p
-                    && pp.canHaveSplatRHS()
-                    && p.prevSibling == pp.operation
-                    && o.prevSibling?.elementType == CR_LPAREN) return HighlightingSupportLevel.Always
                 return HighlightingSupportLevel.Never
             }
 

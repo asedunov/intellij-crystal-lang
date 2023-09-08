@@ -7,7 +7,7 @@ import org.crystal.intellij.lang.ast.CstVisitor
 sealed class CstBoolLiteral(
     val value: Boolean,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode(location), CstSimpleLiteral {
     class False(location: CstLocation? = null) : CstBoolLiteral(false, location)
     class True(location: CstLocation? = null) : CstBoolLiteral(true, location)
 

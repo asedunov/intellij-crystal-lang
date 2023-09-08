@@ -3,6 +3,7 @@ package org.crystal.intellij.lang.ast.nodes
 import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.resolve.cache.CrResolveCache
 
 class CstVar(
     val name: String,
@@ -28,3 +29,5 @@ class CstVar(
 
     override fun acceptTransformer(transformer: CstTransformer) = transformer.transformVar(this)
 }
+
+fun CrResolveCache.newTempVar() = CstVar(newTempVarName())

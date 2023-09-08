@@ -89,3 +89,9 @@ class CstCall(
 
     override fun acceptTransformer(transformer: CstTransformer) = transformer.transformCall(this)
 }
+
+val CstCall.isSuper: Boolean
+    get() = obj == null && name == "super"
+
+val CstCall.isPreviousDef: Boolean
+    get() = obj == null && name == "previous_def"

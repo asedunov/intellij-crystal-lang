@@ -32,14 +32,6 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         }
     }
 
-    private inline fun <reified T> assertNode(source: String, body: T.(String) -> Unit) {
-        convert(source).cast<T>().body(source)
-    }
-
-    private fun assertExpressions(source: String, body: CstExpressions.(String) -> Unit) {
-        assertNode(source, body)
-    }
-
     private fun CstNode.assertStart(line: Int, col: Int) {
         val loc = location!!
         TestCase.assertEquals(line, loc.startLine)
@@ -50,12 +42,6 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         val loc = location!!
         TestCase.assertEquals(line, loc.endLine)
         TestCase.assertEquals(col, loc.endColumn)
-    }
-
-    private fun CstNode.assertNameStart(line: Int, col: Int) {
-        val loc = nameLocation!!
-        TestCase.assertEquals(line, loc.startLine)
-        TestCase.assertEquals(col, loc.startColumn)
     }
 
     private fun CstNode.assertNoEnd() {

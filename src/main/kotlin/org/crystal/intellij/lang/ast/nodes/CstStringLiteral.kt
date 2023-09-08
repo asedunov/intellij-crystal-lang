@@ -9,7 +9,7 @@ import org.crystal.intellij.util.crystal.crString
 class CstStringLiteral(
     val value: String,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode(location), CstSimpleLiteral {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

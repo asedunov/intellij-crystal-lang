@@ -16,6 +16,7 @@ import com.intellij.util.ObjectUtils
 import com.intellij.util.containers.ConcurrentWeakKeySoftValueHashMap
 import org.crystal.intellij.lang.resolve.resolveFacade
 import java.lang.ref.ReferenceQueue
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Based on [com.intellij.psi.impl.source.resolve.ResolveCache]
@@ -30,13 +31,25 @@ class CrResolveCache(project: Project) : Disposable {
         }
     }
 
+    private val tempVariableCount = AtomicInteger()
+
+    private fun clearCache() {
+        caches.clearUserData()
+        tempVariableCount.set(0)
+    }
+
+    fun newTempVarName(): String {
+        val id = tempVariableCount.incrementAndGet()
+        return "__temp_$id"
+    }
+
     init {
         project.messageBus.connect().subscribe(PsiManagerImpl.ANY_PSI_CHANGE_TOPIC, object : AnyPsiChangeListener {
             override fun beforePsiChanged(isPhysical: Boolean) {
-                caches.clearUserData()
+                clearCache()
             }
         })
-        LowMemoryWatcher.register({ caches.clearUserData() }, this)
+        LowMemoryWatcher.register({ clearCache() }, this)
     }
 
     fun <K : Any, V : Any> getOrCompute(slice: CrResolveSlice<K, V>, key: K, resolve: (K) -> V?): V? {

@@ -6,7 +6,7 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNilLiteral(
     location: CstLocation? = null,
-) : CstNode(location) {
+) : CstNode(location), CstSimpleLiteral {
     override fun equals(other: Any?) = this === other || javaClass == other?.javaClass
 
     override fun hashCode() = javaClass.hashCode()

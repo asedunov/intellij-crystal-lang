@@ -1,2 +1,0 @@
-heredoc_literal_expression ::= HEREDOC_START HEREDOC_START_ID heredoc_literal_body* {pin=1}
-heredoc_literal_body ::= HEREDOC_BODY HEREDOC_END_ID {pin=1}

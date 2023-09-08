@@ -8,10 +8,10 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.util.parentOfType
 import com.intellij.rt.execution.junit.FileComparisonFailure
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.crystal.intellij.hierarchy.types.CrystalSubtypesHierarchyTreeStructure
-import org.crystal.intellij.hierarchy.types.CrystalSupertypesHierarchyTreeStructure
-import org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyTreeStructure
-import org.crystal.intellij.psi.CrConstantSource
+import org.crystal.intellij.ide.hierarchy.types.CrystalSubtypesHierarchyTreeStructure
+import org.crystal.intellij.ide.hierarchy.types.CrystalSupertypesHierarchyTreeStructure
+import org.crystal.intellij.ide.hierarchy.types.CrystalTypeHierarchyTreeStructure
+import org.crystal.intellij.lang.psi.CrConstantSource
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.crystal.intellij.tests.util.setupMainFile

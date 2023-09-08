@@ -5,11 +5,11 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.crystal.intellij.config.CrystalLevel
-import org.crystal.intellij.config.asSpecificVersion
-import org.crystal.intellij.config.crystalSettings
-import org.crystal.intellij.config.findVersionOrLatest
-import org.crystal.intellij.psi.childrenOfType
+import org.crystal.intellij.lang.config.CrystalLevel
+import org.crystal.intellij.lang.config.asSpecificVersion
+import org.crystal.intellij.lang.config.crystalSettings
+import org.crystal.intellij.lang.config.findVersionOrLatest
+import org.crystal.intellij.lang.psi.childrenOfType
 import java.io.File
 
 fun getTestDirectoriesAsParameters(rootDirName: String): List<Array<Any>> {

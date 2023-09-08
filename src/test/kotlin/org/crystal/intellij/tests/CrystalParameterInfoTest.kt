@@ -5,8 +5,8 @@ import com.intellij.testFramework.utils.parameterInfo.MockCreateParameterInfoCon
 import com.intellij.testFramework.utils.parameterInfo.MockParameterInfoUIContext
 import com.intellij.testFramework.utils.parameterInfo.MockUpdateParameterInfoContext
 import junit.framework.TestCase
-import org.crystal.intellij.parameterInfo.CrMacroCallParameterInfo
-import org.crystal.intellij.parameterInfo.CrMacroCallParameterInfoHandler
+import org.crystal.intellij.ide.parameterInfo.CrMacroCallParameterInfo
+import org.crystal.intellij.ide.parameterInfo.CrMacroCallParameterInfoHandler
 import org.crystal.intellij.tests.util.findDirectives
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test

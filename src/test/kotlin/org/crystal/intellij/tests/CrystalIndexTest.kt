@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope.FilesScope
 import com.intellij.refactoring.suggested.startOffset
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.crystal.intellij.stubs.indexes.CrystalStringStubIndexExtensionBase
+import org.crystal.intellij.lang.stubs.indexes.CrystalStringStubIndexExtensionBase
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test
@@ -31,7 +31,7 @@ class CrystalIndexTest(private val testFile: File) : BasePlatformTestCase() {
         val file = myFixture.file
         val indexClassName = file.findDirective("# INDEX:")!!
         val key = file.findDirective("# KEY:")!!
-        val indexClass = Class.forName("org.crystal.intellij.stubs.indexes.$indexClassName").kotlin
+        val indexClass = Class.forName("org.crystal.intellij.lang.stubs.indexes.$indexClassName").kotlin
         val index = indexClass.companionObjectInstance as CrystalStringStubIndexExtensionBase.HelperBase<*>
         val results = index[key, project, FilesScope.fileScope(file)].sortedBy { it.startOffset }
         val caretModel = myFixture.editor.caretModel

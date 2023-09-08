@@ -1,20 +1,13 @@
 package org.crystal.intellij.tests.ast
 
-import junit.framework.TestCase
 import org.crystal.intellij.lang.ast.nodes.CstAssign
 import org.crystal.intellij.lang.ast.nodes.CstExpressions
-import org.crystal.intellij.lang.ast.nodes.CstNode
-import org.crystal.intellij.lang.ast.render
 import org.crystal.intellij.lang.config.CrystalLevel
 import org.crystal.intellij.tests.util.withLanguageLevel
 
 class CrystalCstRenderingTest : CrystalCstParsingTestBase() {
     private fun String.check(expected: String = this) {
-        convert(this).check(expected)
-    }
-
-    private fun CstNode.check(expected: String) {
-        TestCase.assertEquals(expected, render())
+        convert(this).assertRender(expected)
     }
 
     fun testRendering() {
@@ -182,7 +175,7 @@ class CrystalCstRenderingTest : CrystalCstParsingTestBase() {
         "{% verbatim do %}\n  1{{ 2 }}\n  3{{ 4 }}\n{% end %}".check()
         "{% for foo in bar %}\n  {{ if true\n  foo\n  bar\nend }}\n{% end %}".check()
         "macro foo\n{% verbatim do %}1{% end %}\nend".check()
-        CstAssign("x".variable, CstExpressions(listOf(1.int32, 2.int32))).check("x = (1\n2\n)")
+        CstAssign("x".variable, CstExpressions(listOf(1.int32, 2.int32))).assertRender("x = (1\n2\n)")
         "asm(\"nop\" ::::)".check()
         "asm(\"nop\" : \"a\"(1), \"b\"(2) : \"c\"(3), \"d\"(4) : \"e\", \"f\" : \"volatile\", \"alignstack\", \"intel\")".check()
         "asm(\"nop\" :: \"c\"(3), \"d\"(4) ::)".check()

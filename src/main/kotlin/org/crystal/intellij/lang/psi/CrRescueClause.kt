@@ -13,5 +13,8 @@ class CrRescueClause(node: ASTNode) : CrElementImpl(node) {
         get() = childOfType()
 
     val type: CrTypeElement<*>?
+        get() = childOfType() ?: variable?.type
+
+    val body: CrBlockExpression?
         get() = childOfType()
 }

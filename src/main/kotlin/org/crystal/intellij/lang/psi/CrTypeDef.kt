@@ -10,4 +10,7 @@ class CrTypeDef : CrDefinitionWithFqNameImpl<CrTypeDef, CrTypeDefStub>, CrAliasL
     constructor(node: ASTNode) : super(node)
 
     override fun accept(visitor: CrVisitor) = visitor.visitTypeDef(this)
+
+    val type: CrTypeElement<*>?
+        get() = childOfType()
 }

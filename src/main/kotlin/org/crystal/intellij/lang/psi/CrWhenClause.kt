@@ -17,4 +17,7 @@ class CrWhenClause(node: ASTNode) : CrElementImpl(node) {
 
     val isExhaustive: Boolean
         get() = keyword.elementType == CR_IN
+
+    val thenClause: CrThenClause?
+        get() = childOfType()
 }

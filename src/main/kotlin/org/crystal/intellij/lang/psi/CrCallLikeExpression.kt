@@ -26,7 +26,7 @@ sealed class CrCallLikeExpression(
         private val CANDIDATE_RESOLVED_CALLS = newResolveSlice<CrCallLikeExpression, List<CrResolvedMacroCall>>("CANDIDATE_RESOLVED_CALLS")
     }
 
-    private val isGlobal: Boolean
+    val isGlobal: Boolean
         get() = firstChild.elementType == CR_PATH_OP
 
     abstract val argumentList: CrArgumentList?
@@ -35,7 +35,7 @@ sealed class CrCallLikeExpression(
 
     override fun getParent(): PsiElement = explicitParent ?: super.getParent()
 
-    private val call: CrCall?
+    val call: CrCall?
         get() = project.resolveCache.getOrCompute(CALL, this) {
             CrCall(this)
         }

@@ -7,4 +7,7 @@ class CrStringInterpolation(node: ASTNode) : CrElementImpl(node), CrStringValueH
 
     override val stringValue: String?
         get() = null
+
+    val expression: CrExpression?
+        get() = childOfType()
 }

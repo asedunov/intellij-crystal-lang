@@ -272,7 +272,7 @@ class CrKeywordCompletionContributor : CompletionContributor(), DumbAware {
         }
         afterToken(CR_RBRACE) { e, consumer ->
             val p = e.parent
-            if (p is CrHashExpression && p.type == null) consumer(CR_OF)
+            if (p is CrHashExpression && p.receiverType == null && p.type == null) consumer(CR_OF)
         }
 
         afterSibling({it is CrExpression }) { e, consumer ->

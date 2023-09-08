@@ -10,6 +10,7 @@ import com.intellij.psi.stubs.StubElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.elementType
+import com.intellij.refactoring.suggested.startOffset
 import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.util.firstInstanceOrNull
 import kotlin.reflect.KClass
@@ -154,3 +155,17 @@ fun PsiElement.findSameElementInCopy(fileCopy: PsiFile) = try {
 } catch (e: IllegalStateException) {
     null
 }
+
+fun PsiFile.crLineNumber(offset: Int): Int {
+    val doc = viewProvider.document ?: return 0
+    return doc.getLineNumber(offset) + 1
+}
+
+fun PsiFile.crColumnNumber(offset: Int): Int {
+    val doc = viewProvider.document ?: return 0
+    val line = doc.getLineNumber(offset)
+    return offset - doc.getLineStartOffset(line) + 1
+}
+
+val PsiElement.crLineNumber: Int
+    get() = containingFile.crLineNumber(startOffset)

@@ -10,4 +10,7 @@ class CrAlias : CrDefinitionWithFqNameImpl<CrAlias, CrAliasStub>, CrAliasLikeDef
     constructor(node: ASTNode) : super(node)
 
     override fun accept(visitor: CrVisitor) = visitor.visitAlias(this)
+
+    val innerType: CrTypeElement<*>?
+        get() = childOfType()
 }

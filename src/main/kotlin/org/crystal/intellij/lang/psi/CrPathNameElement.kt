@@ -40,6 +40,11 @@ open class CrPathNameElement : CrStubbedElementImpl<CrPathStub>, CrNameElement, 
     val isRoot: Boolean
         get() = name.isEmpty() && qualifier == null
 
+    val isGlobal: Boolean
+        get() {
+            return qualifier?.isGlobal ?: isRoot
+        }
+
     val qualifier: CrPathNameElement?
         get() = explicitQualifier ?: stubChildOfType()
 

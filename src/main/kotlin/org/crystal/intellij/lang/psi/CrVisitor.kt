@@ -163,6 +163,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitMacroForStatement(o: CrMacroForStatement) = visitExpression(o)
 
+    open fun visitMacroFragment(o: CrMacroFragment) = visitCrElement(o)
+
     open fun visitMacroIfStatement(o: CrMacroIfStatement) = visitExpression(o)
 
     open fun visitMacroLiteral(o: CrMacroLiteral) = visitCrElement(o)

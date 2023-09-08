@@ -3,7 +3,7 @@ package org.crystal.intellij.tests.psiAttributes
 import com.intellij.psi.util.parentOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.CrAnnotationExpression
+import org.crystal.intellij.lang.psi.CrAnnotationExpression
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test

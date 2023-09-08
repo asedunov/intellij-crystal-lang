@@ -1,0 +1,6 @@
+package org.crystal.intellij.lang.psi
+
+sealed interface CrPathNameElementHolder : CrNameElementHolder {
+    override val nameElement: CrPathNameElement?
+        get() = stubChildOfType()
+}

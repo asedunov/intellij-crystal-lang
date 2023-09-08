@@ -1,6 +1,6 @@
 package org.crystal.intellij.tests.psiAttributes
 
-import org.crystal.intellij.psi.CrStringValueHolder
+import org.crystal.intellij.lang.psi.CrStringValueHolder
 
 class CrystalStringValueTest : CrystalPsiAttributeTest() {
     private fun checkStringValue(text: String, value: String?) {

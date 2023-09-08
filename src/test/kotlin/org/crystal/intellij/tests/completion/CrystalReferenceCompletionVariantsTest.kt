@@ -3,8 +3,8 @@ package org.crystal.intellij.tests.completion
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.resolve.symbols.CrMacroSym
-import org.crystal.intellij.resolve.symbols.CrSym
+import org.crystal.intellij.lang.resolve.symbols.CrMacroSym
+import org.crystal.intellij.lang.resolve.symbols.CrSym
 import org.crystal.intellij.tests.util.configureMultiFileByText
 import org.crystal.intellij.tests.util.setupMainFile
 

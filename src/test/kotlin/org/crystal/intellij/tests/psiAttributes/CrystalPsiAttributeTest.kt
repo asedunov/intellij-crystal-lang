@@ -3,7 +3,7 @@ package org.crystal.intellij.tests.psiAttributes
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.allDescendants
+import org.crystal.intellij.lang.psi.allDescendants
 import org.crystal.intellij.util.firstInstanceOrNull
 
 abstract class CrystalPsiAttributeTest : BasePlatformTestCase() {

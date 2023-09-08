@@ -5,8 +5,8 @@ import com.intellij.ide.util.gotoByName.LanguageRef
 import com.intellij.openapi.project.Project
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.CrDefinitionWithFqName
-import org.crystal.intellij.psi.presentableKind
+import org.crystal.intellij.lang.psi.CrDefinitionWithFqName
+import org.crystal.intellij.lang.psi.presentableKind
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.findDirectives
 import org.junit.Test

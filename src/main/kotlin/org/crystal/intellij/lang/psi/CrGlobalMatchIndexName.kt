@@ -14,4 +14,7 @@ class CrGlobalMatchIndexName(type: IElementType, text: CharSequence) : CrNameLea
 
     override val kind: CrNameKind
         get() = CrNameKind.GLOBAL_MATCH_INDEX
+
+    val isNilable: Boolean
+        get() = text.endsWith("?")
 }

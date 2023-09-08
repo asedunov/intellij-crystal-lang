@@ -56,4 +56,7 @@ class CrMacro : CrDefinitionWithFqNameImpl<CrMacro, CrMacroStub>,
             CrMacroSym.Defined(name, namespace.metaclass, this)
         }
     }
+
+    val body: CrMacroLiteral?
+        get() = childOfType()
 }

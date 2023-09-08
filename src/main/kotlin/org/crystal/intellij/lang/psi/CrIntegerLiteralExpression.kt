@@ -1,13 +1,10 @@
 package org.crystal.intellij.lang.psi
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.util.elementType
 import org.crystal.intellij.lang.config.CrystalLevel
 import org.crystal.intellij.lang.config.languageLevel
 import org.crystal.intellij.lang.lexer.CR_INTEGER_LITERAL
-import org.crystal.intellij.lang.lexer.CR_MINUS_OP
 import org.crystal.intellij.lang.lexer.CrystalTokenType
-import kotlin.math.max
 
 class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(node), CrTypeArgument {
     override fun accept(visitor: CrVisitor) = visitor.visitIntegerLiteralExpression(this)
@@ -25,43 +22,9 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(nod
 
     val explicitKind: CrIntegerKind?
         get() {
-            val text = bodyText
-            val suffixPos = text.findSuffixStart()
-            if (suffixPos >= 0) {
-                val suffix = text.substring(suffixPos)
-                return CrIntegerKind.valueOf(suffix.uppercase())
-            }
-            return null
+            val suffix = suffix ?: return null
+            return CrIntegerKind.valueOf(suffix)
         }
-
-    private val isNegated: Boolean
-        get() = firstChild?.elementType == CR_MINUS_OP
-
-    private fun valueAsString(withSign: Boolean) = buildString {
-        if (withSign && isNegated) append('-')
-        val text = bodyText
-        val n = text.length
-        val from = prefix.length
-        for (i in from until n) {
-            when (val ch = text[i]) {
-                '_' -> continue
-                'i', 'I', 'u', 'U' -> break
-                else -> append(ch)
-            }
-        }
-    }
-
-    val valueString: String
-        get() = valueAsString(true)
-
-    private fun String.findSuffixStart(): Int {
-        val text = bodyText
-        for (i in lastIndex downTo max(lastIndex - 3, 0)) {
-            val ch = text[i].lowercaseChar()
-            if (ch == 'i' || ch == 'u') return i
-        }
-        return -1
-    }
 
     private fun deduceKind(): CrIntegerKind {
         val valueString = valueAsString(false)
@@ -89,4 +52,6 @@ class CrIntegerLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(nod
 
         return CrIntegerKind.I32
     }
+
+    override fun isSuffixDesignator(ch: Char) = ch == 'i' || ch == 'u'
 }

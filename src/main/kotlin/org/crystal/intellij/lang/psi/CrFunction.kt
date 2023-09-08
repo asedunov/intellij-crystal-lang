@@ -25,9 +25,15 @@ class CrFunction :
             return nameElement?.nextSiblingOfType()
         }
 
+    val externalName: String?
+        get() = externalNameElement?.name ?: name
+
     val isVariadic: Boolean
         get() {
             greenStub?.let { return it.isVariadic }
             return parameterList?.isVariadic == true
         }
+
+    val body: CrBlockExpression?
+        get() = childOfType()
 }

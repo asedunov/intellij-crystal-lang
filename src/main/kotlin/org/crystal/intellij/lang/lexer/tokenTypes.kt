@@ -49,6 +49,16 @@ fun crystalKeywordToken(
     override fun createLeaf(text: CharSequence) = factory(this, text)
 }
 
+sealed class CrystalAssignOpToken(name: String) : CrystalTokenType(name)
+
+object CrystalSimpleAssignOpToken : CrystalAssignOpToken("=")
+
+class CrystalComboAssignOpToken(
+    val baseOpToken: CrystalTokenType
+) : CrystalAssignOpToken("${baseOpToken.name}=")
+
+fun CrystalTokenType.comboAssignOpToken() = CrystalComboAssignOpToken(this)
+
 // Bad tokens
 @JvmField val CR_BAD_CHARACTER = TokenType.BAD_CHARACTER!!
 @JvmField val CR_BAD_ESCAPE = crystalToken("CR_BAD_ESCAPE", ::CrSimpleEscapeElement)
@@ -169,26 +179,26 @@ fun crystalKeywordToken(
 @JvmField val CR_XOR_OP = CrystalTokenType("^")
 
 // Assignment
-@JvmField val CR_ASSIGN_OP = CrystalTokenType("=")
+@JvmField val CR_ASSIGN_OP = CrystalSimpleAssignOpToken
 
 // Combined assignments
-@JvmField val CR_ANDAND_ASSIGN_OP = CrystalTokenType("&&=")
-@JvmField val CR_AND_ASSIGN_OP = CrystalTokenType("&=")
-@JvmField val CR_DIV_ASSIGN_OP = CrystalTokenType("/=")
-@JvmField val CR_EXP_ASSIGN_OP = CrystalTokenType("**=")
-@JvmField val CR_FLOOR_DIV_ASSIGN_OP = CrystalTokenType("//=")
-@JvmField val CR_LSHIFT_ASSIGN_OP = CrystalTokenType("<<=")
-@JvmField val CR_MINUS_ASSIGN_OP = CrystalTokenType("-=")
-@JvmField val CR_MOD_ASSIGN_OP = CrystalTokenType("%=")
-@JvmField val CR_MUL_ASSIGN_OP = CrystalTokenType("*=")
-@JvmField val CR_OROR_ASSIGN_OP = CrystalTokenType("||=")
-@JvmField val CR_OR_ASSIGN_OP = CrystalTokenType("|=")
-@JvmField val CR_PLUS_ASSIGN_OP = CrystalTokenType("+=")
-@JvmField val CR_RSHIFT_ASSIGN_OP = CrystalTokenType(">>=")
-@JvmField val CR_WRAP_MINUS_ASSIGN_OP = CrystalTokenType("&-=")
-@JvmField val CR_WRAP_MUL_ASSIGN_OP = CrystalTokenType("&*=")
-@JvmField val CR_WRAP_PLUS_ASSIGN_OP = CrystalTokenType("&+=")
-@JvmField val CR_XOR_ASSIGN_OP = CrystalTokenType("^=")
+@JvmField val CR_ANDAND_ASSIGN_OP = CR_ANDAND_OP.comboAssignOpToken()
+@JvmField val CR_AND_ASSIGN_OP = CR_AND_OP.comboAssignOpToken()
+@JvmField val CR_DIV_ASSIGN_OP = CR_DIV_OP.comboAssignOpToken()
+@JvmField val CR_EXP_ASSIGN_OP = CR_EXP_OP.comboAssignOpToken()
+@JvmField val CR_FLOOR_DIV_ASSIGN_OP = CR_FLOOR_DIV_OP.comboAssignOpToken()
+@JvmField val CR_LSHIFT_ASSIGN_OP = CR_LSHIFT_OP.comboAssignOpToken()
+@JvmField val CR_MINUS_ASSIGN_OP = CR_MINUS_OP.comboAssignOpToken()
+@JvmField val CR_MOD_ASSIGN_OP = CR_MOD_OP.comboAssignOpToken()
+@JvmField val CR_MUL_ASSIGN_OP = CR_MUL_OP.comboAssignOpToken()
+@JvmField val CR_OROR_ASSIGN_OP = CR_OROR_OP.comboAssignOpToken()
+@JvmField val CR_OR_ASSIGN_OP = CR_OR_OP.comboAssignOpToken()
+@JvmField val CR_PLUS_ASSIGN_OP = CR_PLUS_OP.comboAssignOpToken()
+@JvmField val CR_RSHIFT_ASSIGN_OP = CR_RSHIFT_OP.comboAssignOpToken()
+@JvmField val CR_WRAP_MINUS_ASSIGN_OP = CR_WRAP_MINUS_OP.comboAssignOpToken()
+@JvmField val CR_WRAP_MUL_ASSIGN_OP = CR_WRAP_MUL_OP.comboAssignOpToken()
+@JvmField val CR_WRAP_PLUS_ASSIGN_OP = CR_WRAP_PLUS_OP.comboAssignOpToken()
+@JvmField val CR_XOR_ASSIGN_OP = CR_XOR_OP.comboAssignOpToken()
 
 // Escapes
 @JvmField val CR_HEX_ESCAPE = crystalToken("<hex escape>", ::CrHexEscapeElement)
@@ -260,7 +270,7 @@ fun crystalKeywordToken(
 @JvmField val CR_COLON = CrystalTokenType(":")
 @JvmField val CR_COMMA = CrystalTokenType(",")
 @JvmField val CR_DOT = CrystalTokenType(".")
-@JvmField val CR_MACRO_FRAGMENT = CrystalTokenType("<macro fragment>")
+@JvmField val CR_MACRO_FRAGMENT = crystalToken("<macro fragment>", ::CrMacroFragment)
 @JvmField val CR_QUESTION = CrystalTokenType("?")
 @JvmField val CR_SEMICOLON = CrystalTokenType(";")
 

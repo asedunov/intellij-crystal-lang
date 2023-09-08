@@ -9,7 +9,8 @@ class CrSimpleParameter :
     CrDefinitionImpl<CrSimpleParameterStub>,
     CrParameter,
     CrDefinitionWithInitializer,
-    CrExternalNameElementHolder{
+    CrExternalNameElementHolder,
+    CrSyntheticArgHolder {
     constructor(stub: CrSimpleParameterStub) : super(stub, CR_SIMPLE_PARAMETER_DEFINITION)
 
     constructor(node: ASTNode) : super(node)

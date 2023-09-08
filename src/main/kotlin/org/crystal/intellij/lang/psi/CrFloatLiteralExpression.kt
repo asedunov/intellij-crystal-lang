@@ -9,4 +9,9 @@ class CrFloatLiteralExpression(node: ASTNode) : CrNumericLiteralExpression(node)
 
     override val tokenType: CrystalTokenType
         get() = CR_FLOAT_LITERAL
+
+    val isFloat32: Boolean
+        get() = suffix == "F32"
+
+    override fun isSuffixDesignator(ch: Char) = ch == 'f'
 }

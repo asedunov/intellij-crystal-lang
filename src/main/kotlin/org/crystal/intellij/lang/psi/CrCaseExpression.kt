@@ -18,4 +18,7 @@ class CrCaseExpression(node: ASTNode) : CrExpressionImpl(node) {
 
     val elseClause: CrElseClause?
         get() = childOfType()
+
+    val isExhaustive: Boolean
+        get() = whenClauses.first()?.isExhaustive == true
 }

@@ -15,6 +15,9 @@ class CrBinaryExpression(node: ASTNode) : CrExpressionImpl(node) {
     val opSign: IElementType?
         get() = operator?.elementType
 
+    val opName: String?
+        get() = operator?.text
+
     val leftOperand: CrExpression?
         get() = operator?.prevSiblingOfType()
 

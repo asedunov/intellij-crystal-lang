@@ -7,4 +7,10 @@ class CrFunctionLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
 
     val parameterList: CrParameterList?
         get() = childOfType()
+
+    val body: CrBlockExpression?
+        get() = childOfType()
+
+    val returnType: CrTypeElement<*>?
+        get() = childOfType()
 }

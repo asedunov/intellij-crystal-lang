@@ -8,4 +8,7 @@ class CrSelectExpression(node: ASTNode) : CrExpressionImpl(node) {
 
     val whenClauses: JBIterable<CrWhenClause>
         get() = childrenOfType()
+
+    val elseClause: CrElseClause?
+        get() = childOfType()
 }

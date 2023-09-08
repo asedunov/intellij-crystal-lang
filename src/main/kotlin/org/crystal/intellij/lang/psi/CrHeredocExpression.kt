@@ -8,7 +8,7 @@ class CrHeredocExpression(node: ASTNode) : CrExpressionImpl(node), CrStringValue
     private val startId: CrHeredocStartId?
         get() = childOfType()
 
-    private fun resolveToBody() = startId?.resolveToPairedId()?.body
+    fun resolveToBody() = startId?.resolveToPairedId()?.body
 
     override val stringValue: String?
         get() {

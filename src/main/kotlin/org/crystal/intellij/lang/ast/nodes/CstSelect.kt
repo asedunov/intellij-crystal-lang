@@ -1,0 +1,39 @@
+package org.crystal.intellij.lang.ast.nodes
+
+import org.crystal.intellij.lang.ast.location.CstLocation
+
+class CstSelect(
+    val whens: List<When>,
+    val elseBranch: CstNode? = null,
+    location: CstLocation? = null
+) : CstNode(location) {
+    data class When(
+        val condition: CstNode,
+        val body: CstNode
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CstSelect
+
+        if (whens != other.whens) return false
+        if (elseBranch != other.elseBranch) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = whens.hashCode()
+        result = 31 * result + (elseBranch?.hashCode() ?: 0)
+        return result
+    }
+
+    override fun toString() = buildString {
+        append("Select(")
+        append("whens=$whens")
+        if (elseBranch != null) append("elseBranch=$elseBranch")
+        append(")")
+    }
+}

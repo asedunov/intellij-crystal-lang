@@ -4,4 +4,7 @@ import com.intellij.lang.ASTNode
 
 class CrRegexExpression(node: ASTNode) : CrExpressionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitRegexExpression(this)
+
+    val options: CrRegexOptionsElement?
+        get() = childOfType()
 }

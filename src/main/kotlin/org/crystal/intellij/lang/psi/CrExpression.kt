@@ -2,7 +2,7 @@ package org.crystal.intellij.lang.psi
 
 import com.intellij.util.SmartList
 
-interface CrExpression : CrElement, CrCallArgument {
+interface CrExpression : CrElement, CrFileElement, CrCallArgument {
     override fun accept(visitor: CrVisitor) = visitor.visitExpression(this)
 
     @Suppress("UNCHECKED_CAST")
@@ -20,6 +20,7 @@ interface CrExpression : CrElement, CrCallArgument {
             val result = SmartList<CrAnnotationExpression>()
 
             var e: CrExpression = this
+            mainLoop@
             while (true) {
                 if (e.isAnnotationTransparent) {
                     val nestedExpression = e.lastChildOfType<CrExpression>()
@@ -31,17 +32,20 @@ interface CrExpression : CrElement, CrCallArgument {
 
                 when {
                     e is CrAnnotationExpression -> result += e
-                    e != this -> return result
+                    e != this -> break@mainLoop
                 }
 
                 var prevExpression: CrExpression? = e.prevSiblingOfType()
                 while (prevExpression == null) {
-                    val p = e.parent as? CrExpression ?: return result
-                    if (!p.isAnnotationTransparent) return result
+                    val p = e.parent as? CrExpression ?: break@mainLoop
+                    if (!p.isAnnotationTransparent) break@mainLoop
                     e = p
                     prevExpression = e.prevSiblingOfType()
                 }
                 e = prevExpression
             }
+
+            result.reverse()
+            return result
         }
 }

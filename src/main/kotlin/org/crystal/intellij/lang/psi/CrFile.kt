@@ -3,6 +3,7 @@ package org.crystal.intellij.lang.psi
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.util.containers.JBIterable
 import org.crystal.intellij.lang.CrystalFileType
 import org.crystal.intellij.lang.CrystalLanguage
 
@@ -14,4 +15,7 @@ class CrFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Crystal
     }
 
     override fun accept(visitor: CrVisitor) = visitor.visitCrFile(this)
+
+    val elements: JBIterable<CrFileElement>
+        get() = childrenOfType()
 }

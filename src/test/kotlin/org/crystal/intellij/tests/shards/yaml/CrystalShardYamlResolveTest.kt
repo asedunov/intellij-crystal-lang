@@ -8,7 +8,7 @@ import com.intellij.psi.PsiFileSystemItem
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.allDescendants
+import org.crystal.intellij.lang.psi.allDescendants
 import org.crystal.intellij.tests.util.findDirectives
 import org.crystal.intellij.tests.util.getTestDirectoriesAsParameters
 import org.crystal.intellij.util.toPsi

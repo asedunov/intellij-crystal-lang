@@ -7,7 +7,7 @@ import com.intellij.psi.ElementManipulators
 import com.intellij.psi.util.parentOfType
 import com.intellij.refactoring.suggested.startOffset
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.crystal.intellij.psi.CrStringLiteralExpression
+import org.crystal.intellij.lang.psi.CrStringLiteralExpression
 import org.junit.Assert
 
 class CrystalStringLiteralManipulatorTest : BasePlatformTestCase() {

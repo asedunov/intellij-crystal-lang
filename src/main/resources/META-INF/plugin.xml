@@ -41,117 +41,117 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType name="Crystal"
                   language="Crystal"
-                  implementationClass="org.crystal.intellij.CrystalFileType"
+                  implementationClass="org.crystal.intellij.lang.CrystalFileType"
                   fieldName="INSTANCE"
                   extensions="cr"/>
         <lang.parserDefinition language="Crystal"
-                               implementationClass="org.crystal.intellij.parser.CrystalParserDefinition"/>
+                               implementationClass="org.crystal.intellij.lang.parser.CrystalParserDefinition"/>
 
         <internalFileTemplate name="Crystal File"/>
 
-        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxHighlightingPass$Factory"/>
-        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalSyntaxCheckingPass$Factory"/>
-        <highlightingPassFactory implementation="org.crystal.intellij.highlighter.CrystalResolveCheckingPass$Factory"/>
+        <highlightingPassFactory implementation="org.crystal.intellij.ide.highlighter.CrystalSyntaxHighlightingPass$Factory"/>
+        <highlightingPassFactory implementation="org.crystal.intellij.ide.highlighter.CrystalSyntaxCheckingPass$Factory"/>
+        <highlightingPassFactory implementation="org.crystal.intellij.ide.highlighter.CrystalResolveCheckingPass$Factory"/>
 
         <lang.psiStructureViewFactory language="Crystal"
-                                      implementationClass="org.crystal.intellij.structure.CrystalStructureViewFactory"/>
-        <lang.commenter language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalCommenter"/>
-        <lang.foldingBuilder language="Crystal" implementationClass="org.crystal.intellij.editor.CrystalFoldingBuilder"/>
-        <lang.elementManipulator forClass="org.crystal.intellij.psi.CrStringLiteralExpression"
-                                 implementationClass="org.crystal.intellij.psi.CrStringLiteralManipulator"/>
+                                      implementationClass="org.crystal.intellij.ide.structure.CrystalStructureViewFactory"/>
+        <lang.commenter language="Crystal" implementationClass="org.crystal.intellij.ide.editor.CrystalCommenter"/>
+        <lang.foldingBuilder language="Crystal" implementationClass="org.crystal.intellij.ide.editor.CrystalFoldingBuilder"/>
+        <lang.elementManipulator forClass="org.crystal.intellij.lang.psi.CrStringLiteralExpression"
+                                 implementationClass="org.crystal.intellij.lang.psi.CrStringLiteralManipulator"/>
 
-        <typedHandler implementation="org.crystal.intellij.editor.CrystalTypedHandler"
+        <typedHandler implementation="org.crystal.intellij.ide.editor.CrystalTypedHandler"
                       order="before selectionQuoting" />
-        <backspaceHandlerDelegate implementation="org.crystal.intellij.editor.CrystalBackspaceHandler"/>
-        <enterHandlerDelegate implementation="org.crystal.intellij.editor.CrystalEnterHandler"/>
+        <backspaceHandlerDelegate implementation="org.crystal.intellij.ide.editor.CrystalBackspaceHandler"/>
+        <enterHandlerDelegate implementation="org.crystal.intellij.ide.editor.CrystalEnterHandler"/>
 
-        <langCodeStyleSettingsProvider implementation="org.crystal.intellij.formatter.CrystalCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider implementation="org.crystal.intellij.ide.formatter.CrystalCodeStyleSettingsProvider"/>
         <lang.formatter language="Crystal"
-                        implementationClass="org.crystal.intellij.formatter.CrystalFormattingModelBuilder"/>
-        <formattingService implementation="org.crystal.intellij.formatter.CrystalToolFormattingService"/>
+                        implementationClass="org.crystal.intellij.ide.formatter.CrystalFormattingModelBuilder"/>
+        <formattingService implementation="org.crystal.intellij.ide.formatter.CrystalToolFormattingService"/>
 
-        <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectSettings"/>
-        <projectService serviceImplementation="org.crystal.intellij.config.CrystalProjectWorkspaceSettings"/>
-        <projectService serviceImplementation="org.crystal.intellij.psi.CrPsiFactory"/>
-        <projectService serviceImplementation="org.crystal.intellij.resolve.CrResolveFacade"/>
+        <projectService serviceImplementation="org.crystal.intellij.lang.config.CrystalProjectSettings"/>
+        <projectService serviceImplementation="org.crystal.intellij.lang.config.CrystalProjectWorkspaceSettings"/>
+        <projectService serviceImplementation="org.crystal.intellij.lang.psi.CrPsiFactory"/>
+        <projectService serviceImplementation="org.crystal.intellij.lang.resolve.CrResolveFacade"/>
 
         <projectConfigurable id="crystal.settings"
                              groupId="language"
                              key="settings.title"
                              bundle="messages.CrystalBundle"
-                             instance="org.crystal.intellij.config.CrystalSettingsConfigurable"/>
+                             instance="org.crystal.intellij.ide.config.CrystalSettingsConfigurable"/>
 
-        <filePropertyPusher implementation="org.crystal.intellij.config.CrystalLanguageLevelPusher"/>
+        <filePropertyPusher implementation="org.crystal.intellij.lang.config.CrystalLanguageLevelPusher"/>
 
-        <iconProvider implementation="org.crystal.intellij.presentation.CrystalIconProvider"/>
+        <iconProvider implementation="org.crystal.intellij.ide.presentation.CrystalIconProvider"/>
         <iconMapper mappingFile="CrystalIconMappings.json"/>
         <!--suppress PluginXmlValidity -->
-        <lang.symbolDocumentation implementation="org.crystal.intellij.presentation.CrSymbolDocumentationTargetProvider"/>
+        <lang.symbolDocumentation implementation="org.crystal.intellij.ide.presentation.CrSymbolDocumentationTargetProvider"/>
 
-        <elementDescriptionProvider implementation="org.crystal.intellij.presentation.CrystalElementDescriptionProvider"/>
+        <elementDescriptionProvider implementation="org.crystal.intellij.ide.presentation.CrystalElementDescriptionProvider"/>
 
-        <stubElementTypeHolder class="org.crystal.intellij.stubs.elementTypes.CrStubElementTypes"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeShortNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalFunctionShortNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalVariableShortNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalStrictConstantShortNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalConstantFqNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalConstantParentFqNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalTypeBySuperclassNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroFqNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroParentFqNameIndex"/>
-        <stubIndex implementation="org.crystal.intellij.stubs.indexes.CrystalMacroSignatureIndex"/>
+        <stubElementTypeHolder class="org.crystal.intellij.lang.stubs.elementTypes.CrStubElementTypes"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalTypeShortNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalFunctionShortNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalVariableShortNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalStrictConstantShortNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalConstantFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalConstantParentFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalTypeBySuperclassNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalIncludeLikeByContainerFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalMacroFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalMacroParentFqNameIndex"/>
+        <stubIndex implementation="org.crystal.intellij.lang.stubs.indexes.CrystalMacroSignatureIndex"/>
 
-        <additionalLibraryRootsProvider implementation="org.crystal.intellij.sdk.CrystalSdkLibraryRootProvider"/>
+        <additionalLibraryRootsProvider implementation="org.crystal.intellij.lang.sdk.CrystalSdkLibraryRootProvider"/>
 
-        <gotoClassContributor implementation="org.crystal.intellij.navigation.CrystalGotoClassContributor"/>
-        <gotoSymbolContributor implementation="org.crystal.intellij.navigation.CrystalGotoSymbolContributor"/>
+        <gotoClassContributor implementation="org.crystal.intellij.ide.navigation.CrystalGotoClassContributor"/>
+        <gotoSymbolContributor implementation="org.crystal.intellij.ide.navigation.CrystalGotoSymbolContributor"/>
 
-        <symbolNavigation forClass="org.crystal.intellij.resolve.symbols.CrSym"
-                          implementationClass="org.crystal.intellij.navigation.CrSymbolNavigationProvider"/>
+        <symbolNavigation forClass="org.crystal.intellij.lang.resolve.symbols.CrSym"
+                          implementationClass="org.crystal.intellij.ide.navigation.CrSymbolNavigationProvider"/>
 
         <targetElementEvaluator language="Crystal"
-                                implementationClass="org.crystal.intellij.navigation.CrystalTargetElementEvaluator"/>
+                                implementationClass="org.crystal.intellij.ide.navigation.CrystalTargetElementEvaluator"/>
 
         <codeInsight.lineMarkerProvider language="Crystal"
-                                        implementationClass="org.crystal.intellij.lineMarkers.CrystalInheritorsLineMarkerProvider"/>
+                                        implementationClass="org.crystal.intellij.ide.lineMarkers.CrystalInheritorsLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="Crystal"
-                                        implementationClass="org.crystal.intellij.lineMarkers.CrystalPartialDeclarationLineMarkerProvider"/>
+                                        implementationClass="org.crystal.intellij.ide.lineMarkers.CrystalPartialDeclarationLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="Crystal"
-                                        implementationClass="org.crystal.intellij.lineMarkers.CrystalMacroOverrideLineMarkerProvider"/>
+                                        implementationClass="org.crystal.intellij.ide.lineMarkers.CrystalMacroOverrideLineMarkerProvider"/>
 
         <codeInsight.parameterInfo language="Crystal"
-                                   implementationClass="org.crystal.intellij.parameterInfo.CrMacroCallParameterInfoHandler"/>
+                                   implementationClass="org.crystal.intellij.ide.parameterInfo.CrMacroCallParameterInfoHandler"/>
 
         <typeHierarchyProvider language="Crystal"
-                               implementationClass="org.crystal.intellij.hierarchy.types.CrystalTypeHierarchyProvider"/>
+                               implementationClass="org.crystal.intellij.ide.hierarchy.types.CrystalTypeHierarchyProvider"/>
 
-        <lang.codeReferenceSearcher implementation="org.crystal.intellij.search.CrystalCodeReferenceSearcher"/>
+        <lang.codeReferenceSearcher implementation="org.crystal.intellij.ide.search.CrystalCodeReferenceSearcher"/>
 
         <searcher forClass="com.intellij.find.usages.api.UsageSearchParameters"
-                  implementationClass="org.crystal.intellij.findUsages.CrystalUsageSearcher"/>
-        <lang.symbolSearchTarget forClass="org.crystal.intellij.resolve.symbols.CrSym"
-                                 implementationClass="org.crystal.intellij.findUsages.CrystalSymbolSearchTargetFactory"/>
-        <fileStructureGroupRuleProvider implementation="org.crystal.intellij.findUsages.CrystalDeclarationGroupingRuleProvider$ByType"/>
-        <fileStructureGroupRuleProvider implementation="org.crystal.intellij.findUsages.CrystalDeclarationGroupingRuleProvider$ByFunction"/>
+                  implementationClass="org.crystal.intellij.ide.findUsages.CrystalUsageSearcher"/>
+        <lang.symbolSearchTarget forClass="org.crystal.intellij.lang.resolve.symbols.CrSym"
+                                 implementationClass="org.crystal.intellij.ide.findUsages.CrystalSymbolSearchTargetFactory"/>
+        <fileStructureGroupRuleProvider implementation="org.crystal.intellij.ide.findUsages.CrystalDeclarationGroupingRuleProvider$ByType"/>
+        <fileStructureGroupRuleProvider implementation="org.crystal.intellij.ide.findUsages.CrystalDeclarationGroupingRuleProvider$ByFunction"/>
 
         <completion.contributor language="Crystal"
-                                implementationClass="org.crystal.intellij.completion.CrKeywordCompletionContributor"
+                                implementationClass="org.crystal.intellij.ide.completion.CrKeywordCompletionContributor"
                                 id="CrKeywordCompletionContributor"
                                 order="first"/>
         <completion.contributor language="Crystal"
-                                implementationClass="org.crystal.intellij.completion.CrPathReferenceCompletionContributor"
+                                implementationClass="org.crystal.intellij.ide.completion.CrPathReferenceCompletionContributor"
                                 id="CrPathReferenceCompletionContributor"/>
         <completion.contributor language="Crystal"
-                                implementationClass="org.crystal.intellij.completion.CrMacroReferenceCompletionContributor"
+                                implementationClass="org.crystal.intellij.ide.completion.CrMacroReferenceCompletionContributor"
                                 id="CrMacroReferenceCompletionContributor"/>
         <completion.contributor language="yaml"
-                                implementationClass="org.crystal.intellij.shards.yaml.completion.ShardYamlCompletionContributor"
+                                implementationClass="org.crystal.intellij.ide.shards.yaml.completion.ShardYamlCompletionContributor"
                                 id="CrShardsYamlKeyCompletionContributor"/>
 
         <psi.referenceContributor language="yaml"
-                                  implementation="org.crystal.intellij.shards.yaml.references.ShardYamlReferenceContributor"/>
+                                  implementation="org.crystal.intellij.ide.shards.yaml.references.ShardYamlReferenceContributor"/>
 
         <localInspection language="Crystal"
                          shortName="CrystalResolveInspection"
@@ -161,7 +161,7 @@
                          groupKey="inspections.group"
                          enabledByDefault="true"
                          level="ERROR"
-                         implementationClass="org.crystal.intellij.inspections.CrystalResolveInspection"/>
+                         implementationClass="org.crystal.intellij.ide.inspections.CrystalResolveInspection"/>
 
         <localInspection language="Crystal"
                          shortName="CrystalMissingMainFileInspection"
@@ -171,7 +171,7 @@
                          groupKey="inspections.group"
                          enabledByDefault="true"
                          level="WARNING"
-                         implementationClass="org.crystal.intellij.inspections.CrystalMissingMainFileInspection"/>
+                         implementationClass="org.crystal.intellij.ide.inspections.CrystalMissingMainFileInspection"/>
 
         <localInspection language="yaml"
                          shortName="ShardYamlMissingKeysInspection"
@@ -181,7 +181,7 @@
                          groupKey="inspections.group"
                          enabledByDefault="true"
                          level="ERROR"
-                         implementationClass="org.crystal.intellij.shards.yaml.inspections.ShardYamlMissingKeysInspection"/>
+                         implementationClass="org.crystal.intellij.ide.shards.yaml.inspections.ShardYamlMissingKeysInspection"/>
 
         <localInspection language="yaml"
                          shortName="ShardYamlUnknownKeysInspection"
@@ -191,7 +191,7 @@
                          groupKey="inspections.group"
                          enabledByDefault="true"
                          level="ERROR"
-                         implementationClass="org.crystal.intellij.shards.yaml.inspections.ShardYamlUnknownKeysInspection"/>
+                         implementationClass="org.crystal.intellij.ide.shards.yaml.inspections.ShardYamlUnknownKeysInspection"/>
 
         <localInspection language="yaml"
                          shortName="ShardYamlResolveInspection"
@@ -201,23 +201,23 @@
                          groupKey="inspections.group"
                          enabledByDefault="true"
                          level="ERROR"
-                         implementationClass="org.crystal.intellij.shards.yaml.inspections.ShardYamlResolveInspection"/>
+                         implementationClass="org.crystal.intellij.ide.shards.yaml.inspections.ShardYamlResolveInspection"/>
 
-        <renameHandler implementation="org.crystal.intellij.refactoring.rename.CrystalRenameHandler"/>
-        <vetoRenameCondition implementation="org.crystal.intellij.refactoring.rename.CrystalVetoRenameCondition"/>
-        <rename.symbolRenameTargetFactory implementation="org.crystal.intellij.refactoring.rename.CrystalSymbolRenameTargetFactory"/>
+        <renameHandler implementation="org.crystal.intellij.ide.refactoring.rename.CrystalRenameHandler"/>
+        <vetoRenameCondition implementation="org.crystal.intellij.ide.refactoring.rename.CrystalVetoRenameCondition"/>
+        <rename.symbolRenameTargetFactory implementation="org.crystal.intellij.ide.refactoring.rename.CrystalSymbolRenameTargetFactory"/>
         <searcher forClass="com.intellij.refactoring.rename.api.RenameUsageSearchParameters"
-                  implementationClass="org.crystal.intellij.refactoring.rename.CrystalRenameUsageSearcher"/>
+                  implementationClass="org.crystal.intellij.ide.refactoring.rename.CrystalRenameUsageSearcher"/>
 
-        <configurationType implementation="org.crystal.intellij.run.CrystalFileRunConfigurationType"/>
-        <configurationType implementation="org.crystal.intellij.run.CrystalFileBuildConfigurationType"/>
-        <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileRunConfigurationProducer"/>
-        <runConfigurationProducer implementation="org.crystal.intellij.run.CrystalFileBuildConfigurationProducer"/>
+        <configurationType implementation="org.crystal.intellij.ide.run.CrystalFileRunConfigurationType"/>
+        <configurationType implementation="org.crystal.intellij.ide.run.CrystalFileBuildConfigurationType"/>
+        <runConfigurationProducer implementation="org.crystal.intellij.ide.run.CrystalFileRunConfigurationProducer"/>
+        <runConfigurationProducer implementation="org.crystal.intellij.ide.run.CrystalFileBuildConfigurationProducer"/>
 
-        <runConfigurationTemplateProvider implementation="org.crystal.intellij.run.CrystalRunConfigurationTemplateProvider"/>
+        <runConfigurationTemplateProvider implementation="org.crystal.intellij.ide.run.CrystalRunConfigurationTemplateProvider"/>
 
-        <moduleBuilder builderClass="org.crystal.intellij.config.project.CrystalModuleBuilder"/>
-        <directoryProjectGenerator implementation="org.crystal.intellij.config.project.CrystalDirectoryProjectGenerator"/>
+        <moduleBuilder builderClass="org.crystal.intellij.ide.config.project.CrystalModuleBuilder"/>
+        <directoryProjectGenerator implementation="org.crystal.intellij.ide.config.project.CrystalDirectoryProjectGenerator"/>
     </extensions>
 
     <extensionPoints>
@@ -230,13 +230,13 @@
     </extensionPoints>
 
     <extensions defaultExtensionNs="org.crystal">
-        <classInheritorsSearch implementation="org.crystal.intellij.search.CrystalInheritorsSearcher"/>
-        <overridingMacroSearch implementation="org.crystal.intellij.search.CrystalOverridingMacroSearcher"/>
+        <classInheritorsSearch implementation="org.crystal.intellij.ide.search.CrystalInheritorsSearcher"/>
+        <overridingMacroSearch implementation="org.crystal.intellij.ide.search.CrystalOverridingMacroSearcher"/>
     </extensions>
 
     <actions>
         <action id="Crystal.NewCrystalFile"
-                class="org.crystal.intellij.actions.CrCreateFileAction">
+                class="org.crystal.intellij.ide.actions.CrCreateFileAction">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
     </actions>

@@ -2,7 +2,7 @@ package org.crystal.intellij.tests
 
 import com.intellij.testFramework.FileStructureTestBase
 import com.intellij.testFramework.PlatformTestUtil
-import org.crystal.intellij.CrystalFileType
+import org.crystal.intellij.lang.CrystalFileType
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test
 import org.junit.runner.RunWith

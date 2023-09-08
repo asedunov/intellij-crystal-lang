@@ -4,10 +4,10 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.hasErrorElementInRange
 import com.intellij.testFramework.ParsingTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.config.CrystalLevel
-import org.crystal.intellij.config.CrystalProjectSettings
-import org.crystal.intellij.lexer.*
-import org.crystal.intellij.parser.CrystalParserDefinition
+import org.crystal.intellij.lang.config.CrystalLevel
+import org.crystal.intellij.lang.config.CrystalProjectSettings
+import org.crystal.intellij.lang.lexer.*
+import org.crystal.intellij.lang.parser.CrystalParserDefinition
 import org.crystal.intellij.tests.util.withLanguageLevel
 import java.io.File
 

@@ -1,6 +1,6 @@
 package org.crystal.intellij.tests.psiAttributes
 
-import org.crystal.intellij.psi.CrDefinitionWithFqName
+import org.crystal.intellij.lang.psi.CrDefinitionWithFqName
 
 class CrystalFqNameTest : CrystalPsiAttributeTest() {
     private fun checkFqName(text: String, value: String?) {

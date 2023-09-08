@@ -3,9 +3,9 @@ package org.crystal.intellij.tests.intentions
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
 import org.crystal.intellij.CrystalBundle
-import org.crystal.intellij.config.CrystalLevel
-import org.crystal.intellij.config.asSpecificVersion
-import org.crystal.intellij.config.crystalSettings
+import org.crystal.intellij.lang.config.CrystalLevel
+import org.crystal.intellij.lang.config.asSpecificVersion
+import org.crystal.intellij.lang.config.crystalSettings
 import org.crystal.intellij.tests.util.withLanguageLevel
 
 class CrystalCustomIntentionTest : BasePlatformTestCase() {

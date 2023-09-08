@@ -1,7 +1,7 @@
 package org.crystal.intellij.tests.shards.yaml
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.crystal.intellij.shards.yaml.inspections.ShardYamlResolveInspection
+import org.crystal.intellij.ide.shards.yaml.inspections.ShardYamlResolveInspection
 import org.crystal.intellij.tests.util.getTestDirectoriesAsParameters
 import org.crystal.intellij.util.toPsi
 import org.jetbrains.yaml.psi.YAMLFile

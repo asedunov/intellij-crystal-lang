@@ -4,8 +4,8 @@ import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.crystal.intellij.editor.brackets
-import org.crystal.intellij.editor.quotes
+import org.crystal.intellij.ide.editor.brackets
+import org.crystal.intellij.ide.editor.quotes
 
 class CrystalBackspaceHandlerTest : BasePlatformTestCase() {
     private fun CodeInsightTestFixture.backspace() {

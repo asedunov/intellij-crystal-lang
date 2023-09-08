@@ -1,7 +1,7 @@
 package org.crystal.intellij.tests.psiAttributes
 
-import org.crystal.intellij.psi.CrIntegerKind
-import org.crystal.intellij.psi.CrIntegerLiteralExpression
+import org.crystal.intellij.lang.psi.CrIntegerKind
+import org.crystal.intellij.lang.psi.CrIntegerLiteralExpression
 
 class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
     private fun checkIntKind(text: String, kind: CrIntegerKind) {

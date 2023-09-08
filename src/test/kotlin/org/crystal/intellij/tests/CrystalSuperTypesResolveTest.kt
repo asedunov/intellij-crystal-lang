@@ -3,9 +3,9 @@ package org.crystal.intellij.tests
 import com.intellij.psi.util.parentOfType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.psi.CrConstantSource
-import org.crystal.intellij.resolve.scopes.asSequence
-import org.crystal.intellij.resolve.symbols.CrModuleLikeSym
+import org.crystal.intellij.lang.psi.CrConstantSource
+import org.crystal.intellij.lang.resolve.scopes.asSequence
+import org.crystal.intellij.lang.resolve.symbols.CrModuleLikeSym
 import org.crystal.intellij.tests.util.findDirective
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.crystal.intellij.tests.util.setupMainFile

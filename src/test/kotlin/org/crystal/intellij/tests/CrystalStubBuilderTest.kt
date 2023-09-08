@@ -4,8 +4,8 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.impl.DebugUtil
 import com.intellij.testFramework.LightPlatformTestCase
 import com.intellij.testFramework.assertEqualsToFile
-import org.crystal.intellij.psi.CrFile
-import org.crystal.intellij.stubs.CrStubBuilder
+import org.crystal.intellij.lang.stubs.CrStubBuilder
+import org.crystal.intellij.lang.psi.CrFile
 import org.crystal.intellij.tests.util.getCrystalTestFilesAsParameters
 import org.junit.Test
 import org.junit.runner.RunWith

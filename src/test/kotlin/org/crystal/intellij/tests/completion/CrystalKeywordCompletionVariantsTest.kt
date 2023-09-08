@@ -2,8 +2,8 @@ package org.crystal.intellij.tests.completion
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.completion.*
-import org.crystal.intellij.lexer.*
+import org.crystal.intellij.ide.completion.*
+import org.crystal.intellij.lang.lexer.*
 
 private val NONE = emptyList<CrystalTokenType>()
 

@@ -1,0 +1,14 @@
+package org.crystal.intellij.lang.psi
+
+import com.intellij.lang.ASTNode
+import com.intellij.util.containers.JBIterable
+
+class CrHashExpression(node: ASTNode) : CrExpressionImpl(node), CrLiteralExpression {
+    override fun accept(visitor: CrVisitor) = visitor.visitHashExpression(this)
+
+    val entries: JBIterable<CrHashEntry>
+        get() = childrenOfType()
+
+    val type: CrTypeElement<*>?
+        get() = childOfType()
+}

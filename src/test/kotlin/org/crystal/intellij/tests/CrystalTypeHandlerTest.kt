@@ -1,8 +1,8 @@
 package org.crystal.intellij.tests
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.crystal.intellij.editor.brackets
-import org.crystal.intellij.editor.quotes
+import org.crystal.intellij.ide.editor.brackets
+import org.crystal.intellij.ide.editor.quotes
 
 class CrystalTypeHandlerTest : BasePlatformTestCase() {
     private fun doTest(before: String, ch: Char, after: String) {

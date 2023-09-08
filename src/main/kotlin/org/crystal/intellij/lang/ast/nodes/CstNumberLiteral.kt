@@ -8,7 +8,7 @@ class CstNumberLiteral(
     val value: String,
     val kind: NumberKind = NumberKind.I32,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode(location), CstSimpleLiteral {
     constructor(
         value: Int,
         location: CstLocation? = null

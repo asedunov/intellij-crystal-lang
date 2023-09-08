@@ -414,7 +414,7 @@ open class CstTransformer {
         scope = o.scope?.transform(this)
     )
 
-    private inline fun <reified T : CstNode> List<CstNode>.transform() = mapNotNull {
+    protected inline fun <reified T : CstNode> List<CstNode>.transform() = mapNotNull {
         transform(it) as? T
     }
 

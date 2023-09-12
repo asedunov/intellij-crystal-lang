@@ -2,6 +2,8 @@ package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.util.crystal.CrChar
+import org.crystal.intellij.util.crystal.crChar
 
 class CstCharLiteral(
     val value: Int,
@@ -24,3 +26,6 @@ class CstCharLiteral(
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitCharLiteral(this)
 }
+
+val CstCharLiteral.crChar: CrChar
+    get() = value.crChar

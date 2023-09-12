@@ -2,6 +2,8 @@ package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.util.crystal.CrString
+import org.crystal.intellij.util.crystal.crString
 
 class CstStringLiteral(
     val value: String,
@@ -22,3 +24,6 @@ class CstStringLiteral(
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitStringLiteral(this)
 }
+
+val CstStringLiteral.crString: CrString
+    get() = value.crString

@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.descendantsOfType
 import com.intellij.refactoring.suggested.endOffset
 import com.intellij.refactoring.suggested.startOffset
+import com.intellij.psi.util.elementType
 import com.intellij.util.SmartList
 import com.intellij.util.containers.JBIterable
 import com.intellij.util.containers.addIfNotNull
@@ -15,6 +16,7 @@ import org.crystal.intellij.lang.ast.nodes.*
 import org.crystal.intellij.lang.config.CrystalLevel
 import org.crystal.intellij.lang.config.languageLevel
 import org.crystal.intellij.lang.lexer.*
+import org.crystal.intellij.lang.parser.CR_PARENTHESIZED_ARGUMENT_LIST
 import org.crystal.intellij.lang.psi.*
 import org.crystal.intellij.lang.resolve.cache.newResolveSlice
 import org.crystal.intellij.lang.resolve.cache.resolveCache
@@ -47,23 +49,26 @@ class CrPsi2AstConverter : CrVisitor() {
     private fun psiAsExpressions(
         expressions: JBIterable<out CrElement>,
         force: Boolean = false,
+        keyword: CrystalTokenType? = null,
         location: CstLocation? = null
     ): CstNode {
-        return astAsExpressions(expressions.filterMap { it.cstNode }, location, force)
+        return astAsExpressions(expressions.filterMap { it.cstNode }, location, force, keyword)
     }
 
     private fun astAsExpressions(
         nodes: JBIterable<out CstNode>,
-        location: CstLocation?,
-        force: Boolean = false
+        location: CstLocation? = null,
+        force: Boolean = false,
+        keyword: CrystalTokenType? = null
     ): CstNode {
-        if (!force) {
+        if (!force && keyword == null) {
             if (nodes.isEmpty) return CstNop
             val node = nodes.single()
             if (node != null) return node
         }
         return CstExpressions(
             if (nodes.isNotEmpty) nodes.toList() else listOf(CstNop),
+            keyword,
             location
         )
     }
@@ -387,7 +392,7 @@ class CrPsi2AstConverter : CrVisitor() {
     }
 
     override fun visitMultiParameter(o: CrMultiParameter) {
-        result = psiAsExpressions(o.elements, true, cstLocation(o))
+        result = psiAsExpressions(o.elements, true, null, cstLocation(o))
         if (o.kind == CrParameterKind.SPLAT && o.parent is CrMultiParameter) {
             result = CstSplat(result!!, result!!.location)
         }
@@ -432,7 +437,7 @@ class CrPsi2AstConverter : CrVisitor() {
             name = syntheticName ?: name,
             defaultValue = if (initializer != null) initializer.cstNode ?: CstNop else null,
             restriction = if (typeElement != null) typeElement.cstNode ?: CstNop else null,
-            externalName = externalName,
+            externalName = externalName ?: name,
             annotations = o.annotations.mapNotNull { it.cstNode as? CstAnnotation }
         )
 
@@ -703,7 +708,8 @@ class CrPsi2AstConverter : CrVisitor() {
             block = blockNode ?: blockArgNode as? CstBlock,
             blockArg = blockArgNode.takeIf { it !is CstBlock },
             namedArgs = callInfo?.namedArgs?.mapNotNull { it.cstNode as? CstNamedArgument } ?: emptyList(),
-            isGlobal = o.isGlobal
+            isGlobal = o.isGlobal,
+            hasParentheses = o.argumentList?.elementType == CR_PARENTHESIZED_ARGUMENT_LIST
         )
 
         super.visitCallExpression(o)
@@ -960,7 +966,8 @@ class CrPsi2AstConverter : CrVisitor() {
             location = cstLocation(o),
             condition = o.condition.cstNode ?: CstNop,
             thenBranch = o.thenExpression?.cstNode ?: CstNop,
-            elseBranch = o.elseExpression?.cstNode ?: CstNop
+            elseBranch = o.elseExpression?.cstNode ?: CstNop,
+            isTernary = true
         )
 
         super.visitConditionalExpression(o)
@@ -1006,7 +1013,7 @@ class CrPsi2AstConverter : CrVisitor() {
 
     override fun visitParenthesizedExpression(o: CrParenthesizedExpression) {
         val isSplat = o.expressions.single() is CrSplatExpression
-        result = psiAsExpressions(o.expressions, !isSplat, cstLocation(o))
+        result = psiAsExpressions(o.expressions, !isSplat, CR_LPAREN, cstLocation(o))
 
         super.visitParenthesizedExpression(o)
     }
@@ -1111,7 +1118,7 @@ class CrPsi2AstConverter : CrVisitor() {
                 CstExpressions.from(allNodes)
             }
 
-            else -> psiAsExpressions(expressions, o.isBeginEnd, blockLoc)
+            else -> psiAsExpressions(expressions, o.isBeginEnd, if (o.isBeginEnd) CR_BEGIN else null, blockLoc)
         }
     }
 

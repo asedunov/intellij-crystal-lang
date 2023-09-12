@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstModuleDef(
     val name: CstPath,
@@ -38,5 +39,11 @@ class CstModuleDef(
         if (typeVars.isNotEmpty()) append(", typeVars=$typeVars")
         if (splatIndex >= 0) append(", splatIndex=$splatIndex")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitModuleDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        body.accept(visitor)
     }
 }

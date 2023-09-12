@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstFunDef(
     val name: String,
@@ -46,5 +47,13 @@ class CstFunDef(
         if (realName != name) append(", realName=$realName")
         if (isVariadic) append(", isVariadic")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitFunDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        args.forEach { it.accept(visitor) }
+        returnType?.accept(visitor)
+        body?.accept(visitor)
     }
 }

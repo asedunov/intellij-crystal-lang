@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMultiAssign(
     val targets: List<CstNode>,
@@ -26,4 +27,11 @@ class CstMultiAssign(
     }
 
     override fun toString() = "MultiAssign(targets=$targets, values=$values)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMultiAssign(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        targets.forEach { it.accept(visitor) }
+        values.forEach { it.accept(visitor) }
+    }
 }

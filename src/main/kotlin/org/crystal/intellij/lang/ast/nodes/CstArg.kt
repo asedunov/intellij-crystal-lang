@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstArg(
     val name: String,
@@ -42,5 +43,12 @@ class CstArg(
         if (externalName != null) append(", externalName=$externalName")
         if (annotations.isNotEmpty()) append(", annotations=$annotations")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitArg(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        defaultValue?.accept(visitor)
+        restriction?.accept(visitor)
     }
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstSelf(
     location: CstLocation? = null
@@ -10,4 +11,6 @@ class CstSelf(
     override fun hashCode() = javaClass.hashCode()
 
     override fun toString() = "Self"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitSelf(this)
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCase(
     val condition: CstNode?,
@@ -38,5 +39,13 @@ class CstCase(
         if (elseBranch != null) append(", else=$elseBranch")
         if (isExhaustive) append(", isExhaustive")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitCase(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        condition?.accept(visitor)
+        whenBranches.forEach { it.accept(visitor) }
+        elseBranch?.accept(visitor)
     }
 }

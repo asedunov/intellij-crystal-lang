@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstInclude(
     val name: CstNode,
@@ -18,4 +19,10 @@ class CstInclude(
     override fun hashCode() = name.hashCode()
 
     override fun toString() = "Include($name)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitInclude(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        name.accept(visitor)
+    }
 }

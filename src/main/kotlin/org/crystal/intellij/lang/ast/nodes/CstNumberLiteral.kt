@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNumberLiteral(
     val value: String,
@@ -51,4 +52,6 @@ class CstNumberLiteral(
         if (kind != NumberKind.I32) append(", $kind")
         append(")")
     }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitNumberLiteral(this)
 }

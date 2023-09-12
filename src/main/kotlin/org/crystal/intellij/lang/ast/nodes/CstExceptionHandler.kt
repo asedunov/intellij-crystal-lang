@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExceptionHandler(
     val body: CstNode = CstNop,
@@ -47,4 +48,13 @@ class CstExceptionHandler(
         if (elseBranch != null) yield("else=$elseBranch")
         if (ensure != null) yield("ensure=$ensure")
     }.joinToString(prefix = "ExceptionHandler(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitExceptionHandler(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        body.accept(visitor)
+        rescues.forEach { it.accept(visitor) }
+        elseBranch?.accept(visitor)
+        ensure?.accept(visitor)
+    }
 }

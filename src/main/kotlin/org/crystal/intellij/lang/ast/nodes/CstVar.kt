@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstVar(
     val name: String,
@@ -21,4 +22,6 @@ class CstVar(
     override fun hashCode() = name.hashCode()
 
     override fun toString() = "Var($name)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitVar(this)
 }

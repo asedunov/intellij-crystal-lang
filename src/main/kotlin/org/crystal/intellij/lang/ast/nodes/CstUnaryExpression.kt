@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstUnaryExpression(
     val expression: CstNode,
@@ -18,4 +19,8 @@ sealed class CstUnaryExpression(
     override fun hashCode() = expression.hashCode()
 
     override fun toString() = "$strippedClassName($expression)"
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        expression.accept(visitor)
+    }
 }

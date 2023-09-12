@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstWhen(
     val conditions: List<CstNode>,
@@ -34,5 +35,12 @@ class CstWhen(
         append(", body=$body")
         if (isExhaustive) append(", isExhaustive")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitWhen(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        conditions.forEach { it.accept(visitor) }
+        body.accept(visitor)
     }
 }

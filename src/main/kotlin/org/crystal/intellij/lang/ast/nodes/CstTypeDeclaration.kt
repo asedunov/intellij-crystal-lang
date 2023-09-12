@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTypeDeclaration(
     val variable: CstNode,
@@ -34,5 +35,13 @@ class CstTypeDeclaration(
         append(", type=$type")
         if (value != null) append(", value=$value")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitTypeDeclaration(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        variable.accept(visitor)
+        type.accept(visitor)
+        value?.accept(visitor)
     }
 }

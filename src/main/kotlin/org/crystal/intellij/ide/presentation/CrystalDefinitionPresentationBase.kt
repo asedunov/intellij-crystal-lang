@@ -86,11 +86,15 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
             is CrInstantiatedTypeElement ->
                 appendType(type.constructorType)
                     .append("(")
-                    .append(type.argumentList?.elements ?: JBIterable.empty()) { appendTypeArgument(it) }
+                    .append(type.argumentList?.elements ?: JBIterable.empty()) { _, e ->
+                        appendTypeArgument(e)
+                    }
                     .append(")")
             is CrLabeledTypeElement -> append(type.nameElement?.text ?: "???").append(": ").appendType(type.innerType)
             is CrMetaclassTypeElement -> appendType(type.innerType).append(".class")
-            is CrNamedTupleTypeElement -> append(type.componentTypes, ", ", "{", "}") { appendType(it) }
+            is CrNamedTupleTypeElement -> append(type.componentTypes, ", ", "{", "}") { _, e ->
+                appendType(e)
+            }
             is CrNilableTypeElement -> appendType(type.innerType).append("?")
             is CrParenthesizedTypeElement -> {
                 append("(")
@@ -100,7 +104,9 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
             is CrPathTypeElement -> appendPath(type.path)
             is CrPointerTypeElement -> appendType(type.innerType).append("*")
             is CrProcTypeElement -> {
-                append(type.inputList?.elements) { appendTypeArgument(it) }
+                append(type.inputList?.elements) { _, e ->
+                    appendTypeArgument(e)
+                }
                 append(" -> ")
                 type.outputType?.let { appendType(it) }
                 this
@@ -108,9 +114,13 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
             is CrSelfTypeElement -> append(type.text)
             is CrSplatTypeElement -> append("*").appendType(type.innerType)
             is CrStaticArrayTypeElement -> appendType(type.elementType).append("[...]")
-            is CrTupleTypeElement -> append(type.componentTypes, ", ", "{", "}") { appendType(it) }
+            is CrTupleTypeElement -> append(type.componentTypes, ", ", "{", "}") { _, e ->
+                appendType(e)
+            }
             is CrUnderscoreTypeElement -> append("_")
-            is CrUnionTypeElement -> append(type.componentTypes, " | ") { appendType(it) }
+            is CrUnionTypeElement -> append(type.componentTypes, " | ") { _, e ->
+                appendType(e)
+            }
             null -> append("???")
         }
 

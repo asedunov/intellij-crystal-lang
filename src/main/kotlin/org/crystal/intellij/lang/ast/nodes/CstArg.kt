@@ -7,7 +7,7 @@ class CstArg(
     val name: String,
     val defaultValue: CstNode? = null,
     val restriction: CstNode? = null,
-    val externalName: String? = null,
+    val externalName: String = name,
     val annotations: List<CstAnnotation> = emptyList(),
     location: CstLocation? = null
 ) : CstNode(location) {
@@ -30,7 +30,7 @@ class CstArg(
         var result = name.hashCode()
         result = 31 * result + (defaultValue?.hashCode() ?: 0)
         result = 31 * result + (restriction?.hashCode() ?: 0)
-        result = 31 * result + (externalName?.hashCode() ?: 0)
+        result = 31 * result + externalName.hashCode()
         result = 31 * result + annotations.hashCode()
         return result
     }
@@ -40,7 +40,7 @@ class CstArg(
         append(name)
         if (defaultValue != null) append(", defaultValue=$defaultValue")
         if (restriction != null) append(", restriction=$restriction")
-        if (externalName != null) append(", externalName=$externalName")
+        if (externalName != name) append(", externalName=$externalName")
         if (annotations.isNotEmpty()) append(", annotations=$annotations")
         append(")")
     }

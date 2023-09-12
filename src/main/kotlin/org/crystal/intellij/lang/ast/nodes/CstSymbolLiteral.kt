@@ -1,7 +1,9 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.util.crystal.CrSymbol
+import org.crystal.intellij.util.crystal.crSymbol
 
 class CstSymbolLiteral(
     val value: String,
@@ -22,3 +24,6 @@ class CstSymbolLiteral(
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitSymbolLiteral(this)
 }
+
+val CstSymbolLiteral.crSymbol: CrSymbol
+    get() = value.crSymbol

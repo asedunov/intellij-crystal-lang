@@ -2,9 +2,11 @@ package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.lexer.CrystalTokenType
 
 class CstExpressions(
     val expressions: List<CstNode> = emptyList(),
+    val keyword: CrystalTokenType? = null,
     location: CstLocation? = null
 ) : CstNode(location) {
     companion object {
@@ -14,7 +16,7 @@ class CstExpressions(
             if (nodes.isEmpty()) return CstNop
             val node = nodes.singleOrNull()
             if (node != null) return node
-            return CstExpressions(nodes, location)
+            return CstExpressions(nodes, location = location)
         }
     }
 

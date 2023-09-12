@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstEnumDef(
@@ -9,6 +10,13 @@ class CstEnumDef(
     val baseType: CstNode? = null,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: CstPath = this.name,
+        members: List<CstNode> = this.members,
+        baseType: CstNode? = this.baseType,
+        location: CstLocation? = this.location
+    ) = CstEnumDef(name, members, baseType, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -43,4 +51,6 @@ class CstEnumDef(
         members.forEach { it.accept(visitor) }
         baseType?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformEnumDef(this)
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCall(
@@ -31,9 +32,7 @@ class CstCall(
         isGlobal: Boolean = this.isGlobal,
         hasParentheses: Boolean = this.hasParentheses,
         location: CstLocation? = this.location
-    ): CstCall {
-        return CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location)
-    }
+    ) = CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -84,4 +83,6 @@ class CstCall(
         blockArg?.accept(visitor)
         block?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformCall(this)
 }

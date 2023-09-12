@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstInstanceVar(
@@ -21,4 +22,6 @@ class CstInstanceVar(
     override fun toString() = "InstanceVar($name)"
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitInstanceVar(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformInstanceVar(this)
 }

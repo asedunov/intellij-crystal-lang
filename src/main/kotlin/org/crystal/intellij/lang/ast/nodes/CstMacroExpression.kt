@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroExpression(
@@ -8,6 +9,12 @@ class CstMacroExpression(
     val isOutput: Boolean = true,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        exp: CstNode = this.exp,
+        isOutput: Boolean = this.isOutput,
+        location: CstLocation? = this.location
+    ) = CstMacroExpression(exp, isOutput, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,4 +45,6 @@ class CstMacroExpression(
     override fun acceptChildren(visitor: CstVisitor) {
         exp.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMacroExpression(this)
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstProcNotation(
@@ -11,6 +12,12 @@ class CstProcNotation(
     companion object {
         val EMPTY = CstProcNotation()
     }
+
+    fun copy(
+        inputs: List<CstNode> = this.inputs,
+        output: CstNode? = this.output,
+        location: CstLocation? = this.location
+    ) = CstProcNotation(inputs, output, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -41,4 +48,6 @@ class CstProcNotation(
         inputs.forEach { it.accept(visitor) }
         output?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformProcNotation(this)
 }

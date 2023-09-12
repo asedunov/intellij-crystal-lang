@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRescue(
@@ -12,6 +13,13 @@ class CstRescue(
     companion object {
         val EMPTY = CstRescue()
     }
+
+    fun copy(
+        body: CstNode = this.body,
+        types: List<CstNode> = this.types,
+        name: String? = this.name,
+        location: CstLocation? = this.location
+    ) = CstRescue(body, types, name, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -45,4 +53,6 @@ class CstRescue(
         body.accept(visitor)
         types.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformRescue(this)
 }

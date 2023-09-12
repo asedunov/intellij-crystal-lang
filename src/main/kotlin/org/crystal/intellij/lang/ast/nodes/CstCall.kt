@@ -11,6 +11,7 @@ class CstCall(
     val blockArg: CstNode? = null,
     val namedArgs: List<CstNamedArgument> = emptyList(),
     val isGlobal: Boolean = false,
+    val hasParentheses: Boolean = false,
     location: CstLocation? = null
 ) : CstNode(location) {
     constructor(
@@ -28,9 +29,10 @@ class CstCall(
         blockArg: CstNode? = this.blockArg,
         namedArgs: List<CstNamedArgument> = this.namedArgs,
         isGlobal: Boolean = this.isGlobal,
+        hasParentheses: Boolean = this.hasParentheses,
         location: CstLocation? = this.location
     ): CstCall {
-        return CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, location)
+        return CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location)
     }
 
     override fun equals(other: Any?): Boolean {

@@ -25,7 +25,10 @@ class CstNumberLiteral(
         I128,
         U128,
         F32,
-        F64
+        F64;
+
+        val spec: String
+            get() = name.lowercase()
     }
 
     override fun equals(other: Any?): Boolean {

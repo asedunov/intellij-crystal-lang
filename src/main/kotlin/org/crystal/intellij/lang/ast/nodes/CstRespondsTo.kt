@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRespondsTo(
@@ -8,6 +9,12 @@ class CstRespondsTo(
     val name: String,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        receiver: CstNode = this.receiver,
+        name: String = this.name,
+        location: CstLocation? = this.location
+    ) = CstRespondsTo(receiver, name, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -33,4 +40,6 @@ class CstRespondsTo(
     override fun acceptChildren(visitor: CstVisitor) {
         receiver.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformRespondsTo(this)
 }

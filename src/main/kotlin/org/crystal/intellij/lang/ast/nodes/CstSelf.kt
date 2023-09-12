@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstSelf(
@@ -13,4 +14,6 @@ class CstSelf(
     override fun toString() = "Self"
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitSelf(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformSelf(this)
 }

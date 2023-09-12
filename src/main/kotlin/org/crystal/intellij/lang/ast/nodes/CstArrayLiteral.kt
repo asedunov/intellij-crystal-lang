@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstArrayLiteral(
@@ -9,6 +10,13 @@ class CstArrayLiteral(
     val receiverType: CstNode? = null,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        elements: List<CstNode> = this.elements,
+        elementType: CstNode? = this.elementType,
+        receiverType: CstNode? = this.receiverType,
+        location: CstLocation? = this.location
+    ) = CstArrayLiteral(elements, elementType, receiverType, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -42,4 +50,6 @@ class CstArrayLiteral(
         elements.forEach { it.accept(visitor) }
         elementType?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformArrayLiteral(this)
 }

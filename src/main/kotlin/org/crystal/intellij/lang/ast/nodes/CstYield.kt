@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstYield(
@@ -12,6 +13,13 @@ class CstYield(
     companion object {
         val EMPTY = CstYield()
     }
+
+    fun copy(
+        expressions: List<CstNode> = this.expressions,
+        scope: CstNode? = this.scope,
+        hasParentheses: Boolean = this.hasParentheses,
+        location: CstLocation? = this.location
+    ) = CstYield(expressions, scope, hasParentheses, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -45,4 +53,6 @@ class CstYield(
         scope?.accept(visitor)
         expressions.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformYield(this)
 }

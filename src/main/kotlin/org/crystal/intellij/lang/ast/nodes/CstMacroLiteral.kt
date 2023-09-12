@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroLiteral(
@@ -21,4 +22,6 @@ class CstMacroLiteral(
     override fun toString() = "MacroLiteral($value)"
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitMacroLiteral(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMacroLiteral(this)
 }

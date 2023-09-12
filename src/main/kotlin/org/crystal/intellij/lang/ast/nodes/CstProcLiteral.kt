@@ -1,5 +1,6 @@
 package org.crystal.intellij.lang.ast.nodes
 
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 data class CstProcLiteral(
@@ -14,4 +15,6 @@ data class CstProcLiteral(
     override fun acceptChildren(visitor: CstVisitor) {
         def.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformProcLiteral(this)
 }

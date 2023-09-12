@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRequire(
@@ -21,4 +22,6 @@ class CstRequire(
     override fun toString() = "Require($path)"
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitRequire(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformRequire(this)
 }

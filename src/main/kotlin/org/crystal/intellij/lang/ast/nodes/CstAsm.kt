@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAsm(
@@ -14,6 +15,18 @@ class CstAsm(
     val canThrow: Boolean = false,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        text: String = this.text,
+        outputs: List<CstAsmOperand> = this.outputs,
+        inputs: List<CstAsmOperand> = this.inputs,
+        clobbers: List<String> = this.clobbers,
+        volatile: Boolean = this.volatile,
+        alignStack: Boolean = this.alignStack,
+        intel: Boolean = this.intel,
+        canThrow: Boolean = this.canThrow,
+        location: CstLocation? = this.location
+    ) = CstAsm(text, outputs, inputs, clobbers, volatile, alignStack, intel, canThrow, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -63,4 +76,6 @@ class CstAsm(
         outputs.forEach { it.accept(visitor) }
         inputs.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformAsm(this)
 }

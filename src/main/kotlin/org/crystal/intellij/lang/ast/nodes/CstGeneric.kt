@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstGeneric(
@@ -9,6 +10,13 @@ class CstGeneric(
     val namedArgs: List<CstNamedArgument> = emptyList(),
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: CstNode = this.name,
+        typeVars: List<CstNode> = this.typeVars,
+        namedArgs: List<CstNamedArgument> = this.namedArgs,
+        location: CstLocation? = this.location
+    ) = CstGeneric(name, typeVars, namedArgs, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -43,4 +51,6 @@ class CstGeneric(
         typeVars.forEach { it.accept(visitor) }
         namedArgs.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformGeneric(this)
 }

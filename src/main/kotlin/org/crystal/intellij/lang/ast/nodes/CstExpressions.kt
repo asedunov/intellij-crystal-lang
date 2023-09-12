@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.lexer.CrystalTokenType
 
@@ -20,6 +21,11 @@ class CstExpressions(
         }
     }
 
+    fun copy(
+        expressions: List<CstNode> = this.expressions,
+        keyword: CrystalTokenType? = this.keyword
+    ) = CstExpressions(expressions, keyword)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,4 +44,6 @@ class CstExpressions(
     override fun acceptChildren(visitor: CstVisitor) {
         expressions.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformExpressions(this)
 }

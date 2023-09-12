@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCall(
     val obj: CstNode?,
@@ -70,5 +71,15 @@ class CstCall(
         if (namedArgs.isNotEmpty()) append(", namedArgs=$namedArgs")
         if (isGlobal) append(", isGlobal")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitCall(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        obj?.accept(visitor)
+        args.forEach { it.accept(visitor) }
+        namedArgs.forEach { it.accept(visitor) }
+        blockArg?.accept(visitor)
+        block?.accept(visitor)
     }
 }

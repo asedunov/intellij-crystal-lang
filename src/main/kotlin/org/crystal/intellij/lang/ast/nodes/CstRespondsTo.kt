@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRespondsTo(
     val receiver: CstNode,
@@ -26,4 +27,10 @@ class CstRespondsTo(
     }
 
     override fun toString() = "RespondsTo(receiver=$receiver, name=$name)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitRespondsTo(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        receiver.accept(visitor)
+    }
 }

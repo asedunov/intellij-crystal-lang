@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCStructOrUnionDef(
     val name: String,
@@ -34,5 +35,11 @@ class CstCStructOrUnionDef(
         if (body != CstNop) append(", body=$body")
         if (isUnion) append(", isUnion")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitCStructOrUnionDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        body.accept(visitor)
     }
 }

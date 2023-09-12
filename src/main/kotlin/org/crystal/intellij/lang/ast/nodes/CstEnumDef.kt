@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstEnumDef(
     val name: CstPath,
@@ -34,5 +35,12 @@ class CstEnumDef(
         if (members.isNotEmpty()) append(", members=$members")
         if (baseType != null) append(", baseType=$baseType")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitEnumDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        members.forEach { it.accept(visitor) }
+        baseType?.accept(visitor)
     }
 }

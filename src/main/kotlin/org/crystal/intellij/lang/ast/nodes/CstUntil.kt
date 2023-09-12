@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstUntil(
     val condition: CstNode,
@@ -30,5 +31,12 @@ class CstUntil(
         append(condition)
         if (body != CstNop) append(", body=$body")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitUntil(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        condition.accept(visitor)
+        body.accept(visitor)
     }
 }

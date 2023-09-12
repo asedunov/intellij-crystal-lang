@@ -1,5 +1,6 @@
 package org.crystal.intellij.lang.ast.nodes
 
+import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstAnnotation(
@@ -34,5 +35,13 @@ class CstAnnotation(
         if (args.isNotEmpty()) append(", args=$args")
         if (namedArgs.isNotEmpty()) append(", namedArgs=$namedArgs")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitAnnotation(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        path.accept(visitor)
+        args.forEach { it.accept(visitor) }
+        namedArgs.forEach { it.accept(visitor) }
     }
 }

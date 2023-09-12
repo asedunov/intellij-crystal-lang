@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstProcPointer(
     val obj: CstNode?,
@@ -38,5 +39,12 @@ class CstProcPointer(
         if (args.isNotEmpty()) append(", args=$args")
         if (isGlobal) append(", isGlobal")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitProcPointer(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        obj?.accept(visitor)
+        args.forEach { it.accept(visitor) }
     }
 }

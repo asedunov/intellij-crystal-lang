@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCast(
     val obj: CstNode,
@@ -26,4 +27,11 @@ class CstCast(
     }
 
     override fun toString() = "Cast(obj=$obj, type=$type)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitCast(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        obj.accept(visitor)
+        type.accept(visitor)
+    }
 }

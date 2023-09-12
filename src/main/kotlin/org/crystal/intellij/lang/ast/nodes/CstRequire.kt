@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRequire(
     val path: String,
@@ -18,4 +19,6 @@ class CstRequire(
     override fun hashCode() = path.hashCode()
 
     override fun toString() = "Require($path)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitRequire(this)
 }

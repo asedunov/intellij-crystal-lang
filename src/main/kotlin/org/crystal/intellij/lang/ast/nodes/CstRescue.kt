@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRescue(
     val body: CstNode = CstNop,
@@ -37,4 +38,11 @@ class CstRescue(
         if (types.isNotEmpty()) yield("types=$types")
         if (name != null) yield("name=$name")
     }.joinToString(prefix = "Rescue(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitRescue(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        body.accept(visitor)
+        types.forEach { it.accept(visitor) }
+    }
 }

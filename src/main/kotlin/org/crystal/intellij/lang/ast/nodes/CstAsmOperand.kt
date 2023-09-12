@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAsmOperand(
     val constraint: String,
@@ -26,4 +27,10 @@ class CstAsmOperand(
     }
 
     override fun toString() = "AsmOperand(constraint=$constraint, exp=$exp)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitAsmOperand(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        exp.accept(visitor)
+    }
 }

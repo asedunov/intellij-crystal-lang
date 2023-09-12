@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroFor(
     val vars: List<CstVar>,
@@ -29,4 +30,12 @@ class CstMacroFor(
     }
 
     override fun toString() = "MacroFor(vars=$vars, exp=$exp, body=$body)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMacroFor(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        vars.forEach { it.accept(visitor) }
+        exp.accept(visitor)
+        body.accept(visitor)
+    }
 }

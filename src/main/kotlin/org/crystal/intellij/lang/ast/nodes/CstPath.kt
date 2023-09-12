@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstPath(
     val names: List<String>,
@@ -43,4 +44,6 @@ class CstPath(
         if (isGlobal) append(", isGlobal")
         append(")")
     }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitPath(this)
 }

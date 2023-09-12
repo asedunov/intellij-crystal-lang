@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstUnion(
     val types: List<CstNode>,
@@ -18,4 +19,10 @@ class CstUnion(
     override fun hashCode() = types.hashCode()
 
     override fun toString() = "Union($types)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitUnion(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        types.forEach { it.accept(visitor) }
+    }
 }

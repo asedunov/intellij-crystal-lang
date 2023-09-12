@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstStringInterpolation(
     val expressions: List<CstNode>,
@@ -18,4 +19,10 @@ class CstStringInterpolation(
     override fun hashCode() = expressions.hashCode()
 
     override fun toString() = "StringInterpolation($expressions)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitStringInterpolation(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        expressions.forEach { it.accept(visitor) }
+    }
 }

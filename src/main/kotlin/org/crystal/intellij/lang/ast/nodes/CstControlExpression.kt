@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstControlExpression(
     val expression: CstNode? = null,
@@ -20,5 +21,9 @@ sealed class CstControlExpression(
     override fun toString() = buildString {
         append(strippedClassName)
         if (expression != null) append("($expression)")
+    }
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        expression?.accept(visitor)
     }
 }

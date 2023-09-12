@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTupleLiteral(
     val elements: List<CstNode>,
@@ -18,4 +19,10 @@ class CstTupleLiteral(
     override fun hashCode() = elements.hashCode()
 
     override fun toString() = "TupleLiteral($elements)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitTupleLiteral(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        elements.forEach { it.accept(visitor) }
+    }
 }

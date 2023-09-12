@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroExpression(
     val exp: CstNode,
@@ -30,5 +31,11 @@ class CstMacroExpression(
         append("exp=$exp")
         if (isOutput) append(", isOutput")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMacroExpression(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        exp.accept(visitor)
     }
 }

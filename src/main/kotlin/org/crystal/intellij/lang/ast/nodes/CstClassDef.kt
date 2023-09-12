@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstClassDef(
     val name: CstPath,
@@ -50,5 +51,12 @@ class CstClassDef(
         if (isStruct) append(", isStruct")
         if (splatIndex >= 0) append(", splatIndex=$splatIndex")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitClassDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        superclass?.accept(visitor)
+        body.accept(visitor)
     }
 }

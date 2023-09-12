@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstReadInstanceVar(
     val receiver: CstNode,
@@ -26,4 +27,10 @@ class CstReadInstanceVar(
     }
 
     override fun toString() = "CstReadInstanceVar(receiver=$receiver, name=$name)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitReadInstanceVar(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        receiver.accept(visitor)
+    }
 }

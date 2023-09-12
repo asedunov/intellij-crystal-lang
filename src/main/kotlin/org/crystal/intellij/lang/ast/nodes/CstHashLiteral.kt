@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstHashLiteral(
@@ -18,6 +19,13 @@ class CstHashLiteral(
             value.accept(visitor)
         }
     }
+
+    fun copy(
+        entries: List<Entry> = this.entries,
+        elementType: Entry? = this.elementType,
+        receiverType: CstNode? = this.receiverType,
+        location: CstLocation? = this.location
+    ) = CstHashLiteral(entries, elementType, receiverType, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -52,4 +60,6 @@ class CstHashLiteral(
         entries.forEach { it.accept(visitor) }
         elementType?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformHashLiteral(this)
 }

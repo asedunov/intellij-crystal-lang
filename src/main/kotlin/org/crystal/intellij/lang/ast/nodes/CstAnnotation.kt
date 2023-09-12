@@ -1,5 +1,6 @@
 package org.crystal.intellij.lang.ast.nodes
 
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
@@ -9,6 +10,13 @@ class CstAnnotation(
     val namedArgs: List<CstNamedArgument> = emptyList(),
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        path: CstPath = this.path,
+        args: List<CstNode> = this.args,
+        namedArgs: List<CstNamedArgument> = this.namedArgs,
+        location: CstLocation? = this.location
+    ) = CstAnnotation(path, args, namedArgs, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -44,4 +52,6 @@ class CstAnnotation(
         args.forEach { it.accept(visitor) }
         namedArgs.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformAnnotation(this)
 }

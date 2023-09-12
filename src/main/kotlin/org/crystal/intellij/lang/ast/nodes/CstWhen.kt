@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstWhen(
@@ -9,6 +10,13 @@ class CstWhen(
     val isExhaustive: Boolean = false,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        conditions: List<CstNode> = this.conditions,
+        body: CstNode = this.body,
+        isExhaustive: Boolean = this.isExhaustive,
+        location: CstLocation? = this.location
+    ) = CstWhen(conditions, body, isExhaustive, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -43,4 +51,6 @@ class CstWhen(
         conditions.forEach { it.accept(visitor) }
         body.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformWhen(this)
 }

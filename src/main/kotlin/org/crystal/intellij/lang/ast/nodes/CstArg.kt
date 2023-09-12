@@ -1,7 +1,8 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstArg(
     val name: String,
@@ -11,6 +12,15 @@ class CstArg(
     val annotations: List<CstAnnotation> = emptyList(),
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: String = this.name,
+        defaultValue: CstNode? = this.defaultValue,
+        restriction: CstNode? = this.restriction,
+        externalName: String = this.externalName,
+        annotations: List<CstAnnotation> = this.annotations,
+        location: CstLocation? = this.location
+    ) = CstArg(name, defaultValue, restriction, externalName, annotations, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -51,4 +61,6 @@ class CstArg(
         defaultValue?.accept(visitor)
         restriction?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformArg(this)
 }

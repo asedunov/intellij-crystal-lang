@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstBoolLiteral(
@@ -27,4 +28,6 @@ sealed class CstBoolLiteral(
     override fun toString() = "BoolLiteral($value)"
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitBoolLiteral(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformBoolLiteral(this)
 }

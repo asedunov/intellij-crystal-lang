@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.psi.CrVisibility
 
@@ -9,6 +10,12 @@ class CstVisibilityModifier(
     val exp: CstNode,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        visibility: CrVisibility = this.visibility,
+        exp: CstNode = this.exp,
+        location: CstLocation? = this.location
+    ) = CstVisibilityModifier(visibility, exp, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -34,4 +41,6 @@ class CstVisibilityModifier(
     override fun acceptChildren(visitor: CstVisitor) {
         exp.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformVisibilityModifier(this)
 }

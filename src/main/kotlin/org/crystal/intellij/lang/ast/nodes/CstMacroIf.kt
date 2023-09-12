@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroIf(
@@ -9,6 +10,13 @@ class CstMacroIf(
     val elseBranch: CstNode = CstNop,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        condition: CstNode = this.condition,
+        thenBranch: CstNode = this.thenBranch,
+        elseBranch: CstNode = this.elseBranch,
+        location: CstLocation? = this.location
+    ) = CstMacroIf(condition, thenBranch, elseBranch, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -44,4 +52,6 @@ class CstMacroIf(
         thenBranch.accept(visitor)
         elseBranch.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMacroIf(this)
 }

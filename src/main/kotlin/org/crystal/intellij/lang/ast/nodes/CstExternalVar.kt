@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExternalVar(
@@ -9,6 +10,13 @@ class CstExternalVar(
     val realName: String? = null,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: String = this.name,
+        type: CstNode = this.type,
+        realName: String? = this.realName,
+        location: CstLocation? = this.location
+    ) = CstExternalVar(name, type, realName, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -41,4 +49,6 @@ class CstExternalVar(
     override fun acceptChildren(visitor: CstVisitor) {
         type.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformExternalVar(this)
 }

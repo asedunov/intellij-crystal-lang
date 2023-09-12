@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstModuleDef(
@@ -10,6 +11,14 @@ class CstModuleDef(
     val splatIndex: Int = -1,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: CstPath = this.name,
+        body: CstNode = this.body,
+        typeVars: List<String> = this.typeVars,
+        splatIndex: Int = this.splatIndex,
+        location: CstLocation? = this.location
+    ) = CstModuleDef(name, body, typeVars, splatIndex, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -46,4 +55,6 @@ class CstModuleDef(
     override fun acceptChildren(visitor: CstVisitor) {
         body.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformModuleDef(this)
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCase(
@@ -10,6 +11,14 @@ class CstCase(
     val isExhaustive: Boolean,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        condition: CstNode? = this.condition,
+        whenBranches: List<CstWhen> = this.whenBranches,
+        elseBranch: CstNode? = this.elseBranch,
+        isExhaustive: Boolean = this.isExhaustive,
+        location: CstLocation? = this.location
+    ) = CstCase(condition, whenBranches, elseBranch, isExhaustive, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -48,4 +57,6 @@ class CstCase(
         whenBranches.forEach { it.accept(visitor) }
         elseBranch?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformCase(this)
 }

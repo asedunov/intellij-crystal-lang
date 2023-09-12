@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExceptionHandler(
@@ -16,9 +17,7 @@ class CstExceptionHandler(
         elseBranch: CstNode? = this.elseBranch,
         ensure: CstNode? = this.ensure,
         location: CstLocation? = this.location
-    ): CstExceptionHandler {
-        return CstExceptionHandler(body, rescues, elseBranch, ensure, location)
-    }
+    ) = CstExceptionHandler(body, rescues, elseBranch, ensure, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -57,4 +56,6 @@ class CstExceptionHandler(
         elseBranch?.accept(visitor)
         ensure?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformExceptionHandler(this)
 }

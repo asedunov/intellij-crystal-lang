@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTypeDeclaration(
@@ -9,6 +10,13 @@ class CstTypeDeclaration(
     val value: CstNode? = null,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        variable: CstNode = this.variable,
+        type: CstNode = this.type,
+        value: CstNode? = this.value,
+        location: CstLocation? = this.location
+    ) = CstTypeDeclaration(variable, type, value, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -44,4 +52,6 @@ class CstTypeDeclaration(
         type.accept(visitor)
         value?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformTypeDeclaration(this)
 }

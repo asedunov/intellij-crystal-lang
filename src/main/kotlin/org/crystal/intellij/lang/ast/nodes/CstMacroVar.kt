@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroVar(
@@ -8,6 +9,12 @@ class CstMacroVar(
     val exps: List<CstNode> = emptyList(),
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: String = this.name,
+        exps: List<CstNode> = this.exps,
+        location: CstLocation? = this.location
+    ) = CstMacroVar(name, exps, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,4 +45,6 @@ class CstMacroVar(
     override fun acceptChildren(visitor: CstVisitor) {
         exps.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMacroVar(this)
 }

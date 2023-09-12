@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMultiAssign(
@@ -8,6 +9,12 @@ class CstMultiAssign(
     val values: List<CstNode>,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        targets: List<CstNode> = this.targets,
+        values: List<CstNode> = this.values,
+        location: CstLocation? = this.location
+    ) = CstMultiAssign(targets, values, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -34,4 +41,6 @@ class CstMultiAssign(
         targets.forEach { it.accept(visitor) }
         values.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMultiAssign(this)
 }

@@ -2,6 +2,7 @@ package org.crystal.intellij.lang.ast.nodes
 
 import com.intellij.openapi.util.text.StringUtil
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstNode(val location: CstLocation?) {
@@ -17,4 +18,6 @@ sealed class CstNode(val location: CstLocation?) {
     protected abstract fun acceptSelf(visitor: CstVisitor): Boolean
 
     protected open fun acceptChildren(visitor: CstVisitor) { }
+
+    abstract fun acceptTransformer(transformer: CstTransformer): CstNode
 }

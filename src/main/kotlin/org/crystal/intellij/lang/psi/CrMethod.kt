@@ -26,6 +26,12 @@ class CrMethod : CrDefinitionWithFqNameImpl<CrMethod, CrMethodStub>,
     val receiver: CrMethodReceiver?
         get() = firstChild?.skipWhitespacesAndCommentsForward() as? CrMethodReceiver
 
+    override val returnType: CrTypeElement<*>?
+        get() {
+            val receiver = receiver
+            return if (receiver != null) receiver.nextSiblingOfType() else super.returnType
+        }
+
     fun resolveSymbol(): CrMethodSym? {
         val facade = project.resolveFacade
         return facade.resolveCache.getOrCompute(SYMBOL, this) {

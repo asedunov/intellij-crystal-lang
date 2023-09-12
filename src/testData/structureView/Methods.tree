@@ -12,7 +12,7 @@
  foo7(x : Int) : String
  foo8(x : Int, s : String) : String
  foo9(x y : Int)
- Int.foo12 : Int
+ Int.foo12
  -MyClass
   foo
  -MyEnum

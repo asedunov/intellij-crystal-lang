@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstArrayLiteral(
     val elements: List<CstNode> = emptyList(),
@@ -33,4 +34,12 @@ class CstArrayLiteral(
         if (elementType != null) yield("elementType=$elementType")
         if (receiverType != null) yield("receiverType=$receiverType")
     }.joinToString(prefix = "ArrayLiteral(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitArrayLiteral(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        receiverType?.accept(visitor)
+        elements.forEach { it.accept(visitor) }
+        elementType?.accept(visitor)
+    }
 }

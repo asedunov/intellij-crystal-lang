@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstLibDef(
     val name: CstPath,
@@ -30,5 +31,11 @@ class CstLibDef(
         append(name)
         if (body != CstNop) append(", body=$body")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitLibDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        body.accept(visitor)
     }
 }

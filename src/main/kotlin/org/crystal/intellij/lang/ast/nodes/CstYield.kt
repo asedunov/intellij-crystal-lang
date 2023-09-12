@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstYield(
     val expressions: List<CstNode> = emptyList(),
@@ -37,4 +38,11 @@ class CstYield(
         if (scope != null) yield("scope=$scope")
         if (hasParentheses) yield("hasParentheses")
     }.joinToString(prefix = "Yield(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitYield(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        scope?.accept(visitor)
+        expressions.forEach { it.accept(visitor) }
+    }
 }

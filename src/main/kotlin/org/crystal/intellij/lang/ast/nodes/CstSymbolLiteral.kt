@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstSymbolLiteral(
     val value: String,
@@ -18,4 +19,6 @@ class CstSymbolLiteral(
     override fun hashCode() = value.hashCode()
 
     override fun toString() = "SymbolLiteral($value)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitSymbolLiteral(this)
 }

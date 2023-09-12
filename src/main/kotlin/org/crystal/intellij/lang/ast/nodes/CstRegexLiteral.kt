@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRegexLiteral(
     val source: CstNode,
@@ -33,4 +34,10 @@ class CstRegexLiteral(
     }
 
     override fun toString() = "RegexLiteral($source, $options)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitRegexLiteral(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        source.accept(visitor)
+    }
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstGeneric(
     val name: CstNode,
@@ -33,5 +34,13 @@ class CstGeneric(
         append(name)
         append(", typeVars=$typeVars")
         if (namedArgs.isNotEmpty()) append(", namedArgs=$namedArgs")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitGeneric(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        name.accept(visitor)
+        typeVars.forEach { it.accept(visitor) }
+        namedArgs.forEach { it.accept(visitor) }
     }
 }

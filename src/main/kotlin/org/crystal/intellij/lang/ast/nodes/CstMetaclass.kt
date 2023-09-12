@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMetaclass(
     val name: CstNode,
@@ -18,4 +19,10 @@ class CstMetaclass(
     override fun hashCode() = name.hashCode()
 
     override fun toString() = "Metaclass($name)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMetaclass(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        name.accept(visitor)
+    }
 }

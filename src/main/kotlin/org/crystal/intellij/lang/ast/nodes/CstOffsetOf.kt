@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstOffsetOf(
     val type: CstNode,
@@ -26,4 +27,11 @@ class CstOffsetOf(
     }
 
     override fun toString() = "OffsetOf(type=$type, offset=$offset)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitOffsetOf(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        type.accept(visitor)
+        offset.accept(visitor)
+    }
 }

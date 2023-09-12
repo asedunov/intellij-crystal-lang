@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.psi.CrVisibility
 
 class CstVisibilityModifier(
@@ -27,4 +28,10 @@ class CstVisibilityModifier(
     }
 
     override fun toString() = "VisibilityModifier($visibility, $exp)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitVisibilityModifier(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        exp.accept(visitor)
+    }
 }

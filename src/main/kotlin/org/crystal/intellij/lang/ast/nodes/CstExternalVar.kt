@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExternalVar(
     val name: String,
@@ -33,5 +34,11 @@ class CstExternalVar(
         append(name)
         append(", type=$type")
         if (realName != null) append(", realName=$realName")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitExternalVar(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        type.accept(visitor)
     }
 }

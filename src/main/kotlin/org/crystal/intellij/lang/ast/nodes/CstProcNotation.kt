@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstProcNotation(
     val inputs: List<CstNode> = emptyList(),
@@ -33,4 +34,11 @@ class CstProcNotation(
         if (inputs.isNotEmpty()) yield("inputs=$inputs")
         if (output != null) yield("output=$output")
     }.joinToString(prefix = "ProcNotation(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitProcNotation(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        inputs.forEach { it.accept(visitor) }
+        output?.accept(visitor)
+    }
 }

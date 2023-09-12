@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstHashLiteral(
     val entries: List<Entry> = emptyList(),
@@ -11,7 +12,12 @@ class CstHashLiteral(
     data class Entry(
         val key: CstNode,
         val value: CstNode
-    )
+    ) {
+        fun accept(visitor: CstVisitor) {
+            key.accept(visitor)
+            value.accept(visitor)
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,4 +44,12 @@ class CstHashLiteral(
         if (elementType != null) yield("elementType=$elementType")
         if (receiverType != null) yield("receiverType=$receiverType")
     }.joinToString(prefix = "HashLiteral(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitHashLiteral(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        receiverType?.accept(visitor)
+        entries.forEach { it.accept(visitor) }
+        elementType?.accept(visitor)
+    }
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNamedArgument(
     val name: String,
@@ -26,4 +27,10 @@ class CstNamedArgument(
     }
 
     override fun toString() = "NamedArgument($name, $value)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitNamedArgument(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        value.accept(visitor)
+    }
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstSelect(
     val whens: List<When>,
@@ -10,7 +11,12 @@ class CstSelect(
     data class When(
         val condition: CstNode,
         val body: CstNode
-    )
+    ) {
+        fun accept(visitor: CstVisitor) {
+            condition.accept(visitor)
+            body.accept(visitor)
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -35,5 +41,12 @@ class CstSelect(
         append("whens=$whens")
         if (elseBranch != null) append("elseBranch=$elseBranch")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitSelect(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        whens.forEach { it.accept(visitor) }
+        elseBranch?.accept(visitor)
     }
 }

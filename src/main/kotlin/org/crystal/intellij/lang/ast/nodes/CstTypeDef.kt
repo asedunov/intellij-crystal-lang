@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTypeDef(
     val name: String,
@@ -26,4 +27,10 @@ class CstTypeDef(
     }
 
     override fun toString() = "TypeSpec($name, typeSpec=$typeSpec)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitTypeDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        typeSpec.accept(visitor)
+    }
 }

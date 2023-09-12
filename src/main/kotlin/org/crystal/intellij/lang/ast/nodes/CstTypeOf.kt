@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTypeOf(
     val expressions: List<CstNode>,
@@ -18,4 +19,10 @@ class CstTypeOf(
     override fun hashCode() = expressions.hashCode()
 
     override fun toString() = "TypeOf($expressions)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitTypeOf(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        expressions.forEach { it.accept(visitor) }
+    }
 }

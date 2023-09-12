@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRangeLiteral(
     val from: CstNode,
@@ -33,5 +34,12 @@ class CstRangeLiteral(
         append("from=$from, to=$to")
         if (isExclusive) append(", isExclusive")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitRangeLiteral(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        from.accept(visitor)
+        to.accept(visitor)
     }
 }

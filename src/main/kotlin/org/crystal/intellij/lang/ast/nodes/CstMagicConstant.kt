@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstMagicConstant(
     location: CstLocation? = null
@@ -18,4 +19,6 @@ sealed class CstMagicConstant(
     override fun hashCode() = javaClass.hashCode()
 
     override fun toString() = strippedClassName
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMagicConstant(this)
 }

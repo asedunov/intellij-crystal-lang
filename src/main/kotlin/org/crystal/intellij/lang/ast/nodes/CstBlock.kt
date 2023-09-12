@@ -2,6 +2,7 @@ package org.crystal.intellij.lang.ast.nodes
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps
+import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstBlock(
@@ -53,4 +54,12 @@ class CstBlock(
         if (splatIndex >= 0) yield("splatIndex=$splatIndex")
         if (unpacks.isNotEmpty()) yield("unpacks=$unpacks")
     }.joinToString(prefix = "Block(", postfix = ")")
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitBlock(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        args.forEach { it.accept(visitor) }
+        body.accept(visitor)
+        unpacks.forEach { (_, node) -> node.accept(visitor) }
+    }
 }

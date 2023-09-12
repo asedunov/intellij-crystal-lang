@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstIsA(
     val receiver: CstNode,
@@ -34,5 +35,12 @@ class CstIsA(
         append(", arg=$arg")
         if (isNilCheck) append(", isNilCheck")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitIsA(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        receiver.accept(visitor)
+        arg.accept(visitor)
     }
 }

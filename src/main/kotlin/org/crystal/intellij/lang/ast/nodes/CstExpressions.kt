@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExpressions(
     val expressions: List<CstNode> = emptyList(),
@@ -29,4 +30,10 @@ class CstExpressions(
     override fun hashCode() = expressions.hashCode()
 
     override fun toString() = "Expressions($expressions)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitExpressions(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        expressions.forEach { it.accept(visitor) }
+    }
 }

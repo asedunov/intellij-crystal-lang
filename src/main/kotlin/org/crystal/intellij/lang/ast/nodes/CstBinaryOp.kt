@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstBinaryOp(
     val left: CstNode,
@@ -26,4 +27,9 @@ sealed class CstBinaryOp(
     }
 
     override fun toString() = "$strippedClassName($left, $right)"
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        left.accept(visitor)
+        right.accept(visitor)
+    }
 }

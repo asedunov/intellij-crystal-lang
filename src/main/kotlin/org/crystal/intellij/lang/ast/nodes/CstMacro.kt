@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacro(
     val name: String,
@@ -46,5 +47,14 @@ class CstMacro(
         if (splatIndex >= 0) append(", splatIndex=$splatIndex")
         if (doubleSplat != null) append(", doubleSplat=$doubleSplat")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMacro(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        args.forEach { it.accept(visitor) }
+        body.accept(visitor)
+        doubleSplat?.accept(visitor)
+        blockArg?.accept(visitor)
     }
 }

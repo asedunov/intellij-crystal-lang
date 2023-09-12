@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCharLiteral(
     val value: Int,
@@ -20,4 +21,6 @@ class CstCharLiteral(
     override fun toString() = buildString {
         append("CharLiteral(").appendCodePoint(value).append(")")
     }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitCharLiteral(this)
 }

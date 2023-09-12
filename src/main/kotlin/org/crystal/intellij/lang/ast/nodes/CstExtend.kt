@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExtend(
     val name: CstNode,
@@ -18,4 +19,10 @@ class CstExtend(
     override fun hashCode() = name.hashCode()
 
     override fun toString() = "Extend($name)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitExtend(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        name.accept(visitor)
+    }
 }

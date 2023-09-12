@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstOpAssign(
     val target: CstNode,
@@ -29,4 +30,11 @@ class CstOpAssign(
     }
 
     override fun toString() = "OpAssign(target=$target, op=$op, value=$value)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitOpAssign(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        target.accept(visitor)
+        value.accept(visitor)
+    }
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAsm(
     val text: String,
@@ -54,5 +55,12 @@ class CstAsm(
         if (intel) append(", intel")
         if (canThrow) append(", canThrow")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor): Boolean = visitor.visitAsm(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        outputs.forEach { it.accept(visitor) }
+        inputs.forEach { it.accept(visitor) }
     }
 }

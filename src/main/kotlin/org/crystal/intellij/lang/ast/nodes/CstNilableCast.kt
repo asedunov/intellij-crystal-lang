@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNilableCast(
     val obj: CstNode,
@@ -26,4 +27,11 @@ class CstNilableCast(
     }
 
     override fun toString() = "NilableCast(obj=$obj, type=$type)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitNilableCast(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        obj.accept(visitor)
+        type.accept(visitor)
+    }
 }

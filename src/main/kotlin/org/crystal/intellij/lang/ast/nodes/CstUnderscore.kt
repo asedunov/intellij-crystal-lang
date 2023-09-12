@@ -1,5 +1,6 @@
 package org.crystal.intellij.lang.ast.nodes
 
+import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstUnderscore(
@@ -10,4 +11,6 @@ class CstUnderscore(
     override fun hashCode() = javaClass.hashCode()
 
     override fun toString() = "Underscore"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitUnderscore(this)
 }

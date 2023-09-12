@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstBoolLiteral(
     val value: Boolean,
@@ -24,4 +25,6 @@ sealed class CstBoolLiteral(
     override fun hashCode() = value.hashCode()
 
     override fun toString() = "BoolLiteral($value)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitBoolLiteral(this)
 }

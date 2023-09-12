@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstUninitializedVar(
     val variable: CstNode,
@@ -26,4 +27,11 @@ class CstUninitializedVar(
     }
 
     override fun toString() = "UninitializedVar(variable=$variable, declaredType=$declaredType)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitUninitializedVar(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        variable.accept(visitor)
+        declaredType.accept(visitor)
+    }
 }

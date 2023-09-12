@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroIf(
     val condition: CstNode,
@@ -34,5 +35,13 @@ class CstMacroIf(
         if (thenBranch != CstNop) append(", thenBranch=$thenBranch")
         if (elseBranch != CstNop) append(", elseBranch=$elseBranch")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitMacroIf(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        condition.accept(visitor)
+        thenBranch.accept(visitor)
+        elseBranch.accept(visitor)
     }
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstDef(
     val name: String,
@@ -68,5 +69,16 @@ class CstDef(
         if (freeVars.isNotEmpty()) append(", freeVars=$freeVars")
         if (isMacroDef) append(", isMacroDef")
         append(")")
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitDef(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        receiver?.accept(visitor)
+        args.forEach { it.accept(visitor) }
+        doubleSplat?.accept(visitor)
+        blockArg?.accept(visitor)
+        returnType?.accept(visitor)
+        body.accept(visitor)
     }
 }

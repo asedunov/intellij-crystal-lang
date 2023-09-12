@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNamedTupleLiteral(
     val entries: List<Entry>,
@@ -11,6 +12,10 @@ class CstNamedTupleLiteral(
         val value: CstNode
     ) {
         override fun toString() = "Entry($key, $value)"
+
+        fun accept(visitor: CstVisitor) {
+            value.accept(visitor)
+        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -25,4 +30,10 @@ class CstNamedTupleLiteral(
     override fun hashCode() = entries.hashCode()
 
     override fun toString() = "NamedTupleLiteral($entries)"
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitNamedTupleLiteral(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        entries.forEach { it.accept(visitor) }
+    }
 }

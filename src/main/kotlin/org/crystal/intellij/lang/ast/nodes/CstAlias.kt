@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAlias(
     val name: CstPath,
@@ -25,5 +26,11 @@ class CstAlias(
         var result = name.hashCode()
         result = 31 * result + value.hashCode()
         return result
+    }
+
+    override fun acceptSelf(visitor: CstVisitor) = visitor.visitAlias(this)
+
+    override fun acceptChildren(visitor: CstVisitor) {
+        value.accept(visitor)
     }
 }

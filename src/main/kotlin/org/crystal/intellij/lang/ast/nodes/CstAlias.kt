@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAlias(
@@ -8,6 +9,12 @@ class CstAlias(
     val value: CstNode,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: CstPath = this.name,
+        value: CstNode = this.value,
+        location: CstLocation? = this.location
+    ) = CstAlias(name, value, location)
+
     override fun toString() = "Alias($name, value=$value)"
 
     override fun equals(other: Any?): Boolean {
@@ -33,4 +40,6 @@ class CstAlias(
     override fun acceptChildren(visitor: CstVisitor) {
         value.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformAlias(this)
 }

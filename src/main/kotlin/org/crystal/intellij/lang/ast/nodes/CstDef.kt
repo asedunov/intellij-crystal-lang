@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstDef(
@@ -18,6 +19,36 @@ class CstDef(
     val isMacroDef: Boolean = false,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: String = this.name,
+        args: List<CstArg> = this.args,
+        body: CstNode = this.body,
+        receiver: CstNode? = this.receiver,
+        blockArg: CstArg? = this.blockArg,
+        returnType: CstNode? = this.returnType,
+        isAbstract: Boolean = this.isAbstract,
+        blockArity: Int = this.blockArity,
+        splatIndex: Int = this.splatIndex,
+        doubleSplat: CstArg? = this.doubleSplat,
+        freeVars: List<String> = this.freeVars,
+        isMacroDef: Boolean = this.isMacroDef,
+        location: CstLocation? = this.location
+    ) = CstDef(
+        name,
+        args,
+        body,
+        receiver,
+        blockArg,
+        returnType,
+        isAbstract,
+        blockArity,
+        splatIndex,
+        doubleSplat,
+        freeVars,
+        isMacroDef,
+        location
+    )
+    
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -81,4 +112,6 @@ class CstDef(
         returnType?.accept(visitor)
         body.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformDef(this)
 }

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRangeLiteral(
@@ -9,6 +10,13 @@ class CstRangeLiteral(
     val isExclusive: Boolean,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        from: CstNode = this.from,
+        to: CstNode = this.to,
+        isExclusive: Boolean = this.isExclusive,
+        location: CstLocation? = this.location
+    ) = CstRangeLiteral(from, to, isExclusive, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -42,4 +50,6 @@ class CstRangeLiteral(
         from.accept(visitor)
         to.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformRangeLiteral(this)
 }

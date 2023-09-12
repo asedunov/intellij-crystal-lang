@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstProcPointer(
@@ -10,6 +11,14 @@ class CstProcPointer(
     val isGlobal: Boolean = false,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        obj: CstNode? = this.obj,
+        name: String = this.name,
+        args: List<CstNode> = this.args,
+        isGlobal: Boolean = this.isGlobal,
+        location: CstLocation? = this.location
+    ) = CstProcPointer(obj, name, args, isGlobal, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -47,4 +56,6 @@ class CstProcPointer(
         obj?.accept(visitor)
         args.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformProcPointer(this)
 }

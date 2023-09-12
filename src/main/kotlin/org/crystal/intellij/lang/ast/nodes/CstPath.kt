@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstPath(
@@ -46,4 +47,6 @@ class CstPath(
     }
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitPath(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformPath(this)
 }

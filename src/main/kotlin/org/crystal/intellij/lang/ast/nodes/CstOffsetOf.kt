@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstOffsetOf(
@@ -8,6 +9,12 @@ class CstOffsetOf(
     val offset: CstNode,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        type: CstNode = this.type,
+        offset: CstNode = this.offset,
+        location: CstLocation? = this.location
+    ) = CstOffsetOf(type, offset, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -34,4 +41,6 @@ class CstOffsetOf(
         type.accept(visitor)
         offset.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformOffsetOf(this)
 }

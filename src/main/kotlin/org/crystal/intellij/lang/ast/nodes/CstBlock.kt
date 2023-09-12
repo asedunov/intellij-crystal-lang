@@ -2,6 +2,7 @@ package org.crystal.intellij.lang.ast.nodes
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
@@ -22,9 +23,7 @@ class CstBlock(
         splatIndex: Int = this.splatIndex,
         unpacks: Int2ObjectMap<CstExpressions> = this.unpacks,
         location: CstLocation? = this.location
-    ) : CstBlock {
-        return CstBlock(args, body, splatIndex, unpacks, location)
-    }
+    )  = CstBlock(args, body, splatIndex, unpacks, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -62,4 +61,6 @@ class CstBlock(
         body.accept(visitor)
         unpacks.forEach { (_, node) -> node.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformBlock(this)
 }

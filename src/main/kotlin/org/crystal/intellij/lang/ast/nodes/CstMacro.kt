@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacro(
@@ -12,6 +13,16 @@ class CstMacro(
     val splatIndex: Int = -1,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: String = this.name,
+        args: List<CstArg> = this.args,
+        body: CstNode = this.body,
+        doubleSplat: CstArg? = this.doubleSplat,
+        blockArg: CstArg? = this.blockArg,
+        splatIndex: Int = this.splatIndex,
+        location: CstLocation? = this.location
+    ) = CstMacro(name, args, body, doubleSplat, blockArg, splatIndex, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -57,4 +68,6 @@ class CstMacro(
         doubleSplat?.accept(visitor)
         blockArg?.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMacro(this)
 }

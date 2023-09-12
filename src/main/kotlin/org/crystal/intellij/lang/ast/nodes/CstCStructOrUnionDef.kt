@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCStructOrUnionDef(
@@ -9,6 +10,13 @@ class CstCStructOrUnionDef(
     val isUnion: Boolean = false,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: String = this.name,
+        body: CstNode = this.body,
+        isUnion: Boolean = this.isUnion,
+        location: CstLocation? = this.location
+    ) = CstCStructOrUnionDef(name, body, isUnion, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -42,4 +50,6 @@ class CstCStructOrUnionDef(
     override fun acceptChildren(visitor: CstVisitor) {
         body.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformCStructOrUnionDef(this)
 }

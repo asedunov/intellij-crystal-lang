@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.util.crystal.CrChar
 import org.crystal.intellij.util.crystal.crChar
@@ -25,6 +26,8 @@ class CstCharLiteral(
     }
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitCharLiteral(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformCharLiteral(this)
 }
 
 val CstCharLiteral.crChar: CrChar

@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstLibDef(
@@ -8,6 +9,12 @@ class CstLibDef(
     val body: CstNode = CstNop,
     location: CstLocation? = null
 ) : CstNode(location) {
+    fun copy(
+        name: CstPath = this.name,
+        body: CstNode = this.body,
+        location: CstLocation? = this.location
+    ) = CstLibDef(name, body, location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,4 +45,6 @@ class CstLibDef(
     override fun acceptChildren(visitor: CstVisitor) {
         body.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformLibDef(this)
 }

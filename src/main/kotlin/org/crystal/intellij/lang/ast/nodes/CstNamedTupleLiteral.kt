@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNamedTupleLiteral(
@@ -17,6 +18,11 @@ class CstNamedTupleLiteral(
             value.accept(visitor)
         }
     }
+
+    fun copy(
+        entries: List<Entry> = this.entries,
+        location: CstLocation? = this.location
+    ) = CstNamedTupleLiteral(entries, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -36,4 +42,6 @@ class CstNamedTupleLiteral(
     override fun acceptChildren(visitor: CstVisitor) {
         entries.forEach { it.accept(visitor) }
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformNamedTupleLiteral(this)
 }

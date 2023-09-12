@@ -1,5 +1,6 @@
 package org.crystal.intellij.lang.ast.nodes
 
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.lexer.*
@@ -23,4 +24,6 @@ sealed class CstMagicConstant(
     override fun toString() = strippedClassName
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitMagicConstant(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformMagicConstant(this)
 }

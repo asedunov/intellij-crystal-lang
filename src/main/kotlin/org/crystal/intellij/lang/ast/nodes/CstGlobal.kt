@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstGlobal(
@@ -21,4 +22,6 @@ class CstGlobal(
     override fun toString() = "Global($name)"
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitGlobal(this)
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformGlobal(this)
 }

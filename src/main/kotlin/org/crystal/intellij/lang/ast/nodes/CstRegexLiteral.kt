@@ -1,6 +1,7 @@
 package org.crystal.intellij.lang.ast.nodes
 
 import org.crystal.intellij.lang.ast.location.CstLocation
+import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstRegexLiteral(
@@ -14,6 +15,12 @@ class CstRegexLiteral(
         const val MULTILINE   = 0x0000_0006
         const val EXTENDED    = 0x0000_0008
     }
+
+    fun copy(
+        source: CstNode = this.source,
+        options: Int = this.options,
+        location: CstLocation? = this.location
+    ) = CstRegexLiteral(source, options, location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -40,4 +47,6 @@ class CstRegexLiteral(
     override fun acceptChildren(visitor: CstVisitor) {
         source.accept(visitor)
     }
+
+    override fun acceptTransformer(transformer: CstTransformer) = transformer.transformRegexLiteral(this)
 }

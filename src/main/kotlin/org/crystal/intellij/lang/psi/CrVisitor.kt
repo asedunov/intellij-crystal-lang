@@ -119,9 +119,13 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitHashType(o: CrHashTypeElement) = visitType(o)
 
-    open fun visitHeredocLiteralBody(o: CrHeredocLiteralBody) = visitCrElement(o)
+    open fun visitHeredocEndId(o: CrHeredocEndId) = visitCrElement(o)
 
     open fun visitHeredocExpression(o: CrHeredocExpression) = visitExpression(o)
+
+    open fun visitHeredocLiteralBody(o: CrHeredocLiteralBody) = visitCrElement(o)
+
+    open fun visitHeredocStartId(o: CrHeredocStartId) = visitCrElement(o)
 
     open fun visitHexEscapeElement(o: CrHexEscapeElement) = visitEscapeElement(o)
 

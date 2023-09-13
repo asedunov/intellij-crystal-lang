@@ -92,3 +92,6 @@ val CrBlockExpression.isWhenBody: Boolean
     get() = whenBody != null
 
 var CrElement.explicitParent: PsiElement? by UserDataProperty(Key.create("EXPLICIT_PARENT"))
+
+val PsiElement.isCrNewLineWhitespace: Boolean
+    get() = this is CrWhiteSpace && isNewLine

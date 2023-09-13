@@ -136,6 +136,8 @@
         <fileStructureGroupRuleProvider implementation="org.crystal.intellij.ide.findUsages.CrystalDeclarationGroupingRuleProvider$ByType"/>
         <fileStructureGroupRuleProvider implementation="org.crystal.intellij.ide.findUsages.CrystalDeclarationGroupingRuleProvider$ByFunction"/>
 
+        <highlightUsagesHandlerFactory implementation="org.crystal.intellij.ide.highlighter.CrystalHeredocIdHighlighterFactory"/>
+
         <completion.contributor language="Crystal"
                                 implementationClass="org.crystal.intellij.ide.completion.CrKeywordCompletionContributor"
                                 id="CrKeywordCompletionContributor"

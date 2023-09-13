@@ -117,12 +117,19 @@ fun PsiElement.skipWhitespacesAndCommentsForward(): PsiElement? =
 fun PsiElement.skipWhitespacesAndCommentsBackward(): PsiElement? =
     PsiTreeUtil.skipWhitespacesAndCommentsBackward(this)
 
+fun PsiElement.deepestFirst() = PsiTreeUtil.getDeepestFirst(this)
+
 fun PsiElement.deepestLast() = PsiTreeUtil.getDeepestLast(this)
+
+fun PsiElement.nextLeaf() = PsiTreeUtil.nextLeaf(this)
 
 fun PsiElement.prevLeaf() = PsiTreeUtil.prevLeaf(this)
 
+fun PsiElement.leavesForward(strict: Boolean = false) =
+    generateSequence(if (strict) nextLeaf() else deepestFirst()) { PsiTreeUtil.nextLeaf(it) }
+
 fun PsiElement.leavesBackward(strict: Boolean = false) =
-    generateSequence(if (strict) prevLeaf() else this) { PsiTreeUtil.prevLeaf(it) }
+    generateSequence(if (strict) prevLeaf() else deepestLast()) { PsiTreeUtil.prevLeaf(it) }
 
 fun PsiElement.significantLeafToTheLeft() =
     leavesBackward().dropWhile { it is PsiWhiteSpace || it is PsiComment }.firstOrNull()

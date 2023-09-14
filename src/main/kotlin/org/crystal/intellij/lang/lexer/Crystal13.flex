@@ -562,6 +562,59 @@ MACRO_START_KEYWORD2 =
 }
 
 <HEREDOC_BODY> {
+  {OCTAL_ESCAPE}                 {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_OCTAL_ESCAPE);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {HEX_ESCAPE}                   {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_HEX_ESCAPE);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {UNICODE_ESCAPE}               {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_UNICODE_ESCAPE);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {SPECIAL_CHAR_ESCAPE}          {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_SPECIAL_ESCAPE);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {SPACE_ESCAPE}                 {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_RAW_ESCAPE);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {LINE_CONTINUATION}            {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_LINE_CONTINUATION);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {NON_SPACE_CHAR_ESCAPE}        {
+    if (isFullHeredoc()) return closePrecedingBlockOrHandle(CR_HEREDOC_RAW, CR_RAW_ESCAPE);
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
+  {UNICODE_BLOCK_ESCAPE_START}   {
+    if (isFullHeredoc()) {
+      if (blockLength != 0) return closePrecedingBlockToken(CR_HEREDOC_RAW);
+
+      yypushbegin(STRING_UNICODE_BLOCK);
+      return handle(CR_UNICODE_BLOCK_START);
+    }
+    IElementType type = consumeHeredocPortion(zzInput == YYEOF);
+    if (type != null) return type;
+  }
+
   {INTERPOLATION_START}          {
     if (isFullHeredoc()) {
       return blockLength != 0
@@ -572,7 +625,7 @@ MACRO_START_KEYWORD2 =
     if (type != null) return type;
   }
 
-  {SINGLE_NEWLINE}? [^\r\n\#\{]* |
+  {SINGLE_NEWLINE}? [^\r\n\#\{\\]* |
   [\#\{]                         {
     IElementType type = consumeHeredocPortion(zzInput == YYEOF);
     if (type != null) return type;

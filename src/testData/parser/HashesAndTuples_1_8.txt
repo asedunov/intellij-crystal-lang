@@ -4,18 +4,18 @@ FILE
     CrHashEntry(CR_HASH_ENTRY)
       CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
         PsiElement(<integer literal>)('1')
-      PsiWhiteSpace(' ')
+      PsiElement(CR_WHITESPACE)(' ')
       PsiElement(=>)('=>')
       PsiErrorElement:Expected: <expression>
         <empty list>
-    PsiWhiteSpace('\n')
+    PsiElement(CR_NEWLINE)('\n')
     PsiErrorElement:Expected: '}'
       PsiElement(<integer literal>)('2')
       PsiElement(,)(',')
-      PsiWhiteSpace(' ')
+      PsiElement(CR_WHITESPACE)(' ')
       PsiElement(<integer literal>)('3')
-      PsiWhiteSpace(' ')
+      PsiElement(CR_WHITESPACE)(' ')
       PsiElement(=>)('=>')
-      PsiWhiteSpace('\n')
+      PsiElement(CR_NEWLINE)('\n')
       PsiElement(<integer literal>)('4')
     PsiElement(})('}')

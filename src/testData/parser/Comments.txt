@@ -1,20 +1,20 @@
 FILE
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiComment(CR_LINE_COMMENT)('#')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiComment(CR_LINE_COMMENT)('#{')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiComment(CR_LINE_COMMENT)('# sajdfhs 1 ''')
 
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiComment(CR_LINE_COMMENT)('# #')

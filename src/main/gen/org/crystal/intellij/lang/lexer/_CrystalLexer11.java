@@ -1468,14 +1468,14 @@ public class _CrystalLexer11 extends CrystalLexerBase {
       heredocIds.pop();
       yypushbackAndBegin(HEREDOC_END_ID);
       zzStartRead = zzMarkedPos - blockLength;
-      return handle(CR_HEREDOC_BODY);
+      return handle(CR_HEREDOC_RAW);
     }
     else {
       blockLength += yylength();
       if (isEof) {
         heredocIds.clear();
         zzStartRead = zzMarkedPos - blockLength;
-        return handle(CR_HEREDOC_BODY);
+        return handle(CR_HEREDOC_RAW);
       }
       return null;
     }
@@ -2615,7 +2615,7 @@ public class _CrystalLexer11 extends CrystalLexerBase {
           case 131:
             { if (isFullHeredoc()) {
       return blockLength != 0
-        ? closePrecedingBlockToken(CR_HEREDOC_BODY)
+        ? closePrecedingBlockToken(CR_HEREDOC_RAW)
         : enterBlock(INTERPOLATION_BLOCK, CR_INTERPOLATION_START, CR_INTERPOLATION_END);
     }
     IElementType type = consumeHeredocPortion(zzInput == YYEOF);

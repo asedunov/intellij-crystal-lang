@@ -333,18 +333,6 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 }
                 if (at(CR_NEWLINE)) advanceLexer()
             }
-
-            while (at(CR_HEREDOC_BODY)) {
-                composite(CR_HEREDOC_LITERAL_BODY) {
-                    advanceLexer()
-                    if (at(CR_HEREDOC_END_ID)) {
-                        advanceLexer()
-                    }
-                    else {
-                        error("Expected: <heredoc end identifier>")
-                    }
-                }
-            }
         }
 
         private fun PsiBuilder.nextTokenSkipSpaces() {

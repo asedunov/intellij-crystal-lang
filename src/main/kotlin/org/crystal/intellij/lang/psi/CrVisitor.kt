@@ -123,7 +123,11 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitHeredocExpression(o: CrHeredocExpression) = visitExpression(o)
 
+    open fun visitHeredocIndent(o: CrHeredocIndent) = visitCrElement(o)
+
     open fun visitHeredocLiteralBody(o: CrHeredocLiteralBody) = visitCrElement(o)
+
+    open fun visitHeredocRawElement(o: CrHeredocRawElement) = visitCrElement(o)
 
     open fun visitHeredocStartId(o: CrHeredocStartId) = visitCrElement(o)
 

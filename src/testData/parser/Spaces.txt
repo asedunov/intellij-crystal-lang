@@ -1,16 +1,16 @@
 FILE
 
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
 
-  PsiWhiteSpace('\t')
+  PsiElement(CR_WHITESPACE)('\t')
 
-  PsiWhiteSpace(' \t ')
+  PsiElement(CR_WHITESPACE)(' \t ')
 
-  PsiWhiteSpace('\t \t')
+  PsiElement(CR_WHITESPACE)('\t \t')
 
-  PsiWhiteSpace('\n')
+  PsiElement(CR_NEWLINE)('\n')
 
-  PsiWhiteSpace('\n\n\n')
+  PsiElement(CR_NEWLINE)('\n\n\n')
 
-  PsiWhiteSpace(' ')
-  PsiWhiteSpace('\n\n')
+  PsiElement(CR_WHITESPACE)(' ')
+  PsiElement(CR_NEWLINE)('\n\n')

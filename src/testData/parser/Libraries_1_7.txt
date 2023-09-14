@@ -1,12 +1,12 @@
 FILE
   CrLibrary(CR_LIBRARY_DEFINITION)
     PsiElement(lib)('lib')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     CrPathNameElement(CR_PATH_NAME_ELEMENT)
       PsiElement(<constant>)('Foo')
     CrBody(CR_BODY)
       PsiErrorElement:Expected: <statement end>
         PsiElement(::)('::')
         PsiElement(<constant>)('Bar')
-    PsiWhiteSpace('\n')
+    PsiElement(CR_NEWLINE)('\n')
     PsiElement(end)('end')

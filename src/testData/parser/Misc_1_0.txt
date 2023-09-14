@@ -7,7 +7,7 @@ FILE
     PsiElement(;)(';')
     PsiErrorElement:Expected: <expression>
       <empty list>
-    PsiWhiteSpace('\n')
+    PsiElement(CR_NEWLINE)('\n')
     CrCallExpression(CR_CALL_EXPRESSION)
       CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
         PsiElement(<identifier>)('b')

@@ -19,7 +19,7 @@ fun crystalToken(
     override fun createLeaf(text: CharSequence) = factory(this, text)
 }
 
-fun crystalWhitespaceToken(name: String) = crystalToken(name) { _, text -> PsiWhiteSpaceImpl(text) }
+fun crystalWhitespaceToken(name: String) = crystalToken(name) { type, text -> CrWhiteSpace(type, text) }
 
 open class CrystalKeywordTokenType(name: String) : CrystalTokenType(name) {
     companion object {

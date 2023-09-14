@@ -3,31 +3,31 @@ FILE
     PsiElement(->)('->')
     PsiErrorElement:Expected: do or '{'
       <empty list>
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(:)(':')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrHashExpression(CR_HASH_EXPRESSION)
     CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Int32')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement({)('{')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(})('}')
 
   CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
     PsiElement(->)('->')
     PsiErrorElement:Expected: do or '{'
       <empty list>
-  PsiWhiteSpace('\n')
+  PsiElement(CR_NEWLINE)('\n')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(:)(':')
-  PsiWhiteSpace('\n')
+  PsiElement(CR_NEWLINE)('\n')
   CrPathExpression(CR_PATH_EXPRESSION)
     CrPathNameElement(CR_PATH_NAME_ELEMENT)
       PsiElement(<constant>)('Int32')
-  PsiWhiteSpace('\n')
+  PsiElement(CR_NEWLINE)('\n')
   CrHashExpression(CR_HASH_EXPRESSION)
     PsiElement({)('{')
     CrHashEntry(CR_HASH_ENTRY)
@@ -46,17 +46,17 @@ FILE
       PsiElement())(')')
     PsiErrorElement:Expected: do or '{'
       <empty list>
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(:)(':')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrHashExpression(CR_HASH_EXPRESSION)
     CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Int32')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement({)('{')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(})('}')
 
   CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
@@ -66,17 +66,17 @@ FILE
       PsiElement())(')')
     PsiErrorElement:Expected: do or '{'
       <empty list>
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(:)(':')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrPathExpression(CR_PATH_EXPRESSION)
     CrPathNameElement(CR_PATH_NAME_ELEMENT)
       PsiElement(<constant>)('Int32')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <EOF>
     PsiElement(do)('do')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(end)('end')
 
   CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
@@ -86,40 +86,40 @@ FILE
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
-        PsiWhiteSpace(' ')
+        PsiElement(CR_WHITESPACE)(' ')
         PsiElement(:)(':')
-        PsiWhiteSpace(' ')
+        PsiElement(CR_WHITESPACE)(' ')
         CrPathTypeElement(CR_PATH_TYPE)
           CrPathNameElement(CR_PATH_NAME_ELEMENT)
             PsiElement(<constant>)('Int32')
       PsiElement())(')')
     PsiErrorElement:Expected: do or '{'
       <empty list>
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(:)(':')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrHashExpression(CR_HASH_EXPRESSION)
     CrPathTypeElement(CR_PATH_TYPE)
       CrPathNameElement(CR_PATH_NAME_ELEMENT)
         PsiElement(<constant>)('Int32')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement({)('{')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(})('}')
 
   CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)
     PsiElement(->)('->')
     PsiErrorElement:Expected: <identifier>, <constant>, <instance variable> or <class variable>
       <empty list>
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<symbol start>)(':')
     PsiElement(<string raw>)('Int32')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrHashExpression(CR_HASH_EXPRESSION)
     PsiElement({)('{')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(})('}')
 
   CrFunctionLiteralExpression(CR_FUNCTION_LITERAL_EXPRESSION)
@@ -129,14 +129,14 @@ FILE
       PsiElement())(')')
     PsiErrorElement:Expected: do or '{'
       <empty list>
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <end of expression>
     PsiElement(<symbol start>)(':')
     PsiElement(<string raw>)('Int32')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrHashExpression(CR_HASH_EXPRESSION)
     PsiElement({)('{')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(})('}')
 
   CrFunctionPointerExpression(CR_FUNCTION_POINTER_EXPRESSION)

@@ -2,7 +2,6 @@ package org.crystal.intellij.lang.lexer
 
 import com.intellij.psi.TokenType
 import com.intellij.psi.impl.source.tree.LeafElement
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import org.crystal.intellij.lang.CrystalLanguage
@@ -205,9 +204,9 @@ fun crystalKeywordToken(
 @JvmField val CR_CHAR_START = CrystalTokenType("<char start>")
 @JvmField val CR_COMMAND_END = CrystalTokenType("<command end>")
 @JvmField val CR_COMMAND_START = CrystalTokenType("<command start>")
-@JvmField val CR_HEREDOC_RAW = CrystalTokenType("<heredoc raw>")
+@JvmField val CR_HEREDOC_RAW = crystalToken("<heredoc raw>", ::CrHeredocRawElement)
 @JvmField val CR_HEREDOC_END_ID = crystalToken("<heredoc end identifier>", ::CrHeredocEndId)
-@JvmField val CR_HEREDOC_INDENT = CrystalTokenType("<heredoc indent>")
+@JvmField val CR_HEREDOC_INDENT = crystalToken("<heredoc indent>", ::CrHeredocIndent)
 @JvmField val CR_HEREDOC_START = CrystalTokenType("<heredoc start>")
 @JvmField val CR_HEREDOC_START_ID = crystalToken("<heredoc start identifier>", ::CrHeredocStartId)
 @JvmField val CR_INTERPOLATION_END = CrystalTokenType("<interpolation end>")

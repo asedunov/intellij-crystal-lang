@@ -304,21 +304,28 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
+        private val heredocBodyStartTokens = TokenSet.create(
+            CR_HEREDOC_RAW,
+            CR_INTERPOLATION_START
+        )
+
+        private val heredocBodyEndTokens = TokenSet.create(
+            CR_NEWLINE,
+            CR_HEREDOC_INDENT,
+            CR_HEREDOC_END_ID
+        )
+
         private fun PsiBuilder.consumeHeredocBody() {
             while (true) {
-                if (!at(CR_HEREDOC_BODY)) break
+                if (!at(heredocBodyStartTokens)) break
                 composite(CR_HEREDOC_LITERAL_BODY) {
                     while (true) {
                         recoverUntil("<heredoc body>, <interpolation> or <heredoc tail>", true) {
-                            at(CR_HEREDOC_BODY)
-                                    || at(CR_INTERPOLATION_START)
-                                    || at(CR_NEWLINE)
-                                    || at(CR_HEREDOC_INDENT)
-                                    || at(CR_HEREDOC_END_ID)
+                            at(heredocBodyStartTokens) || at(heredocBodyEndTokens)
                         }
 
                         when {
-                            at(CR_HEREDOC_BODY) || at(CR_NEWLINE) || at(CR_HEREDOC_INDENT) -> advanceLexer()
+                            at(CR_HEREDOC_RAW) || at(CR_NEWLINE) || at(CR_HEREDOC_INDENT) -> advanceLexer()
 
                             at(CR_INTERPOLATION_START) -> parseInterpolation()
 

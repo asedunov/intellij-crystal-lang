@@ -71,7 +71,7 @@ class CrystalSyntaxHighlightingVisitor(
             map[CR_COMMAND_END] = STRING_CONTENT_KEY
             map[CR_HEREDOC_START] = HEREDOC_CONTENT_KEY
             map[CR_HEREDOC_START_ID] = HEREDOC_ID_KEY
-            map[CR_HEREDOC_BODY] = HEREDOC_CONTENT_KEY
+            map[CR_HEREDOC_RAW] = HEREDOC_CONTENT_KEY
             map[CR_HEREDOC_END_ID] = HEREDOC_ID_KEY
             map[CR_INTERPOLATION_START] = INTERPOLATION_KEY
             map[CR_INTERPOLATION_END] = INTERPOLATION_KEY

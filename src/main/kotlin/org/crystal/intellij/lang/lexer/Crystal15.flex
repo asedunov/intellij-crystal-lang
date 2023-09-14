@@ -855,7 +855,7 @@ MACRO_START_KEYWORD2 =
 }
 
 <YYINITIAL, HEREDOC_HEADER, INTERPOLATION_BLOCK> {
-  {HEREDOC_START}                { return pushAndHandle(HEREDOC_START_ID, CR_HEREDOC_START); }
+  {HEREDOC_START}                { return beginAndHandle(HEREDOC_START_ID, CR_HEREDOC_START); }
 
   \'                             { return pushAndHandle(CHAR_LITERAL_BODY, CR_CHAR_START); }
 

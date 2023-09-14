@@ -207,6 +207,7 @@ fun crystalKeywordToken(
 @JvmField val CR_COMMAND_START = CrystalTokenType("<command start>")
 @JvmField val CR_HEREDOC_BODY = CrystalTokenType("<heredoc body>")
 @JvmField val CR_HEREDOC_END_ID = CrystalTokenType("<heredoc end identifier>")
+@JvmField val CR_HEREDOC_INDENT = CrystalTokenType("<heredoc indent>")
 @JvmField val CR_HEREDOC_START = CrystalTokenType("<heredoc start>")
 @JvmField val CR_HEREDOC_START_ID = CrystalTokenType("<heredoc start identifier>")
 @JvmField val CR_INTERPOLATION_END = CrystalTokenType("<interpolation end>")

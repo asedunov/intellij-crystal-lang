@@ -527,7 +527,8 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
             "x, y = <<-FOO, <<-BAR\nhello\nFOO\nworld\nBAR",
             "x, y, z = <<-FOO, <<-BAR, <<-BAZ\nhello\nFOO\nworld\nBAR\n!\nBAZ",
             "<<-HEREDOC",
-            "<<-HEREDOC\n"
+            "<<-HEREDOC\n",
+            "puts <<-FOO, <<-BAR\nFOO\nBAR\n123"
         )
     }
 

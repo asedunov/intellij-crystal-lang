@@ -3,212 +3,160 @@ package org.crystal.intellij.tests.psiAttributes
 import org.crystal.intellij.lang.psi.CrDefinitionWithFqName
 
 class CrystalFqNameTest : CrystalPsiAttributeTest() {
-    private fun checkFqName(text: String, value: String?) {
-        checkLast<CrDefinitionWithFqName>(text, { fqName?.fullName }, value)
+    private infix fun String.hasFqName(value: String?) {
+        checkLast<CrDefinitionWithFqName>(this, { fqName?.fullName }, value)
     }
 
     fun testTopLevelPaths() {
-        checkFqName(
-            """
-                class A
-                end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-                class ::A
-                end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-                class A::B::C
-                end
-            """.trimIndent(),
-            "A::B::C"
-        )
-        checkFqName(
-            """
-                class ::A::B::C
-                end
-            """.trimIndent(),
-            "A::B::C"
-        )
-        checkFqName(
-            """
-                def foo
-                end
-            """.trimIndent(),
-            "foo"
-        )
+        """
+            class A
+            end
+        """.trimIndent() hasFqName "A"
+
+        """
+            class ::A
+            end
+        """.trimIndent() hasFqName "A"
+
+        """
+            class A::B::C
+            end
+        """.trimIndent() hasFqName "A::B::C"
+
+        """
+            class ::A::B::C
+            end
+        """.trimIndent() hasFqName "A::B::C"
+
+        """
+            def foo
+            end
+        """.trimIndent() hasFqName "foo"
     }
 
     fun testModifiers() {
-        checkFqName(
-            """
-            private class A
-            end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-            @[Foo]
-            class A
-            end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-            @[Foo]
-            @[Bar]
-            class A
-            end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-            @[Foo] 
-            private class A
-            end
-            """.trimIndent(),
-            "A"
-        )
+        """
+        private class A
+        end
+        """.trimIndent() hasFqName "A"
+
+        """
+        @[Foo]
+        class A
+        end
+        """.trimIndent() hasFqName "A"
+
+        """
+        @[Foo]
+        @[Bar]
+        class A
+        end
+        """.trimIndent() hasFqName "A"
+
+        """
+        @[Foo] 
+        private class A
+        end
+        """.trimIndent() hasFqName "A"
     }
 
     fun testNestedPaths() {
-        checkFqName(
-            """
-            class X
-                class A
-                end
+        """
+        class X
+            class A
             end
-            """.trimIndent(),
-            "X::A"
-        )
-        checkFqName(
-            """
-            class X
-                class ::A
-                end
-            end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-            class X
-                class A::B::C
-                end
-            end
-            """.trimIndent(),
-            "X::A::B::C"
-        )
-        checkFqName(
-            """
-            class X
-                class ::A::B::C
-                end
-            end
-            """.trimIndent(),
-            "A::B::C"
-        )
+        end
+        """.trimIndent() hasFqName "X::A"
 
-        checkFqName(
-            """
-            class X::Y
-                class A
-                end
+        """
+        class X
+            class ::A
             end
-            """.trimIndent(),
-            "X::Y::A"
-        )
-        checkFqName(
-            """
-            class X::Y
-                class ::A
-                end
+        end
+        """.trimIndent() hasFqName "A"
+
+        """
+        class X
+            class A::B::C
             end
-            """.trimIndent(),
-            "A"
-        )
-        checkFqName(
-            """
-            class X::Y
-                class A::B::C
-                end
+        end
+        """.trimIndent() hasFqName "X::A::B::C"
+
+        """
+        class X
+            class ::A::B::C
             end
-            """.trimIndent(),
-            "X::Y::A::B::C"
-        )
-        checkFqName(
-            """
-            class X::Y
-                class ::A::B::C
-                end
+        end
+        """.trimIndent() hasFqName "A::B::C"
+
+        """
+        class X::Y
+            class A
             end
-            """.trimIndent(),
-            "A::B::C"
-        )
+        end
+        """.trimIndent() hasFqName "X::Y::A"
+
+        """
+        class X::Y
+            class ::A
+            end
+        end
+        """.trimIndent() hasFqName "A"
+
+        """
+        class X::Y
+            class A::B::C
+            end
+        end
+        """.trimIndent() hasFqName "X::Y::A::B::C"
+
+        """
+        class X::Y
+            class ::A::B::C
+            end
+        end
+        """.trimIndent() hasFqName "A::B::C"
     }
 
     fun testMembers() {
-        checkFqName(
-            """
+        """
+        def foo
+        end
+        """.trimIndent() hasFqName "foo"
+
+        """
+        class X
             def foo
             end
-            """.trimIndent(),
-            "foo"
-        )
-        checkFqName(
-            """
-            class X
-                def foo
-                end
-            end
-            """.trimIndent(),
-            "X.foo"
-        )
-        checkFqName(
-            """
-            class ::X
-                def foo
-                end
-            end
-            """.trimIndent(),
-            "X.foo"
-        )
-        checkFqName(
-            """
-            class X::Y
-                def foo
-                end
-            end
-            """.trimIndent(),
-            "X::Y.foo"
-        )
-        checkFqName(
-            """
-            class ::X::Y
-                def foo
-                end
-            end
-            """.trimIndent(),
-            "X::Y.foo"
-        )
+        end
+        """.trimIndent() hasFqName "X.foo"
 
-        checkFqName(
-            """
-            lib Foo
-                fun bar
-                end
-            end    
-            """.trimIndent(),
-            "Foo.bar"
-        )
+        """
+        class ::X
+            def foo
+            end
+        end
+        """.trimIndent() hasFqName "X.foo"
+
+        """
+        class X::Y
+            def foo
+            end
+        end
+        """.trimIndent() hasFqName "X::Y.foo"
+
+        """
+        class ::X::Y
+            def foo
+            end
+        end
+        """.trimIndent() hasFqName "X::Y.foo"
+
+        """
+        lib Foo
+            fun bar
+            end
+        end    
+        """.trimIndent() hasFqName "Foo.bar"
     }
 }

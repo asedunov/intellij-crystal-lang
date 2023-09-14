@@ -3,103 +3,103 @@ package org.crystal.intellij.tests.psiAttributes
 import org.crystal.intellij.lang.psi.CrStringValueHolder
 
 class CrystalStringValueTest : CrystalPsiAttributeTest() {
-    private fun checkStringValue(text: String, value: String?) {
-        checkFirst(text, CrStringValueHolder::stringValue, value)
+    private infix fun String.hasValue(value: String?) {
+        checkFirst(this, CrStringValueHolder::stringValue, value)
     }
 
-    fun testStringValues() {
-        checkStringValue("\"abc\\\ndef\"", "abcdef")
-        checkStringValue("\"abc\\\n   def\"", "abcdef")
+    fun testStringLiterals() {
+        "\"abc\\\ndef\"" hasValue "abcdef"
+        "\"abc\\\n   def\"" hasValue "abcdef"
 
-        checkStringValue("\"abc#{123}def\"", null)
-        checkStringValue("\"abc\\ndef\"", "abc\ndef")
-        checkStringValue("\"abc\\(def\"", "abc(def")
-        checkStringValue("\"abc\"\\\n\"def\"", "abcdef")
-        checkStringValue("\"abc\\u{4A 4B 4C}\"", "abcJKL")
+        "\"abc#{123}def\"" hasValue null
+        "\"abc\\ndef\"" hasValue "abc\ndef"
+        "\"abc\\(def\"".hasValue("abc(def")
+        "\"abc\"\\\n\"def\"" hasValue "abcdef"
+        "\"abc\\u{4A 4B 4C}\"" hasValue "abcJKL"
 
-        checkStringValue("%(abc#{123}def)", null)
-        checkStringValue("%(abc\\ndef)", "abc\ndef")
-        checkStringValue("%(abc\\(def)", "abc(def")
-        checkStringValue("%(abc)\\\n%[def]", "abcdef")
-        checkStringValue("%(abc\\u{4A 4B 4C})", "abcJKL")
+        "%(abc#{123}def)" hasValue null
+        "%(abc\\ndef)" hasValue "abc\ndef"
+        "%(abc\\(def)" hasValue "abc(def"
+        "%(abc)\\\n%[def]" hasValue "abcdef"
+        "%(abc\\u{4A 4B 4C})" hasValue "abcJKL"
 
-        checkStringValue("%[abc#{123}def]", null)
-        checkStringValue("%[abc\\ndef]", "abc\ndef")
-        checkStringValue("%[abc\\[def]", "abc[def")
-        checkStringValue("%[abc]\\\n%(def)", "abcdef")
-        checkStringValue("%[abc\\u{4A 4B 4C}]", "abcJKL")
+        "%[abc#{123}def]" hasValue null
+        "%[abc\\ndef]" hasValue "abc\ndef"
+        "%[abc\\[def]" hasValue "abc[def"
+        "%[abc]\\\n%(def)" hasValue "abcdef"
+        "%[abc\\u{4A 4B 4C}]" hasValue "abcJKL"
 
-        checkStringValue("%{abc#{123}def}", null)
-        checkStringValue("%{abc\\ndef}", "abc\ndef")
-        checkStringValue("%{abc\\{def}", "abc{def")
-        checkStringValue("%{abc}\\\n%[def]", "abcdef")
-        checkStringValue("%{abc\\u{4A 4B 4C}}", "abcJKL")
+        "%{abc#{123}def}" hasValue null
+        "%{abc\\ndef}" hasValue "abc\ndef"
+        "%{abc\\{def}" hasValue "abc{def"
+        "%{abc}\\\n%[def]" hasValue "abcdef"
+        "%{abc\\u{4A 4B 4C}}" hasValue "abcJKL"
 
-        checkStringValue("%<abc#{123}def>", null)
-        checkStringValue("%<abc\\ndef>", "abc\ndef")
-        checkStringValue("%<abc\\<def>", "abc<def")
-        checkStringValue("%<abc>\\\n%(def)", "abcdef")
-        checkStringValue("%<abc\\u{4A 4B 4C}>", "abcJKL")
+        "%<abc#{123}def>" hasValue null
+        "%<abc\\ndef>" hasValue "abc\ndef"
+        "%<abc\\<def>" hasValue "abc<def"
+        "%<abc>\\\n%(def)" hasValue "abcdef"
+        "%<abc\\u{4A 4B 4C}>" hasValue "abcJKL"
 
-        checkStringValue("%|abc#{123}def|", null)
-        checkStringValue("%|abc\\ndef|", "abc\ndef")
-        checkStringValue("%|abc\\|def|", "abc|def")
-        checkStringValue("%|abc|\\\n%[def]", "abcdef")
-        checkStringValue("%|abc\\u{4A 4B 4C}|", "abcJKL")
+        "%|abc#{123}def|" hasValue null
+        "%|abc\\ndef|" hasValue "abc\ndef"
+        "%|abc\\|def|" hasValue "abc|def"
+        "%|abc|\\\n%[def]" hasValue "abcdef"
+        "%|abc\\u{4A 4B 4C}|" hasValue "abcJKL"
 
-        checkStringValue("%Q(abc#{123}def)", null)
-        checkStringValue("%Q(abc\\ndef)", "abc\ndef")
-        checkStringValue("%Q(abc\\(def)", "abc(def")
-        checkStringValue("%Q(abc)\\\n%Q[def]", "abcdef")
-        checkStringValue("%Q(abc\\u{4A 4B 4C})", "abcJKL")
+        "%Q(abc#{123}def)" hasValue null
+        "%Q(abc\\ndef)" hasValue "abc\ndef"
+        "%Q(abc\\(def)" hasValue "abc(def"
+        "%Q(abc)\\\n%Q[def]" hasValue "abcdef"
+        "%Q(abc\\u{4A 4B 4C})" hasValue "abcJKL"
 
-        checkStringValue("%Q[abc#{123}def]", null)
-        checkStringValue("%Q[abc\\ndef]", "abc\ndef")
-        checkStringValue("%Q[abc\\[def]", "abc[def")
-        checkStringValue("%Q[abc]\\\n%Q(def)", "abcdef")
-        checkStringValue("%Q[abc\\u{4A 4B 4C}]", "abcJKL")
+        "%Q[abc#{123}def]" hasValue null
+        "%Q[abc\\ndef]" hasValue "abc\ndef"
+        "%Q[abc\\[def]" hasValue "abc[def"
+        "%Q[abc]\\\n%Q(def)" hasValue "abcdef"
+        "%Q[abc\\u{4A 4B 4C}]" hasValue "abcJKL"
 
-        checkStringValue("%Q{abc#{123}def}", null)
-        checkStringValue("%Q{abc\\ndef}", "abc\ndef")
-        checkStringValue("%Q{abc\\{def}", "abc{def")
-        checkStringValue("%Q{abc}\\\n%Q[def]", "abcdef")
-        checkStringValue("%Q{abc\\u{4A 4B 4C}}", "abcJKL")
+        "%Q{abc#{123}def}" hasValue null
+        "%Q{abc\\ndef}" hasValue "abc\ndef"
+        "%Q{abc\\{def}" hasValue "abc{def"
+        "%Q{abc}\\\n%Q[def]" hasValue "abcdef"
+        "%Q{abc\\u{4A 4B 4C}}" hasValue "abcJKL"
 
-        checkStringValue("%Q<abc#{123}def>", null)
-        checkStringValue("%Q<abc\\ndef>", "abc\ndef")
-        checkStringValue("%Q<abc\\<def>", "abc<def")
-        checkStringValue("%Q<abc>\\\n%Q(def)", "abcdef")
-        checkStringValue("%Q<abc\\u{4A 4B 4C}>", "abcJKL")
+        "%Q<abc#{123}def>" hasValue null
+        "%Q<abc\\ndef>" hasValue "abc\ndef"
+        "%Q<abc\\<def>" hasValue "abc<def"
+        "%Q<abc>\\\n%Q(def)" hasValue "abcdef"
+        "%Q<abc\\u{4A 4B 4C}>" hasValue "abcJKL"
 
-        checkStringValue("%Q|abc#{123}def|", null)
-        checkStringValue("%Q|abc\\ndef|", "abc\ndef")
-        checkStringValue("%Q|abc\\|def|", "abc|def")
-        checkStringValue("%Q|abc|\\\n%Q[def]", "abcdef")
-        checkStringValue("%Q|abc\\u{4A 4B 4C}|", "abcJKL")
+        "%Q|abc#{123}def|" hasValue null
+        "%Q|abc\\ndef|" hasValue "abc\ndef"
+        "%Q|abc\\|def|" hasValue "abc|def"
+        "%Q|abc|\\\n%Q[def]" hasValue "abcdef"
+        "%Q|abc\\u{4A 4B 4C}|" hasValue "abcJKL"
 
-        checkStringValue("%q(abc#{123}def)", "abc#{123}def")
-        checkStringValue("%q(abc\\ndef)", "abc\\ndef")
-        checkStringValue("%q(abc)\\\n%q[def]", "abcdef")
-        checkStringValue("%q(abc\\u{4A 4B 4C})", "abc\\u{4A 4B 4C}")
+        "%q(abc#{123}def)" hasValue "abc#{123}def"
+        "%q(abc\\ndef)" hasValue "abc\\ndef"
+        "%q(abc)\\\n%q[def]" hasValue "abcdef"
+        "%q(abc\\u{4A 4B 4C})" hasValue "abc\\u{4A 4B 4C}"
 
-        checkStringValue("%q[abc#{123}def]", "abc#{123}def")
-        checkStringValue("%q[abc\\ndef]", "abc\\ndef")
-        checkStringValue("%q[abc]\\\n%q(def)", "abcdef")
-        checkStringValue("%q[abc\\u{4A 4B 4C}]", "abc\\u{4A 4B 4C}")
+        "%q[abc#{123}def]" hasValue "abc#{123}def"
+        "%q[abc\\ndef]" hasValue "abc\\ndef"
+        "%q[abc]\\\n%q(def)" hasValue "abcdef"
+        "%q[abc\\u{4A 4B 4C}]" hasValue "abc\\u{4A 4B 4C}"
 
-        checkStringValue("%q{abc#{123}def}", "abc#{123}def")
-        checkStringValue("%q{abc\\ndef}", "abc\\ndef")
-        checkStringValue("%q{abc}\\\n%q[def]", "abcdef")
-        checkStringValue("%q{abc\\u{4A 4B 4C}}", "abc\\u{4A 4B 4C}")
+        "%q{abc#{123}def}" hasValue "abc#{123}def"
+        "%q{abc\\ndef}" hasValue "abc\\ndef"
+        "%q{abc}\\\n%q[def]" hasValue "abcdef"
+        "%q{abc\\u{4A 4B 4C}}" hasValue "abc\\u{4A 4B 4C}"
 
-        checkStringValue("%q<abc#{123}def>", "abc#{123}def")
-        checkStringValue("%q<abc\\ndef>", "abc\\ndef")
-        checkStringValue("%q<abc>\\\n%q(def)", "abcdef")
-        checkStringValue("%q<abc\\u{4A 4B 4C}>", "abc\\u{4A 4B 4C}")
+        "%q<abc#{123}def>" hasValue "abc#{123}def"
+        "%q<abc\\ndef>" hasValue "abc\\ndef"
+        "%q<abc>\\\n%q(def)" hasValue "abcdef"
+        "%q<abc\\u{4A 4B 4C}>" hasValue "abc\\u{4A 4B 4C}"
 
-        checkStringValue("%q|abc#{123}def|", "abc#{123}def")
-        checkStringValue("%q|abc\\ndef|", "abc\\ndef")
-        checkStringValue("%q|abc|\\\n%q[def]", "abcdef")
-        checkStringValue("%q|abc\\u{4A 4B 4C}|", "abc\\u{4A 4B 4C}")
+        "%q|abc#{123}def|" hasValue "abc#{123}def"
+        "%q|abc\\ndef|" hasValue "abc\\ndef"
+        "%q|abc|\\\n%q[def]" hasValue "abcdef"
+        "%q|abc\\u{4A 4B 4C}|" hasValue "abc\\u{4A 4B 4C}"
     }
 }

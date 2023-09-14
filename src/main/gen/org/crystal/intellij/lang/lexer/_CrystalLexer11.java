@@ -2835,7 +2835,7 @@ public class _CrystalLexer11 extends CrystalLexerBase {
           // fall through
           case 424: break;
           case 167:
-            { return pushAndHandle(HEREDOC_START_ID, CR_HEREDOC_START);
+            { return beginAndHandle(HEREDOC_START_ID, CR_HEREDOC_START);
             }
           // fall through
           case 425: break;

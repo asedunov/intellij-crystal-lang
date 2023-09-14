@@ -529,7 +529,13 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
             "<<-HEREDOC",
             "<<-HEREDOC\n",
             "puts <<-FOO, <<-BAR\nFOO\nBAR\n123",
-            "<<-FOO\n#{1}\nFOO"
+            "<<-FOO\n#{1}\nFOO",
+            "<<-FOO\n\\a\\b\\e\\f\\n\\r\\t\\v\\\\\\\"\\z\\s\\(\\)\\[\\]\\{\\}\\<\\>\\|\\.\\:\\ \nFOO",
+            "<<-FOO\n\\123\\12\\1\\1238\\129\\18\\123456\nFOO",
+            "<<-FOO\n\\x\\x1\\x2B\\xABC\nFOO",
+            "<<-FOO\n\\u\\u1\\u12\\u123\\u1AB4\\u1ABCD\nFOO",
+            "<<-FOO\n\\u{123}\\u{12 234 FAB}\\u{1234567}\nFOO",
+            "<<-FOO\na\\\nb\nFOO"
         )
     }
 

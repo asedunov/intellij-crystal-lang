@@ -1,7 +1,7 @@
 FILE
   CrMacro(CR_MACRO_DEFINITION)
     PsiElement(macro)('macro')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
@@ -13,7 +13,7 @@ FILE
 
   CrMacro(CR_MACRO_DEFINITION)
     PsiElement(macro)('macro')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
@@ -24,7 +24,7 @@ FILE
     <empty list>
   PsiErrorElement:Expected: <end of expression>
     PsiElement(:)(':')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
     PsiElement(<integer literal>)('1')
   PsiErrorElement:Expected: <end of expression>
@@ -35,7 +35,7 @@ FILE
 
   CrMethod(CR_METHOD_DEFINITION)
     PsiElement(def)('def')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
       PsiElement(<identifier>)('foo')
     PsiElement(;)(';')
@@ -49,7 +49,7 @@ FILE
             CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
               PsiElement(end)('end')
             PsiElement(:)(':')
-            PsiWhiteSpace(' ')
+            PsiElement(CR_WHITESPACE)(' ')
             CrIntegerLiteralExpression(CR_INTEGER_LITERAL_EXPRESSION)
               PsiElement(<integer literal>)('1')
           PsiElement())(')')

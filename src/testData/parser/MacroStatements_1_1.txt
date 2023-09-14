@@ -1,11 +1,11 @@
 FILE
   CrMacroForStatement(CR_MACRO_FOR_STATEMENT)
     PsiElement({%)('{%')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(for)('for')
     PsiErrorElement:Expected: <identifier>
       <empty list>
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     CrMacroLiteral(CR_MACRO_LITERAL)
       <empty list>
     PsiErrorElement:Expected: '{%'
@@ -14,8 +14,8 @@ FILE
     PsiElement(_)('_')
     PsiElement(<macro fragment>)(', x, _ in y %}body')
     PsiElement({%)('{%')
-  PsiWhiteSpace(' ')
+  PsiElement(CR_WHITESPACE)(' ')
   PsiErrorElement:Expected: <EOF>
     PsiElement(end)('end')
-    PsiWhiteSpace(' ')
+    PsiElement(CR_WHITESPACE)(' ')
     PsiElement(%})('%}')

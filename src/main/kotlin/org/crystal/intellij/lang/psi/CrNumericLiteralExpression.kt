@@ -4,7 +4,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import org.crystal.intellij.lang.lexer.CrystalTokenType
 
-sealed class CrNumericLiteralExpression(node: ASTNode) : CrExpressionImpl(node), CrLiteralExpression {
+sealed class CrNumericLiteralExpression(node: ASTNode) : CrExpressionImpl(node) {
     protected abstract val tokenType: CrystalTokenType
 
     private val body: PsiElement?

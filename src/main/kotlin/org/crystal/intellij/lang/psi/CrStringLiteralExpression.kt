@@ -9,7 +9,6 @@ import org.crystal.intellij.lang.lexer.CR_STRING_START
 
 class CrStringLiteralExpression(node: ASTNode) :
     CrExpressionImpl(node),
-    CrLiteralExpression,
     CrStringValueHolder,
     PsiLanguageInjectionHost,
     CrNameKindAware {

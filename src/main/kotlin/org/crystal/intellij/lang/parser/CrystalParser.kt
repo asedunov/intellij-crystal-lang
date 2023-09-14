@@ -309,12 +309,16 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 if (!at(CR_HEREDOC_BODY)) break
                 composite(CR_HEREDOC_LITERAL_BODY) {
                     while (true) {
-                        recoverUntil("<heredoc body>, <interpolation> or <heredoc end identifier>", true) {
-                            at(CR_HEREDOC_BODY) || at(CR_INTERPOLATION_START) || at(CR_HEREDOC_END_ID)
+                        recoverUntil("<heredoc body>, <interpolation> or <heredoc tail>", true) {
+                            at(CR_HEREDOC_BODY)
+                                    || at(CR_INTERPOLATION_START)
+                                    || at(CR_NEWLINE)
+                                    || at(CR_HEREDOC_INDENT)
+                                    || at(CR_HEREDOC_END_ID)
                         }
 
                         when {
-                            at(CR_HEREDOC_BODY) -> advanceLexer()
+                            at(CR_HEREDOC_BODY) || at(CR_NEWLINE) || at(CR_HEREDOC_INDENT) -> advanceLexer()
 
                             at(CR_INTERPOLATION_START) -> parseInterpolation()
 

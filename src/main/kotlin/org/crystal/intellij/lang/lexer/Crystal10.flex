@@ -506,6 +506,8 @@ MACRO_START_KEYWORD2 =
 %state HEREDOC_HEADER
 %state HEREDOC_BODY
 %state HEREDOC_END_ID
+%state HEREDOC_END_ID_INDENT
+%state HEREDOC_END_ID_PROPER
 
 %state CHAR_LITERAL_BODY
 
@@ -578,7 +580,21 @@ MACRO_START_KEYWORD2 =
 }
 
 <HEREDOC_END_ID> {
-  {SINGLE_NEWLINE}? [^\r\n]*     { return consumeHeredocEndId(); }
+  {SINGLE_NEWLINE}?              {
+    yybegin(HEREDOC_END_ID_INDENT);
+    if (yylength() > 0) return handle(CR_NEWLINE);
+  }
+}
+
+<HEREDOC_END_ID_INDENT> {
+  {WHITE_SPACE}*                 {
+      yybegin(HEREDOC_END_ID_PROPER);
+      if (yylength() > 0) return handle(CR_HEREDOC_INDENT);
+  }
+}
+
+<HEREDOC_END_ID_PROPER> {
+  [^\r\n]*                       { return consumeHeredocEndId(); }
 }
 
 <CHAR_LITERAL_BODY> {

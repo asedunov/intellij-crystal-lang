@@ -18,6 +18,7 @@ import org.crystal.intellij.lang.lexer.*
 import org.crystal.intellij.lang.parser.CR_PARENTHESIZED_ARGUMENT_LIST
 import org.crystal.intellij.lang.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.lang.psi.*
+import org.crystal.intellij.util.countLeadingSpaces
 
 class CrystalSyntaxCheckingVisitor(
     file: CrFile,
@@ -150,6 +151,27 @@ class CrystalSyntaxCheckingVisitor(
 
     override fun visitCharCodeElement(o: CrCharCodeElement) {
         handleUnicode(o)
+    }
+
+    override fun visitHeredocRawElement(o: CrHeredocRawElement) {
+        val indentSize = o.body.indentSize
+        if (indentSize == 0) return
+
+        val text = o.text
+        val offset = o.startOffset
+        for ((i, range) in o.lineRangesInText) {
+            if (i == 0 && !o.isFirst) continue
+            val from = range.startOffset
+            val spaces = text.countLeadingSpaces(from)
+            if (spaces < indentSize) {
+                val fromAbsolute = from + offset
+                error(
+                    o,
+                    "Heredoc line must have an indent greater than or equal to $indentSize",
+                    TextRange(fromAbsolute, fromAbsolute + spaces)
+                )
+            }
+        }
     }
 
     override fun visitArrayLiteralExpression(o: CrArrayLiteralExpression) {

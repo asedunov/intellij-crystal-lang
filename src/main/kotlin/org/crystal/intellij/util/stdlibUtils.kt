@@ -30,3 +30,20 @@ fun <T, A : Appendable> A.append(
     append(postfix)
     return this
 }
+
+fun <T, A : Appendable> A.append(
+    sequence: Sequence<T>?,
+    separator: CharSequence = ", ",
+    prefix: CharSequence = "",
+    postfix: CharSequence = "",
+    appendElement: A.(T) -> Unit
+): A {
+    if (sequence == null) return this
+    append(prefix)
+    for ((count, element) in sequence.withIndex()) {
+        if (count + 1 > 1) append(separator)
+        appendElement(element)
+    }
+    append(postfix)
+    return this
+}

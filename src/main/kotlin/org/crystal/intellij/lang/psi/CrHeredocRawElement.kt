@@ -1,6 +1,9 @@
 package org.crystal.intellij.lang.psi
 
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.tree.IElementType
+import org.crystal.intellij.util.append
+import org.crystal.intellij.util.countLeadingSpaces
 import kotlin.math.min
 
 class CrHeredocRawElement(
@@ -12,36 +15,33 @@ class CrHeredocRawElement(
     val body: CrHeredocLiteralBody
         get() = parent as CrHeredocLiteralBody
 
-    private val isFirst: Boolean
+    val isFirst: Boolean
         get() = prevSibling == null
+
+    val lineRangesInText: Sequence<IndexedValue<TextRange>>
+        get() = sequence {
+            var i = 0
+            val len = text.length
+            while (i < len) {
+                var newlinePos = text.indexOf('\n', i)
+                if (newlinePos < 0) newlinePos = len
+                yield(TextRange(i, newlinePos))
+                i = newlinePos + 1
+            }
+        }.withIndex()
 
     override val stringValue: String
         get() {
-            val indentSize = body.indentSize
             val text = text
+            val indentSize = body.indentSize
             if (indentSize == 0) return text
             return buildString {
-                var i = 0
-                val len = text.length
-                while (i < len) {
-                    var newlinePos = text.indexOf('\n', i)
-                    if (newlinePos < 0) newlinePos = len
-                    val spacesToTrim = if (i > 0 || isFirst) min(text.countLeadingSpaces(i), indentSize) else 0
-                    appendRange(text, i + spacesToTrim, newlinePos)
-                    if (newlinePos < len) {
-                        append('\n')
-                    }
-                    i = newlinePos + 1
+                append(lineRangesInText, separator = "\n") { (i, range) ->
+                    val from = range.startOffset
+                    val to = range.endOffset
+                    val spacesToTrim = if (i > 0 || isFirst) min(text.countLeadingSpaces(from), indentSize) else 0
+                    appendRange(text, from + spacesToTrim, to)
                 }
             }
         }
-
-    private fun String.countLeadingSpaces(offset: Int): Int {
-        var count = 0
-        for (i in offset until length) {
-            val ch = this[i]
-            if (ch == ' ' || ch == '\t') count++ else break
-        }
-        return count
-    }
 }

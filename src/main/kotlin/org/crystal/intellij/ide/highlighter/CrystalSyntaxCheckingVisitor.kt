@@ -18,7 +18,6 @@ import org.crystal.intellij.lang.lexer.*
 import org.crystal.intellij.lang.parser.CR_PARENTHESIZED_ARGUMENT_LIST
 import org.crystal.intellij.lang.parser.CR_SYMBOL_EXPRESSION
 import org.crystal.intellij.lang.psi.*
-import org.crystal.intellij.util.countLeadingSpaces
 
 class CrystalSyntaxCheckingVisitor(
     file: CrFile,
@@ -35,6 +34,8 @@ class CrystalSyntaxCheckingVisitor(
     private val inFun: (String) -> String? = { if (funNest > 0) "Can't $it in method/function body" else null }
     private val inExpr: (String) -> String? = { if (exprNest > 0) "Can't $it dynamically" else null }
     private val inConst: (String) -> String? = { if (constNest > 0) "Can't $it dynamically" else null }
+
+    private var fixIndentsFix: CrystalFixHeredocIndentsAction? = null
 
     private inline infix fun ((String) -> String?).or(crossinline op: (String) -> String?): (String) -> String? {
         return { this(it) ?: op(it) }
@@ -153,24 +154,33 @@ class CrystalSyntaxCheckingVisitor(
         handleUnicode(o)
     }
 
+    override fun visitHeredocLiteralBody(o: CrHeredocLiteralBody) {
+        fixIndentsFix = null
+
+        super.visitHeredocLiteralBody(o)
+
+        if (fixIndentsFix != null) {
+            highlight(
+                o,
+                "",
+                HighlightInfoType.INFORMATION,
+                o.textRange
+            )?.withFix(fixIndentsFix)
+            fixIndentsFix = null
+        }
+    }
+
     override fun visitHeredocRawElement(o: CrHeredocRawElement) {
         val indentSize = o.body.indentSize
-        if (indentSize == 0) return
-
-        val text = o.text
-        val offset = o.startOffset
-        for ((i, range) in o.lineRangesInText) {
-            if (i == 0 && !o.isFirst) continue
-            val from = range.startOffset
-            val spaces = text.countLeadingSpaces(from)
-            if (spaces < indentSize) {
-                val fromAbsolute = from + offset
-                error(
-                    o,
-                    "Heredoc line must have an indent greater than or equal to $indentSize",
-                    TextRange(fromAbsolute, fromAbsolute + spaces)
-                )
+        for (range in o.lineRangesWithWrongIndent()) {
+            if (fixIndentsFix == null) {
+                fixIndentsFix = CrystalFixHeredocIndentsAction(o.body)
             }
+            error(
+                o,
+                "Heredoc line must have an indent greater than or equal to $indentSize",
+                range
+            )?.withFix(fixIndentsFix)
         }
     }
 

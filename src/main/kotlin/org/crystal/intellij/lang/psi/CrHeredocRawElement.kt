@@ -45,3 +45,22 @@ class CrHeredocRawElement(
             }
         }
 }
+
+fun CrHeredocRawElement.lineRangesWithWrongIndent(): Sequence<TextRange> {
+    val indentSize = body.indentSize
+    if (indentSize == 0) return emptySequence()
+
+    return sequence {
+        val text = text
+        val offset = startOffset
+        for ((i, range) in lineRangesInText) {
+            if (i == 0 && !isFirst) continue
+            val from = range.startOffset
+            val spaces = text.countLeadingSpaces(from)
+            if (spaces < indentSize) {
+                val fromAbsolute = from + offset
+                yield(TextRange(fromAbsolute, fromAbsolute + spaces))
+            }
+        }
+    }
+}

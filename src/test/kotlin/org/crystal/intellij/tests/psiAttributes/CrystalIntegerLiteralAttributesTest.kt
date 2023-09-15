@@ -62,7 +62,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0b1_u8" hasValue null
 
         "0b100000000_i16" hasValue 256
-        "0b_1_0000_0000_i16" hasValue 256
+        "0b1_0000_0000_i16" hasValue 256
         "0b111111111111111_i16" hasValue 32767
         "0b1000000000000000_i16" hasValue null
         "0b1010101010101010_i16" hasValue null
@@ -72,7 +72,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0b1010101010101010_i16" hasValue null
 
         "0b100000000_u16" hasValue 256
-        "0b_1_0000_0000_u16" hasValue 256
+        "0b1_0000_0000_u16" hasValue 256
         "0b1111111111111111_u16" hasValue 65535
         "0b10000000000000000_u16" hasValue null
         "-0b1_u16" hasValue null
@@ -82,7 +82,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "0b1111111111111111111111111111111_i32" hasValue 2147483647
         "0b10000000000000000000000000000000_i32" hasValue null
         "0b10101010101010101010101010101010_i32" hasValue null
-        "-0b10000_0000_0000_0000_i32" hasValue 65535
+        "-0b10000_0000_0000_0000_i32" hasValue -65536
         "-0b10000000000000000000000000000000_i32" hasValue -2147483648
         "-0b10101010101010101010101010101010_i32" hasValue null
 
@@ -127,24 +127,21 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "0b111111111111111111111111111111111111111111111111111111111111111_i128" hasValue 
             9223372036854775807
         
-        "0b1000000000000000000000000000000000000000000000000000000000000000_i128" hasValue null
-        "0b1010101010101010101010101010101010101010101010101010101010101010_i128" hasValue null
+        "0b1000000000000000000000000000000000000000000000000000000000000000_i128" hasValue "9223372036854775808"
+        "0b1010101010101010101010101010101010101010101010101010101010101010_i128" hasValue "12297829382473034410"
         "-0b1_0000_0000_0000_0000_i128" hasValue -65536
-        "-0b1000000000000000000000000000000000000000000000000000000000000000_i128" hasValue 
-            "-9223372036854775808"
+        "-0b1000000000000000000000000000000000000000000000000000000000000000_i128" hasValue "-9223372036854775808"
         
-        "-0b1010101010101010101010101010101010101010101010101010101010101010_i128" hasValue null
+        "-0b1010101010101010101010101010101010101010101010101010101010101010_i128" hasValue "-12297829382473034410"
 
         "0b100000000_u128" hasValue 256
         "0b1_0000_0000_0000_0000_u128" hasValue 65536
-        "0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_u128" hasValue 
-            "18446744073709551615"
+        "0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111_u128" hasValue "18446744073709551615"
         
-        "0b1111111111111111111111111111111111111111111111111111111111111111_u128" hasValue 
-            "18446744073709551615"
+        "0b1111111111111111111111111111111111111111111111111111111111111111_u128" hasValue "18446744073709551615"
         
-        "0b10000000000000000000000000000000000000000000000000000000000000000_u128" hasValue null
-        "0b11111111111111111111111111111111111111111111111111111111111111111_u128" hasValue null
+        "0b10000000000000000000000000000000000000000000000000000000000000000_u128" hasValue "18446744073709551616"
+        "0b11111111111111111111111111111111111111111111111111111111111111111_u128" hasValue "36893488147419103231"
         "-0b1_u128" hasValue null
     }
 
@@ -157,7 +154,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0o32_i8" hasValue -26
         "-0o3_2_i8" hasValue -26
         "-0o200_i8" hasValue -128
-        "-0o252_i8" hasValue -128
+        "-0o252_i8" hasValue null
 
         "0o1_u8" hasValue 1
         "0o3_2_u8" hasValue 26
@@ -166,7 +163,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0o1_u8" hasValue null
 
         "0o400_i16" hasValue 256
-        "0o_4_0_0_i16" hasValue 256
+        "0o4_0_0_i16" hasValue 256
         "0o77777_i16" hasValue 32767
         "0o100000_i16" hasValue null
         "0o125252_i16" hasValue null
@@ -176,7 +173,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0o125252_i16" hasValue null
 
         "0o400_u16" hasValue 256
-        "0o_4_0_0_u16" hasValue 256
+        "0o4_0_0_u16" hasValue 256
         "0o177777_u16" hasValue 65535
         "0o200000_u16" hasValue null
         "-0o1_u16" hasValue null
@@ -217,18 +214,18 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "0o1_i128" hasValue 1
         "0o777_777_777_777_777_777_777_i128" hasValue 9223372036854775807
         "0o777777777777777777777_i128" hasValue 9223372036854775807
-        "0o1000000000000000000000_i128" hasValue null
-        "0o1252525252525252525252_i128" hasValue null
+        "0o1000000000000000000000_i128" hasValue "9223372036854775808"
+        "0o1252525252525252525252_i128" hasValue "12297829382473034410"
         "-0o20_00_00_i128" hasValue -65536
         "-0o1000000000000000000000_i128" hasValue "-9223372036854775808"
-        "-0o1252525252525252525252_i128" hasValue null
+        "-0o1252525252525252525252_i128" hasValue "-12297829382473034410"
 
         "0o400_u128" hasValue 256
         "0o200000_u128" hasValue 65536
         "0o1_777_777_777_777_777_777_777_u128" hasValue "18446744073709551615"
         "0o1777777777777777777777_u128" hasValue "18446744073709551615"
-        "0o2000000000000000000000_u128" hasValue null
-        "0o3777777777777777777777_u128" hasValue null
+        "0o2000000000000000000000_u128" hasValue "18446744073709551616"
+        "0o3777777777777777777777_u128" hasValue "36893488147419103231"
         "-0o1_u128" hasValue null
     }
 
@@ -301,18 +298,18 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "1_i128" hasValue 1
         "9_223_372_036_854_775_807_i128" hasValue 9223372036854775807
         "9223372036854775807_i128" hasValue 9223372036854775807
-        "9223372036854775808_i128" hasValue null
-        "9333333333333333333_i128" hasValue null
+        "9223372036854775808_i128" hasValue "9223372036854775808"
+        "9333333333333333333_i128" hasValue "9333333333333333333"
         "-10_000_i128" hasValue -10000
         "-9223372036854775808_i128" hasValue "-9223372036854775808"
-        "-9333333333333333333_i128" hasValue null
+        "-9333333333333333333_i128" hasValue "-9333333333333333333"
 
         "100_u128" hasValue 100
         "10_000_u128" hasValue 10000
         "18_446_744_073_709_551_615_u128" hasValue "18446744073709551615"
         "18446744073709551615_u128" hasValue "18446744073709551615"
-        "18446744073709551616_u128" hasValue null
-        "19000000000000000000_u128" hasValue null
+        "18446744073709551616_u128" hasValue "18446744073709551616"
+        "19000000000000000000_u128" hasValue "19000000000000000000"
         "-1_u128" hasValue null
     }
 
@@ -333,7 +330,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0x1_u8" hasValue null
 
         "0x100_i16" hasValue 256
-        "0x_1_0_0_i16" hasValue 256
+        "0x1_0_0_i16" hasValue 256
         "0x7FFF_i16" hasValue 32767
         "0x8000_i16" hasValue null
         "0xAAAA_i16" hasValue null
@@ -343,7 +340,7 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "-0xAAAA_i16" hasValue null
 
         "0x100_u16" hasValue 256
-        "0x_1_0_0_u16" hasValue 256
+        "0x1_0_0_u16" hasValue 256
         "0xFFFF_u16" hasValue 65535
         "0x10000_u16" hasValue null
         "-0x1_u16" hasValue null
@@ -384,18 +381,18 @@ class CrystalIntegerLiteralAttributesTest : CrystalPsiAttributeTest() {
         "0x1_i128" hasValue 1
         "0x7F_FF_FF_FF_FF_FF_FF_FF_i128" hasValue 9223372036854775807
         "0x7FFFFFFFFFFFFFFF_i128" hasValue 9223372036854775807
-        "0x8000000000000000_i128" hasValue null
-        "0xAAAAAAAAAAAAAAAA_i128" hasValue null
+        "0x8000000000000000_i128" hasValue "9223372036854775808"
+        "0xAAAAAAAAAAAAAAAA_i128" hasValue "12297829382473034410"
         "-0x10_000_i128" hasValue -65536
         "-0x8000000000000000_i128" hasValue "-9223372036854775808"
-        "-0xAAAAAAAAAAAAAAAA_i128" hasValue null
+        "-0xAAAAAAAAAAAAAAAA_i128" hasValue "-12297829382473034410"
 
         "0x100_u128" hasValue 256
         "0x10_000_u128" hasValue 65536
         "0xFF_FF_FF_FF_FF_FF_FF_FF_u128" hasValue "18446744073709551615"
         "0xFFFFFFFFFFFFFFFF_u128" hasValue "18446744073709551615"
-        "0x10000000000000000_u128" hasValue null
-        "0x11111111111111111_u128" hasValue null
+        "0x10000000000000000_u128" hasValue "18446744073709551616"
+        "0x11111111111111111_u128" hasValue "19676527011956855057"
         "-0x1_u128" hasValue null
     }
 }

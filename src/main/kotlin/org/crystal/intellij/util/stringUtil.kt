@@ -10,7 +10,7 @@ fun String.unquote(): String {
     return StringUtil.unquoteString(this)
 }
 
-fun String.countLeadingSpaces(offset: Int): Int {
+fun CharSequence.countLeadingSpaces(offset: Int): Int {
     var count = 0
     for (i in offset until length) {
         val ch = this[i]

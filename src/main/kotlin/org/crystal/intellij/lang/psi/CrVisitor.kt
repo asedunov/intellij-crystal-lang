@@ -41,7 +41,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitBooleanLiteralExpression(o: CrBooleanLiteralExpression) = visitExpression(o)
 
-    open fun visitBreakExpression(o: CrBreakExpression) = visitExpression(o)
+    open fun visitBreakExpression(o: CrBreakExpression) = visitVoidExpression(o)
 
     open fun visitCallExpression(o: CrCallExpression) = visitExpression(o)
 
@@ -193,7 +193,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitNamedTupleType(o: CrNamedTupleTypeElement) = visitType(o)
 
-    open fun visitNextExpression(o: CrNextExpression) = visitExpression(o)
+    open fun visitNextExpression(o: CrNextExpression) = visitVoidExpression(o)
 
     open fun visitNilableType(o: CrNilableTypeElement) = visitType(o)
 
@@ -245,7 +245,7 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitRespondsToExpression(o: CrRespondsToExpression) = visitExpression(o)
 
-    open fun visitReturnExpression(o: CrReturnExpression) = visitExpression(o)
+    open fun visitReturnExpression(o: CrReturnExpression) = visitVoidExpression(o)
 
     open fun visitSelectExpression(o: CrSelectExpression) = visitExpression(o)
 
@@ -324,6 +324,8 @@ open class CrVisitor : PsiElementVisitor() {
     open fun visitVariable(o: CrVariable) = visitDefinition(o)
 
     open fun visitVisibilityModifier(o: CrVisibilityModifier) = visitCrElement(o)
+
+    open fun visitVoidExpression(o: CrVoidExpression) = visitExpression(o)
 
     open fun visitWhenClause(o: CrWhenClause) = visitCrElement(o)
 

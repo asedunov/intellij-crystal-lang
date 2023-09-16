@@ -2,8 +2,12 @@ package org.crystal.intellij.ide.highlighter
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.util.containers.JBIterable
+import com.intellij.util.containers.MultiMap
 import org.crystal.intellij.ide.presentation.presentableKind
 import org.crystal.intellij.ide.presentation.shortDescription
+import org.crystal.intellij.lang.ast.cstNode
+import org.crystal.intellij.lang.ast.nodes.CstNode
+import org.crystal.intellij.lang.ast.render
 import org.crystal.intellij.lang.psi.*
 import org.crystal.intellij.lang.resolve.CrStdFqNames
 import org.crystal.intellij.lang.resolve.scopes.getTypeAs
@@ -346,6 +350,32 @@ class CrystalResolveCheckingVisitor(
         (lib.resolveSymbol() as? CrLibrarySym)?.annotations?.get(CrStdFqNames.CALL_CONVENTION)?.let { annotations ->
             if (annotations.firstOrNull() != o) {
                 error(o.path ?: o, "Call convention is already specified")
+            }
+        }
+    }
+
+    override fun visitCaseExpression(o: CrCaseExpression) {
+        super.visitCaseExpression(o)
+
+        checkDuplicateWhens(o)
+    }
+
+    private fun checkDuplicateWhens(o: CrCaseExpression) {
+        val conditionGroups = MultiMap<CstNode, CrExpression>()
+        for (whenClause in o.whenClauses) {
+            for (expression in whenClause.expressions) {
+                val expressionNode = expression.cstNode ?: return
+                conditionGroups.putValue(expressionNode, expression)
+            }
+        }
+        for (node in conditionGroups.keySet()) {
+            val group = conditionGroups[node]
+            if (group.size <= 1) continue
+            for (element in group) {
+                error(
+                    element,
+                    "Duplicate when condition '${node.render()}' in case"
+                )
             }
         }
     }

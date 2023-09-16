@@ -9,7 +9,4 @@ class CrIfExpression(node: ASTNode) : CrIfUnlessExpression(node) {
 
     val isElsif: Boolean
         get() = firstChild.elementType == CR_ELSIF
-
-    val condition: CrExpression?
-        get() = childOfType()
 }

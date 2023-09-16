@@ -351,6 +351,37 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitVoidExpression(o: CrVoidExpression) {
+        super.visitVoidExpression(o)
+
+        if (hasWrongContextForVoid(o)) {
+            error(
+                o.keyword,
+                "Void value expression is not allowed here"
+            )
+        }
+    }
+
+    private fun hasWrongContextForVoid(o: CrExpression): Boolean = when (val p = o.parent) {
+        is CrUnaryExpression -> true
+        is CrBinaryExpression -> true
+        is CrConditionalExpression -> true
+        is CrArrayLiteralExpression -> true
+        is CrTupleExpression -> true
+        is CrNamedTupleEntry -> true
+        is CrWhenClause -> true
+        is CrArgumentList -> true
+        is CrAssignmentExpression -> p.rhs == o
+        is CrExpressionWithReceiver -> p.receiver == o
+        is CrIfUnlessExpression -> p.condition == o
+        is CrSplatExpression -> hasWrongContextForVoid(p)
+        is CrVariable -> p.initializer == o
+        is CrLoopExpression -> p.condition == o
+        is CrHashEntry -> p.leftArgument == o
+        is CrCaseExpression -> p.condition == o
+        else -> false
+    }
+
     override fun visitAssignmentExpression(o: CrAssignmentExpression) {
         super.visitAssignmentExpression(o)
 

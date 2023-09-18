@@ -362,7 +362,7 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
-    private fun hasWrongContextForVoid(o: CrExpression): Boolean = when (val p = o.parent) {
+    private tailrec fun hasWrongContextForVoid(o: CrExpression): Boolean = when (val p = o.parent) {
         is CrUnaryExpression -> true
         is CrBinaryExpression -> true
         is CrConditionalExpression -> true

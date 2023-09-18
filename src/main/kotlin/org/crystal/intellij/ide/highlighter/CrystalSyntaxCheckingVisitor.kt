@@ -663,6 +663,19 @@ class CrystalSyntaxCheckingVisitor(
         }
     }
 
+    override fun visitSplatType(o: CrSplatTypeElement) {
+        super.visitSplatType(o)
+
+        if (hasWrongContextForSplatType(o)) {
+            error(o.splatElement, "Splat type is not allowed here")
+        }
+    }
+
+    private fun hasWrongContextForSplatType(o: CrTypeElement<*>): Boolean {
+        val p = o.parent
+        return !(p is CrTupleTypeElement || p is CrTypeArgumentList)
+    }
+
     override fun visitVariable(o: CrVariable) {
         super.visitVariable(o)
 

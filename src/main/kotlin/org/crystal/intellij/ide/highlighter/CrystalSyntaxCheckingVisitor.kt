@@ -413,11 +413,18 @@ class CrystalSyntaxCheckingVisitor(
         val parameters = o.parameterList?.elements ?: JBIterable.empty()
         val paramsByName = MultiMap<String, CrSimpleParameter>()
 
-        fun processParameterName(parameter: CrSimpleParameter) {
+        fun processSimpleParameterName(parameter: CrSimpleParameter) {
             errorIfInvalidName(parameter)
 
             if (parameter.nameElement?.kind == CrNameKind.IDENTIFIER) {
                 paramsByName.putValue(parameter.name, parameter)
+            }
+        }
+
+        fun processParameterName(parameter: CrParameter) {
+            when (parameter) {
+                is CrSimpleParameter -> processSimpleParameterName(parameter)
+                is CrMultiParameter -> parameter.elements.forEach(::processParameterName)
             }
         }
 
@@ -430,10 +437,7 @@ class CrystalSyntaxCheckingVisitor(
                 else splat = parameter
             }
 
-            when (parameter) {
-                is CrSimpleParameter -> processParameterName(parameter)
-                is CrMultiParameter -> parameter.elements.forEach(::processParameterName)
-            }
+            processParameterName(parameter)
         }
 
         for ((name, parameterGroup) in paramsByName.entrySet()) {

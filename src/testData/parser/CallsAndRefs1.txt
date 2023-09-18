@@ -2221,7 +2221,7 @@ FILE
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
             PsiElement(<identifier>)('a')
         PsiElement(CR_WHITESPACE)(' ')
-        PsiErrorElement:Expected: ',' or '|
+        PsiErrorElement:Expected: ',' or '|'
           PsiElement(<identifier>)('b')
         PsiElement(|)('|')
       PsiElement(CR_WHITESPACE)(' ')
@@ -2242,7 +2242,7 @@ FILE
             CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
               PsiElement(<identifier>)('a')
           PsiElement(CR_WHITESPACE)(' ')
-          PsiErrorElement:Expected: ',' or ')
+          PsiErrorElement:Expected: ',' or ')'
             PsiElement(<identifier>)('b')
           PsiElement())(')')
         PsiElement(|)('|')

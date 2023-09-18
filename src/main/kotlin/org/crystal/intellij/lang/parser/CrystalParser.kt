@@ -1821,7 +1821,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpaces()
 
                 scopes.withLexicalVarScope {
-                    parseOptBlockParamList()
+                    parseOptBlockParamList(CR_OR_OP, CR_OR_OP, CR_BLOCK_PARAMETER_LIST)
                     skipStatementEnd()
 
                     parseExpressions()
@@ -1833,9 +1833,13 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.parseOptBlockParamList() {
-            if (!at(CR_OR_OP)) return
-            composite(CR_BLOCK_PARAMETER_LIST) {
+        private fun PsiBuilder.parseOptBlockParamList(
+            startDelimiter: CrystalTokenType,
+            endDelimiter: CrystalTokenType,
+            nodeType: IElementType
+        ) {
+            if (!at(startDelimiter)) return
+            composite(nodeType) {
                 nextTokenSkipSpacesAndNewlines()
                 while (!eof()) {
                     val m = mark()
@@ -1875,36 +1879,41 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                         m.drop()
                     }
 
-                    val recovered = recoverUntil(if (hasParam) "',' or '|" else "<identifier>, '_' or '('") {
-                        at(CR_COMMA) || at(CR_OR_OP)
+                    val recovered = recoverUntil(if (hasParam) "',' or '${endDelimiter.name}'" else "<identifier>, '_' or '('") {
+                        at(CR_COMMA) || at(endDelimiter)
                     }
                     if (!(hasParam || recovered)) error("Expected: <identifier>, '_' or '('")
                     if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()
-                    if (at(CR_OR_OP)) break
+                    if (at(endDelimiter)) break
                 }
                 nextTokenSkipStatementEnd()
             }
         }
 
         private fun PsiBuilder.parseMultiParam() {
-            composite(CR_MULTI_PARAMETER_DEFINITION) {
-                nextTokenSkipSpacesAndNewlines()
+            if (ll <= CrystalLevel.CRYSTAL_1_9) {
+                composite(CR_MULTI_PARAMETER_DEFINITION) {
+                    nextTokenSkipSpacesAndNewlines()
 
-                while (!eof()) {
-                    val hasParam = at(CR_IDS) || at(CR_UNDERSCORE)
-                    if (hasParam) {
-                        scopes.pushVarName(lexer.tokenText)
-                        parseTokenAsParam()
+                    while (!eof()) {
+                        val hasParam = at(CR_IDS) || at(CR_UNDERSCORE)
+                        if (hasParam) {
+                            scopes.pushVarName(lexer.tokenText)
+                            parseTokenAsParam()
+                        }
+                        val recovered = recoverUntil(if (hasParam) "',' or ')" else "<identifier> or '_'") {
+                            at(CR_COMMA) || at(CR_RPAREN)
+                        }
+                        if (!(hasParam || recovered)) error("Expected: <identifier> or '_'")
+                        if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()
+                        if (at(CR_RPAREN)) break
                     }
-                    val recovered = recoverUntil(if (hasParam) "',' or ')" else "<identifier> or '_'") {
-                        at(CR_COMMA) || at(CR_RPAREN)
-                    }
-                    if (!(hasParam || recovered)) error("Expected: <identifier> or '_'")
-                    if (at(CR_COMMA)) nextTokenSkipSpacesAndNewlines()
-                    if (at(CR_RPAREN)) break
+                    tok(CR_RPAREN)
+                    skipSpacesAndNewlines()
                 }
-                tok(CR_RPAREN)
-                skipSpacesAndNewlines()
+            }
+            else {
+                parseOptBlockParamList(CR_LPAREN, CR_RPAREN, CR_MULTI_PARAMETER_DEFINITION)
             }
         }
 

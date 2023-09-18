@@ -135,7 +135,7 @@ class CrystalSyntaxCheckingVisitor(
     }
 
     override fun visitOctalEscapeElement(o: CrOctalEscapeElement) {
-        if (o.charValue > maxOctalCharCode) {
+        if (o.charValue > MAX_OCTAL_CHAR_CODE) {
             error(o, "Octal value may not exceed 377 (decimal 255)")
         }
     }
@@ -1143,7 +1143,7 @@ class CrystalSyntaxCheckingVisitor(
     }
 
     companion object {
-        private const val maxOctalCharCode = 255
+        private const val MAX_OCTAL_CHAR_CODE = 255
 
         private val nonOverloadableOperators = setOf(
             "&&",

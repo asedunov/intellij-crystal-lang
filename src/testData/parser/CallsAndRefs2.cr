@@ -366,3 +366,9 @@ previous_def(1, 2, 3)
 
 
 previous_def 1, 2, 3
+
+
+foo { |(a, (b, (c, d)))| }
+
+
+foo { |(a, *b, c)| }

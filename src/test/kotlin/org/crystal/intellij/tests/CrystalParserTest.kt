@@ -87,6 +87,9 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     fun testCallsAndRefs_1_1() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_1) {
         doTestSingleFileWithMultiFragments("\n\n\n")
     }
+    fun testCallsAndRefs_1_9() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_9) {
+        doTestSingleFileWithMultiFragments("\n\n\n")
+    }
     fun testCaseSelect() = doTestSingleFileWithMultiFragments()
     fun testCharLiterals() = doTestSingleFileWithMultiFragments()
     fun testControlExpressions() = doTestSingleFileWithMultiFragments()

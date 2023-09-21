@@ -15,6 +15,17 @@ import org.crystal.intellij.parser.builder.LazyPsiBuilder.StartMarker
 import java.util.*
 
 class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
+    companion object {
+        val invalidInternalNames = setOf(
+            "asm", "begin", "nil", "true", "false", "yield", "with", "abstract",
+            "def", "require", "case", "select", "if", "unless", "include",
+            "extend", "class", "struct", "macro", "module", "enum", "while", "until", "return",
+            "next", "break", "lib", "fun", "alias", "pointerof", "sizeof", "offsetof",
+            "instance_sizeof", "typeof", "private", "protected", "out",
+            "self", "in", "end"
+        )
+    }
+
     private class OpInfo(
         val opType: IElementType,
         val precedence: Int,
@@ -139,6 +150,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         private var insideCStruct = false
         private var isMacroDef = false
         private var inMacroExpression = false
+        private var tempArgCount = 0
 
         private tailrec fun PsiBuilder.asLazyBuilder(): LazyPsiBuilder {
             return if (this is PsiBuilderAdapter) delegate.asLazyBuilder() else this as LazyPsiBuilder
@@ -494,6 +506,10 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 error("Expected: $expected")
             }
             return true
+        }
+
+        private fun PsiBuilder.addSyntheticArg() {
+            mark().done(CrSyntheticArgElementType(tempArgCount++))
         }
 
         // Parsing rules
@@ -1613,6 +1629,8 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                 nextTokenSkipSpaces()
 
                 if (at(CR_DOT)) {
+                    addSyntheticArg()
+
                     val m = mark()
 
                     lexerState.wantsRegex = false
@@ -3302,6 +3320,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                             parseStringLiteral()
                             foundStringLiteral = true
                         }
+
                         else -> unexpected()
                     }
                 }
@@ -3313,24 +3332,27 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
 
             val hasInternalName = at(CR_IDS) || at(CR_INSTANCE_VAR) || at(CR_CLASS_VAR)
             when (tokenType) {
-                CR_INSTANCE_VAR -> if (inMacroDef) error("Can't use instance variable in macro")
-                CR_CLASS_VAR -> if (inMacroDef) error("Can't use class variable in macro")
+                CR_INSTANCE_VAR -> {
+                    if (inMacroDef) error("Can't use instance variable in macro")
+                    if (lexer.tokenText.substring(1) in invalidInternalNames) addSyntheticArg()
+                }
+                CR_CLASS_VAR -> {
+                    if (inMacroDef) error("Can't use class variable in macro")
+                    if (lexer.tokenText.substring(2) in invalidInternalNames) addSyntheticArg()
+                }
             }
             if (hasInternalName) {
                 doNextToken = true
-            }
-            else if (hasExternalName) {
+            } else if (hasExternalName) {
                 if (foundStringLiteral) error("Expected: parameter internal name")
-            }
-            else {
+            } else {
                 unexpected()
             }
 
             if (doNextToken) {
                 if (hasInternalName) {
                     composite(CR_SIMPLE_NAME_ELEMENT) { nextToken() }
-                }
-                else {
+                } else {
                     nextToken()
                 }
             }

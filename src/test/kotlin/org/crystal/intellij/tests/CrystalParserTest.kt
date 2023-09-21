@@ -7,6 +7,7 @@ import junit.framework.TestCase
 import org.crystal.intellij.lang.config.CrystalLevel
 import org.crystal.intellij.lang.config.CrystalProjectSettings
 import org.crystal.intellij.lang.lexer.*
+import org.crystal.intellij.lang.parser.CrystalParser
 import org.crystal.intellij.lang.parser.CrystalParserDefinition
 import org.crystal.intellij.tests.util.withLanguageLevel
 import java.io.File
@@ -352,8 +353,7 @@ class CrystalParserTest : ParsingTestCase("parser", "cr", CrystalParserDefinitio
     }
 
     fun testKeywordsInDefParamsWithAt() {
-        CR_KEYWORDS.types.forEach {
-            val kw = it.toString()
+        CrystalParser.invalidInternalNames.forEach { kw ->
             if (kw.endsWith("?")) return@forEach
             doCustomTest(
                 """

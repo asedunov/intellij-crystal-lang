@@ -1715,7 +1715,14 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                             compositeSuffix(CR_ASSIGNMENT_EXPRESSION) {
                                 nextTokenSkipSpaces()
                                 hasParens = at(CR_LPAREN)
-                                ensureParseAssignment()
+                                if (hasParens) {
+                                    nextTokenSkipSpacesAndNewlines()
+                                    ensureParseAssignment()
+                                    recoverUntil("')'", true) { at(CR_RPAREN) }
+                                    tok(CR_RPAREN)
+                                } else {
+                                    ensureParseAssignment()
+                                }
                             }
                             if (hasParens) {
                                 skipSpaces()

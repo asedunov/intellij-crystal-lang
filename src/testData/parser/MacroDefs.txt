@@ -756,8 +756,6 @@ FILE
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
         PsiErrorElement:Can't use instance variable in macro
           <empty list>
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@var')
       PsiElement())(')')
@@ -775,8 +773,6 @@ FILE
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
         PsiErrorElement:Can't use class variable in macro
-          <empty list>
-        PsiElement(<synthetic arg: 0>)
           <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<class variable>)('@@var')

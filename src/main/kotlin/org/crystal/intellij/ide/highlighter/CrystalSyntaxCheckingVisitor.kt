@@ -17,6 +17,7 @@ import org.crystal.intellij.lang.config.crystalSettings
 import org.crystal.intellij.lang.lexer.*
 import org.crystal.intellij.lang.parser.CR_PARENTHESIZED_ARGUMENT_LIST
 import org.crystal.intellij.lang.parser.CR_SYMBOL_EXPRESSION
+import org.crystal.intellij.lang.parser.CrystalParser
 import org.crystal.intellij.lang.psi.*
 
 class CrystalSyntaxCheckingVisitor(
@@ -1140,7 +1141,7 @@ class CrystalSyntaxCheckingVisitor(
         val nameElement = element.nameElement as? CrSimpleNameElement ?: return
         if (nameElement.kind == CrNameKind.IDENTIFIER) {
             val name = nameElement.name
-            if (name in invalidInternalNames) {
+            if (name in CrystalParser.invalidInternalNames) {
                 error(nameElement, "Cannot use '$name' as a ${element.presentableKind} name")
             }
         }
@@ -1169,15 +1170,6 @@ class CrystalSyntaxCheckingVisitor(
             "as?",
             "responds_to?",
             "nil?"
-        )
-
-        private val invalidInternalNames = setOf(
-            "asm", "begin", "nil", "true", "false", "yield", "with", "abstract",
-            "def", "require", "case", "select", "if", "unless", "include",
-            "extend", "class", "struct", "macro", "module", "enum", "while", "until", "return",
-            "next", "break", "lib", "fun", "alias", "pointerof", "sizeof", "offsetof",
-            "instance_sizeof", "typeof", "private", "protected", "asm", "out",
-            "self", "in", "end"
         )
 
         private val asmOptionsCommon = setOf(

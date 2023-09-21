@@ -526,6 +526,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 0>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -539,6 +541,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 1>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -551,6 +555,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 2>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -568,6 +574,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 3>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -585,6 +593,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 4>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -602,6 +612,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 5>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -619,6 +631,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 6>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrCallExpression(CR_CALL_EXPRESSION)
             PsiElement(.)('.')
@@ -635,6 +649,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 7>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrCallExpression(CR_CALL_EXPRESSION)
             PsiElement(.)('.')
@@ -652,6 +668,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 8>)
+          <empty list>
         CrIndexedExpression(CR_INDEXED_EXPRESSION)
           CrCallExpression(CR_CALL_EXPRESSION)
             PsiElement(.)('.')
@@ -670,6 +688,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 9>)
+          <empty list>
         CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
           CrCallExpression(CR_CALL_EXPRESSION)
             PsiElement(.)('.')
@@ -689,6 +709,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 10>)
+          <empty list>
         CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
           CrCallExpression(CR_CALL_EXPRESSION)
             PsiElement(.)('.')
@@ -707,6 +729,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 11>)
+          <empty list>
         CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
           CrIndexedExpression(CR_INDEXED_EXPRESSION)
             CrCallExpression(CR_CALL_EXPRESSION)
@@ -731,6 +755,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 12>)
+          <empty list>
         CrIndexedExpression(CR_INDEXED_EXPRESSION)
           PsiElement(.)('.')
           PsiElement([)('[')
@@ -746,6 +772,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 13>)
+          <empty list>
         CrAssignmentExpression(CR_ASSIGNMENT_EXPRESSION)
           CrIndexedExpression(CR_INDEXED_EXPRESSION)
             PsiElement(.)('.')
@@ -767,6 +795,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 14>)
+          <empty list>
         CrIsExpression(CR_IS_EXPRESSION)
           PsiElement(.)('.')
           PsiElement(is_a?)('is_a?')
@@ -784,6 +814,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 15>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -797,6 +829,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 16>)
+          <empty list>
         CrRespondsToExpression(CR_RESPONDS_TO_EXPRESSION)
           PsiElement(.)('.')
           PsiElement(responds_to?)('responds_to?')
@@ -814,6 +848,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 17>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -831,6 +867,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 18>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -848,6 +886,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 19>)
+          <empty list>
         CrReferenceExpression(CR_REFERENCE_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -860,6 +900,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 20>)
+          <empty list>
         CrAsExpression(CR_AS_EXPRESSION)
           PsiElement(.)('.')
           PsiElement(as)('as')
@@ -877,6 +919,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 21>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrAsExpression(CR_AS_EXPRESSION)
             PsiElement(.)('.')
@@ -898,6 +942,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 22>)
+          <empty list>
         CrAsExpression(CR_AS_EXPRESSION)
           PsiElement(.)('.')
           PsiElement(as)('as')
@@ -914,6 +960,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 23>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrAsExpression(CR_AS_EXPRESSION)
             PsiElement(.)('.')
@@ -934,6 +982,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 24>)
+          <empty list>
         CrAsExpression(CR_AS_EXPRESSION)
           PsiElement(.)('.')
           PsiElement(as?)('as?')
@@ -951,6 +1001,8 @@ FILE
       PsiElement(()('(')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 25>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrAsExpression(CR_AS_EXPRESSION)
             PsiElement(.)('.')
@@ -972,6 +1024,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 26>)
+          <empty list>
         CrAsExpression(CR_AS_EXPRESSION)
           PsiElement(.)('.')
           PsiElement(as?)('as?')
@@ -988,6 +1042,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 27>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrAsExpression(CR_AS_EXPRESSION)
             PsiElement(.)('.')
@@ -1009,6 +1065,8 @@ FILE
       PsiElement(CR_NEWLINE)('\n')
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 28>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
@@ -2520,6 +2578,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 0>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           CrCallExpression(CR_CALL_EXPRESSION)
             PsiElement(.)('.')
@@ -2572,6 +2632,8 @@ FILE
     CrArgumentList(CR_SPACED_ARGUMENT_LIST)
       CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
         PsiElement(&)('&')
+        PsiElement(<synthetic arg: 0>)
+          <empty list>
         CrCallExpression(CR_CALL_EXPRESSION)
           PsiElement(.)('.')
           CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)

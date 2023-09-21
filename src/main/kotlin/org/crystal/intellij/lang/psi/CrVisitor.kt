@@ -285,6 +285,8 @@ open class CrVisitor : PsiElementVisitor() {
 
     open fun visitSymbolExpression(o: CrSymbolExpression) = visitExpression(o)
 
+    open fun visitSyntheticArg(o: CrSyntheticArg) = visitCrElement(o)
+
     open fun visitThenClause(o: CrThenClause) = visitCrElement(o)
 
     open fun visitTupleExpression(o: CrTupleExpression) = visitExpression(o)

@@ -588,6 +588,8 @@ FILE
           PsiElement(()('(')
           CrShortBlockArgument(CR_SHORT_BLOCK_ARGUMENT)
             PsiElement(&)('&')
+            PsiElement(<synthetic arg: 0>)
+              <empty list>
             CrCallExpression(CR_CALL_EXPRESSION)
               PsiElement(.)('.')
               CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)

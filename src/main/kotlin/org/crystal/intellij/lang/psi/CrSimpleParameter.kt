@@ -27,8 +27,8 @@ class CrSimpleParameter :
             }
 
             val firstNameElement = childOfType<CrSimpleNameElement>()
-            val secondNameElement = firstNameElement?.skipWhitespacesAndCommentsForward()
-            return if (secondNameElement is CrSimpleNameElement) return firstNameElement else null
+            val secondNameElement = firstNameElement?.nextSiblingOfType<CrSimpleNameElement>()
+            return if (secondNameElement != null) firstNameElement else null
         }
 
     val externalName: String?

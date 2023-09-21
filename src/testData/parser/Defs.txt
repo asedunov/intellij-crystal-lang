@@ -913,8 +913,6 @@ FILE
     CrParameterList(CR_PARAMETER_LIST)
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@var')
       PsiElement())(')')
@@ -932,8 +930,6 @@ FILE
     CrParameterList(CR_PARAMETER_LIST)
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@var')
       PsiElement())(')')
@@ -954,8 +950,6 @@ FILE
     CrParameterList(CR_PARAMETER_LIST)
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@var')
         PsiElement(CR_WHITESPACE)(' ')
@@ -981,8 +975,6 @@ FILE
     CrParameterList(CR_PARAMETER_LIST)
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<class variable>)('@@var')
       PsiElement())(')')
@@ -1000,8 +992,6 @@ FILE
     CrParameterList(CR_PARAMETER_LIST)
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<class variable>)('@@var')
       PsiElement())(')')
@@ -1022,8 +1012,6 @@ FILE
     CrParameterList(CR_PARAMETER_LIST)
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<class variable>)('@@var')
         PsiElement(CR_WHITESPACE)(' ')
@@ -1050,8 +1038,6 @@ FILE
       PsiElement(()('(')
       CrSimpleParameter(CR_SIMPLE_PARAMETER_DEFINITION)
         PsiElement(&)('&')
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@block')
       PsiElement())(')')
@@ -1683,8 +1669,6 @@ FILE
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
         PsiElement(CR_WHITESPACE)(' ')
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@var')
       PsiElement())(')')
@@ -1705,8 +1689,6 @@ FILE
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
         PsiElement(CR_WHITESPACE)(' ')
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<class variable>)('@@var')
       PsiElement())(')')
@@ -1802,8 +1784,6 @@ FILE
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
         PsiElement(CR_WHITESPACE)(' ')
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<instance variable>)('@x')
       PsiElement())(')')
@@ -1827,8 +1807,6 @@ FILE
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<identifier>)('x')
         PsiElement(CR_WHITESPACE)(' ')
-        PsiElement(<synthetic arg: 0>)
-          <empty list>
         CrSimpleNameElement(CR_SIMPLE_NAME_ELEMENT)
           PsiElement(<class variable>)('@@x')
       PsiElement())(')')

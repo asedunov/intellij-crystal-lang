@@ -10,6 +10,7 @@ import com.intellij.openapi.vfs.ex.temp.TempFileSystem
 import com.intellij.util.xmlb.Converter
 import com.intellij.util.xmlb.annotations.Attribute
 import org.crystal.intellij.lang.psi.CrFile
+import org.crystal.intellij.util.isUnitTestMode
 import org.crystal.intellij.util.toPsi
 import org.jetbrains.annotations.TestOnly
 
@@ -21,7 +22,7 @@ class CrystalProjectSettings(
 ) : PersistentConfigBase<CrystalProjectSettings.State>(SERVICE_NAME) {
     data class State(
         @Attribute("languageLevel", converter = VersionConverter::class)
-        var languageVersion: CrystalVersion = CrystalVersion.LatestStable,
+        var languageVersion: CrystalVersion = DEFAULT_LANGUAGE_VERSION,
         var mainFilePath: String = "",
         var useFormatTool: Boolean = false,
         var runFormatToolOnSave: Boolean = false
@@ -79,3 +80,9 @@ class CrystalProjectSettings(
 
 val Project.crystalSettings: CrystalProjectSettings
     get() = getService(CrystalProjectSettings::class.java)
+
+private val DEFAULT_LANGUAGE_VERSION = if (isUnitTestMode) {
+    CrystalLevel.CRYSTAL_PREVIEW.asSpecificVersion()
+} else {
+    CrystalVersion.LatestStable
+}

@@ -49,7 +49,10 @@ sealed class CrystalVersion {
 
 fun CrystalLevel.asSpecificVersion() = CrystalVersion.Specific.of(this)
 
-fun findVersionOrLatest(version: String?): CrystalVersion {
-    return CrystalVersion.Specific.instances.firstOrNull { it.level.shortName == version }
-        ?: CrystalVersion.LatestStable
+fun findVersion(version: String?, default: CrystalVersion): CrystalVersion {
+    return CrystalVersion.Specific.instances.firstOrNull { it.level.shortName == version } ?: default
 }
+
+fun findVersionOrLatest(version: String?) = findVersion(version, CrystalVersion.LatestStable)
+
+fun findVersionOrPreview(version: String?) = findVersion(version, CrystalLevel.CRYSTAL_PREVIEW.asSpecificVersion())

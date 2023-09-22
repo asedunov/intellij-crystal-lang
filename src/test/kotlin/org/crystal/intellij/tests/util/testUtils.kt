@@ -5,10 +5,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture
-import org.crystal.intellij.lang.config.CrystalLevel
-import org.crystal.intellij.lang.config.asSpecificVersion
-import org.crystal.intellij.lang.config.crystalSettings
-import org.crystal.intellij.lang.config.findVersionOrLatest
+import org.crystal.intellij.lang.config.*
 import org.crystal.intellij.lang.psi.childrenOfType
 import java.io.File
 
@@ -68,7 +65,7 @@ fun String.findDirective(prefix: String): String? {
 
 fun CodeInsightTestFixture.setupLanguageVersion() {
     project.crystalSettings.update {
-        languageVersion = findVersionOrLatest(file.findDirective("# LANGUAGE_LEVEL: "))
+        languageVersion = findVersionOrPreview(file.findDirective("# LANGUAGE_LEVEL: "))
     }
 }
 

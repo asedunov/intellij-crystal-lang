@@ -9,10 +9,7 @@ import com.intellij.psi.util.elementType
 import com.intellij.psi.util.siblings
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.lang.lexer.CR_COMMA
-import org.crystal.intellij.lang.psi.CrArgumentList
-import org.crystal.intellij.lang.psi.CrBlockParameterList
-import org.crystal.intellij.lang.psi.CrParameterList
-import org.crystal.intellij.lang.psi.CrTypeParameterList
+import org.crystal.intellij.lang.psi.*
 
 class CrystalDropListElementAction(element: PsiElement) : LocalQuickFixAndIntentionActionOnPsiElement(element) {
     override fun getFamilyName() = CrystalBundle.message("intention.drop.list.element.family")
@@ -31,7 +28,8 @@ class CrystalDropListElementAction(element: PsiElement) : LocalQuickFixAndIntent
         if (!(parent is CrParameterList
                     || parent is CrBlockParameterList
                     || parent is CrTypeParameterList
-                    || parent is CrArgumentList)) {
+                    || parent is CrArgumentList
+                    || parent is CrMultiParameter)) {
             startElement.deleteWithLeadingSpaces()
             return
         }

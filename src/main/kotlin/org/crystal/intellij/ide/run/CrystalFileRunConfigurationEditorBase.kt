@@ -12,13 +12,13 @@ import com.intellij.ui.RawCommandLineEditor
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.Panel
 import com.intellij.ui.dsl.builder.panel
-import com.intellij.util.io.exists
-import com.intellij.util.io.isFile
 import org.crystal.intellij.CrystalBundle
 import org.crystal.intellij.util.textAsPath
 import java.nio.file.Path
 import javax.swing.JComponent
+import kotlin.io.path.exists
 import kotlin.io.path.extension
+import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
 
 abstract class CrystalFileRunConfigurationEditorBase<C : CrystalFileRunConfigurationBase> : SettingsEditor<C>() {
@@ -90,7 +90,7 @@ abstract class CrystalFileRunConfigurationEditorBase<C : CrystalFileRunConfigura
             override fun validateSelectedFiles(files: Array<VirtualFile>) {
                 if (files.isEmpty()) return
                 val path = StandardFileSystems.local().getNioPath(files.first()) ?: return
-                if (!(path.exists() && path.isFile() && path.extension == "cr")) {
+                if (!(path.exists() && path.isRegularFile() && path.extension == "cr")) {
                     throw Exception(CrystalBundle.message("settings.sdk.invalid.interpreter.name.0", path.name))
                 }
             }

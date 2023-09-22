@@ -12,19 +12,15 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.psi.PsiManager
-import com.intellij.util.io.isDirectory
-import com.intellij.util.io.isFile
+import org.crystal.intellij.ide.shards.yaml.model.findAllShardYamls
 import org.crystal.intellij.lang.config.crystalWorkspaceSettings
 import org.crystal.intellij.lang.psi.module
 import org.crystal.intellij.lang.resolve.crystalPathRoots
 import org.crystal.intellij.lang.sdk.CrystalLocalToolPeer
-import org.crystal.intellij.ide.shards.yaml.model.findAllShardYamls
 import org.crystal.intellij.util.*
 import org.jdom.Element
 import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.extension
-import kotlin.io.path.pathString
+import kotlin.io.path.*
 
 abstract class CrystalFileRunConfigurationBase(
     project: Project,
@@ -67,7 +63,7 @@ abstract class CrystalFileRunConfigurationBase(
         val file = targetFile
         when {
             file == null || !file.exists() -> throw RuntimeConfigurationError("Target file doesn't exist")
-            !(file.isFile() && file.extension == "cr") -> throw RuntimeConfigurationError("Target file is not valid")
+            !(file.isRegularFile() && file.extension == "cr") -> throw RuntimeConfigurationError("Target file is not valid")
         }
         val workingDirectory = workingDirectory
         when {

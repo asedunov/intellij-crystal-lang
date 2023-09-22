@@ -401,6 +401,52 @@ class CrystalSyntaxCheckingVisitor(
         checkIsWritable(lhs, o.operation)
     }
 
+    private inner class ParameterListChecker {
+        private val paramsByName = MultiMap<String, CrSimpleParameter>()
+
+        private fun processParameterName(parameter: CrSimpleParameter) {
+            errorIfInvalidName(parameter)
+
+            if (parameter.nameElement?.kind == CrNameKind.IDENTIFIER) {
+                paramsByName.putValue(parameter.name, parameter)
+            }
+        }
+
+        private fun processParameter(parameter: CrParameter) {
+            when (parameter) {
+                is CrSimpleParameter -> processParameterName(parameter)
+                is CrMultiParameter -> processParameterList(parameter)
+            }
+        }
+
+        private fun processParameterList(list: CrListElement<CrParameter>?) {
+            val parameters = list?.elements ?: JBIterable.empty()
+
+            val splatParameters = parameters.filter { it.kind == CrParameterKind.SPLAT }.toList()
+            if (splatParameters.size > 1) {
+                for (i in 1..splatParameters.lastIndex) {
+                    val parameter = splatParameters[i]
+                    error(parameter, "Splat parameter is already specified")
+                        ?.withFix(CrystalDropListElementAction(parameter))
+                }
+            }
+
+            for (parameter in parameters) {
+                processParameter(parameter)
+            }
+        }
+
+        fun check(list: CrListElement<CrParameter>?) {
+            processParameterList(list)
+
+            for ((name, parameterGroup) in paramsByName.entrySet()) {
+                if (parameterGroup.size > 1) {
+                    parameterGroup.forEach { error(it, "Duplicated parameter name: $name") }
+                }
+            }
+        }
+    }
+
     override fun visitBlockExpression(o: CrBlockExpression) {
         super.visitBlockExpression(o)
 
@@ -409,42 +455,7 @@ class CrystalSyntaxCheckingVisitor(
             error(o, "Setter method '[]=' cannot be called with a block")
         }
 
-        var splat: CrParameter? = null
-        val parameters = o.parameterList?.elements ?: JBIterable.empty()
-        val paramsByName = MultiMap<String, CrSimpleParameter>()
-
-        fun processSimpleParameterName(parameter: CrSimpleParameter) {
-            errorIfInvalidName(parameter)
-
-            if (parameter.nameElement?.kind == CrNameKind.IDENTIFIER) {
-                paramsByName.putValue(parameter.name, parameter)
-            }
-        }
-
-        fun processParameterName(parameter: CrParameter) {
-            when (parameter) {
-                is CrSimpleParameter -> processSimpleParameterName(parameter)
-                is CrMultiParameter -> parameter.elements.forEach(::processParameterName)
-            }
-        }
-
-        for (parameter in parameters) {
-            if (parameter.kind == CrParameterKind.SPLAT) {
-                if (splat != null) {
-                    error(parameter, "Splat parameter is already specified")
-                        ?.withFix(CrystalDropListElementAction(parameter))
-                }
-                else splat = parameter
-            }
-
-            processParameterName(parameter)
-        }
-
-        for ((name, parameterGroup) in paramsByName.entrySet()) {
-            if (parameterGroup.size > 1) {
-                parameterGroup.forEach { error(it, "Duplicated parameter name: $name") }
-            }
-        }
+        ParameterListChecker().check(o.parameterList)
     }
 
     override fun visitRequireExpression(o: CrRequireExpression) {

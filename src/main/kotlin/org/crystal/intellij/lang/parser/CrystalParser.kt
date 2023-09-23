@@ -150,7 +150,6 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         private var insideCStruct = false
         private var isMacroDef = false
         private var inMacroExpression = false
-        private var tempArgCount = 0
 
         private tailrec fun PsiBuilder.asLazyBuilder(): LazyPsiBuilder {
             return if (this is PsiBuilderAdapter) delegate.asLazyBuilder() else this as LazyPsiBuilder
@@ -509,7 +508,7 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
         }
 
         private fun PsiBuilder.addSyntheticArg() {
-            mark().done(CrSyntheticArgElementType(tempArgCount++))
+            mark().done(CrSyntheticArgElementType(tempArgNameCount++))
         }
 
         // Parsing rules

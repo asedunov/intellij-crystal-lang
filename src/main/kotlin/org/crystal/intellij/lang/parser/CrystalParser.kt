@@ -238,8 +238,6 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun tempArgName() = "__arg${tempArgNameCount++}"
-
         private inline fun <T> PsiBuilder.inTypeMode(body: PsiBuilder.() -> T): T {
             lexerState.typeMode = true
             try {
@@ -507,8 +505,8 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             return true
         }
 
-        private fun PsiBuilder.addSyntheticArg() {
-            mark().done(CrSyntheticArgElementType(tempArgNameCount++))
+        private fun PsiBuilder.addSyntheticArg(id: Int = tempArgNameCount++) {
+            mark().done(CrSyntheticArgElementType(id))
         }
 
         // Parsing rules
@@ -1856,8 +1854,9 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
                         }
 
                         at(CR_LPAREN) -> {
-                            argName = tempArgName()
-                            parseMultiParam()
+                            val id = tempArgNameCount++
+                            argName = "__arg$id"
+                            parseMultiParam(id)
                             true
                         }
 
@@ -1889,9 +1888,11 @@ class CrystalParser(private val ll: CrystalLevel) : PsiParser, LightPsiParser {
             }
         }
 
-        private fun PsiBuilder.parseMultiParam() {
+        private fun PsiBuilder.parseMultiParam(argId: Int) {
             if (ll <= CrystalLevel.CRYSTAL_1_9) {
                 composite(CR_MULTI_PARAMETER_DEFINITION) {
+                    addSyntheticArg(argId)
+
                     nextTokenSkipSpacesAndNewlines()
 
                     while (!eof()) {

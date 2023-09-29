@@ -1,8 +1,8 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstCall(
     val obj: CstNode?,
@@ -13,14 +13,16 @@ class CstCall(
     val namedArgs: List<CstNamedArgument> = emptyList(),
     val isGlobal: Boolean = false,
     val hasParentheses: Boolean = false,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     constructor(
         obj: CstNode?,
         name: String,
         arg: CstNode,
-        location: CstLocation? = null
-    ) : this(obj = obj, name = name, args = listOf(arg), location = location)
+        location: CstLocation? = null,
+        nameLocation: CstLocation? = null
+    ) : this(obj = obj, name = name, args = listOf(arg), location = location, nameLocation = nameLocation)
 
     fun copy(
         obj: CstNode? = this.obj,
@@ -31,8 +33,9 @@ class CstCall(
         namedArgs: List<CstNamedArgument> = this.namedArgs,
         isGlobal: Boolean = this.isGlobal,
         hasParentheses: Boolean = this.hasParentheses,
-        location: CstLocation? = this.location
-    ) = CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

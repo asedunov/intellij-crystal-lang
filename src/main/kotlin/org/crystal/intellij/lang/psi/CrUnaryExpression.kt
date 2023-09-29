@@ -8,7 +8,7 @@ import com.intellij.psi.util.elementType
 class CrUnaryExpression(node: ASTNode) : CrExpressionImpl(node) {
     override fun accept(visitor: CrVisitor) = visitor.visitUnaryExpression(this)
 
-    private val operator: PsiElement
+    val operator: PsiElement
         get() = firstChild
 
     val opSign: IElementType?

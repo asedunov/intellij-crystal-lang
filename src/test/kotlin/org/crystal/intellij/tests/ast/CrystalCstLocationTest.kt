@@ -15,6 +15,10 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         return sourceBetween(node.location!!)
     }
 
+    private fun String.nameSource(node: CstNode): String {
+        return sourceBetween(node.nameLocation!!)
+    }
+
     private fun assertEndLocationAndText(
         source: String,
         line: Int = 1,
@@ -46,6 +50,12 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         val loc = location!!
         TestCase.assertEquals(line, loc.endLine)
         TestCase.assertEquals(col, loc.endColumn)
+    }
+
+    private fun CstNode.assertNameStart(line: Int, col: Int) {
+        val loc = nameLocation!!
+        TestCase.assertEquals(line, loc.startLine)
+        TestCase.assertEquals(col, loc.startColumn)
     }
 
     private fun CstNode.assertNoEnd() {
@@ -389,5 +399,21 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
 
     fun testProtectedMethodLocInEnum() = assertNode<CstEnumDef>("enum X; protected def foo; end; end") { source ->
         TestCase.assertEquals("protected def foo; end", source.nodeSource(members.first()))
+    }
+
+    fun testPlusAssignLoc() = assertExpressions("a = 1; a += 2") {
+        expressions[1].assertNameStart(1, 10)
+    }
+
+    fun testPlusAssignLocInQualifiedCall() = assertExpressions("a = 1; a.x += 2") {
+        expressions[1].assertNameStart(1, 12)
+    }
+
+    fun testCallNameLoc() = assertNode<CstCall>("foo(bar)") { source ->
+        TestCase.assertEquals("foo", source.nameSource(this))
+    }
+
+    fun testCallNameLocInOpAssign() = assertNode<CstOpAssign>("@foo.bar += 1") { source ->
+        TestCase.assertEquals("bar", source.nameSource(target as CstCall))
     }
 }

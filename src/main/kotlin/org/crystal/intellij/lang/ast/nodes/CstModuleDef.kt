@@ -9,15 +9,17 @@ class CstModuleDef(
     val body: CstNode = CstNop,
     val typeVars: List<String> = emptyList(),
     val splatIndex: Int = -1,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: CstPath = this.name,
         body: CstNode = this.body,
         typeVars: List<String> = this.typeVars,
         splatIndex: Int = this.splatIndex,
-        location: CstLocation? = this.location
-    ) = CstModuleDef(name, body, typeVars, splatIndex, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstModuleDef(name, body, typeVars, splatIndex, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

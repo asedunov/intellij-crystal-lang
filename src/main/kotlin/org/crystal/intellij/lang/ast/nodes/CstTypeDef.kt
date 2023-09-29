@@ -7,13 +7,15 @@ import org.crystal.intellij.lang.ast.CstVisitor
 class CstTypeDef(
     val name: String,
     val typeSpec: CstNode,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: String = this.name,
         typeSpec: CstNode = this.typeSpec,
-        location: CstLocation? = this.location
-    ) = CstTypeDef(name, typeSpec, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstTypeDef(name, typeSpec, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

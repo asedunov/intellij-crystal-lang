@@ -17,7 +17,8 @@ class CstDef(
     val doubleSplat: CstArg? = null,
     val freeVars: List<String> = emptyList(),
     val isMacroDef: Boolean = false,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: String = this.name,
@@ -32,7 +33,8 @@ class CstDef(
         doubleSplat: CstArg? = this.doubleSplat,
         freeVars: List<String> = this.freeVars,
         isMacroDef: Boolean = this.isMacroDef,
-        location: CstLocation? = this.location
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
     ) = CstDef(
         name,
         args,
@@ -46,7 +48,8 @@ class CstDef(
         doubleSplat,
         freeVars,
         isMacroDef,
-        location
+        location,
+        nameLocation
     )
     
     override fun equals(other: Any?): Boolean {

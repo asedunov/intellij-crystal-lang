@@ -71,3 +71,5 @@ private fun <T> List<T>.binaryIndexOf(condition: (T) -> Boolean): Int {
 fun <T> List<T>.binaryFirstOrNull(condition: (T) -> Boolean): T? {
     return getOrNull(binaryIndexOf(condition))
 }
+
+inline fun <reified T> Any?.cast() = this as T

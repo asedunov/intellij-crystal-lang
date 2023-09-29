@@ -57,6 +57,14 @@ class CrPsi2AstConverter : CrVisitor() {
         )
     }
 
+    private fun cstCallNameLocation(e: PsiElement): CstLocation {
+        val startOffset = e.startOffset
+        val text = e.text
+        val length = if (text.endsWith('=') || text.endsWith('@')) text.length - 1 else text.length
+        val endOffset = startOffset + length
+        return CstLocation(startOffset, endOffset, e.containingFile)
+    }
+
     private fun cstLocation(from: CstNode, to: CstNode): CstLocation? {
         val fromLocation = from.location ?: return null
         val toLocation = to.location ?: return null
@@ -115,9 +123,11 @@ class CrPsi2AstConverter : CrVisitor() {
     private fun visitClassOrStruct(o: CrClassLikeDefinition<*, *>) {
         val superTypeClause = o.superTypeClause
         val typeParams = o.typeParameterList?.elements ?: JBIterable.empty()
+        val nameElement = o.nameElement
         result = CstClassDef(
             location = cstLocation(o),
-            name = o.nameElement?.cstNode as? CstPath ?: return,
+            nameLocation = nameElement?.let { cstLocation(it) },
+            name = nameElement?.cstNode as? CstPath ?: return,
             body = o.body?.cstNode ?: CstNop,
             superclass = if (superTypeClause != null) superTypeClause.cstNode ?: CstNop else null,
             typeVars = typeParams.mapNotNull { it.name },
@@ -141,9 +151,11 @@ class CrPsi2AstConverter : CrVisitor() {
 
     override fun visitModule(o: CrModule) {
         val typeParams = o.typeParameterList?.elements ?: JBIterable.empty()
+        val nameElement = o.nameElement
         result = CstModuleDef(
             location = cstLocation(o),
-            name = o.nameElement?.cstNode as? CstPath ?: return,
+            nameLocation = nameElement?.let { cstLocation(it) },
+            name = nameElement?.cstNode as? CstPath ?: return,
             body = o.body?.cstNode ?: CstNop,
             typeVars = typeParams.mapNotNull { it.name },
             splatIndex = typeParams.indexOf { it.isSplat }
@@ -186,18 +198,22 @@ class CrPsi2AstConverter : CrVisitor() {
     }
 
     override fun visitAnnotation(o: CrAnnotation) {
+        val nameElement = o.nameElement
         result = CstAnnotationDef(
             location = cstLocation(o),
-            name = o.nameElement?.cstNode as? CstPath ?: return
+            nameLocation = nameElement?.let { cstLocation(it) },
+            name = nameElement?.cstNode as? CstPath ?: return
         )
 
         super.visitAnnotation(o)
     }
 
     override fun visitLibrary(o: CrLibrary) {
+        val nameElement = o.nameElement
         result = CstLibDef(
             location = cstLocation(o),
-            name = o.nameElement?.cstNode as? CstPath ?: return,
+            nameLocation = nameElement?.let { cstLocation(it) },
+            name = nameElement?.cstNode as? CstPath ?: return,
             body = o.body?.cstNode ?: CstNop
         )
 
@@ -207,6 +223,7 @@ class CrPsi2AstConverter : CrVisitor() {
     override fun visitTypeDef(o: CrTypeDef) {
         result = CstTypeDef(
             location = cstLocation(o),
+            nameLocation = o.nameElement?.let { cstLocation(it) },
             name = o.name ?: "",
             typeSpec = o.type?.cstNode ?: CstNop
         )
@@ -259,6 +276,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val returnType = o.returnType
         result = CstDef(
             location = cstLocation(o),
+            nameLocation = o.nameElement?.let { cstLocation(it) },
             name = o.name ?: "",
             args = params
                 .filter { it.kind != CrParameterKind.BLOCK && it.kind != CrParameterKind.DOUBLE_SPLAT }
@@ -299,6 +317,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val bodyAst = o.body?.cstNode ?: CstNop
         result = CstMacro(
             location = cstLocation(o),
+            nameLocation = o.nameElement?.let { cstLocation(it) },
             name = o.name ?: "",
             args = params
                 .filter { it.kind != CrParameterKind.BLOCK && it.kind != CrParameterKind.DOUBLE_SPLAT }
@@ -578,6 +597,7 @@ class CrPsi2AstConverter : CrVisitor() {
             is CrystalComboAssignOpToken -> {
                 CstOpAssign(
                     location = loc,
+                    nameLocation = cstLocation(o.operation),
                     target = lhsAst,
                     op = opSign.baseOpToken.name,
                     value = rhsAst
@@ -630,6 +650,7 @@ class CrPsi2AstConverter : CrVisitor() {
             )
             else -> CstCall(
                 location = cstLocation(o),
+                nameLocation = cstCallNameLocation(o.operator),
                 obj = leftAst,
                 name = o.opName ?: "",
                 arg = rightAst
@@ -660,6 +681,7 @@ class CrPsi2AstConverter : CrVisitor() {
             )
             else -> CstCall(
                 location = cstLocation(o),
+                nameLocation = cstCallNameLocation(o.operator),
                 obj = argAst,
                 name = o.opName
             )
@@ -673,6 +695,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val callInfo = o.call
         result = CstCall(
             location = cstLocation(o),
+            nameLocation = cstCallNameLocation(o.operator),
             obj = transformReceiver(o),
             name = methodName,
             args = callInfo?.positionalArgs?.mapNotNull { it.cstNode } ?: emptyList(),
@@ -710,7 +733,8 @@ class CrPsi2AstConverter : CrVisitor() {
     override fun visitCallExpression(o: CrCallExpression) {
         val receiverAst = transformReceiver(o)
         val callInfo = o.call
-        val name = o.nameElement?.name ?: ""
+        val nameElement = o.nameElement ?: return
+        val name = nameElement.name ?: ""
         if (name == "!") {
             result = CstNot(
                 location = cstLocation(o),
@@ -722,6 +746,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val blockNode = o.blockArgument?.cstNode as? CstBlock
         result = CstCall(
             location = cstLocation(o),
+            nameLocation = cstCallNameLocation(nameElement),
             obj = receiverAst,
             name = name,
             args = callInfo?.positionalArgs?.mapNotNull { it.cstNode } ?: emptyList(),

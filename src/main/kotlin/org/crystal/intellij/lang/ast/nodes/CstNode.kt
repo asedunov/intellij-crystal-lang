@@ -6,6 +6,9 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 sealed class CstNode(val location: CstLocation?) {
+    open val nameLocation: CstLocation?
+        get() = null
+
     protected val strippedClassName: String
         get() = StringUtil.trimStart(javaClass.simpleName, "Cst")
 

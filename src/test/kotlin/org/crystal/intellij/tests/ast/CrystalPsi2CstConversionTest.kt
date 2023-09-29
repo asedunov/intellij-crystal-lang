@@ -1,33 +1,16 @@
 package org.crystal.intellij.tests.ast
 
 import com.intellij.openapi.util.text.StringUtil
-import com.intellij.testFramework.ParsingTestCase
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import junit.framework.TestCase
-import org.crystal.intellij.lang.ast.cstNode
 import org.crystal.intellij.lang.ast.nodes.*
 import org.crystal.intellij.lang.config.CrystalLevel
-import org.crystal.intellij.lang.config.CrystalProjectSettings
-import org.crystal.intellij.lang.parser.CrystalParserDefinition
-import org.crystal.intellij.lang.psi.CrFile
 import org.crystal.intellij.lang.psi.CrVisibility
-import org.crystal.intellij.lang.resolve.CrResolveFacade
 import org.crystal.intellij.tests.util.withLanguageLevel
 
-class CrystalPsi2CstConversionTest : ParsingTestCase("parser", "cr", CrystalParserDefinition()) {
-    override fun getTestDataPath() = ""
-
-    override fun setUp() {
-        super.setUp()
-
-        project.registerService(CrystalProjectSettings::class.java)
-        project.registerService(CrResolveFacade::class.java)
-    }
-
+class CrystalPsi2CstConversionTest : CrystalCstParsingTestBase() {
     private infix fun String.becomes(node: CstNode) {
-        myFile = createPsiFile("a", this)
-        ensureParsed(myFile)
-        TestCase.assertEquals(node, (myFile as CrFile).cstNode)
+        TestCase.assertEquals(node, convert(this))
     }
 
     fun testConversion() {

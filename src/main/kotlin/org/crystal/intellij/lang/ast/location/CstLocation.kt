@@ -16,8 +16,8 @@ data class CstLocation(
         get() = file.crColumnNumber(startOffset)
 
     val endLine: Int
-        get() = file.crLineNumber(endOffset)
+        get() = file.crLineNumber(endOffset - 1)
 
     val endColumn: Int
-        get() = file.crColumnNumber(endOffset)
+        get() = file.crColumnNumber(endOffset - 1)
 }

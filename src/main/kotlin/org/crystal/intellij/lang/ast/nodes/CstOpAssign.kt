@@ -8,14 +8,16 @@ class CstOpAssign(
     val target: CstNode,
     val op: String,
     val value: CstNode,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         target: CstNode = this.target,
         op: String = this.op,
         value: CstNode = this.value,
-        location: CstLocation? = this.location
-    ) = CstOpAssign(target, op, value, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation,
+    ) = CstOpAssign(target, op, value, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

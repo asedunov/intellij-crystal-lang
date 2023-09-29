@@ -11,7 +11,8 @@ class CstMacro(
     val doubleSplat: CstArg? = null,
     val blockArg: CstArg? = null,
     val splatIndex: Int = -1,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: String = this.name,
@@ -20,8 +21,9 @@ class CstMacro(
         doubleSplat: CstArg? = this.doubleSplat,
         blockArg: CstArg? = this.blockArg,
         splatIndex: Int = this.splatIndex,
-        location: CstLocation? = this.location
-    ) = CstMacro(name, args, body, doubleSplat, blockArg, splatIndex, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstMacro(name, args, body, doubleSplat, blockArg, splatIndex, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

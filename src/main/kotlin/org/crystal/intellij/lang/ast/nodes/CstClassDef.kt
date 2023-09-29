@@ -12,7 +12,8 @@ class CstClassDef(
     val isAbstract: Boolean = false,
     val isStruct: Boolean = false,
     val splatIndex: Int = -1,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: CstPath = this.name,
@@ -22,8 +23,9 @@ class CstClassDef(
         isAbstract: Boolean = this.isAbstract,
         isStruct: Boolean = this.isStruct,
         splatIndex: Int = this.splatIndex,
-        location: CstLocation? = this.location
-    ) = CstClassDef(name, body, superclass, typeVars, isAbstract, isStruct, splatIndex, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstClassDef(name, body, superclass, typeVars, isAbstract, isStruct, splatIndex, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

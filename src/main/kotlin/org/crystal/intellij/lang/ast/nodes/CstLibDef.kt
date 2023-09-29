@@ -1,19 +1,21 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstLibDef(
     val name: CstPath,
     val body: CstNode = CstNop,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: CstPath = this.name,
         body: CstNode = this.body,
-        location: CstLocation? = this.location
-    ) = CstLibDef(name, body, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstLibDef(name, body, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

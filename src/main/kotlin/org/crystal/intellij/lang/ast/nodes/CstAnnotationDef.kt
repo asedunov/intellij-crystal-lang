@@ -6,12 +6,14 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAnnotationDef(
     val name: CstPath,
-    location: CstLocation? = null
+    location: CstLocation? = null,
+    override val nameLocation: CstLocation? = null
 ) : CstNode(location) {
     fun copy(
         name: CstPath = this.name,
-        location: CstLocation? = this.location
-    ) = CstAnnotationDef(name, location)
+        location: CstLocation? = this.location,
+        nameLocation: CstLocation? = this.nameLocation
+    ) = CstAnnotationDef(name, location, nameLocation)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

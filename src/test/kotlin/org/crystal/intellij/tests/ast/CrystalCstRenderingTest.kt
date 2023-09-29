@@ -1,30 +1,14 @@
 package org.crystal.intellij.tests.ast
 
-import com.intellij.testFramework.ParsingTestCase
 import junit.framework.TestCase
-import org.crystal.intellij.lang.config.CrystalProjectSettings
-import org.crystal.intellij.lang.ast.nodes.*
-import org.crystal.intellij.lang.ast.cstNode
+import org.crystal.intellij.lang.ast.nodes.CstAssign
+import org.crystal.intellij.lang.ast.nodes.CstExpressions
+import org.crystal.intellij.lang.ast.nodes.CstNode
 import org.crystal.intellij.lang.ast.render
-import org.crystal.intellij.lang.parser.CrystalParserDefinition
-import org.crystal.intellij.lang.psi.CrFile
-import org.crystal.intellij.lang.resolve.CrResolveFacade
 
-class CrystalCstRenderingTest : ParsingTestCase("parser", "cr", CrystalParserDefinition()) {
-    override fun getTestDataPath() = ""
-
-    override fun setUp() {
-        super.setUp()
-
-        project.registerService(CrystalProjectSettings::class.java)
-        project.registerService(CrResolveFacade::class.java)
-    }
-
+class CrystalCstRenderingTest : CrystalCstParsingTestBase() {
     private fun String.check(expected: String = this) {
-        myFile = createPsiFile("a", this)
-        ensureParsed(myFile)
-        val node = (myFile as CrFile).cstNode!!
-        node.check(expected)
+        convert(this).check(expected)
     }
 
     private fun CstNode.check(expected: String) {

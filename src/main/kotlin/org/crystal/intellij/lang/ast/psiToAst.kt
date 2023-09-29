@@ -25,6 +25,23 @@ class CrPsi2AstConverter : CrVisitor() {
     var result: CstNode? = null
         private set
 
+    private fun cstLocation(e: CrIfExpression): CstLocation {
+        val effectiveEnd = if (e.isElsif) e.parent else e
+        return CstLocation(
+            e.startOffset,
+            effectiveEnd.endOffset,
+            e.containingFile
+        )
+    }
+
+    private fun cstLocation(e: CrRescueClause): CstLocation {
+        return CstLocation(
+            e.startOffset,
+            if (e.body?.firstChild == null) -1 else e.endOffset,
+            e.containingFile
+        )
+    }
+
     private fun cstLocation(e: PsiElement, skipVisibility: Boolean = true) = cstLocation(e, e, skipVisibility)
 
     private fun cstLocation(start: PsiElement, end: PsiElement, skipVisibility: Boolean = true): CstLocation {
@@ -527,11 +544,13 @@ class CrPsi2AstConverter : CrVisitor() {
         val lhs = o.lhs ?: return
         val lhsAst = lhs.cstNode ?: CstNop
 
+        val loc = cstLocation(o)
+
         if (lhs is CrListExpression || lhs is CrSplatExpression || rhs is CrListExpression) {
             val targets = lhsAst.unpackExpressions()
             val values = rhsAst.unpackExpressions()
             result = CstMultiAssign(
-                location = cstLocation(o),
+                location = loc,
                 targets = targets,
                 values = values
             )
@@ -542,13 +561,14 @@ class CrPsi2AstConverter : CrVisitor() {
             is CrystalSimpleAssignOpToken -> {
                 if (lhsAst is CstCall) {
                     lhsAst.copy(
+                        location = loc,
                         name = lhsAst.name + "=",
                         args = lhsAst.args + rhsAst
                     )
                 }
                 else {
                     CstAssign(
-                        location = cstLocation(o),
+                        location = loc,
                         target = lhsAst,
                         value = rhsAst
                     )
@@ -557,7 +577,7 @@ class CrPsi2AstConverter : CrVisitor() {
 
             is CrystalComboAssignOpToken -> {
                 CstOpAssign(
-                    location = cstLocation(o),
+                    location = loc,
                     target = lhsAst,
                     op = opSign.baseOpToken.name,
                     value = rhsAst
@@ -573,7 +593,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val varAst = assignment.lhs?.cstNode ?: CstNop
         val typeAst = o.type?.cstNode ?: CstNop
         result = CstUninitializedVar(
-            location = cstLocation(o),
+            location = cstLocation(assignment),
             variable = varAst,
             declaredType = typeAst
         )
@@ -1067,15 +1087,15 @@ class CrPsi2AstConverter : CrVisitor() {
         return astAsExpressions(JBIterable.from(bodyNodes), location = blockLoc)
     }
 
-    private fun transformBlock(o: CrBlockExpression): CstNode {
-        val parent = o.parent
-        val expressions = o.expressions
-        val blockLoc = cstLocation(o)
+    private fun CrBlockExpression.transformBlock(): CstNode {
+        val parent = parent
+        val expressions = expressions
+        val blockLoc = cstLocation(this)
         return when (parent) {
             is CrCallExpression -> {
-                val params = o.parameterList?.elements ?: JBIterable.empty()
+                val params = parameterList?.elements ?: JBIterable.empty()
                 val splatIndex = params.indexOf { it.kind == CrParameterKind.SPLAT }
-                val unpacks = if (o.languageLevel > CrystalLevel.CRYSTAL_1_9) {
+                val unpacks = if (languageLevel > CrystalLevel.CRYSTAL_1_9) {
                     buildBlockUnpacks(params)
                 } else {
                     Int2ObjectMaps.emptyMap()
@@ -1083,7 +1103,7 @@ class CrPsi2AstConverter : CrVisitor() {
                 CstBlock(
                     location = blockLoc,
                     args = params.mapNotNull(::transformBlockParam),
-                    body = transformCallBlockBody(o, blockLoc),
+                    body = transformCallBlockBody(this, blockLoc),
                     splatIndex = splatIndex,
                     unpacks = unpacks
                 )
@@ -1118,14 +1138,14 @@ class CrPsi2AstConverter : CrVisitor() {
                 CstExpressions.from(allNodes)
             }
 
-            else -> psiAsExpressions(expressions, o.isBeginEnd, if (o.isBeginEnd) CR_BEGIN else null, blockLoc)
+            else -> psiAsExpressions(expressions, isBeginEnd, if (isBeginEnd) CR_BEGIN else null, blockLoc)
         }
     }
 
     override fun visitBlockExpression(o: CrBlockExpression) {
         val exceptionHandler = o.exceptionHandler
         if (exceptionHandler == null) {
-            result = transformBlock(o)
+            result = o.transformBlock()
             return
         }
 
@@ -1159,7 +1179,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val bodyAst = o.argument.cstNode ?: CstNop
         val loc = cstLocation(o)
         val rescueAst = CstRescue(
-            location = loc,
+            location = loc.copy(startOffset = o.keyword.startOffset),
             body = o.body?.cstNode ?: CstNop
         )
         result = CstExceptionHandler(
@@ -1192,9 +1212,10 @@ class CrPsi2AstConverter : CrVisitor() {
     }
 
     override fun visitExceptionHandler(o: CrExceptionHandler) {
+        val block = o.block
         result = CstExceptionHandler(
-            location = cstLocation(o),
-            body = o.block?.let(::transformBlock)?.unpackIfSingle() ?: CstNop,
+            location = cstLocation(block ?: o),
+            body = block?.transformBlock()?.unpackIfSingle() ?: CstNop,
             rescues = o.rescueClauses.mapNotNull { it.cstNode as? CstRescue },
             elseBranch = o.elseClause?.cstNode,
             ensure = o.ensureClause?.cstNode
@@ -1758,14 +1779,14 @@ class CrPsi2AstConverter : CrVisitor() {
         super.visitUnderscoreType(o)
     }
 
-    private fun CstNode.nilableType(): CstNode {
+    private fun CstNode.nilableType(location: CstLocation): CstNode {
         return CstUnion(
             location = location,
             types = listOf(this, CstPath.global("Nil", location))
         )
     }
 
-    private fun CstNode.nilableTypeAsGeneric(): CstNode {
+    private fun CstNode.nilableTypeAsGeneric(location: CstLocation): CstNode {
         return CstGeneric(
             location = location,
             name = CstPath.global("Union", location),
@@ -1774,22 +1795,21 @@ class CrPsi2AstConverter : CrVisitor() {
     }
 
     override fun visitSelfType(o: CrSelfTypeElement) {
-        result = CstSelf(
-            location = cstLocation(o)
-        )
-        if (o.isNilable) result = result!!.nilableType()
+        val loc = cstLocation(o)
+        result = CstSelf(loc)
+        if (o.isNilable) result = result!!.nilableType(loc)
 
         super.visitSelfType(o)
     }
 
     override fun visitNilableType(o: CrNilableTypeElement) {
-        result = (o.innerType?.cstNode ?: CstNop).nilableType()
+        result = (o.innerType?.cstNode ?: CstNop).nilableType(cstLocation(o))
 
         super.visitNilableType(o)
     }
 
     override fun visitNilableExpression(o: CrNilableExpression) {
-        result = (o.argument?.cstNode ?: CstNop).nilableTypeAsGeneric()
+        result = (o.argument?.cstNode ?: CstNop).nilableTypeAsGeneric(cstLocation(o))
 
         super.visitNilableExpression(o)
     }

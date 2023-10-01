@@ -17,6 +17,9 @@ sealed class CstBoolLiteral(
     }
 
     companion object {
+        val FALSE = False()
+        val TRUE = True()
+
         fun of(
             value: Boolean,
             location: CstLocation? = null

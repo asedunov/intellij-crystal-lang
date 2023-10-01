@@ -25,7 +25,8 @@ class CrystalProjectSettings(
         var languageVersion: CrystalVersion = DEFAULT_LANGUAGE_VERSION,
         var mainFilePath: String = "",
         var useFormatTool: Boolean = false,
-        var runFormatToolOnSave: Boolean = false
+        var runFormatToolOnSave: Boolean = false,
+        val flags: MutableSet<String> = LinkedHashSet()
     )
 
     private class VersionConverter : Converter<CrystalVersion>() {
@@ -56,6 +57,10 @@ class CrystalProjectSettings(
     val languageVersion: CrystalVersion
         get() = protectedState.languageVersion
 
+    fun hasFlag(flag: String): Boolean {
+        return flag in protectedState.flags
+    }
+
     val mainFile: CrFile?
         get() {
             val path = protectedState.mainFilePath
@@ -75,6 +80,16 @@ class CrystalProjectSettings(
     @TestOnly
     fun setLanguageLevelSilently(version: CrystalVersion) {
         protectedState.languageVersion = version
+    }
+
+    @TestOnly
+    fun addFlagSilently(flag: String) {
+        protectedState.flags += flag
+    }
+
+    @TestOnly
+    fun removeFlagSilently(flag: String) {
+        protectedState.flags -= flag
     }
 }
 

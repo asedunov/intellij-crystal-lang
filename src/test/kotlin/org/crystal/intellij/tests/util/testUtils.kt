@@ -33,6 +33,22 @@ fun Project.withLanguageLevel(level: CrystalLevel, body: () -> Unit) {
     }
 }
 
+fun Project.withFlag(flag: String, body: () -> Unit) {
+    if (hasCrystalFlag(flag)) {
+        body()
+        return
+    }
+
+    val settings = crystalSettings
+    settings.addFlagSilently(flag)
+    try {
+        body()
+    }
+    finally {
+        settings.removeFlagSilently(flag)
+    }
+}
+
 fun PsiFile.hasDirective(directive: String): Boolean {
     for (comment in childrenOfType<PsiComment>()) {
         if (comment.text.trim() == directive) return true

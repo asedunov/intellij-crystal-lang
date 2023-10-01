@@ -7,6 +7,10 @@ import org.crystal.intellij.lang.ast.location.CstLocation
 class CstNilLiteral(
     location: CstLocation? = null,
 ) : CstNode<CstNilLiteral>(location), CstSimpleLiteral {
+    companion object {
+        val EMPTY = CstNilLiteral()
+    }
+
     override fun withLocation(location: CstLocation?) = CstNilLiteral(location)
 
     override fun equals(other: Any?) = this === other || javaClass == other?.javaClass

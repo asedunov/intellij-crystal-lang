@@ -4,10 +4,10 @@ import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 sealed class CstCastBase<T : CstCastBase<T>>(
-    val obj: CstNode<*>,
+    override val obj: CstNode<*>,
     val type: CstNode<*>,
     location: CstLocation? = null
-) : CstNode<T>(location) {
+) : CstNodeWithReceiver<T>(location) {
     abstract fun copy(
         obj: CstNode<*> = this.obj,
         type: CstNode<*> = this.type,
@@ -15,6 +15,8 @@ sealed class CstCastBase<T : CstCastBase<T>>(
     ): T
 
     override fun withLocation(location: CstLocation?) = copy(location = location)
+
+    override fun withReceiver(obj: CstNode<*>?) = copy(obj = obj ?: CstNop)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

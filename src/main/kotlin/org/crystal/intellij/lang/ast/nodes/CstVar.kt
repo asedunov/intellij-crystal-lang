@@ -37,4 +37,4 @@ class CstVar(
     override fun acceptTransformer(transformer: CstTransformer) = transformer.transformVar(this)
 }
 
-fun CrResolveCache.newTempVar() = CstVar(newTempVarName())
+fun CrResolveCache.newTempVar(location: CstLocation? = null) = CstVar(newTempVarName(), location)

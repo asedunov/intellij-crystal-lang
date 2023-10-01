@@ -9,7 +9,7 @@ import org.crystal.intellij.lang.resolve.cache.resolveCache
 class CstNormalizer(
     project: Project,
     private var currentDef: CstDef? = null
-) : CstTransformer() {
+) : CstRecursiveTransformerBase() {
     private val resolveCache = project.resolveCache
 
     private var deadCode = false

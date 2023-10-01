@@ -7,6 +7,10 @@ import org.crystal.intellij.lang.ast.location.CstLocation
 class CstUnderscore(
     location: CstLocation? = null,
 ) : CstNode<CstUnderscore>(location) {
+    companion object {
+        val EMPTY = CstUnderscore()
+    }
+
     override fun withLocation(location: CstLocation?) = CstUnderscore(location)
 
     override fun equals(other: Any?) = this === other || javaClass == other?.javaClass

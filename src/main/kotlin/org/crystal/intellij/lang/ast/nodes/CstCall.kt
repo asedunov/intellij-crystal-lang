@@ -5,7 +5,7 @@ import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstCall(
-    val obj: CstNode<*>?,
+    override val obj: CstNode<*>?,
     val name: String,
     val args: List<CstNode<*>> = emptyList(),
     val block: CstBlock? = null,
@@ -15,14 +15,30 @@ class CstCall(
     val hasParentheses: Boolean = false,
     location: CstLocation? = null,
     override val nameLocation: CstLocation? = null
-) : CstNode<CstCall>(location) {
+) : CstNodeWithReceiver<CstCall>(location) {
+    companion object {
+        fun global(
+            name: String,
+            arg: CstNode<*>,
+            location: CstLocation? = null
+        ) = CstCall(null, name, listOf(arg), isGlobal = true, location = location)
+    }
+
     constructor(
         obj: CstNode<*>?,
         name: String,
         arg: CstNode<*>,
+        isGlobal: Boolean = false,
         location: CstLocation? = null,
         nameLocation: CstLocation? = null
-    ) : this(obj = obj, name = name, args = listOf(arg), location = location, nameLocation = nameLocation)
+    ) : this(
+        obj = obj,
+        name = name,
+        args = listOf(arg),
+        isGlobal = isGlobal,
+        location = location,
+        nameLocation = nameLocation
+    )
 
     fun copy(
         obj: CstNode<*>? = this.obj,
@@ -38,6 +54,8 @@ class CstCall(
     ) = CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location, nameLocation)
 
     override fun withLocation(location: CstLocation?) = copy(location = location)
+
+    override fun withReceiver(obj: CstNode<*>?) = copy(obj = obj)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

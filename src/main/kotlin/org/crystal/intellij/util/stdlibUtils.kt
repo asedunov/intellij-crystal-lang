@@ -73,3 +73,17 @@ fun <T> List<T>.binaryFirstOrNull(condition: (T) -> Boolean): T? {
 }
 
 inline fun <reified T> Any?.cast() = this as T
+
+private fun List<*>.kickIndex(index: Int): Int = if (index >= 0) index else index + size
+
+// Supports both positive and negative indices in a way similar to Crystal `Indexable` module
+fun <T> List<T>.crGet(index: Int): T {
+    return get(kickIndex(index))
+}
+
+// Supports both positive and negative indices in a way similar to Crystal `Array` class
+fun <T> List<T>.crGet(range: IntRange): List<T> {
+    val start = kickIndex(range.first)
+    val end = kickIndex(range.last)
+    return subList(start, end + 1)
+}

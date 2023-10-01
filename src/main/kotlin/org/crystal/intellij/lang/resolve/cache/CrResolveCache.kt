@@ -32,15 +32,22 @@ class CrResolveCache(project: Project) : Disposable {
     }
 
     private val tempVariableCount = AtomicInteger()
+    private val regexConstCount = AtomicInteger()
 
     private fun clearCache() {
         caches.clearUserData()
         tempVariableCount.set(0)
+        regexConstCount.set(0)
     }
 
     fun newTempVarName(): String {
         val id = tempVariableCount.incrementAndGet()
         return "__temp_$id"
+    }
+
+    fun newRegexConstName(): String {
+        val id = regexConstCount.incrementAndGet()
+        return "\$Regex:$id"
     }
 
     init {

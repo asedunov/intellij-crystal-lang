@@ -1,21 +1,23 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstIsA(
-    val receiver: CstNode<*>,
+    override val obj: CstNode<*>,
     val arg: CstNode<*>,
     val isNilCheck: Boolean = false,
     location: CstLocation? = null
-) : CstNode<CstIsA>(location) {
+) : CstNodeWithReceiver<CstIsA>(location) {
     fun copy(
-        receiver: CstNode<*> = this.receiver,
+        obj: CstNode<*> = this.obj,
         arg: CstNode<*> = this.arg,
         isNilCheck: Boolean = this.isNilCheck,
         location: CstLocation? = this.location
-    ) = CstIsA(receiver, arg, isNilCheck, location)
+    ) = CstIsA(obj, arg, isNilCheck, location)
+
+    override fun withReceiver(obj: CstNode<*>?) = copy(obj = obj ?: CstNop)
 
     override fun withLocation(location: CstLocation?) = copy(location = location)
 
@@ -25,7 +27,7 @@ class CstIsA(
 
         other as CstIsA
 
-        if (receiver != other.receiver) return false
+        if (obj != other.obj) return false
         if (arg != other.arg) return false
         if (isNilCheck != other.isNilCheck) return false
 
@@ -33,7 +35,7 @@ class CstIsA(
     }
 
     override fun hashCode(): Int {
-        var result = receiver.hashCode()
+        var result = obj.hashCode()
         result = 31 * result + arg.hashCode()
         result = 31 * result + isNilCheck.hashCode()
         return result
@@ -41,7 +43,7 @@ class CstIsA(
 
     override fun toString() = buildString {
         append("IsA(")
-        append("receiver=$receiver")
+        append("receiver=$obj")
         append(", arg=$arg")
         if (isNilCheck) append(", isNilCheck")
         append(")")
@@ -50,7 +52,7 @@ class CstIsA(
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitIsA(this)
 
     override fun acceptChildren(visitor: CstVisitor) {
-        receiver.accept(visitor)
+        obj.accept(visitor)
         arg.accept(visitor)
     }
 

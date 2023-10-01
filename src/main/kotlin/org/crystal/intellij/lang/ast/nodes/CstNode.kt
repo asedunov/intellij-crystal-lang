@@ -26,3 +26,9 @@ sealed class CstNode<T : CstNode<T>>(val location: CstLocation?) {
 
     abstract fun acceptTransformer(transformer: CstTransformer): CstNode<*>
 }
+
+private val CstNode<*>.singleExpressionOrNull: CstNode<*>?
+    get() = (this as? CstExpressions)?.expressions?.singleOrNull()?.singleExpression
+
+val CstNode<*>.singleExpression: CstNode<*>
+    get() = singleExpressionOrNull ?: this

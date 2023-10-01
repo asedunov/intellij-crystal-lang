@@ -177,6 +177,8 @@ open class CstVisitor {
 
     open fun visitUnless(o: CstUnless) = true
 
+    open fun visitUnreachable(o: CstUnreachable) = true
+
     open fun visitUntil(o: CstUntil) = true
 
     open fun visitVar(o: CstVar) = true

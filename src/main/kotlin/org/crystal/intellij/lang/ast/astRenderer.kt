@@ -1416,7 +1416,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
     }
 
     override fun visitIsA(o: CstIsA): Boolean {
-        o.receiver.accept(this)
+        o.obj.accept(this)
         if (o.isNilCheck) {
             sb.append(".nil?")
         }
@@ -1452,7 +1452,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
     }
 
     override fun visitRespondsTo(o: CstRespondsTo): Boolean {
-        o.receiver.accept(this)
+        o.obj.accept(this)
         sb.append(".responds_to?(")
         o.name.crSymbol.specTo(sb)
         sb.append(')')
@@ -1664,6 +1664,12 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         sb.append('(')
         o.exp.accept(this)
         sb.append(')')
+
+        return false
+    }
+
+    override fun visitUnreachable(o: CstUnreachable): Boolean {
+        sb.append("raise \"unreachable\"")
 
         return false
     }

@@ -789,7 +789,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val loc = cstLocation(o)
         result = CstIsA(
             location = loc,
-            receiver = transformReceiver(o) { CstVar("self", loc) } ?: CstNop,
+            obj = transformReceiver(o) { CstVar("self", loc) } ?: CstNop,
             arg = o.typeElement?.cstNode ?: CstNop
         )
 
@@ -800,7 +800,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val loc = cstLocation(o)
         result = CstIsA(
             location = loc,
-            receiver = transformReceiver(o) { CstVar("self", loc) } ?: CstNop,
+            obj = transformReceiver(o) { CstVar("self", loc) } ?: CstNop,
             arg = CstPath(
                 names = listOf("Nil"),
                 isGlobal = true
@@ -815,7 +815,7 @@ class CrPsi2AstConverter : CrVisitor() {
         val loc = cstLocation(o)
         result = CstRespondsTo(
             location = loc,
-            receiver = transformReceiver(o) { CstVar("self", loc) } ?: CstNop,
+            obj = transformReceiver(o) { CstVar("self", loc) } ?: CstNop,
             name = o.symbol?.name ?: ""
         )
 

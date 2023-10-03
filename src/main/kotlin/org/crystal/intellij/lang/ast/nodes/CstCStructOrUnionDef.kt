@@ -6,16 +6,18 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCStructOrUnionDef(
     val name: String,
-    val body: CstNode = CstNop,
+    val body: CstNode<*> = CstNop,
     val isUnion: Boolean = false,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstCStructOrUnionDef>(location) {
     fun copy(
         name: String = this.name,
-        body: CstNode = this.body,
+        body: CstNode<*> = this.body,
         isUnion: Boolean = this.isUnion,
         location: CstLocation? = this.location
     ) = CstCStructOrUnionDef(name, body, isUnion, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

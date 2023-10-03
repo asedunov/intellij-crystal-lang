@@ -8,7 +8,7 @@ import org.crystal.intellij.lang.ast.normalize
 import org.crystal.intellij.util.cast
 
 class CrystalAstNormalizerTest : CrystalCstParsingTestBase() {
-    private fun CstNode.normalize() = normalize(project)
+    private fun CstNode<*>.normalize() = normalize(project)
 
     private infix fun String.becomes(expected: String) {
         convert(this).normalize().assertRenderTrimmed(expected)

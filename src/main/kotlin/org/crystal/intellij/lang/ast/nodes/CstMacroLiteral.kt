@@ -7,7 +7,14 @@ import org.crystal.intellij.lang.ast.CstVisitor
 class CstMacroLiteral(
     val value: String,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstMacroLiteral>(location) {
+    fun copy(
+        value: String = this.value,
+        location: CstLocation? = this.location
+    ) = CstMacroLiteral(value, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

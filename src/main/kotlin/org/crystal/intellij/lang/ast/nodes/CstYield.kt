@@ -5,21 +5,23 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstYield(
-    val expressions: List<CstNode> = emptyList(),
-    val scope: CstNode? = null,
+    val expressions: List<CstNode<*>> = emptyList(),
+    val scope: CstNode<*>? = null,
     val hasParentheses: Boolean = false,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstYield>(location) {
     companion object {
         val EMPTY = CstYield()
     }
 
     fun copy(
-        expressions: List<CstNode> = this.expressions,
-        scope: CstNode? = this.scope,
+        expressions: List<CstNode<*>> = this.expressions,
+        scope: CstNode<*>? = this.scope,
         hasParentheses: Boolean = this.hasParentheses,
         location: CstLocation? = this.location
     ) = CstYield(expressions, scope, hasParentheses, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

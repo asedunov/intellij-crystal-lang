@@ -1,23 +1,25 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstCase(
-    val condition: CstNode?,
+    val condition: CstNode<*>?,
     val whenBranches: List<CstWhen>,
-    val elseBranch: CstNode?,
+    val elseBranch: CstNode<*>?,
     val isExhaustive: Boolean,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstCase>(location) {
     fun copy(
-        condition: CstNode? = this.condition,
+        condition: CstNode<*>? = this.condition,
         whenBranches: List<CstWhen> = this.whenBranches,
-        elseBranch: CstNode? = this.elseBranch,
+        elseBranch: CstNode<*>? = this.elseBranch,
         isExhaustive: Boolean = this.isExhaustive,
         location: CstLocation? = this.location
     ) = CstCase(condition, whenBranches, elseBranch, isExhaustive, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

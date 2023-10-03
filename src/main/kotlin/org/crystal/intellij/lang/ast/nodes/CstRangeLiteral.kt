@@ -1,21 +1,23 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstRangeLiteral(
-    val from: CstNode,
-    val to: CstNode,
+    val from: CstNode<*>,
+    val to: CstNode<*>,
     val isExclusive: Boolean,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstRangeLiteral>(location) {
     fun copy(
-        from: CstNode = this.from,
-        to: CstNode = this.to,
+        from: CstNode<*> = this.from,
+        to: CstNode<*> = this.to,
         isExclusive: Boolean = this.isExclusive,
         location: CstLocation? = this.location
     ) = CstRangeLiteral(from, to, isExclusive, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

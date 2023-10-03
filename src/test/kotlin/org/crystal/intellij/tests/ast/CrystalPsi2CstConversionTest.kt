@@ -9,7 +9,7 @@ import org.crystal.intellij.lang.psi.CrVisibility
 import org.crystal.intellij.tests.util.withLanguageLevel
 
 class CrystalPsi2CstConversionTest : CrystalCstParsingTestBase() {
-    private infix fun String.becomes(node: CstNode) {
+    private infix fun String.becomes(node: CstNode<*>) {
         TestCase.assertEquals(node, convert(this))
     }
 
@@ -1862,7 +1862,7 @@ class CrystalPsi2CstConversionTest : CrystalCstParsingTestBase() {
         "{{ 1 // 2 }}" becomes CstMacroExpression(CstCall(1.int32, "//", 2.int32))
         "{{ //.options }}" becomes CstMacroExpression(CstCall("".regex, "options"))
 
-        "[] of Int" becomes listOf<CstNode>().arrayOf("Int".path)
+        "[] of Int" becomes listOf<CstNode<*>>().arrayOf("Int".path)
         "[1, 2] of Int" becomes listOf(1.int32, 2.int32).arrayOf("Int".path)
 
         "::A::B" becomes CstPath.global(listOf("A", "B"))
@@ -3933,7 +3933,7 @@ class CrystalPsi2CstConversionTest : CrystalCstParsingTestBase() {
         "%w{one  two}" becomes listOf("one".string, "two".string).arrayOf("String".globalPath)
         "%w{one\ntwo}" becomes listOf("one".string, "two".string).arrayOf("String".globalPath)
         "%w{one\ttwo}" becomes listOf("one".string, "two".string).arrayOf("String".globalPath)
-        "%w{\n}" becomes emptyList<CstNode>().arrayOf("String".globalPath)
+        "%w{\n}" becomes emptyList<CstNode<*>>().arrayOf("String".globalPath)
         "%w{one\\ two}" becomes listOf("one two".string).arrayOf("String".globalPath)
         "%w{one{} two}" becomes listOf("one{}".string, "two".string).arrayOf("String".globalPath)
         "%w{\\{one}" becomes listOf("{one".string).arrayOf("String".globalPath)

@@ -7,7 +7,14 @@ import org.crystal.intellij.lang.ast.CstVisitor
 class CstRequire(
     val path: String,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstRequire>(location) {
+    fun copy(
+        path: String = this.path,
+        location: CstLocation? = this.location
+    ) = CstRequire(path, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

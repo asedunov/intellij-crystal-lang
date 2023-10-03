@@ -1,19 +1,21 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstReadInstanceVar(
-    val receiver: CstNode,
+    val receiver: CstNode<*>,
     val name: String,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstReadInstanceVar>(location) {
     fun copy(
-        receiver: CstNode = this.receiver,
+        receiver: CstNode<*> = this.receiver,
         name: String = this.name,
         location: CstLocation? = this.location
     ) = CstReadInstanceVar(receiver, name, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

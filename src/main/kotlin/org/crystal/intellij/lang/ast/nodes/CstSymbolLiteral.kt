@@ -9,7 +9,14 @@ import org.crystal.intellij.util.crystal.crSymbol
 class CstSymbolLiteral(
     val value: String,
     location: CstLocation? = null
-) : CstNode(location), CstSimpleLiteral {
+) : CstNode<CstSymbolLiteral>(location), CstSimpleLiteral {
+    fun copy(
+        value: String = this.value,
+        location: CstLocation? = this.location
+    ) = CstSymbolLiteral(value, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

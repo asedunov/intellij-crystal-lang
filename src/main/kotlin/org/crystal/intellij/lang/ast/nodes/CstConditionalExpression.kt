@@ -3,17 +3,17 @@ package org.crystal.intellij.lang.ast.nodes
 import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
-sealed class CstConditionalExpression(
-    val condition: CstNode,
-    val thenBranch: CstNode = CstNop,
-    val elseBranch: CstNode = CstNop,
+sealed class CstConditionalExpression<T : CstConditionalExpression<T>>(
+    val condition: CstNode<*>,
+    val thenBranch: CstNode<*> = CstNop,
+    val elseBranch: CstNode<*> = CstNop,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<T>(location) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CstConditionalExpression
+        other as CstConditionalExpression<*>
 
         if (condition != other.condition) return false
         if (thenBranch != other.thenBranch) return false

@@ -6,20 +6,22 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstModuleDef(
     val name: CstPath,
-    val body: CstNode = CstNop,
+    val body: CstNode<*> = CstNop,
     val typeVars: List<String> = emptyList(),
     val splatIndex: Int = -1,
     location: CstLocation? = null,
     override val nameLocation: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstModuleDef>(location) {
     fun copy(
         name: CstPath = this.name,
-        body: CstNode = this.body,
+        body: CstNode<*> = this.body,
         typeVars: List<String> = this.typeVars,
         splatIndex: Int = this.splatIndex,
         location: CstLocation? = this.location,
         nameLocation: CstLocation? = this.nameLocation
     ) = CstModuleDef(name, body, typeVars, splatIndex, location, nameLocation)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

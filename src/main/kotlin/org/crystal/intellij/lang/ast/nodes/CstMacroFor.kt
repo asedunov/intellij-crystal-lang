@@ -6,16 +6,18 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMacroFor(
     val vars: List<CstVar>,
-    val exp: CstNode,
-    val body: CstNode,
+    val exp: CstNode<*>,
+    val body: CstNode<*>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstMacroFor>(location) {
     fun copy(
         vars: List<CstVar> = this.vars,
-        exp: CstNode = this.exp,
-        body: CstNode = this.body,
+        exp: CstNode<*> = this.exp,
+        body: CstNode<*> = this.body,
         location: CstLocation? = this.location
     ) = CstMacroFor(vars, exp, body, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

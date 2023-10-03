@@ -5,13 +5,15 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMetaclass(
-    val name: CstNode,
+    val name: CstNode<*>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstMetaclass>(location) {
     fun copy(
-        name: CstNode = this.name,
+        name: CstNode<*> = this.name,
         location: CstLocation? = this.location
     ) = CstMetaclass(name, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

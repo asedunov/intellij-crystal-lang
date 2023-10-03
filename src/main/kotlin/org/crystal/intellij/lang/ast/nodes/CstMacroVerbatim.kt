@@ -1,16 +1,16 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstMacroVerbatim(
-    expression: CstNode,
+    expression: CstNode<*>,
     location: CstLocation? = null
-) : CstUnaryExpression(expression, location) {
-    fun copy(
-        expression: CstNode = this.expression,
-        location: CstLocation? = this.location
+) : CstUnaryExpression<CstMacroVerbatim>(expression, location) {
+    override fun copy(
+        expression: CstNode<*>,
+        location: CstLocation?
     ) = CstMacroVerbatim(expression, location)
     
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitMacroVerbatim(this)

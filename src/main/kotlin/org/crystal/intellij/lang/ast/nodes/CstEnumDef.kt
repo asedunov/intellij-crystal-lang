@@ -1,21 +1,23 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstEnumDef(
     val name: CstPath,
-    val members: List<CstNode> = emptyList(),
-    val baseType: CstNode? = null,
+    val members: List<CstNode<*>> = emptyList(),
+    val baseType: CstNode<*>? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstEnumDef>(location) {
     fun copy(
         name: CstPath = this.name,
-        members: List<CstNode> = this.members,
-        baseType: CstNode? = this.baseType,
+        members: List<CstNode<*>> = this.members,
+        baseType: CstNode<*>? = this.baseType,
         location: CstLocation? = this.location
     ) = CstEnumDef(name, members, baseType, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -5,12 +5,12 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstNot(
-    expression: CstNode,
+    expression: CstNode<*>,
     location: CstLocation? = null
-) : CstUnaryExpression(expression, location) {
-    fun copy(
-        expression: CstNode = this.expression,
-        location: CstLocation? = this.location
+) : CstUnaryExpression<CstNot>(expression, location) {
+    override fun copy(
+        expression: CstNode<*>,
+        location: CstLocation?
     ) = CstNot(expression, location)
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitNot(this)

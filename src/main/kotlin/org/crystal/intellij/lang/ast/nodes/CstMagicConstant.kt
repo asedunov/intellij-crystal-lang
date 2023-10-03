@@ -8,14 +8,22 @@ import org.crystal.intellij.lang.lexer.*
 sealed class CstMagicConstant(
     val tokenType: CrystalTokenType,
     location: CstLocation? = null
-) : CstNode(location) {
-    class Dir(location: CstLocation? = null) : CstMagicConstant(CR_DIR_, location)
+) : CstNode<CstMagicConstant>(location) {
+    class Dir(location: CstLocation? = null) : CstMagicConstant(CR_DIR_, location) {
+        override fun withLocation(location: CstLocation?) = Dir(location)
+    }
 
-    class File(location: CstLocation? = null) : CstMagicConstant(CR_FILE_, location)
+    class File(location: CstLocation? = null) : CstMagicConstant(CR_FILE_, location) {
+        override fun withLocation(location: CstLocation?) = File(location)
+    }
 
-    class Line(location: CstLocation? = null) : CstMagicConstant(CR_LINE_, location)
+    class Line(location: CstLocation? = null) : CstMagicConstant(CR_LINE_, location) {
+        override fun withLocation(location: CstLocation?) = Line(location)
+    }
 
-    class EndLine(location: CstLocation? = null) : CstMagicConstant(CR_END_LINE_, location)
+    class EndLine(location: CstLocation? = null) : CstMagicConstant(CR_END_LINE_, location) {
+        override fun withLocation(location: CstLocation?) = EndLine(location)
+    }
 
     override fun equals(other: Any?) = this === other || javaClass == other?.javaClass
 

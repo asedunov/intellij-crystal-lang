@@ -6,20 +6,22 @@ import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstArg(
     val name: String,
-    val defaultValue: CstNode? = null,
-    val restriction: CstNode? = null,
+    val defaultValue: CstNode<*>? = null,
+    val restriction: CstNode<*>? = null,
     val externalName: String = name,
     val annotations: List<CstAnnotation> = emptyList(),
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstArg>(location) {
     fun copy(
         name: String = this.name,
-        defaultValue: CstNode? = this.defaultValue,
-        restriction: CstNode? = this.restriction,
+        defaultValue: CstNode<*>? = this.defaultValue,
+        restriction: CstNode<*>? = this.restriction,
         externalName: String = this.externalName,
         annotations: List<CstAnnotation> = this.annotations,
         location: CstLocation? = this.location
     ) = CstArg(name, defaultValue, restriction, externalName, annotations, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

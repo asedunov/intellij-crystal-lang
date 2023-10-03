@@ -5,17 +5,19 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstGeneric(
-    val name: CstNode,
-    val typeVars: List<CstNode>,
+    val name: CstNode<*>,
+    val typeVars: List<CstNode<*>>,
     val namedArgs: List<CstNamedArgument> = emptyList(),
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstGeneric>(location) {
     fun copy(
-        name: CstNode = this.name,
-        typeVars: List<CstNode> = this.typeVars,
+        name: CstNode<*> = this.name,
+        typeVars: List<CstNode<*>> = this.typeVars,
         namedArgs: List<CstNamedArgument> = this.namedArgs,
         location: CstLocation? = this.location
     ) = CstGeneric(name, typeVars, namedArgs, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

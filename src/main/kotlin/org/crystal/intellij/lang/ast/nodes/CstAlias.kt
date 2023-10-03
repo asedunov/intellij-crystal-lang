@@ -6,14 +6,16 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstAlias(
     val name: CstPath,
-    val value: CstNode,
+    val value: CstNode<*>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstAlias>(location) {
     fun copy(
         name: CstPath = this.name,
-        value: CstNode = this.value,
+        value: CstNode<*> = this.value,
         location: CstLocation? = this.location
     ) = CstAlias(name, value, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun toString() = "Alias($name, value=$value)"
 

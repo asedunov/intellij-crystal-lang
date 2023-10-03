@@ -5,37 +5,39 @@ import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstCall(
-    val obj: CstNode?,
+    val obj: CstNode<*>?,
     val name: String,
-    val args: List<CstNode> = emptyList(),
+    val args: List<CstNode<*>> = emptyList(),
     val block: CstBlock? = null,
-    val blockArg: CstNode? = null,
+    val blockArg: CstNode<*>? = null,
     val namedArgs: List<CstNamedArgument> = emptyList(),
     val isGlobal: Boolean = false,
     val hasParentheses: Boolean = false,
     location: CstLocation? = null,
     override val nameLocation: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstCall>(location) {
     constructor(
-        obj: CstNode?,
+        obj: CstNode<*>?,
         name: String,
-        arg: CstNode,
+        arg: CstNode<*>,
         location: CstLocation? = null,
         nameLocation: CstLocation? = null
     ) : this(obj = obj, name = name, args = listOf(arg), location = location, nameLocation = nameLocation)
 
     fun copy(
-        obj: CstNode? = this.obj,
+        obj: CstNode<*>? = this.obj,
         name: String = this.name,
-        args: List<CstNode> = this.args,
+        args: List<CstNode<*>> = this.args,
         block: CstBlock? = this.block,
-        blockArg: CstNode? = this.blockArg,
+        blockArg: CstNode<*>? = this.blockArg,
         namedArgs: List<CstNamedArgument> = this.namedArgs,
         isGlobal: Boolean = this.isGlobal,
         hasParentheses: Boolean = this.hasParentheses,
         location: CstLocation? = this.location,
         nameLocation: CstLocation? = this.nameLocation
     ) = CstCall(obj, name, args, block, blockArg, namedArgs, isGlobal, hasParentheses, location, nameLocation)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -5,14 +5,14 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstOr(
-    left: CstNode,
-    right: CstNode,
+    left: CstNode<*>,
+    right: CstNode<*>,
     location: CstLocation? = null
-) : CstBinaryOp(left, right, location) {
-    fun copy(
-        left: CstNode = this.left,
-        right: CstNode = this.right,
-        location: CstLocation? = this.location
+) : CstBinaryOp<CstOr>(left, right, location) {
+    override fun copy(
+        left: CstNode<*>,
+        right: CstNode<*>,
+        location: CstLocation?
     ) = CstOr(left, right, location)
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitOr(this)

@@ -6,16 +6,18 @@ import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstAnnotation(
     val path: CstPath,
-    val args: List<CstNode> = emptyList(),
+    val args: List<CstNode<*>> = emptyList(),
     val namedArgs: List<CstNamedArgument> = emptyList(),
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstAnnotation>(location) {
     fun copy(
         path: CstPath = this.path,
-        args: List<CstNode> = this.args,
+        args: List<CstNode<*>> = this.args,
         namedArgs: List<CstNamedArgument> = this.namedArgs,
         location: CstLocation? = this.location
     ) = CstAnnotation(path, args, namedArgs, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

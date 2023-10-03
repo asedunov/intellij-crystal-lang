@@ -6,7 +6,9 @@ import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstUnderscore(
     location: CstLocation? = null,
-) : CstNode(location) {
+) : CstNode<CstUnderscore>(location) {
+    override fun withLocation(location: CstLocation?) = CstUnderscore(location)
+
     override fun equals(other: Any?) = this === other || javaClass == other?.javaClass
 
     override fun hashCode() = javaClass.hashCode()

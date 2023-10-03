@@ -5,13 +5,15 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTypeOf(
-    val expressions: List<CstNode>,
+    val expressions: List<CstNode<*>>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstTypeOf>(location) {
     fun copy(
-        expressions: List<CstNode> = this.expressions,
+        expressions: List<CstNode<*>> = this.expressions,
         location: CstLocation? = this.location
     ) = CstTypeOf(expressions, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

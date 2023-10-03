@@ -8,22 +8,24 @@ import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstBlock(
     val args: List<CstVar> = emptyList(),
-    val body: CstNode = CstNop,
+    val body: CstNode<*> = CstNop,
     val splatIndex: Int = -1,
     val unpacks: Int2ObjectMap<CstExpressions> = Int2ObjectMaps.emptyMap(),
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstBlock>(location) {
     companion object {
         val EMPTY = CstBlock()
     }
 
     fun copy(
         args: List<CstVar> = this.args,
-        body: CstNode = this.body,
+        body: CstNode<*> = this.body,
         splatIndex: Int = this.splatIndex,
         unpacks: Int2ObjectMap<CstExpressions> = this.unpacks,
         location: CstLocation? = this.location
-    )  = CstBlock(args, body, splatIndex, unpacks, location)
+    ) = CstBlock(args, body, splatIndex, unpacks, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,24 +1,24 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstClassDef(
     val name: CstPath,
-    val body: CstNode = CstNop,
-    val superclass: CstNode? = null,
+    val body: CstNode<*> = CstNop,
+    val superclass: CstNode<*>? = null,
     val typeVars: List<String> = emptyList(),
     val isAbstract: Boolean = false,
     val isStruct: Boolean = false,
     val splatIndex: Int = -1,
     location: CstLocation? = null,
     override val nameLocation: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstClassDef>(location) {
     fun copy(
         name: CstPath = this.name,
-        body: CstNode = this.body,
-        superclass: CstNode? = this.superclass,
+        body: CstNode<*> = this.body,
+        superclass: CstNode<*>? = this.superclass,
         typeVars: List<String> = this.typeVars,
         isAbstract: Boolean = this.isAbstract,
         isStruct: Boolean = this.isStruct,
@@ -26,6 +26,8 @@ class CstClassDef(
         location: CstLocation? = this.location,
         nameLocation: CstLocation? = this.nameLocation
     ) = CstClassDef(name, body, superclass, typeVars, isAbstract, isStruct, splatIndex, location, nameLocation)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

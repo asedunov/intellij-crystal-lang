@@ -1,14 +1,14 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstRegexLiteral(
-    val source: CstNode,
+    val source: CstNode<*>,
     val options: Int = NONE,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstRegexLiteral>(location) {
     companion object {
         const val NONE        = 0
         const val IGNORE_CASE = 0x0000_0001
@@ -17,10 +17,12 @@ class CstRegexLiteral(
     }
 
     fun copy(
-        source: CstNode = this.source,
+        source: CstNode<*> = this.source,
         options: Int = this.options,
         location: CstLocation? = this.location
     ) = CstRegexLiteral(source, options, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

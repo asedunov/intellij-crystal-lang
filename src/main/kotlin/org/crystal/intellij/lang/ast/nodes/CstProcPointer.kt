@@ -1,23 +1,25 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstProcPointer(
-    val obj: CstNode?,
+    val obj: CstNode<*>?,
     val name: String,
-    val args: List<CstNode> = emptyList(),
+    val args: List<CstNode<*>> = emptyList(),
     val isGlobal: Boolean = false,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstProcPointer>(location) {
     fun copy(
-        obj: CstNode? = this.obj,
+        obj: CstNode<*>? = this.obj,
         name: String = this.name,
-        args: List<CstNode> = this.args,
+        args: List<CstNode<*>> = this.args,
         isGlobal: Boolean = this.isGlobal,
         location: CstLocation? = this.location
     ) = CstProcPointer(obj, name, args, isGlobal, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

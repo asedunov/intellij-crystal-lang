@@ -22,7 +22,7 @@ abstract class CrystalCstParsingTestBase : ParsingTestCase("parser", "cr", Cryst
         project.registerService(CrResolveFacade::class.java)
     }
 
-    protected fun convert(source: String): CstNode {
+    protected fun convert(source: String): CstNode<*> {
         myFile = createPsiFile("a", source)
         ensureParsed(myFile)
         return (myFile as CrFile).cstNode!!
@@ -36,15 +36,15 @@ abstract class CrystalCstParsingTestBase : ParsingTestCase("parser", "cr", Cryst
         assertNode(source, body)
     }
 
-    protected fun CstNode.assertRender(expected: String) {
+    protected fun CstNode<*>.assertRender(expected: String) {
         TestCase.assertEquals(expected, render())
     }
 
-    protected fun CstNode.assertRenderTrimmed(expected: String) {
+    protected fun CstNode<*>.assertRenderTrimmed(expected: String) {
         TestCase.assertEquals(expected, render().trim())
     }
 
-    protected fun CstNode.assertNameStart(line: Int, col: Int) {
+    protected fun CstNode<*>.assertNameStart(line: Int, col: Int) {
         val loc = nameLocation!!
         TestCase.assertEquals(line, loc.startLine)
         TestCase.assertEquals(col, loc.startColumn)

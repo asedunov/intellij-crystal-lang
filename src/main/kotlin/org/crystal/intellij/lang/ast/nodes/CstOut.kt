@@ -5,12 +5,12 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstOut(
-    expression: CstNode,
+    expression: CstNode<*>,
     location: CstLocation? = null
-) : CstUnaryExpression(expression, location) {
-    fun copy(
-        expression: CstNode = this.expression,
-        location: CstLocation? = this.location
+) : CstUnaryExpression<CstOut>(expression, location) {
+    override fun copy(
+        expression: CstNode<*>,
+        location: CstLocation?
     ) = CstOut(expression, location)
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitOut(this)

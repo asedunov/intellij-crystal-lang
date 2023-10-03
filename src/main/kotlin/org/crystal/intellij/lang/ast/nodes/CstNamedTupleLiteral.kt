@@ -1,16 +1,16 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstNamedTupleLiteral(
     val entries: List<Entry>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstNamedTupleLiteral>(location) {
     data class Entry(
         val key: String,
-        val value: CstNode
+        val value: CstNode<*>
     ) {
         override fun toString() = "Entry($key, $value)"
 
@@ -23,6 +23,8 @@ class CstNamedTupleLiteral(
         entries: List<Entry> = this.entries,
         location: CstLocation? = this.location
     ) = CstNamedTupleLiteral(entries, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

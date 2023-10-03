@@ -8,7 +8,7 @@ class CstPath(
     val names: List<String>,
     val isGlobal: Boolean = false,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstPath>(location) {
     companion object {
         fun global(
             name: String,
@@ -20,6 +20,14 @@ class CstPath(
             location: CstLocation? = null
         ) = CstPath(names, true, location)
     }
+
+    fun copy(
+        names: List<String> = this.names,
+        isGlobal: Boolean = this.isGlobal,
+        location: CstLocation? = this.location
+    ) = CstPath(names, isGlobal, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

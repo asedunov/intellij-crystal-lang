@@ -5,13 +5,15 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTupleLiteral(
-    val elements: List<CstNode>,
+    val elements: List<CstNode<*>>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstTupleLiteral>(location) {
     fun copy(
-        elements: List<CstNode> = this.elements,
+        elements: List<CstNode<*>> = this.elements,
         location: CstLocation? = this.location
     ) = CstTupleLiteral(elements, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

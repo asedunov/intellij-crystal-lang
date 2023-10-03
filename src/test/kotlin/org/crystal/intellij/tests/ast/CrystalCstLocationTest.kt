@@ -11,11 +11,11 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         return substring(location.startOffset, location.endOffset)
     }
 
-    private fun String.nodeSource(node: CstNode): String {
+    private fun String.nodeSource(node: CstNode<*>): String {
         return sourceBetween(node.location!!)
     }
 
-    private fun String.nameSource(node: CstNode): String {
+    private fun String.nameSource(node: CstNode<*>): String {
         return sourceBetween(node.nameLocation!!)
     }
 
@@ -32,19 +32,19 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         }
     }
 
-    private fun CstNode.assertStart(line: Int, col: Int) {
+    private fun CstNode<*>.assertStart(line: Int, col: Int) {
         val loc = location!!
         TestCase.assertEquals(line, loc.startLine)
         TestCase.assertEquals(col, loc.startColumn)
     }
 
-    private fun CstNode.assertEnd(line: Int, col: Int) {
+    private fun CstNode<*>.assertEnd(line: Int, col: Int) {
         val loc = location!!
         TestCase.assertEquals(line, loc.endLine)
         TestCase.assertEquals(col, loc.endColumn)
     }
 
-    private fun CstNode.assertNoEnd() {
+    private fun CstNode<*>.assertNoEnd() {
         val loc = location ?: return
         TestCase.assertEquals(-1, loc.endOffset)
     }
@@ -198,7 +198,7 @@ class CrystalCstLocationTest : CrystalCstParsingTestBase() {
         members[1].assertStart(1, 14)
     }
 
-    fun testConditionalExprLoc() = assertNode<CstConditionalExpression>("\n  1 ? 2 : 3") {
+    fun testConditionalExprLoc() = assertNode<CstConditionalExpression<*>>("\n  1 ? 2 : 3") {
         assertStart(2, 3)
     }
 

@@ -7,7 +7,14 @@ import org.crystal.intellij.lang.ast.CstVisitor
 class CstGlobal(
     val name: String,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstGlobal>(location) {
+    fun copy(
+        name: String = this.name,
+        location: CstLocation? = this.location
+    ) = CstGlobal(name, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

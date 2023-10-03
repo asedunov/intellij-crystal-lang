@@ -1,23 +1,25 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstOpAssign(
-    val target: CstNode,
+    val target: CstNode<*>,
     val op: String,
-    val value: CstNode,
+    val value: CstNode<*>,
     location: CstLocation? = null,
     override val nameLocation: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstOpAssign>(location) {
     fun copy(
-        target: CstNode = this.target,
+        target: CstNode<*> = this.target,
         op: String = this.op,
-        value: CstNode = this.value,
+        value: CstNode<*> = this.value,
         location: CstLocation? = this.location,
         nameLocation: CstLocation? = this.nameLocation,
     ) = CstOpAssign(target, op, value, location, nameLocation)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

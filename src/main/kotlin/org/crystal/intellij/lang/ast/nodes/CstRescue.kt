@@ -1,25 +1,27 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstRescue(
-    val body: CstNode = CstNop,
-    val types: List<CstNode> = emptyList(),
+    val body: CstNode<*> = CstNop,
+    val types: List<CstNode<*>> = emptyList(),
     val name: String? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstRescue>(location) {
     companion object {
         val EMPTY = CstRescue()
     }
 
     fun copy(
-        body: CstNode = this.body,
-        types: List<CstNode> = this.types,
+        body: CstNode<*> = this.body,
+        types: List<CstNode<*>> = this.types,
         name: String? = this.name,
         location: CstLocation? = this.location
     ) = CstRescue(body, types, name, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

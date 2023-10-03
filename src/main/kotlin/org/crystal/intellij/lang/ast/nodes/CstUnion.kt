@@ -5,13 +5,15 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstUnion(
-    val types: List<CstNode>,
+    val types: List<CstNode<*>>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstUnion>(location) {
     fun copy(
-        types: List<CstNode> = this.types,
+        types: List<CstNode<*>> = this.types,
         location: CstLocation? = this.location
     ) = CstUnion(types, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

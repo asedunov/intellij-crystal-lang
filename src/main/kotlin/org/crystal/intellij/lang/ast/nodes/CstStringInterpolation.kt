@@ -1,17 +1,19 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstStringInterpolation(
-    val expressions: List<CstNode>,
+    val expressions: List<CstNode<*>>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstStringInterpolation>(location) {
     fun copy(
-        expressions: List<CstNode> = this.expressions,
+        expressions: List<CstNode<*>> = this.expressions,
         location: CstLocation? = this.location
     ) = CstStringInterpolation(expressions, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

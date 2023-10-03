@@ -1,19 +1,19 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.lexer.CrystalTokenType
 
 class CstExpressions(
-    val expressions: List<CstNode> = emptyList(),
+    val expressions: List<CstNode<*>> = emptyList(),
     val keyword: CrystalTokenType? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstExpressions>(location) {
     companion object {
         val EMPTY = CstExpressions()
 
-        fun from(nodes: List<CstNode>, location: CstLocation? = null): CstNode {
+        fun from(nodes: List<CstNode<*>>, location: CstLocation? = null): CstNode<*> {
             if (nodes.isEmpty()) return CstNop
             val node = nodes.singleOrNull()
             if (node != null) return node
@@ -22,9 +22,12 @@ class CstExpressions(
     }
 
     fun copy(
-        expressions: List<CstNode> = this.expressions,
-        keyword: CrystalTokenType? = this.keyword
-    ) = CstExpressions(expressions, keyword)
+        expressions: List<CstNode<*>> = this.expressions,
+        keyword: CrystalTokenType? = this.keyword,
+        location: CstLocation? = this.location
+    ) = CstExpressions(expressions, keyword, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,15 +1,20 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 sealed class CstBoolLiteral(
     val value: Boolean,
     location: CstLocation? = null
-) : CstNode(location), CstSimpleLiteral {
-    class False(location: CstLocation? = null) : CstBoolLiteral(false, location)
-    class True(location: CstLocation? = null) : CstBoolLiteral(true, location)
+) : CstNode<CstBoolLiteral>(location), CstSimpleLiteral {
+    class False(location: CstLocation? = null) : CstBoolLiteral(false, location) {
+        override fun withLocation(location: CstLocation?) = False(location)
+    }
+
+    class True(location: CstLocation? = null) : CstBoolLiteral(true, location) {
+        override fun withLocation(location: CstLocation?) = True(location)
+    }
 
     companion object {
         fun of(

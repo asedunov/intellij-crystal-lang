@@ -1,19 +1,21 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstMacroVar(
     val name: String,
-    val exps: List<CstNode> = emptyList(),
+    val exps: List<CstNode<*>> = emptyList(),
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstMacroVar>(location) {
     fun copy(
         name: String = this.name,
-        exps: List<CstNode> = this.exps,
+        exps: List<CstNode<*>> = this.exps,
         location: CstLocation? = this.location
     ) = CstMacroVar(name, exps, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

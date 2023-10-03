@@ -1,17 +1,24 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
-sealed class CstControlExpression(
-    val expression: CstNode? = null,
+sealed class CstControlExpression<T : CstControlExpression<T>>(
+    val expression: CstNode<*>? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<T>(location) {
+    abstract fun copy(
+        expression: CstNode<*>? = this.expression,
+        location: CstLocation? = this.location
+    ): T
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CstControlExpression
+        other as CstControlExpression<*>
 
         return expression == other.expression
     }

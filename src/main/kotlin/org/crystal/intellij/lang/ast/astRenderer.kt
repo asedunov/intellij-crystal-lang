@@ -417,7 +417,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         }
     }
 
-    private fun visitBacktick(exp: CstNode) {
+    private fun visitBacktick(exp: CstNode<*>) {
         sb.append('`')
         when (exp) {
             is CstStringLiteral -> specUnquotedWithEscapedBackticks(exp.value.crString)
@@ -501,7 +501,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         return false
     }
 
-    private fun visitUnpack(o: CstNode) {
+    private fun visitUnpack(o: CstNode<*>) {
         when (o) {
             is CstExpressions -> {
                 sb.append(o.expressions, prefix = "(", postfix = ")") { _, e ->
@@ -654,7 +654,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         return false
     }
 
-    private fun visitControlExpression(o: CstControlExpression, keyword: String) {
+    private fun visitControlExpression(o: CstControlExpression<*>, keyword: String) {
         sb.append(keyword)
         val exp = o.expression
         if (exp != null) {
@@ -720,7 +720,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         return false
     }
 
-    private fun visitConditional(o: CstConditionalExpression, keyword: String) {
+    private fun visitConditional(o: CstConditionalExpression<*>, keyword: String) {
         sb.append(keyword)
         sb.append(' ')
 
@@ -843,7 +843,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         return false
     }
 
-    private fun visitLoop(o: CstLoopBase, keyword: String) {
+    private fun visitLoop(o: CstLoopBase<*>, keyword: String) {
         sb.append(keyword)
         sb.append(' ')
 
@@ -1221,7 +1221,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         return false
     }
 
-    private fun visitBinaryOp(o: CstBinaryOp, op: String) {
+    private fun visitBinaryOp(o: CstBinaryOp<*>, op: String) {
         inParenthesis(o.left)
 
         sb.append(' ')
@@ -1441,7 +1441,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         return false
     }
 
-    private fun visitAnyCast(o: CstCastBase, keyword: String) {
+    private fun visitAnyCast(o: CstCastBase<*>, keyword: String) {
         val needParens = o.obj.needParens
         inParenthesis(needParens, o.obj)
         sb.append('.')
@@ -1684,7 +1684,7 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         indent--
     }
 
-    private fun acceptWithIndent(o: CstNode) {
+    private fun acceptWithIndent(o: CstNode<*>) {
         when (o) {
             is CstExpressions -> {
                 withIndent {
@@ -1730,17 +1730,17 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         }
     }
 
-    private fun inParenthesis(needParens: Boolean, node: CstNode) {
+    private fun inParenthesis(needParens: Boolean, node: CstNode<*>) {
         inParenthesis(needParens) {
             ((node as? CstExpressions)?.expressions?.singleOrNull() ?: node).accept(this)
         }
     }
 
-    private fun inParenthesis(node: CstNode) {
+    private fun inParenthesis(node: CstNode<*>) {
         inParenthesis(node.needParens, node)
     }
 
-    private val CstNode.needParens: Boolean
+    private val CstNode<*>.needParens: Boolean
         get() = when (this) {
             is CstCall -> when {
                 args.isEmpty() -> !name.isIdent
@@ -1786,6 +1786,6 @@ class CstRenderer(private val sb: StringBuilder) : CstVisitor() {
         get() = isAsciiLetter || this == '_' || code > 0x9F
 }
 
-fun CstNode.render() = buildString {
+fun CstNode<*>.render() = buildString {
     accept(CstRenderer(this))
 }

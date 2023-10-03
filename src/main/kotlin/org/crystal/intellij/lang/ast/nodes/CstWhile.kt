@@ -5,14 +5,14 @@ import org.crystal.intellij.lang.ast.CstVisitor
 import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstWhile(
-    condition: CstNode,
-    body: CstNode = CstNop,
+    condition: CstNode<*>,
+    body: CstNode<*> = CstNop,
     location: CstLocation? = null
-) : CstLoopBase(condition, body, location) {
-    fun copy(
-        condition: CstNode = this.condition,
-        body: CstNode = this.body,
-        location: CstLocation? = this.location
+) : CstLoopBase<CstWhile>(condition, body, location) {
+    override fun copy(
+        condition: CstNode<*>,
+        body: CstNode<*>,
+        location: CstLocation?
     ) = CstWhile(condition, body, location)
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitWhile(this)

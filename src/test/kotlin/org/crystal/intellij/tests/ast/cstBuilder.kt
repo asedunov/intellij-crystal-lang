@@ -60,18 +60,18 @@ val String.call: CstCall
 val String.globalCall: CstCall
     get() = CstCall(null, this, isGlobal = true)
 
-fun String.call(arg: CstNode): CstCall =
+fun String.call(arg: CstNode<*>): CstCall =
     CstCall(null, this, listOf(arg))
 
-fun String.call(arg1: CstNode, arg2: CstNode): CstCall =
+fun String.call(arg1: CstNode<*>, arg2: CstNode<*>): CstCall =
     CstCall(null, this, listOf(arg1, arg2))
 
 val String.arg: CstArg
     get() = CstArg(this)
 
 fun String.arg(
-    defaultValue: CstNode? = null,
-    restriction: CstNode? = null,
+    defaultValue: CstNode<*>? = null,
+    restriction: CstNode<*>? = null,
     externalName: String = this,
     annotations: List<CstAnnotation> = emptyList()
 ): CstArg = CstArg(
@@ -91,7 +91,7 @@ val String.globalPath: CstPath
 fun String.staticArrayOf(size: Int): CstGeneric =
     staticArrayOf(size.int32)
 
-fun String.staticArrayOf(size: CstNode): CstGeneric =
+fun String.staticArrayOf(size: CstNode<*>): CstGeneric =
     CstGeneric("StaticArray".globalPath, listOf(path, size))
 
 val String.ann: CstAnnotation
@@ -100,13 +100,13 @@ val String.ann: CstAnnotation
 val String.macroLiteral: CstMacroLiteral
     get() = CstMacroLiteral(this)
 
-fun String.namedArg(value: CstNode): CstNamedArgument =
+fun String.namedArg(value: CstNode<*>): CstNamedArgument =
     CstNamedArgument(this, value)
 
 val String.macroVar: CstMacroVar
     get() = CstMacroVar(this)
 
-fun String.macroVar(exps: List<CstNode> = emptyList()): CstMacroVar =
+fun String.macroVar(exps: List<CstNode<*>> = emptyList()): CstMacroVar =
     CstMacroVar(this, exps)
 
 val String.stringInterpolation: CstStringInterpolation
@@ -115,25 +115,25 @@ val String.stringInterpolation: CstStringInterpolation
 val List<String>.path: CstPath
     get() = CstPath(this, false)
 
-val CstNode.splat: CstSplat
+val CstNode<*>.splat: CstSplat
     get() = CstSplat(this)
 
-val CstNode.pointerOf: CstGeneric
+val CstNode<*>.pointerOf: CstGeneric
     get() = CstGeneric("Pointer".globalPath, listOf(this))
 
-val CstNode.typeOf: CstTypeOf
+val CstNode<*>.typeOf: CstTypeOf
     get() = CstTypeOf(listOf(this))
 
-val CstNode.regex: CstRegexLiteral
+val CstNode<*>.regex: CstRegexLiteral
     get() = CstRegexLiteral(this)
 
-val List<CstNode>.array: CstArrayLiteral
+val List<CstNode<*>>.array: CstArrayLiteral
     get() = CstArrayLiteral(this)
 
-fun List<CstNode>.arrayOf(type: CstNode): CstArrayLiteral =
+fun List<CstNode<*>>.arrayOf(type: CstNode<*>): CstArrayLiteral =
     CstArrayLiteral(this, type)
 
-val List<CstNode>.expressions: CstNode
+val List<CstNode<*>>.expressions: CstNode<*>
     get() = CstExpressions.from(this)
 
 val self: CstSelf = CstSelf()

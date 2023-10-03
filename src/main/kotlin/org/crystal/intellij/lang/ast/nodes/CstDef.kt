@@ -1,16 +1,16 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstDef(
     val name: String,
     val args: List<CstArg> = emptyList(),
-    val body: CstNode = CstNop,
-    val receiver: CstNode? = null,
+    val body: CstNode<*> = CstNop,
+    val receiver: CstNode<*>? = null,
     val blockArg: CstArg? = null,
-    val returnType: CstNode? = null,
+    val returnType: CstNode<*>? = null,
     val isAbstract: Boolean = false,
     val blockArity: Int = -1,
     val splatIndex: Int = -1,
@@ -19,14 +19,14 @@ class CstDef(
     val isMacroDef: Boolean = false,
     location: CstLocation? = null,
     override val nameLocation: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstDef>(location) {
     fun copy(
         name: String = this.name,
         args: List<CstArg> = this.args,
-        body: CstNode = this.body,
-        receiver: CstNode? = this.receiver,
+        body: CstNode<*> = this.body,
+        receiver: CstNode<*>? = this.receiver,
         blockArg: CstArg? = this.blockArg,
-        returnType: CstNode? = this.returnType,
+        returnType: CstNode<*>? = this.returnType,
         isAbstract: Boolean = this.isAbstract,
         blockArity: Int = this.blockArity,
         splatIndex: Int = this.splatIndex,
@@ -51,6 +51,8 @@ class CstDef(
         location,
         nameLocation
     )
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
     
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

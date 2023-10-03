@@ -6,16 +6,18 @@ import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstExternalVar(
     val name: String,
-    val type: CstNode,
+    val type: CstNode<*>,
     val realName: String? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstExternalVar>(location) {
     fun copy(
         name: String = this.name,
-        type: CstNode = this.type,
+        type: CstNode<*> = this.type,
         realName: String? = this.realName,
         location: CstLocation? = this.location
     ) = CstExternalVar(name, type, realName, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

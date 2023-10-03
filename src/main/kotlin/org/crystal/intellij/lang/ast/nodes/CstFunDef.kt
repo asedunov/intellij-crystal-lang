@@ -7,21 +7,23 @@ import org.crystal.intellij.lang.ast.CstVisitor
 class CstFunDef(
     val name: String,
     val args: List<CstArg> = emptyList(),
-    val returnType: CstNode? = null,
-    val body: CstNode? = null,
+    val returnType: CstNode<*>? = null,
+    val body: CstNode<*>? = null,
     val realName: String = name,
     val isVariadic: Boolean = false,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstFunDef>(location) {
     fun copy(
         name: String = this.name,
         args: List<CstArg> = this.args,
-        returnType: CstNode? = this.returnType,
-        body: CstNode? = this.body,
+        returnType: CstNode<*>? = this.returnType,
+        body: CstNode<*>? = this.body,
         realName: String = this.realName,
         isVariadic: Boolean = this.isVariadic,
         location: CstLocation? = this.location
     ) = CstFunDef(name, args, returnType, body, realName, isVariadic, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

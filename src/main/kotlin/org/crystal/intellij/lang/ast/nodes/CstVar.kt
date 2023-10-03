@@ -1,17 +1,24 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.resolve.cache.CrResolveCache
 
 class CstVar(
     val name: String,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstVar>(location) {
     companion object {
         val EMPTY = CstVar("")
     }
+
+    fun copy(
+        name: String = this.name,
+        location: CstLocation? = this.location
+    ) = CstVar(name, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,19 +1,21 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstOffsetOf(
-    val type: CstNode,
-    val offset: CstNode,
+    val type: CstNode<*>,
+    val offset: CstNode<*>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstOffsetOf>(location) {
     fun copy(
-        type: CstNode = this.type,
-        offset: CstNode = this.offset,
+        type: CstNode<*> = this.type,
+        offset: CstNode<*> = this.offset,
         location: CstLocation? = this.location
     ) = CstOffsetOf(type, offset, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

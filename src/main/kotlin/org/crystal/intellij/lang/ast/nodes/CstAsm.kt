@@ -14,7 +14,7 @@ class CstAsm(
     val intel: Boolean = false,
     val canThrow: Boolean = false,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstAsm>(location) {
     fun copy(
         text: String = this.text,
         outputs: List<CstAsmOperand> = this.outputs,
@@ -26,6 +26,8 @@ class CstAsm(
         canThrow: Boolean = this.canThrow,
         location: CstLocation? = this.location
     ) = CstAsm(text, outputs, inputs, clobbers, volatile, alignStack, intel, canThrow, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

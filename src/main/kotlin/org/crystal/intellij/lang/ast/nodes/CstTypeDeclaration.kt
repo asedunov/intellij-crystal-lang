@@ -5,17 +5,19 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstTypeDeclaration(
-    val variable: CstNode,
-    val type: CstNode,
-    val value: CstNode? = null,
+    val variable: CstNode<*>,
+    val type: CstNode<*>,
+    val value: CstNode<*>? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstTypeDeclaration>(location) {
     fun copy(
-        variable: CstNode = this.variable,
-        type: CstNode = this.type,
-        value: CstNode? = this.value,
+        variable: CstNode<*> = this.variable,
+        type: CstNode<*> = this.type,
+        value: CstNode<*>? = this.value,
         location: CstLocation? = this.location
     ) = CstTypeDeclaration(variable, type, value, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -361,7 +361,7 @@ class CrystalResolveCheckingVisitor(
     }
 
     private fun checkDuplicateWhens(o: CrCaseExpression) {
-        val conditionGroups = MultiMap<CstNode, CrExpression>()
+        val conditionGroups = MultiMap<CstNode<*>, CrExpression>()
         for (whenClause in o.whenClauses) {
             for (expression in whenClause.expressions) {
                 val expressionNode = expression.cstNode ?: return

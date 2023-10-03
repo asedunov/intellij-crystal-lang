@@ -5,15 +5,17 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstMultiAssign(
-    val targets: List<CstNode>,
-    val values: List<CstNode>,
+    val targets: List<CstNode<*>>,
+    val values: List<CstNode<*>>,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstMultiAssign>(location) {
     fun copy(
-        targets: List<CstNode> = this.targets,
-        values: List<CstNode> = this.values,
+        targets: List<CstNode<*>> = this.targets,
+        values: List<CstNode<*>> = this.values,
         location: CstLocation? = this.location
     ) = CstMultiAssign(targets, values, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

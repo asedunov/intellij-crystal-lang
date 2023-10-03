@@ -1,17 +1,17 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstSelect(
     val whens: List<When>,
-    val elseBranch: CstNode? = null,
+    val elseBranch: CstNode<*>? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstSelect>(location) {
     data class When(
-        val condition: CstNode,
-        val body: CstNode
+        val condition: CstNode<*>,
+        val body: CstNode<*>
     ) {
         fun accept(visitor: CstVisitor) {
             condition.accept(visitor)
@@ -21,9 +21,11 @@ class CstSelect(
 
     fun copy(
         whens: List<When> = this.whens,
-        elseBranch: CstNode? = this.elseBranch,
+        elseBranch: CstNode<*>? = this.elseBranch,
         location: CstLocation? = this.location
     ) = CstSelect(whens, elseBranch, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,23 +1,25 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstExceptionHandler(
-    val body: CstNode = CstNop,
+    val body: CstNode<*> = CstNop,
     val rescues: List<CstRescue> = emptyList(),
-    val elseBranch: CstNode? = null,
-    val ensure: CstNode? = null,
+    val elseBranch: CstNode<*>? = null,
+    val ensure: CstNode<*>? = null,
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstExceptionHandler>(location) {
     fun copy(
-        body: CstNode = this.body,
+        body: CstNode<*> = this.body,
         rescues: List<CstRescue> = this.rescues,
-        elseBranch: CstNode? = this.elseBranch,
-        ensure: CstNode? = this.ensure,
+        elseBranch: CstNode<*>? = this.elseBranch,
+        ensure: CstNode<*>? = this.ensure,
         location: CstLocation? = this.location
     ) = CstExceptionHandler(body, rescues, elseBranch, ensure, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

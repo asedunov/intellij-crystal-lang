@@ -1,12 +1,14 @@
 package org.crystal.intellij.lang.ast.nodes
 
-import org.crystal.intellij.lang.ast.location.CstLocation
 import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
+import org.crystal.intellij.lang.ast.location.CstLocation
 
 class CstSelf(
     location: CstLocation? = null
-) : CstNode(location) {
+) : CstNode<CstSelf>(location) {
+    override fun withLocation(location: CstLocation?) = CstSelf(location = location)
+
     override fun equals(other: Any?) = this === other || javaClass == other?.javaClass
 
     override fun hashCode() = javaClass.hashCode()

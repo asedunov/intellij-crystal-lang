@@ -5,12 +5,12 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstSplat(
-    expression: CstNode,
+    expression: CstNode<*>,
     location: CstLocation? = null
-) : CstUnaryExpression(expression, location) {
-    fun copy(
-        expression: CstNode = this.expression,
-        location: CstLocation? = null
+) : CstUnaryExpression<CstSplat>(expression, location) {
+    override fun copy(
+        expression: CstNode<*>,
+        location: CstLocation?
     ) = CstSplat(expression, location)
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitSplat(this)

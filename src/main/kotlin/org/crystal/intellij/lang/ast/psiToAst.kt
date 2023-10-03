@@ -22,7 +22,7 @@ import org.crystal.intellij.lang.resolve.cache.newResolveSlice
 import org.crystal.intellij.lang.resolve.cache.resolveCache
 
 class CrPsi2AstConverter : CrVisitor() {
-    var result: CstNode? = null
+    var result: CstNode<*>? = null
         private set
 
     private fun cstLocation(e: CrIfExpression): CstLocation {
@@ -65,7 +65,7 @@ class CrPsi2AstConverter : CrVisitor() {
         return CstLocation(startOffset, endOffset, e.containingFile)
     }
 
-    private fun cstLocation(from: CstNode, to: CstNode): CstLocation? {
+    private fun cstLocation(from: CstNode<*>, to: CstNode<*>): CstLocation? {
         val fromLocation = from.location ?: return null
         val toLocation = to.location ?: return null
         return CstLocation(fromLocation.startOffset, toLocation.endOffset, fromLocation.file)
@@ -76,16 +76,16 @@ class CrPsi2AstConverter : CrVisitor() {
         force: Boolean = false,
         keyword: CrystalTokenType? = null,
         location: CstLocation? = null
-    ): CstNode {
+    ): CstNode<*> {
         return astAsExpressions(expressions.filterMap { it.cstNode }, location, force, keyword)
     }
 
     private fun astAsExpressions(
-        nodes: JBIterable<out CstNode>,
+        nodes: JBIterable<out CstNode<*>>,
         location: CstLocation? = null,
         force: Boolean = false,
         keyword: CrystalTokenType? = null
-    ): CstNode {
+    ): CstNode<*> {
         if (!force && keyword == null) {
             if (nodes.isEmpty) return CstNop
             val node = nodes.single()
@@ -98,7 +98,7 @@ class CrPsi2AstConverter : CrVisitor() {
         )
     }
 
-    private fun CstNode.unpackExpressions(): List<CstNode> {
+    private fun CstNode<*>.unpackExpressions(): List<CstNode<*>> {
         return when (this) {
             is CstNop -> emptyList()
             is CstExpressions -> expressions
@@ -106,7 +106,7 @@ class CrPsi2AstConverter : CrVisitor() {
         }
     }
 
-    private fun CstNode.unpackIfSingle(): CstNode {
+    private fun CstNode<*>.unpackIfSingle(): CstNode<*> {
         return (this as? CstExpressions)?.expressions?.singleOrNull() ?: this
     }
 
@@ -526,7 +526,7 @@ class CrPsi2AstConverter : CrVisitor() {
 
     override fun visitAnnotationExpression(o: CrAnnotationExpression) {
         val pathAst = o.path?.cstNode as? CstPath ?: return
-        val argsAst = SmartList<CstNode>()
+        val argsAst = SmartList<CstNode<*>>()
         val namedArgsAst = SmartList<CstNamedArgument>()
         o.argumentList?.elements?.forEach {
             when (it) {
@@ -721,8 +721,8 @@ class CrPsi2AstConverter : CrVisitor() {
 
     private inline fun transformReceiver(
         o: CrExpressionWithReceiver,
-        noReceiver: () -> CstNode? = { null }
-    ): CstNode? {
+        noReceiver: () -> CstNode<*>? = { null }
+    ): CstNode<*>? {
         if (o.hasImplicitReceiver) {
             return o.findBlockArgument()?.syntheticArg?.cstNode ?: CstImplicitObj
         }
@@ -859,7 +859,7 @@ class CrPsi2AstConverter : CrVisitor() {
         super.visitOffsetExpression(o)
     }
 
-    private fun psiAsTupleOrNull(expressions: JBIterable<out CrElement>): CstNode? {
+    private fun psiAsTupleOrNull(expressions: JBIterable<out CrElement>): CstNode<*>? {
         val nodes = expressions.filterMap { it.cstNode }
         if (nodes.isEmpty) return null
         val node = nodes.single()
@@ -1082,14 +1082,14 @@ class CrPsi2AstConverter : CrVisitor() {
         return map
     }
 
-    private fun transformCallBlockBody(o: CrBlockExpression, blockLoc: CstLocation): CstNode {
+    private fun transformCallBlockBody(o: CrBlockExpression, blockLoc: CstLocation): CstNode<*> {
         val expressions = o.expressions
 
         if (o.languageLevel > CrystalLevel.CRYSTAL_1_9) {
             return psiAsExpressions(expressions, location = blockLoc)
         }
 
-        val bodyNodes = SmartList<CstNode>()
+        val bodyNodes = SmartList<CstNode<*>>()
         o.parameterList?.elements?.forEach { param ->
             val multiParam = param as? CrMultiParameter ?: return@forEach
             val syntheticName = multiParam.syntheticArg?.name ?: ""
@@ -1112,7 +1112,7 @@ class CrPsi2AstConverter : CrVisitor() {
         return astAsExpressions(JBIterable.from(bodyNodes), location = blockLoc)
     }
 
-    private fun CrBlockExpression.transformBlock(): CstNode {
+    private fun CrBlockExpression.transformBlock(): CstNode<*> {
         val parent = parent
         val expressions = expressions
         val blockLoc = cstLocation(this)
@@ -1135,7 +1135,7 @@ class CrPsi2AstConverter : CrVisitor() {
             }
 
             is CrMethod -> {
-                val allNodes = SmartList<CstNode>()
+                val allNodes = SmartList<CstNode<*>>()
                 for (param in parent.parameters) {
                     val nameElement = param.nameElement ?: continue
                     val name = nameElement.name ?: continue
@@ -1457,9 +1457,9 @@ class CrPsi2AstConverter : CrVisitor() {
         location: CstLocation?,
         elements: JBIterable<PsiElement>,
         forceInterpolation: Boolean = false
-    ): CstNode {
+    ): CstNode<*> {
         val sb = StringBuilder()
-        val nodes = SmartList<CstNode>()
+        val nodes = SmartList<CstNode<*>>()
         for (element in elements) {
             when (element) {
                 is CrStringInterpolation -> {
@@ -1484,7 +1484,7 @@ class CrPsi2AstConverter : CrVisitor() {
         return if (forceInterpolation) CstStringInterpolation(listOf(stringNode)) else stringNode
     }
 
-    private fun asStringOrNull(nodes: List<CstNode>): String? {
+    private fun asStringOrNull(nodes: List<CstNode<*>>): String? {
         return buildString {
             for (node in nodes) {
                 if (node !is CstStringLiteral) return null
@@ -1493,7 +1493,7 @@ class CrPsi2AstConverter : CrVisitor() {
         }
     }
 
-    private fun asStringNode(location: CstLocation?, nodes: List<CstNode>): CstNode {
+    private fun asStringNode(location: CstLocation?, nodes: List<CstNode<*>>): CstNode<*> {
         asStringOrNull(nodes)?.let { return CstStringLiteral(it, location) }
         if (nodes.isEmpty()) return CstStringLiteral("", location)
         return nodes.singleOrNull() as? CstStringLiteral ?: CstStringInterpolation(nodes, location)
@@ -1804,14 +1804,14 @@ class CrPsi2AstConverter : CrVisitor() {
         super.visitUnderscoreType(o)
     }
 
-    private fun CstNode.nilableType(location: CstLocation): CstNode {
+    private fun CstNode<*>.nilableType(location: CstLocation): CstNode<*> {
         return CstUnion(
             location = location,
             types = listOf(this, CstPath.global("Nil", location))
         )
     }
 
-    private fun CstNode.nilableTypeAsGeneric(location: CstLocation): CstNode {
+    private fun CstNode<*>.nilableTypeAsGeneric(location: CstLocation): CstNode<*> {
         return CstGeneric(
             location = location,
             name = CstPath.global("Union", location),
@@ -1839,7 +1839,7 @@ class CrPsi2AstConverter : CrVisitor() {
         super.visitNilableExpression(o)
     }
 
-    private fun CstNode.pointerType() = CstGeneric(
+    private fun CstNode<*>.pointerType() = CstGeneric(
         location = location,
         name = CstPath.global("Pointer", location),
         typeVars = listOf(this)
@@ -1851,7 +1851,7 @@ class CrPsi2AstConverter : CrVisitor() {
         super.visitPointerType(o)
     }
 
-    private fun CstNode.staticArrayType(size: CstNode) = CstGeneric(
+    private fun CstNode<*>.staticArrayType(size: CstNode<*>) = CstGeneric(
         location = location,
         name = CstPath.global("StaticArray", location),
         typeVars = listOf(this, size)
@@ -1903,7 +1903,7 @@ class CrPsi2AstConverter : CrVisitor() {
         result = when (elements.firstOrNull() ?: return) {
             is CrExpression -> psiAsExpressions(elements, location = cstLocation(o))
             is CrFileFragment -> {
-                var allNodes = JBIterable.empty<CstNode>()
+                var allNodes = JBIterable.empty<CstNode<*>>()
                 for (element in elements) {
                     val node = element.cstNode ?: continue
                     allNodes = if (node is CstExpressions) {
@@ -1922,9 +1922,9 @@ class CrPsi2AstConverter : CrVisitor() {
 
 private val numberKinds = CstNumberLiteral.NumberKind.values()
 
-private val CST_NODE_SLICE = newResolveSlice<CrElement, CstNode>("CST_NODE_SLICE")
+private val CST_NODE_SLICE = newResolveSlice<CrElement, CstNode<*>>("CST_NODE_SLICE")
 
-val CrElement.cstNode: CstNode?
+val CrElement.cstNode: CstNode<*>?
     get() = project.resolveCache.getOrCompute(CST_NODE_SLICE, this) {
         val converter = CrPsi2AstConverter()
         accept(converter)

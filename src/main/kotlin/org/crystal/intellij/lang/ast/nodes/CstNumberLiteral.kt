@@ -8,7 +8,7 @@ class CstNumberLiteral(
     val value: String,
     val kind: NumberKind = NumberKind.I32,
     location: CstLocation? = null
-) : CstNode(location), CstSimpleLiteral {
+) : CstNode<CstNumberLiteral>(location), CstSimpleLiteral {
     constructor(
         value: Int,
         location: CstLocation? = null
@@ -31,6 +31,14 @@ class CstNumberLiteral(
         val spec: String
             get() = name.lowercase()
     }
+
+    fun copy(
+        value: String = this.value,
+        kind: NumberKind = this.kind,
+        location: CstLocation? = this.location
+    ) = CstNumberLiteral(value, kind, location)
+
+    override fun withLocation(location: CstLocation?) = copy(location = location)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

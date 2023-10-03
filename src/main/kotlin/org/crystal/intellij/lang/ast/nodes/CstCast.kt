@@ -5,14 +5,14 @@ import org.crystal.intellij.lang.ast.CstTransformer
 import org.crystal.intellij.lang.ast.CstVisitor
 
 class CstCast(
-    obj: CstNode,
-    type: CstNode,
+    obj: CstNode<*>,
+    type: CstNode<*>,
     location: CstLocation? = null
-) : CstCastBase(obj, type, location) {
-    fun copy(
-        obj: CstNode = this.obj,
-        type: CstNode = this.type,
-        location: CstLocation? = this.location
+) : CstCastBase<CstCast>(obj, type, location) {
+    override fun copy(
+        obj: CstNode<*>,
+        type: CstNode<*>,
+        location: CstLocation?
     ) = CstCast(obj, type, location)
 
     override fun acceptSelf(visitor: CstVisitor) = visitor.visitCast(this)

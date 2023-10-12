@@ -11,10 +11,11 @@ enum class CrystalLevel(val shortName: String) {
     CRYSTAL_1_7("1.7"),
     CRYSTAL_1_8("1.8"),
     CRYSTAL_1_9("1.9"),
+    CRYSTAL_1_10("1.10"),
     CRYSTAL_PREVIEW("Preview");
 
     companion object {
         @JvmField
-        val LATEST_STABLE = CRYSTAL_1_9
+        val LATEST_STABLE = CRYSTAL_1_10
     }
 }

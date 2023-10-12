@@ -1,0 +1,9 @@
+-ParamsWithModifiers.cr
+ foo(& : Int -> Int)
+ foo(&)
+ [foo(*)]
+ foo(**)
+ foo(**x : Int)
+ foo(**x)
+ foo(*x : Int)
+ foo(*x)

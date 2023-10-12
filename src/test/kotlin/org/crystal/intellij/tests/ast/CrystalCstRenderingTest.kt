@@ -5,6 +5,8 @@ import org.crystal.intellij.lang.ast.nodes.CstAssign
 import org.crystal.intellij.lang.ast.nodes.CstExpressions
 import org.crystal.intellij.lang.ast.nodes.CstNode
 import org.crystal.intellij.lang.ast.render
+import org.crystal.intellij.lang.config.CrystalLevel
+import org.crystal.intellij.tests.util.withLanguageLevel
 
 class CrystalCstRenderingTest : CrystalCstParsingTestBase() {
     private fun String.check(expected: String = this) {
@@ -227,5 +229,26 @@ class CrystalCstRenderingTest : CrystalCstParsingTestBase() {
         "%r{#{1}\\/\\0}".check("/#{1}\\/\\0/")
         "`\\n\\0`".check("`\\n\\u0000`")
         "`#{1}\\n\\0`".check("`#{1}\\n\\u0000`")
+    }
+
+    fun testBlockUnpacking19() = project.withLanguageLevel(CrystalLevel.CRYSTAL_1_9) {
+        "foo { |(x, y)| x }".check(
+            """
+              foo do |__arg0|
+                x = __arg0[0]
+                y = __arg0[1]
+                x
+              end
+            """.trimIndent()
+        )
+        "foo { |(x, (y, z))| x }".check(
+            """
+              foo do |__arg0|
+                x = __arg0[0]
+                z = __arg0[1]
+                x
+              end
+            """.trimIndent()
+        )
     }
 }

@@ -1,4 +1,4 @@
-# HINT: x, y, [z], u, v
+# HINT: x, y, [*z], u, v
 
 macro foo(x, y, *z, u, v)
   puts {{x}}, {{y}}

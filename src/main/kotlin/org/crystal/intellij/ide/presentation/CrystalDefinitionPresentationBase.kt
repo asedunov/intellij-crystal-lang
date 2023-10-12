@@ -23,7 +23,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
                 is CrMethod -> definition.receiver?.let { appendReceiver(it).append(".") }
                 else -> {}
             }
-            append(definition.nameElement.presentableText)
+            append(definition.presentableName)
             if (definition is CrExternalNameElementHolder && definition !is CrSimpleParameter) {
                 definition.externalNameElement?.let { appendSpaced("=").appendSpaced(it.presentableText) }
             }
@@ -42,7 +42,7 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
         }
 
         private fun StringBuilder.appendReceiver(receiver: CrMethodReceiver) = when (receiver) {
-            is CrReferenceExpression -> appendSpaced(receiver.nameElement.presentableText)
+            is CrReferenceExpression -> appendSpaced(receiver.presentableName)
             is CrTypeElement<*> -> appendType(receiver)
         }
 
@@ -62,6 +62,21 @@ abstract class CrystalDefinitionPresentationBase(protected val definition: CrDef
                 else -> {}
             }
         }
+
+        private val CrNameElementHolder.presentableName: String
+            get() {
+                if (this is CrParameter) {
+                    val prefix = when (kind) {
+                        CrParameterKind.ORDINARY -> ""
+                        CrParameterKind.SPLAT -> "*"
+                        CrParameterKind.DOUBLE_SPLAT -> "**"
+                        CrParameterKind.BLOCK -> "&"
+                    }
+                    return prefix + (nameElement?.sourceName ?: "")
+                }
+
+                return nameElement.presentableText
+            }
 
         private val CrNameElement?.presentableText: String
             get() = this?.sourceName ?: "???"

@@ -8,6 +8,7 @@ import com.intellij.execution.configurations.RunProfileState
 import com.intellij.execution.configurations.RuntimeConfigurationError
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.util.ProgramParametersConfigurator
+import com.intellij.openapi.application.runReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.SystemInfo
 import com.intellij.openapi.vfs.StandardFileSystems
@@ -27,7 +28,9 @@ abstract class CrystalFileRunConfigurationBase(
     name: String,
     factory: ConfigurationFactory
 ) : LocatableConfigurationBase<RunProfileState>(project, factory, name) {
-    var workingDirectory: Path? = project.findAllShardYamls().firstOrNull()?.toNioPath()?.parent
+    var workingDirectory: Path? = runReadAction {
+        project.findAllShardYamls().firstOrNull()?.toNioPath()?.parent
+    }
     var targetFile: Path? = null
     var env: EnvironmentVariablesData = EnvironmentVariablesData.DEFAULT
     var compilerArguments: String = ""

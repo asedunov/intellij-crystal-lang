@@ -3,6 +3,7 @@ package org.crystal.intellij.ide.config.project
 import com.intellij.execution.RunManager
 import com.intellij.ide.util.PsiNavigationSupport
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.invokeLater
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
@@ -20,8 +21,11 @@ import org.crystal.intellij.util.unwrapOrElse
 fun Project.openFiles(layout: CrystalGeneratedProjectLayout) {
     if (!ApplicationManager.getApplication().isHeadlessEnvironment) {
         val navigationSupport = PsiNavigationSupport.getInstance()
-        layout.shardYaml?.let { navigationSupport.createNavigatable(this, it, -1)}?.navigate(false)
-        layout.mainFile?.let { navigationSupport.createNavigatable(this, it, -1)}?.navigate(true)
+
+        invokeLater {
+            layout.shardYaml?.let { navigationSupport.createNavigatable(this, it, -1)}?.navigate(false)
+            layout.mainFile?.let { navigationSupport.createNavigatable(this, it, -1)}?.navigate(true)
+        }
     }
 }
 

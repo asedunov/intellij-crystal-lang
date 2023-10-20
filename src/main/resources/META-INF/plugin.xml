@@ -18,21 +18,23 @@
 
     <change-notes><![CDATA[
     <h2>New features</h2>
-    <h3>General</h3>
+    <h3>Parser</h3>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/61">#61</a> Crystal 1.9 support</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/66">#66</a> Support parsing of arbitrarily nested block parameters</li>
+    </ul>
+    <h3>Editor</h3>
+    <ul>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/71">#71</a> Support highlighting of escape sequences in heredocs</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/68">#68</a> Highlight heredoc start id when caret is on the end id, and vice versa</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/67">#67</a> Highlight heredoc content similar to string literals</li>
     </ul>
     <h3>Analysis</h3>
     <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/59">#59</a> When macro call is not resolved exactly, resolve it to possible candidate macros</li>
-    </ul>
-    <h3>Parameter Info</h3>
-    <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/57">#57</a> Support parameter info for macro calls</li>
-    </ul>
-    <h3>Completion</h3>
-    <ul>
-      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/56">#56</a> Support reference completion for macros</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/73">#73</a> Report error on duplicating splats inside nested block parameters</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/69">#69</a> Report an error when heredoc indents are too small</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/16">#16</a> Report void expressions used in wrong context</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/14">#14</a> Report branch duplication in case-expressions</li>
+      <li><a href="https://github.com/asedunov/intellij-crystal-lang/issues/13">#13</a> Report invalid splat types</li>
     </ul>]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>

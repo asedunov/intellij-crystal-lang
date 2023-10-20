@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.10] - 2023-10-21
+
+### New features
+
+#### Parser
+- [Support parsing of arbitrarily nested block parameters](https://github.com/asedunov/intellij-crystal-lang/issues/66)
+
+#### Editor
+- [Support highlighting of escape sequences in heredocs](https://github.com/asedunov/intellij-crystal-lang/issues/71)
+- [Highlight heredoc start id when caret is on the end id, and vice versa](https://github.com/asedunov/intellij-crystal-lang/issues/68)
+- [Highlight heredoc content similar to string literals](https://github.com/asedunov/intellij-crystal-lang/issues/67)
+
+#### Analysis
+- [Report error on duplicating splats inside nested block parameters](https://github.com/asedunov/intellij-crystal-lang/issues/73)
+- [Report an error when heredoc indents are too small](https://github.com/asedunov/intellij-crystal-lang/issues/69)
+- [Report void expressions used in wrong context](https://github.com/asedunov/intellij-crystal-lang/issues/16)
+- [Report branch duplication in case-expressions](https://github.com/asedunov/intellij-crystal-lang/issues/14)
+- [Report invalid splat types](https://github.com/asedunov/intellij-crystal-lang/issues/13)
+
+### Fixes
+
+#### Parser
+- [Allow string interpolation at the beginning of heredoc](https://github.com/asedunov/intellij-crystal-lang/issues/72)
+- [Fix parsing of multiple heredocs](https://github.com/asedunov/intellij-crystal-lang/issues/70)
+- [Allow parsing name with "=" in qualified proc literals](https://github.com/asedunov/intellij-crystal-lang/issues/65)
+
+#### Analysis
+- [Report "Wrong number of tuple elements" on all branches of case-expression](https://github.com/asedunov/intellij-crystal-lang/issues/62)
+
+#### Structure View
+- [Improve rendering of unnamed parameters](https://github.com/asedunov/intellij-crystal-lang/issues/74)
+- [Support expressions used as type arguments](https://github.com/asedunov/intellij-crystal-lang/issues/64)
+- [Show external names of global variables in a library](https://github.com/asedunov/intellij-crystal-lang/issues/63)
+
+#### Configuration
+- [Fix exception on project opening (access file index from run configuration)](https://github.com/asedunov/intellij-crystal-lang/issues/60)
+
 ## [0.9] - 2023-07-30
 
 ### New features

@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - master_232
   pull_request:
     branches:
-      - master
+      - master_232
   workflow_dispatch:    
 
 permissions:

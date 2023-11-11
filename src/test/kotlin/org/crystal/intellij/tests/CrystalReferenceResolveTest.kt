@@ -50,83 +50,98 @@ class CrystalReferenceResolveTest(private val testFile: File) : BasePlatformTest
     }
 
     private class RefAnnotator(
-        private val withMetaclass: Boolean = false
+        private val withMetaclass: Boolean
     ) : LocalInspectionTool() {
         override fun getDisplayName() = "Reference annotator"
 
         override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean) = object : CrVisitor() {
-            private var nextId = 1
-            private val ids = Object2IntOpenHashMap<CrSym<*>>()
+            val descriptions = buildReferenceDescriptions(withMetaclass)
 
-            private fun getId(sym: CrSym<*>): Int {
-                if (ids.containsKey(sym)) return ids.getInt(sym)
-                val id = nextId++
-                ids.put(sym, id)
-                return id
-            }
+            private fun buildReferenceDescriptions(withMetaclass: Boolean): List<Pair<PsiElement, String>> {
+                val result = ArrayList<Pair<PsiElement, String>>()
+                val visitor = object : CrRecursiveVisitor() {
+                    private var nextId = 1
+                    private val ids = Object2IntOpenHashMap<CrSym<*>>()
 
-            private fun StringBuilder.appendSym(sym: CrSym<*>): StringBuilder {
-                append('#').append(getId(sym)).append(": ")
-                append(sym.shortDescription)
-                return this
-            }
-
-            private fun StringBuilder.appendCall(call: CrResolvedMacroCall): StringBuilder {
-                append("call<")
-                append("args: ")
-                val arguments = call.call.expression.argumentList?.elements ?: emptyList()
-                val parameters = call.macro.parameters
-                arguments.joinTo(this) {
-                    parameters.indexOf(call.getArgumentMatch(it)).toString()
-                }
-                append(", params: ")
-                parameters.joinTo(this) { param ->
-                    when (val match = call.getParameterMatch(param)) {
-                        CrMacroParameterMatch.DefaultValue -> "<default>"
-                        is CrMacroParameterMatch.Simple -> arguments.indexOf(match.argument).toString()
-                        is CrMacroParameterMatch.Splat -> match.arguments.joinToString(prefix = "(", postfix = ")") {
-                            arguments.indexOf(it).toString()
-                        }
-                        else -> "???"
+                    private fun getId(sym: CrSym<*>): Int {
+                        if (ids.containsKey(sym)) return ids.getInt(sym)
+                        val id = nextId++
+                        ids.put(sym, id)
+                        return id
                     }
-                }
-                append(">")
-                return this
-            }
 
-            private fun report(e: PsiElement, message: String) {
-                holder.registerProblem(e, message, ProblemHighlightType.WARNING)
-            }
+                    private fun StringBuilder.appendSym(sym: CrSym<*>): StringBuilder {
+                        append('#').append(getId(sym)).append(": ")
+                        append(sym.shortDescription)
+                        return this
+                    }
 
-            override fun visitNameElement(o: CrNameElement) {
-                super.visitNameElement(o)
-
-                val nameElement = when (o) {
-                    is CrPathNameElement -> o.item ?: return
-                    is CrSimpleNameElement -> o
-                }
-                val symbols = o.resolveCandidates()
-                if (symbols.isNotEmpty()) {
-                    val resolvedCalls = (o.parent as? CrCallLikeExpression)?.resolveCandidateCalls() ?: emptyList()
-                    val message = buildString {
-                        for ((i, sym) in symbols.withIndex()) {
-                            if (i > 0) {
-                                append(", ")
-                            }
-                            appendSym(sym)
-                            if (sym is CrTypeSym<*> && withMetaclass) {
-                                append(" / ").appendSym(sym.metaclass)
+                    private fun StringBuilder.appendCall(call: CrResolvedMacroCall): StringBuilder {
+                        append("call<")
+                        append("args: ")
+                        val arguments = call.call.expression.argumentList?.elements ?: emptyList()
+                        val parameters = call.macro.parameters
+                        arguments.joinTo(this) {
+                            parameters.indexOf(call.getArgumentMatch(it)).toString()
+                        }
+                        append(", params: ")
+                        parameters.joinTo(this) { param ->
+                            when (val match = call.getParameterMatch(param)) {
+                                CrMacroParameterMatch.DefaultValue -> "<default>"
+                                is CrMacroParameterMatch.Simple -> arguments.indexOf(match.argument).toString()
+                                is CrMacroParameterMatch.Splat -> match.arguments.joinToString(prefix = "(", postfix = ")") {
+                                    arguments.indexOf(it).toString()
+                                }
+                                else -> "???"
                             }
                         }
-                        for (resolvedCall in resolvedCalls) {
-                            append(", ")
-                            appendCall(resolvedCall)
+                        append(">")
+                        return this
+                    }
+
+                    private fun report(e: PsiElement, message: String) {
+                        result.add(e to message)
+                    }
+
+                    override fun visitNameElement(o: CrNameElement) {
+                        super.visitNameElement(o)
+
+                        val nameElement = when (o) {
+                            is CrPathNameElement -> o.item ?: return
+                            is CrSimpleNameElement -> o
+                        }
+                        val symbols = o.resolveCandidates()
+                        if (symbols.isNotEmpty()) {
+                            val resolvedCalls = (o.parent as? CrCallLikeExpression)?.resolveCandidateCalls() ?: emptyList()
+                            val message = buildString {
+                                for ((i, sym) in symbols.withIndex()) {
+                                    if (i > 0) {
+                                        append(", ")
+                                    }
+                                    appendSym(sym)
+                                    if (sym is CrTypeSym<*> && withMetaclass) {
+                                        append(" / ").appendSym(sym.metaclass)
+                                    }
+                                }
+                                for (resolvedCall in resolvedCalls) {
+                                    append(", ")
+                                    appendCall(resolvedCall)
+                                }
+                            }
+                            report(nameElement, message)
+                        }
+                        else if (o is CrPathNameElement) {
+                            report(nameElement, "unresolved")
                         }
                     }
-                    report(nameElement, message)
                 }
-                else if (o is CrPathNameElement) {
-                    report(nameElement, "unresolved")
+                holder.file.accept(visitor)
+                return result
+            }
+
+            override fun visitCrFile(o: CrFile) {
+                for ((e, message) in descriptions) {
+                    holder.registerProblem(e, message, ProblemHighlightType.WARNING)
                 }
             }
         }
